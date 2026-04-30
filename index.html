@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WorldofKits — Maglie da Calcio Premium</title>
+  <meta name="description" content="GoalKit: il tuo store online per maglie da calcio e articoli sportivi premium. Acquista le migliori maglie delle nazionali e dei club." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Bebas+Neue&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <!-- EmailJS SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+</head>
+<body>
+
+  <!-- ═══════════════════ HEADER / NAV ═══════════════════ -->
+  <header class="header" id="top">
+    <nav class="navbar">
+      <div class="nav-logo">
+        <span class="logo-icon">⚽</span>
+        <span class="logo-text">Worldofkits</span>
+      </div>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#home" class="nav-link active">Home</a></li>
+        <li><a href="#products" class="nav-link">Prodotti</a></li>
+        <li><a href="#about" class="nav-link">Chi Siamo</a></li>
+        <li><a href="#contact" class="nav-link">Contatti</a></li>
+      </ul>
+      <button class="cart-btn" id="cartBtn" aria-label="Carrello">
+        <span class="cart-icon">🛒</span>
+        <span class="cart-badge" id="cartBadge">0</span>
+      </button>
+      <button class="hamburger" id="hamburger" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </nav>
+  </header>
+
+  <!-- ═══════════════════ HERO SECTION ═══════════════════ -->
+  <section class="hero" id="home">
+    <div class="hero-bg"></div>
+    <div class="hero-particles" id="heroParticles"></div>
+    <div class="hero-content">
+      <div class="hero-badge">🏆 Store Ufficiale</div>
+      <h1 class="hero-title">
+        Vesti con <br />
+        <span class="gradient-text">Classe</span>
+      </h1>
+      <p class="hero-subtitle">
+        Maglie da calcio originali, accessori e articoli sportivi per i veri appassionati.
+        Qualità premium, spedizione rapida in tutta Italia.
+      </p>
+      <div class="hero-actions">
+        <a href="#products" class="btn btn-primary">
+          <span>Scopri i Prodotti</span>
+          <span class="btn-arrow">→</span>
+        </a>
+        <a href="#about" class="btn btn-outline">Ordina</a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat">
+          <span class="stat-number">1K+</span>
+          <span class="stat-label">Prodotti</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat">
+          <span class="stat-number">500+</span>
+          <span class="stat-label">Clienti</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat">
+          <span class="stat-number">72h</span>
+          <span class="stat-label">Spedizione</span>
+        </div>
+      </div>
+    </div>
+    <div class="hero-image-wrap">
+      <div class="hero-img-glow"></div>
+      <img src="images/hero_banner.png" alt="Maglie da calcio premium" class="hero-img" />
+    </div>
+    <div class="hero-scroll-hint">
+      <span>Scorri</span>
+      <div class="scroll-arrow">↓</div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ FILTER BAR ═══════════════════ -->
+  <section class="filter-section" id="products">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-badge">🏅 Collezione</span>
+        <h2 class="section-title">I Nostri Prodotti</h2>
+        <p class="section-sub">Seleziona la categoria e trova il prodotto perfetto</p>
+      </div>
+
+      <!-- ── SEARCH BAR ── -->
+      <div class="search-wrap">
+        <span class="search-icon">🔍</span>
+        <input
+          type="text"
+          id="searchInput"
+          class="search-input"
+          placeholder="Cerca una maglia... (es. Napoli, Real Madrid)"
+          autocomplete="off"
+        />
+        <button class="search-clear" id="searchClear" title="Cancella ricerca" aria-label="Cancella ricerca">✕</button>
+      </div>
+
+      <div class="filter-bar" id="filterBar">
+        <button class="filter-btn active" data-filter="all" id="filterAll">Tutti</button>
+
+        <!-- Champions League -->
+        <div class="filter-dropdown" id="ddChampions">
+          <button class="filter-btn" data-filter="Champions" id="filterChampions">
+            Champions League <span class="dd-arrow">▾</span>
+          </button>
+          <ul class="dd-menu" id="menuChampions"></ul>
+        </div>
+
+        <!-- Premier League -->
+        <div class="filter-dropdown" id="ddPremier">
+          <button class="filter-btn" data-filter="Premier" id="filterPremier">
+            Premier League <span class="dd-arrow">▾</span>
+          </button>
+          <ul class="dd-menu" id="menuPremier"></ul>
+        </div>
+
+        <!-- Serie A -->
+        <div class="filter-dropdown" id="ddSerieA">
+          <button class="filter-btn" data-filter="SerieA" id="filterSerie">
+            Serie A <span class="dd-arrow">▾</span>
+          </button>
+          <ul class="dd-menu" id="menuSerieA"></ul>
+        </div>
+
+        <!-- Bundesliga -->
+        <div class="filter-dropdown" id="ddBundesliga">
+          <button class="filter-btn" data-filter="Bundesliga" id="filterBundesliga">
+            Bundesliga <span class="dd-arrow">▾</span>
+          </button>
+          <ul class="dd-menu" id="menuBundesliga"></ul>
+        </div>
+
+        <!-- Saudi Pro League -->
+        <div class="filter-dropdown" id="ddSaudi">
+          <button class="filter-btn" data-filter="SaudiLeague" id="filterSaudi">
+            🇸🇦 Saudi Pro League <span class="dd-arrow">▾</span>
+          </button>
+          <ul class="dd-menu" id="menuSaudi"></ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ PRODUCTS GRID ═══════════════════ -->
+  <section class="products-section">
+    <div class="container">
+      <div class="products-grid" id="productsGrid">
+        <!-- Cards generate dynamically via JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ ABOUT ═══════════════════ -->
+  <section class="about-section" id="about">
+    <div class="container">
+      <div class="about-grid">
+        <div class="about-text">
+          <span class="section-badge">💬 Chi Siamo</span>
+          <h2 class="section-title">La Passione per il Calcio<br /><span class="gradient-text">è il nostro DNA</span></h2>
+          <p>GoalKit nasce dalla passione di tifosi veri. Offriamo maglie originali, accessori certificati e un servizio clienti che capisce davvero di calcio.</p>
+          <ul class="about-features">
+            <li><span class="feat-icon">✅</span> Prodotti 100% originali e certificati</li>
+            <li><span class="feat-icon">🚀</span> Spedizione express in 24-48 ore</li>
+            <li><span class="feat-icon">🔄</span> Reso gratuito entro 30 giorni</li>
+            <li><span class="feat-icon">🛡️</span> Pagamento sicuro e garantito</li>
+          </ul>
+        </div>
+        <div class="about-cards">
+          <div class="about-card glass">
+            <span class="about-card-icon">🌍</span>
+            <h3>Spedizioni in tutta Europa</h3>
+            <p>Consegniamo in oltre 30 paesi europei con corriere espresso.</p>
+          </div>
+          <div class="about-card glass">
+            <span class="about-card-icon">🎁</span>
+            <h3>Personalizzazione</h3>
+            <p>Aggiungi nome e numero sulla tua maglia preferita.</p>
+          </div>
+          <div class="about-card glass">
+            <span class="about-card-icon">📞</span>
+            <h3>Supporto Clienti</h3>
+            <p>Assistenza disponibile 7 giorni su 7 via chat o email.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ CONTACT / NEWSLETTER ═══════════════════ -->
+  <section class="contact-section" id="contact">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-badge">📬 Contatti</span>
+        <h2 class="section-title">Hai Domande?</h2>
+        <p class="section-sub">Scrivici e ti risponderemo entro 24 ore</p>
+      </div>
+      <form class="contact-form glass" id="contactForm">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="contactName">Nome</label>
+            <input type="text" id="contactName" placeholder="Il tuo nome" required />
+          </div>
+          <div class="form-group">
+            <label for="contactEmail">Email</label>
+            <input type="email" id="contactEmail" placeholder="La tua email" required />
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="contactMsg">Messaggio</label>
+          <textarea id="contactMsg" rows="4" placeholder="Scrivi il tuo messaggio..." required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary" id="contactSubmit">
+          <span>Invia Messaggio</span> <span class="btn-arrow">→</span>
+        </button>
+      </form>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ FOOTER ═══════════════════ -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="nav-logo">
+            <span class="logo-icon">⚽</span>
+            <span class="logo-text">GoalKit</span>
+          </div>
+          <p>Il tuo store di fiducia per maglie da calcio e articoli sportivi premium.</p>
+        </div>
+        <div class="footer-links-group">
+          <h4>Navigazione</h4>
+          <a href="#home">Home</a>
+          <a href="#products">Prodotti</a>
+          <a href="#about">Chi Siamo</a>
+          <a href="#contact">Contatti</a>
+        </div>
+        <div class="footer-links-group">
+          <h4>Categorie</h4>
+          <a href="#products">Nazionali</a>
+          <a href="#products">Club</a>
+          <a href="#products">Accessori</a>
+          <a href="#products">Novità</a>
+        </div>
+        <div class="footer-links-group">
+          <h4>Contatti</h4>
+          <a href="mailto:info@goalkit.it">info@goalkit.it</a>
+          <a href="tel:+390000000000">+39 000 000 0000</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2026 GoalKit. Tutti i diritti riservati.</p>
+        <p>P.IVA: 12345678901</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ═══════════════════ CART SIDEBAR ═══════════════════ -->
+  <div class="cart-overlay" id="cartOverlay"></div>
+  <aside class="cart-sidebar" id="cartSidebar">
+    <div class="cart-header">
+      <h2>🛒 Il tuo Carrello</h2>
+      <button class="cart-close" id="cartClose" aria-label="Chiudi carrello">✕</button>
+    </div>
+    <div class="cart-items" id="cartItems">
+      <div class="cart-empty" id="cartEmpty">
+        <span class="cart-empty-icon">🛒</span>
+        <p>Il carrello è vuoto</p>
+        <a href="#products" class="btn btn-outline btn-sm" id="goShopBtn">Vai ai Prodotti</a>
+      </div>
+    </div>
+    <div class="cart-footer" id="cartFooter" style="display:none;">
+      <div class="cart-subtotal">
+        <span>Subtotale</span>
+        <span id="cartSubtotal">€0.00</span>
+      </div>
+      <div class="cart-shipping">
+        <span>Spedizione</span>
+        <span id="cartShipping">Gratuita</span>
+      </div>
+      <div class="cart-total">
+        <span>Totale</span>
+        <span id="cartTotal">€0.00</span>
+      </div>
+      <button class="btn btn-primary btn-full" id="checkoutBtn">
+        Procedi all'Ordine →
+      </button>
+    </div>
+  </aside>
+
+  <!-- ═══════════════════ ORDER MODAL ═══════════════════ -->
+  <div class="modal-overlay" id="orderOverlay">
+    <div class="modal glass" id="orderModal">
+      <button class="modal-close" id="orderClose" aria-label="Chiudi">✕</button>
+      <div class="modal-header">
+        <span class="modal-icon">📦</span>
+        <h2>Completa il tuo Ordine</h2>
+        <p>Inserisci i tuoi dati per finalizzare l'acquisto</p>
+      </div>
+      <form class="order-form" id="orderForm">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="orderName">Nome *</label>
+            <input type="text" id="orderName" placeholder="Mario" required />
+          </div>
+          <div class="form-group">
+            <label for="orderSurname">Cognome *</label>
+            <input type="text" id="orderSurname" placeholder="Rossi" required />
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="orderEmail">Email *</label>
+          <input type="email" id="orderEmail" placeholder="mario.rossi@email.com" required />
+        </div>
+        <div class="form-group">
+          <label for="orderPhone">Telefono</label>
+          <input type="tel" id="orderPhone" placeholder="+39 333 000 0000" />
+        </div>
+        <div class="form-group">
+          <label for="orderAddress">Indirizzo di Spedizione *</label>
+          <input type="text" id="orderAddress" placeholder="Via Roma 1, 00100 Roma (RM)" required />
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="orderCity">Città *</label>
+            <input type="text" id="orderCity" placeholder="Roma" required />
+          </div>
+          <div class="form-group">
+            <label for="orderZip">CAP *</label>
+            <input type="text" id="orderZip" placeholder="00100" required />
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="orderNotes">Note sull'ordine</label>
+          <textarea id="orderNotes" rows="2" placeholder="Personalizzazione maglia (nome/numero), note speciali..."></textarea>
+        </div>
+
+        <!-- Order Summary inside modal -->
+        <div class="order-summary-box glass" id="orderSummaryBox"></div>
+
+        <div class="form-group payment-notice">
+          <span class="payment-icon">💳</span>
+          <span>Il pagamento avverrà al momento della consegna (contrassegno) o tramite bonifico bancario. Verrai contattato via email.</span>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-full" id="orderSubmitBtn">
+          <span id="orderBtnText">✅ Conferma Ordine</span>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ═══════════════════ SETUP EMAIL MODAL ═══════════════════ -->
+  <div class="modal-overlay" id="setupOverlay" style="display:none;">
+    <div class="modal glass" id="setupModal" style="max-width:520px;">
+      <button class="modal-close" id="setupClose">✕</button>
+      <div class="modal-header">
+        <span class="modal-icon">⚙️</span>
+        <h2>Configura Email Notifiche</h2>
+        <p>Inserisci le tue credenziali EmailJS per ricevere le notifiche degli ordini</p>
+      </div>
+      <form id="setupForm" class="order-form">
+        <div class="form-group">
+          <label for="ejsPublicKey">Public Key EmailJS *</label>
+          <input type="text" id="ejsPublicKey" placeholder="Es: user_xxxxxxxxxx" required />
+          <small>Trovalo su <a href="https://dashboard.emailjs.com/admin/account" target="_blank">dashboard.emailjs.com → Account</a></small>
+        </div>
+        <div class="form-group">
+          <label for="ejsServiceId">Service ID *</label>
+          <input type="text" id="ejsServiceId" placeholder="Es: service_xxxxxxx" required />
+          <small>Trovalo su <a href="https://dashboard.emailjs.com/admin" target="_blank">dashboard.emailjs.com → Email Services</a></small>
+        </div>
+        <div class="form-group">
+          <label for="ejsTemplateId">Template ID *</label>
+          <input type="text" id="ejsTemplateId" placeholder="Es: template_xxxxxxx" required />
+          <small>Trovalo su <a href="https://dashboard.emailjs.com/admin/templates" target="_blank">dashboard.emailjs.com → Email Templates</a></small>
+        </div>
+        <div class="form-group">
+          <label for="ejsOwnerEmail">Tua Email (destinatario notifiche) *</label>
+          <input type="email" id="ejsOwnerEmail" placeholder="tuaemail@gmail.com" required />
+        </div>
+        <button type="submit" class="btn btn-primary btn-full">💾 Salva Configurazione</button>
+      </form>
+      <div class="setup-guide glass" style="margin-top:1rem;padding:1rem;border-radius:12px;font-size:0.85rem;">
+        <strong>📖 Come configurare EmailJS (gratis):</strong>
+        <ol style="margin-top:0.5rem;padding-left:1.2rem;line-height:1.8;">
+          <li>Vai su <a href="https://emailjs.com" target="_blank">emailjs.com</a> e crea un account gratuito</li>
+          <li>Crea un <strong>Email Service</strong> (Gmail, Outlook, ecc.)</li>
+          <li>Crea un <strong>Email Template</strong> con queste variabili nel corpo:<br>
+            <code>{{order_number}}</code> — Numero ordine<br>
+            <code>{{customer_name}}</code> — Nome cliente<br>
+            <code>{{customer_email}}</code> — Email cliente (per contattarlo)<br>
+            <code>{{customer_phone}}</code> — Telefono<br>
+            <code>{{customer_address}}</code> — Indirizzo spedizione<br>
+            <code>{{order_details}}</code> — Lista prodotti ordinati<br>
+            <code>{{order_total}}</code> — Totale ordine<br>
+            <code>{{order_notes}}</code> — Note
+          </li>
+          <li>
+            <strong>⭐ Per rispondere al cliente direttamente:</strong><br>
+            Nel template, in <em>Settings → Reply To</em>, inserisci <code>{{reply_to}}</code>.<br>
+            Così quando ricevi l'email e clicchi <strong>"Rispondi"</strong>, la risposta andrà automaticamente all'email del cliente!
+          </li>
+          <li>Copia le credenziali nei campi sopra e salva</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════ SUCCESS TOAST ═══════════════════ -->
+  <div class="toast" id="toast">
+    <span class="toast-icon" id="toastIcon">✅</span>
+    <span id="toastMsg">Operazione completata!</span>
+  </div>
+
+  <!-- ═══════════════════ QUICK VIEW MODAL ═══════════════════ -->
+  <div class="modal-overlay" id="quickViewOverlay">
+    <div class="modal glass" id="quickViewModal" style="max-width:640px;">
+      <button class="modal-close" id="quickViewClose">✕</button>
+      <div id="quickViewContent"></div>
+    </div>
+  </div>
+
+  <!-- Admin Setup Button (hidden, click logo 5 times) -->
+  <button class="admin-btn" id="adminBtn" title="Configura Email">⚙️ Setup Email</button>
+
+  <script src="products.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
