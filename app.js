@@ -4,7 +4,16 @@
 ═══════════════════════════════════════════════ */
 
 // ── CONFIG EMAIL (salvata in localStorage) ──
-let EMAIL_CONFIG = JSON.parse(localStorage.getItem('gk_email_config') || '{}');
+// Le credenziali sono configurate UNA VOLTA dal venditore via "⚙️ Setup Email"
+// e poi funzionano automaticamente per tutti gli ordini di tutti i clienti.
+const DEFAULT_EMAIL_CONFIG = {
+  publicKey: "z3BLJtLhUWt266yFW",
+  serviceId: "service_0onnes3",
+  templateId: "template_i8e9odd",
+  customerTemplateId: "template_oo5ig0c",
+  ownerEmail: "worldofkits04@gmail.com"
+};
+let EMAIL_CONFIG = Object.assign({}, DEFAULT_EMAIL_CONFIG, JSON.parse(localStorage.getItem('gk_email_config') || '{}'));
 
 // ── STATO ──
 let cart = JSON.parse(localStorage.getItem('gk_cart') || '[]');
@@ -56,6 +65,9 @@ document.addEventListener('DOMContentLoaded', () => {
   setupScrollSpy();
   setupFilters();
   setupSearch();
+  setupVendorPanel();
+  setupReviews();
+  setupCustomOrder();
 });
 
 // ── EMAILJS INIT ──
@@ -184,9 +196,9 @@ function renderProducts(filter, team = null) {
       <div class="card-body">
         <div class="card-category">${catLabel}</div>
         <div class="card-name">${p.name}</div>
-        <div class="card-sizes">
-          ${p.sizes.slice(0, 4).map(s => `<span class="size-tag">${s}</span>`).join('')}
-          ${p.sizes.length > 4 ? `<span class="size-tag">+${p.sizes.length - 4}</span>` : ''}
+        <div class="card-sizes" data-product-id="${p.id}">
+          ${p.sizes.slice(0, 5).map((s, i) => `<button class="size-tag${i === 0 ? ' active' : ''}" onclick="selectCardSize(this)">${s}</button>`).join('')}
+          ${p.sizes.length > 5 ? `<span class="size-tag">+${p.sizes.length - 5}</span>` : ''}
         </div>
         <div class="card-footer">
           <div>
@@ -385,28 +397,43 @@ function closeQuickView() {
 function addToCart(productId) {
   const p = PRODUCTS.find(x => x.id === productId);
   if (!p) return;
-  const existing = cart.find(item => item.id === productId);
+
+  // Leggi la taglia attiva dalla card (bottone .size-tag.active)
+  const sizeContainer = document.querySelector('.card-sizes[data-product-id="' + productId + '"]');
+  const activeBtn = sizeContainer ? sizeContainer.querySelector('.size-tag.active') : null;
+  const selectedSize = activeBtn ? activeBtn.textContent.trim() : (p.sizes[0] || 'M');
+
+  // Distingui per id + taglia (stesso prodotto in taglie diverse = righe separate)
+  const existing = cart.find(item => item.id === productId && item.size === selectedSize);
   if (existing) {
     existing.qty += 1;
   } else {
-    cart.push({ id: p.id, name: p.name, price: p.price, image: p.image, qty: 1, size: 'M' });
+    cart.push({ id: p.id, name: p.name, price: p.price, image: p.image, qty: 1, size: selectedSize });
   }
   saveCart();
   updateCartUI();
-  showToast('✅', `"${p.name}" aggiunto al carrello!`);
-  // Apri sidebar
+  showToast('✅', '"' + p.name + '" (' + selectedSize + ') aggiunto al carrello!');
   openCart();
 }
 
+function selectCardSize(btn) {
+  const container = btn.closest('.card-sizes');
+  if (!container) return;
+  container.querySelectorAll('.size-tag').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
 function removeFromCart(id) {
-  cart = cart.filter(item => item.id !== id);
+  // eslint-disable-next-line eqeqeq
+  cart = cart.filter(item => item.id != id);
   saveCart();
   updateCartUI();
   renderCartItems();
 }
 
 function changeQty(id, delta) {
-  const item = cart.find(x => x.id === id);
+  // eslint-disable-next-line eqeqeq
+  const item = cart.find(x => x.id == id);
   if (!item) return;
   item.qty = Math.max(1, item.qty + delta);
   saveCart();
@@ -449,32 +476,44 @@ function renderCartItems() {
   if (footer) footer.style.display = 'block';
 
   const total = getCartTotal();
-  const shipping = total >= 60 ? 'Gratuita' : '€4.99';
+  const shipping = total >= 50 ? 'Gratuita' : '€3.00';
 
-  container.innerHTML = cart.map(item => `
-    <div class="cart-item">
-      <img class="cart-item-img" src="${item.image}" alt="${item.name}"
-           onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2270%22 height=%2270%22><rect fill=%22%230f1525%22 width=%2270%22 height=%2270%22/><text x=%2250%25%22 y=%2250%25%22 fill=%22%236c63ff%22 text-anchor=%22middle%22 dominant-baseline=%22middle%22 font-size=%2230%22>⚽</text></svg>'">
-      <div class="cart-item-info">
-        <div class="cart-item-name">${item.name}</div>
-        <div class="cart-item-meta">Taglia: ${item.size}</div>
-        <div class="cart-item-price">€${(item.price * item.qty).toFixed(2)}</div>
-        <div class="cart-item-qty">
-          <button class="qty-btn" onclick="changeQty(${item.id}, -1)">−</button>
-          <span class="qty-val">${item.qty}</span>
-          <button class="qty-btn" onclick="changeQty(${item.id}, +1)">+</button>
-        </div>
-      </div>
-      <button class="cart-item-remove" onclick="removeFromCart(${item.id})" title="Rimuovi">🗑️</button>
-    </div>
-  `).join('');
+  let html = '';
+  cart.forEach(function (item) {
+    const isCustom = !!item.custom;
+    const idRef = isCustom ? ("'" + item.id + "'") : item.id;
+    const imgSrc = item.image || '';
+    const safeName = String(item.name).replace(/"/g, '&quot;');
+
+    const imgHtml = isCustom
+      ? '<div class="cart-item-img" style="display:flex;align-items:center;justify-content:center;font-size:1.8rem;background:rgba(108,99,255,.1);border-radius:8px;">🔍</div>'
+      : '<img class="cart-item-img" src="' + imgSrc + '" alt="' + safeName + '" onerror="this.style.display=\'none\'">';
+
+    const priceLabel = '&euro;' + (item.price * item.qty).toFixed(2);
+
+    html += '<div class="cart-item">'
+      + imgHtml
+      + '<div class="cart-item-info">'
+      + '<div class="cart-item-name">' + item.name + '</div>'
+      + '<div class="cart-item-meta">Taglia: ' + item.size + '</div>'
+      + '<div class="cart-item-price">' + priceLabel + '</div>'
+      + '<div class="cart-item-qty">'
+      + '<button class="qty-btn" onclick="changeQty(' + idRef + ', -1)">&minus;</button>'
+      + '<span class="qty-val">' + item.qty + '</span>'
+      + '<button class="qty-btn" onclick="changeQty(' + idRef + ', +1)">+</button>'
+      + '</div>'
+      + '</div>'
+      + '<button class="cart-item-remove" onclick="removeFromCart(' + idRef + ')" title="Rimuovi">&#128465;&#65039;</button>'
+      + '</div>';
+  });
+  container.innerHTML = html;
 
   const subtotalEl = document.getElementById('cartSubtotal');
   const shippingEl = document.getElementById('cartShipping');
   const totalEl = document.getElementById('cartTotal');
   if (subtotalEl) subtotalEl.textContent = `€${total.toFixed(2)}`;
   if (shippingEl) shippingEl.textContent = shipping;
-  const finalTotal = shipping === 'Gratuita' ? total : total + 4.99;
+  const finalTotal = shipping === 'Gratuita' ? total : total + 3.00;
   if (totalEl) totalEl.textContent = `€${finalTotal.toFixed(2)}`;
 }
 
@@ -531,7 +570,7 @@ function renderOrderSummary() {
   const box = document.getElementById('orderSummaryBox');
   if (!box) return;
   const total = getCartTotal();
-  const shipping = total >= 60 ? 0 : 4.99;
+  const shipping = total >= 50 ? 0 : 3.00;
   const finalTotal = total + shipping;
   box.innerHTML = `
     <h4>📋 Riepilogo Ordine</h4>
@@ -543,7 +582,7 @@ function renderOrderSummary() {
     `).join('')}
     <div class="order-summary-row">
       <span>Spedizione</span>
-      <span>${shipping === 0 ? 'Gratuita 🎉' : '€4.99'}</span>
+      <span>${shipping === 0 ? 'Gratuita 🎉' : '€3.00'}</span>
     </div>
     <div class="order-summary-total">
       <span>TOTALE</span>
@@ -552,13 +591,12 @@ function renderOrderSummary() {
   `;
 }
 
-
 async function submitOrder(e) {
   e.preventDefault();
   const btn = document.getElementById('orderSubmitBtn');
   const btnText = document.getElementById('orderBtnText');
 
-  // Controlla configurazione EmailJS
+  // Controlla configurazione EmailJS (usa la variabile globale)
   if (!EMAIL_CONFIG.publicKey || !EMAIL_CONFIG.serviceId || !EMAIL_CONFIG.templateId || !EMAIL_CONFIG.ownerEmail) {
     showToast('⚠️', 'Sistema email non configurato. Clicca su "⚙️ Setup Email" per configurarlo.');
     return;
@@ -574,13 +612,15 @@ async function submitOrder(e) {
   const notes = document.getElementById('orderNotes').value.trim();
 
   const total = getCartTotal();
-  const shipping = total >= 60 ? 0 : 4.99;
+  const shipping = total >= 60 ? 0 : 3.00;
   const finalTotal = total + shipping;
   const orderNum = 'WOK-' + Date.now().toString().slice(-6);
 
-  const orderDetails = cart.map(item =>
-    `• ${item.name} | Taglia: ${item.size} | Qtà: ${item.qty} | €${(item.price * item.qty).toFixed(2)}`
-  ).join('\n');
+  const orderDetails = cart.map(item => {
+    const priceStr = item.custom ? '⚠️ Prezzo da definire' : `€${(item.price * item.qty).toFixed(2)}`;
+    return `• ${item.name} | Taglia: ${item.size} | Qtà: ${item.qty} | ${priceStr}`;
+  }).join('\n');
+
 
   // Loading state
   btn.disabled = true;
@@ -588,18 +628,52 @@ async function submitOrder(e) {
 
   try {
     // Invia email SOLO al venditore tramite EmailJS
-    await emailjs.send(EMAIL_CONFIG.serviceId, EMAIL_CONFIG.templateId, {
-      to_email: EMAIL_CONFIG.ownerEmail,   // ← solo al venditore
+    const emailData = {
+      to_email: EMAIL_CONFIG.ownerEmail,
+      customer_name: `${name} ${surname}`,
+      customer_email: email,
+      customer_phone: phone || 'Non fornito',
+      customer_address: address,
+      customer_city: city,
+      customer_zip: zip,
+      order_number: orderNum,
+      order_details: orderDetails,
+      order_subtotal: `€${total.toFixed(2)}`,
+      order_shipping: shipping === 0 ? 'Gratuita' : '€3.00',
+      order_total: `€${finalTotal.toFixed(2)}`,
+      order_notes: notes || 'Nessuna nota',
+      reply_to: email
+    };
+
+    console.log("DATI INVIATI A EMAILJS:", emailData);
+
+    await emailjs.send(
+      EMAIL_CONFIG.serviceId,
+      EMAIL_CONFIG.templateId,
+      emailData
+    );
+
+    // Invia conferma automatica AL CLIENTE
+    const customerTemplateId = EMAIL_CONFIG.customerTemplateId || EMAIL_CONFIG.templateId;
+    const customerConfirmData = {
+      to_email: email,                              // ← va al cliente
       customer_name: `${name} ${surname}`,
       customer_email: email,
       customer_phone: phone || 'Non fornito',
       customer_address: `${address}, ${zip} ${city}`,
       order_number: orderNum,
       order_details: orderDetails,
+      order_subtotal: `€${total.toFixed(2)}`,
+      order_shipping: shipping === 0 ? 'Gratuita 🎉' : '€3.00',
       order_total: `€${finalTotal.toFixed(2)}`,
       order_notes: notes || 'Nessuna nota',
-      reply_to: email
-    });
+      reply_to: EMAIL_CONFIG.ownerEmail            // cliente può rispondere al venditore
+    };
+    try {
+      await emailjs.send(EMAIL_CONFIG.serviceId, customerTemplateId, customerConfirmData);
+    } catch (customerErr) {
+      console.warn('Email conferma cliente non inviata:', customerErr);
+    }
 
     // Svuota carrello e mostra conferma al cliente
     const savedOrder = { orderNum, name, surname, finalTotal, shipping, cart: [...cart] };
@@ -649,7 +723,10 @@ function showOrderConfirmation({ orderNum, name, surname, finalTotal, shipping, 
     document.body.appendChild(overlay);
     document.getElementById('confClose').addEventListener('click', () => {
       overlay.classList.remove('open');
-      setTimeout(() => overlay.style.display = 'none', 300);
+      setTimeout(() => {
+        overlay.style.display = 'none';
+        document.body.style.overflow = ''; // ← ripristina lo scroll
+      }, 300);
     });
   }
 
@@ -659,7 +736,7 @@ function showOrderConfirmation({ orderNum, name, surname, finalTotal, shipping, 
 
   overlay.style.display = 'flex';
   requestAnimationFrame(() => overlay.classList.add('open'));
-  document.body.style.overflow = 'hidden';
+  // NON blocchiamo overflow qui — closeOrderModal lo ha già rilasciato
 }
 
 
@@ -676,17 +753,24 @@ function setupContactForm() {
 
     try {
       if (EMAIL_CONFIG.publicKey && EMAIL_CONFIG.serviceId && EMAIL_CONFIG.templateId) {
-        await emailjs.send(EMAIL_CONFIG.serviceId, EMAIL_CONFIG.templateId, {
-          to_email: EMAIL_CONFIG.ownerEmail,
-          customer_name: name,
-          customer_email: email,
-          order_details: msg,
-          order_total: 'N/A — Contatto',
-          order_number: 'CONTACT-' + Date.now().toString().slice(-6),
-          reply_to: email
-        });
+        // 📩 EMAIL AL VENDITORE
+        await emailjs.send(
+          EMAIL_CONFIG.serviceId,
+          EMAIL_CONFIG.templateId,
+          emailData
+        );
+
+        // 📩 EMAIL AL CLIENTE
+        await emailjs.send(
+          EMAIL_CONFIG.serviceId,
+          "order_customer", // 👈 nome template cliente
+          {
+            ...emailData,
+            to_email: email // 👈 invia al cliente
+          }
+        );
       } else {
-        const sub = encodeURIComponent(`[GoalKit] Messaggio da ${name}`);
+        const sub = encodeURIComponent(`[WorldOfKits] Messaggio da ${name}`);
         const body = encodeURIComponent(`Da: ${name} <${email}>\n\n${msg}`);
         window.open(`mailto:${EMAIL_CONFIG.ownerEmail || ''}?subject=${sub}&body=${body}`);
       }
@@ -716,6 +800,8 @@ function setupSetupModal() {
     document.getElementById('ejsServiceId').value = EMAIL_CONFIG.serviceId || '';
     document.getElementById('ejsTemplateId').value = EMAIL_CONFIG.templateId || '';
     document.getElementById('ejsOwnerEmail').value = EMAIL_CONFIG.ownerEmail || '';
+    const ctEl = document.getElementById('ejsCustomerTemplateId');
+    if (ctEl) ctEl.value = EMAIL_CONFIG.customerTemplateId || '';
   }
 }
 
@@ -735,13 +821,15 @@ function saveEmailConfig(e) {
     publicKey: document.getElementById('ejsPublicKey').value.trim(),
     serviceId: document.getElementById('ejsServiceId').value.trim(),
     templateId: document.getElementById('ejsTemplateId').value.trim(),
-    ownerEmail: document.getElementById('ejsOwnerEmail').value.trim()
+    ownerEmail: document.getElementById('ejsOwnerEmail').value.trim(),
+    customerTemplateId: (document.getElementById('ejsCustomerTemplateId')?.value || '').trim()
   };
   localStorage.setItem('gk_email_config', JSON.stringify(EMAIL_CONFIG));
   emailjs.init({ publicKey: EMAIL_CONFIG.publicKey });
   closeSetupModal();
   showToast('✅', 'Configurazione email salvata!');
-  updateAdminBtnVisibility(); // Nascondi il bottone dopo il salvataggio
+  updateAdminBtnVisibility();
+  updateVendorBtnVisibility();
 }
 
 // ── ADMIN BTN ──
@@ -759,7 +847,7 @@ function updateAdminBtnVisibility() {
   const btn = document.getElementById('adminBtn');
   if (!btn) return;
   const isConfigured = EMAIL_CONFIG.publicKey && EMAIL_CONFIG.serviceId &&
-                       EMAIL_CONFIG.templateId && EMAIL_CONFIG.ownerEmail;
+    EMAIL_CONFIG.templateId && EMAIL_CONFIG.ownerEmail;
   btn.style.display = isConfigured ? 'none' : 'flex';
 }
 
@@ -793,4 +881,285 @@ function showToast(icon, msg) {
   toast.classList.add('show');
   clearTimeout(toastTimeout);
   toastTimeout = setTimeout(() => toast.classList.remove('show'), 3500);
+}
+
+// ═══════════════════════════════════════════════
+// PANNELLO VENDITORE — Rispondi al Cliente
+// ═══════════════════════════════════════════════
+
+const REPLY_TEMPLATES = {
+  confirm: (name, orderNum) =>
+    `Ciao ${name || '[Nome Cliente]'},
+
+grazie mille per il tuo ordine su WorldOfKits! 🎉
+
+📦 Numero Ordine: ${orderNum || '[WOK-XXXXXX]'}
+
+Il tuo ordine è stato ricevuto ed è attualmente in fase di lavorazione.
+Ti contatteremo non appena è pronto per la spedizione.
+
+Per qualsiasi domanda, rispondi pure a questa email.
+
+A presto,
+Il Team WorldOfKits ⚽`,
+
+  shipped: (name, orderNum) =>
+    `Ciao ${name || '[Nome Cliente]'},
+
+ottime notizie! Il tuo ordine è in viaggio! 🚚
+
+📦 Numero Ordine: ${orderNum || '[WOK-XXXXXX]'}
+
+Il pacco è stato spedito e dovrebbe arrivare entro 24–72 ore lavorative.
+Ti avviseremo con i dettagli di tracciamento non appena disponibili.
+
+Grazie per aver scelto WorldOfKits!
+
+Il Team WorldOfKits ⚽`,
+
+  info: (name, orderNum) =>
+    `Ciao ${name || '[Nome Cliente]'},
+
+ti scriviamo riguardo al tuo ordine ${orderNum || '[WOK-XXXXXX]'}.
+
+Per poter procedere, avremmo bisogno di alcune informazioni aggiuntive:
+
+👉 [Scrivi qui cosa ti serve — es: conferma taglia, indirizzo, ecc.]
+
+Puoi rispondere direttamente a questa email.
+
+Grazie per la collaborazione,
+Il Team WorldOfKits ⚽`,
+
+  custom: () =>
+    `Ciao [Nome Cliente],
+
+[Scrivi qui il tuo messaggio personalizzato]
+
+Il Team WorldOfKits ⚽`
+};
+
+function setupVendorPanel() {
+  const vendorBtn = document.getElementById('vendorReplyBtn');
+  const overlay = document.getElementById('vendorOverlay');
+  const closeBtn = document.getElementById('vendorClose');
+  const copyBtn = document.getElementById('replyCopyBtn');
+  const mailtoBtn = document.getElementById('replyMailtoBtn');
+  const ejsBtn = document.getElementById('replyEjsBtn');
+  const msgArea = document.getElementById('replyMessage');
+  const nameInput = document.getElementById('replyCustomerName');
+  const numInput = document.getElementById('replyOrderNum');
+  const tplBtns = document.querySelectorAll('.reply-tpl-btn');
+
+  if (!vendorBtn || !overlay) return;
+
+  // Mostra bottone solo se EmailJS è configurato
+  updateVendorBtnVisibility();
+
+  vendorBtn.addEventListener('click', () => {
+    overlay.style.display = 'flex';
+    requestAnimationFrame(() => overlay.classList.add('open'));
+    document.body.style.overflow = 'hidden';
+    refreshMessage();
+  });
+
+  closeBtn?.addEventListener('click', closeVendorPanel);
+  overlay.addEventListener('click', e => { if (e.target === overlay) closeVendorPanel(); });
+
+  // Aggiorna messaggio al cambio template
+  tplBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      tplBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      refreshMessage();
+    });
+  });
+
+  // Aggiorna messaggio al cambio nome/numero ordine
+  nameInput?.addEventListener('input', refreshMessage);
+  numInput?.addEventListener('input', refreshMessage);
+
+  // Copia testo
+  copyBtn?.addEventListener('click', () => {
+    if (!msgArea) return;
+    navigator.clipboard.writeText(msgArea.value).then(() => {
+      showToast('📋', 'Messaggio copiato negli appunti!');
+    });
+  });
+
+  // Apri client email (mailto)
+  mailtoBtn?.addEventListener('click', () => {
+    const toEmail = document.getElementById('replyEmail')?.value.trim();
+    if (!toEmail) { showToast('⚠️', 'Inserisci l\'email del cliente!'); return; }
+    const orderNum = numInput?.value.trim() || '';
+    const subject = encodeURIComponent(`Re: Ordine WorldOfKits${orderNum ? ' — ' + orderNum : ''}`);
+    const body = encodeURIComponent(msgArea?.value || '');
+    window.open(`mailto:${toEmail}?subject=${subject}&body=${body}`);
+  });
+
+  // Invia via EmailJS (richiede secondo template)
+  ejsBtn?.addEventListener('click', async () => {
+    const toEmail = document.getElementById('replyEmail')?.value.trim();
+    const customerName = nameInput?.value.trim() || 'Cliente';
+    if (!toEmail) { showToast('⚠️', 'Inserisci l\'email del cliente!'); return; }
+    if (!EMAIL_CONFIG.publicKey || !EMAIL_CONFIG.serviceId) {
+      showToast('⚠️', 'EmailJS non configurato. Usa "Apri Email" come alternativa.');
+      return;
+    }
+    try {
+      ejsBtn.disabled = true;
+      ejsBtn.textContent = '⏳ Invio...';
+      await emailjs.send(EMAIL_CONFIG.serviceId, EMAIL_CONFIG.templateId, {
+        to_email: toEmail,
+        customer_name: customerName,
+        customer_email: toEmail,
+        order_number: numInput?.value.trim() || 'N/A',
+        order_details: msgArea?.value || '',
+        order_total: '—',
+        order_notes: '—',
+        reply_to: EMAIL_CONFIG.ownerEmail
+      });
+      showToast('✅', `Email inviata a ${toEmail}!`);
+      closeVendorPanel();
+    } catch (err) {
+      console.error(err);
+      showToast('❌', 'Errore invio. Usa "Apri Email" come alternativa.');
+    } finally {
+      ejsBtn.disabled = false;
+      ejsBtn.textContent = '⚡ Invia via EmailJS';
+    }
+  });
+
+  function refreshMessage() {
+    const activeTpl = document.querySelector('.reply-tpl-btn.active')?.dataset.tpl || 'confirm';
+    const name = nameInput?.value.trim();
+    const num = numInput?.value.trim();
+    if (msgArea) msgArea.value = REPLY_TEMPLATES[activeTpl](name, num);
+  }
+
+  function closeVendorPanel() {
+    overlay.classList.remove('open');
+    setTimeout(() => { overlay.style.display = 'none'; }, 300);
+    document.body.style.overflow = '';
+  }
+}
+
+function updateVendorBtnVisibility() {
+  const btn = document.getElementById('vendorReplyBtn');
+  if (!btn) return;
+  const isConfigured = EMAIL_CONFIG.publicKey && EMAIL_CONFIG.serviceId &&
+    EMAIL_CONFIG.templateId && EMAIL_CONFIG.ownerEmail;
+  btn.style.display = isConfigured ? 'flex' : 'none';
+}
+
+// ══════════════════════════════════
+// CAROSELLO RECENSIONI
+// ══════════════════════════════════
+function setupReviews() {
+  const track = document.getElementById('reviewsTrack');
+  const prevBtn = document.getElementById('reviewsPrev');
+  const nextBtn = document.getElementById('reviewsNext');
+  const dotsEl = document.getElementById('reviewsDots');
+  if (!track || !prevBtn || !nextBtn) return;
+
+  const cards = track.querySelectorAll('.review-card');
+  const total = cards.length;
+  let current = 0;
+  let autoInterval = null;
+
+  // Calcola la larghezza di uno step (card + gap)
+  function cardWidth() {
+    const card = cards[0];
+    const gap = parseFloat(getComputedStyle(track).gap) || 20;
+    return card.offsetWidth + gap;
+  }
+
+  // Crea i dots
+  cards.forEach((_, i) => {
+    const dot = document.createElement('button');
+    dot.className = 'reviews-dot' + (i === 0 ? ' active' : '');
+    dot.setAttribute('aria-label', `Recensione ${i + 1}`);
+    dot.addEventListener('click', () => goTo(i));
+    dotsEl.appendChild(dot);
+  });
+
+  function goTo(index) {
+    current = (index + total) % total;
+    track.style.transform = `translateX(-${current * cardWidth()}px)`;
+    dotsEl.querySelectorAll('.reviews-dot').forEach((d, i) => {
+      d.classList.toggle('active', i === current);
+    });
+  }
+
+  prevBtn.addEventListener('click', () => { goTo(current - 1); resetAuto(); });
+  nextBtn.addEventListener('click', () => { goTo(current + 1); resetAuto(); });
+
+  // Auto-play ogni 4s
+  function startAuto() {
+    autoInterval = setInterval(() => goTo(current + 1), 4000);
+  }
+  function resetAuto() {
+    clearInterval(autoInterval);
+    startAuto();
+  }
+  startAuto();
+
+  // Pausa al hover
+  const wrap = track.closest('.reviews-carousel-wrap');
+  wrap?.addEventListener('mouseenter', () => clearInterval(autoInterval));
+  wrap?.addEventListener('mouseleave', startAuto);
+
+  // Swipe su mobile
+  let startX = 0;
+  track.addEventListener('touchstart', e => { startX = e.touches[0].clientX; }, { passive: true });
+  track.addEventListener('touchend', e => {
+    const diff = startX - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 50) { diff > 0 ? goTo(current + 1) : goTo(current - 1); resetAuto(); }
+  });
+
+  // Ricalcola posizione al resize
+  window.addEventListener('resize', () => goTo(current));
+}
+
+// ══════════════════════════════════
+// RICHIESTA PRODOTTO PERSONALIZZATA
+// ══════════════════════════════════
+function setupCustomOrder() {
+  const form = document.getElementById('customOrderForm');
+  if (!form) return;
+
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+
+    const name = document.getElementById('customProductName')?.value.trim();
+    const size = document.getElementById('customProductSize')?.value || 'M';
+    const qty = parseInt(document.getElementById('customProductQty')?.value) || 1;
+
+    if (!name) return;
+
+    const customItem = {
+      id: 'custom-' + Date.now(),
+      name: '🔍 ' + name,
+      size,
+      qty,
+      price: 28,
+      custom: true
+    };
+
+    const existing = cart.find(i => i.name === customItem.name && i.size === size);
+    if (existing) {
+      existing.qty += qty;
+    } else {
+      cart.push(customItem);
+    }
+
+    saveCart();
+    updateCartUI();
+    openCart();  // openCart() chiama renderCartItems() internamente
+
+    showToast('✅', `"${name}" aggiunto! Il prezzo ti verrà comunicato via email.`);
+    form.reset();
+    document.getElementById('customProductSize').value = 'M';
+    document.getElementById('customProductQty').value = '1';
+  });
 }

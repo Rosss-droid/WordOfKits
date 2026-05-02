@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nuovo Ordine WorldOfKits</title>
+</head>
+
+<body style="margin:0;padding:0;background:#f4f4f8;font-family:'Segoe UI',Arial,sans-serif;">
+
+  <table width="100%" cellpadding="0" cellspacing="0" style="background:#f4f4f8;padding:40px 20px;">
+    <tr>
+      <td align="center">
+        <table width="600" cellpadding="0" cellspacing="0"
+          style="max-width:600px;width:100%;background:#ffffff;border-radius:16px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.10);">
+
+          <!-- HEADER -->
+          <tr>
+            <td style="background:linear-gradient(135deg,#6c63ff,#8b5cf6);padding:32px 40px;text-align:center;">
+              <p style="margin:0;font-size:36px;">⚽</p>
+              <h1 style="margin:8px 0 4px;color:#ffffff;font-size:26px;font-weight:800;letter-spacing:2px;">WorldOfKits
+              </h1>
+              <p style="margin:0;color:rgba(255,255,255,0.85);font-size:14px;">Nuovo Ordine Ricevuto</p>
+            </td>
+          </tr>
+
+          <!-- BODY -->
+          <tr>
+            <td style="padding:32px 40px;">
+
+              <!-- Numero ordine -->
+              <table width="100%" cellpadding="0" cellspacing="0"
+                style="background:#f0eeff;border-radius:10px;margin-bottom:24px;">
+                <tr>
+                  <td style="padding:16px 20px;">
+                    <p
+                      style="margin:0;font-size:12px;color:#8892b0;text-transform:uppercase;letter-spacing:1px;font-weight:600;">
+                      Numero Ordine</p>
+                    <p style="margin:4px 0 0;font-size:22px;font-weight:800;color:#6c63ff;">{{order_number}}</p>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- Dati cliente -->
+              <h2
+                style="margin:0 0 14px;font-size:16px;font-weight:700;color:#1a1a2e;border-bottom:2px solid #f0eeff;padding-bottom:8px;">
+                👤 Dati Cliente</h2>
+              <table width="100%" cellpadding="6" cellspacing="0" style="margin-bottom:24px;font-size:14px;color:#444;">
+                <tr>
+                  <td style="width:140px;color:#8892b0;font-weight:600;">Nome</td>
+                  <td style="color:#1a1a2e;font-weight:500;">{{customer_name}}</td>
+                </tr>
+                <tr>
+                  <td style="color:#8892b0;font-weight:600;">Email</td>
+                  <td>
+                    <a href="mailto:{{customer_email}}"
+                      style="color:#6c63ff;font-weight:600;text-decoration:none;">{{customer_email}}</a>
+                  </td>
+                </tr>
+                <tr>
+                  <td style="color:#8892b0;font-weight:600;">Telefono</td>
+                  <td style="color:#1a1a2e;">{{customer_phone}}</td>
+                </tr>
+                <tr>
+                  <td style="color:#8892b0;font-weight:600;">Indirizzo</td>
+                  <td style="color:#1a1a2e;">{{customer_address}}</td>
+                </tr>
+              </table>
+
+              <!-- Prodotti -->
+              <h2
+                style="margin:0 0 14px;font-size:16px;font-weight:700;color:#1a1a2e;border-bottom:2px solid #f0eeff;padding-bottom:8px;">
+                🛒 Prodotti Ordinati</h2>
+              <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:24px;">
+                <tr>
+                  <td
+                    style="background:#f8f8fc;border-radius:10px;padding:16px 20px;font-size:14px;color:#333;white-space:pre-line;line-height:1.8;">
+                    {{order_details}}</td>
+                </tr>
+              </table>
+
+              <!-- Totale -->
+              <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:24px;">
+                <tr>
+                  <td style="background:linear-gradient(135deg,#6c63ff,#8b5cf6);border-radius:10px;padding:16px 24px;">
+                    <table width="100%" cellpadding="0" cellspacing="0">
+                      <tr>
+                        <td style="color:rgba(255,255,255,0.85);font-size:14px;font-weight:600;">TOTALE ORDINE</td>
+                        <td align="right" style="color:#ffffff;font-size:22px;font-weight:800;">{{order_total}}</td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- Note -->
+              <h2
+                style="margin:0 0 10px;font-size:16px;font-weight:700;color:#1a1a2e;border-bottom:2px solid #f0eeff;padding-bottom:8px;">
+                📝 Note</h2>
+              <p
+                style="margin:0 0 24px;font-size:14px;color:#555;background:#f8f8fc;border-radius:8px;padding:12px 16px;">
+                {{order_notes}}</p>
+
+              <!-- CTA risposta al cliente -->
+              <table width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td align="center">
+                    <a href="mailto:{{customer_email}}"
+                      style="display:inline-block;background:linear-gradient(135deg,#6c63ff,#8b5cf6);color:#ffffff;text-decoration:none;font-weight:700;font-size:15px;padding:14px 32px;border-radius:50px;box-shadow:0 4px 16px rgba(108,99,255,0.4);">
+                      ✉️ Rispondi al Cliente
+                    </a>
+                  </td>
+                </tr>
+              </table>
+
+            </td>
+          </tr>
+
+          <!-- FOOTER -->
+          <tr>
+            <td style="background:#f8f8fc;padding:20px 40px;text-align:center;border-top:1px solid #eee;">
+              <p style="margin:0;font-size:12px;color:#aaa;">WorldOfKits • Pannello Ordini Venditore</p>
+              <p style="margin:4px 0 0;font-size:11px;color:#ccc;">Questa email è riservata al venditore — non va
+                inoltrata al cliente.</p>
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+
+</body>
+
+</html>

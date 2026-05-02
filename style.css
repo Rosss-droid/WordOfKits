@@ -756,6 +756,22 @@ img {
   border: 1px solid var(--border);
   border-radius: 4px;
   color: var(--text-muted);
+  background: transparent;
+  cursor: pointer;
+  font-family: inherit;
+  transition: border-color .2s, color .2s, background .2s;
+}
+
+.size-tag:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.size-tag.active {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: #fff;
+  font-weight: 700;
 }
 
 .card-footer {
@@ -1493,4 +1509,424 @@ img {
   .modal {
     padding: 1.5rem;
   }
+}
+
+/* ══════════════════════════════════
+   RICHIESTA PERSONALIZZATA
+══════════════════════════════════ */
+.custom-order-section {
+  padding: 2rem 0 3rem;
+  background: var(--bg);
+}
+
+.custom-order-inner {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1.75rem 2rem;
+  border-radius: var(--radius);
+  border: 1px solid rgba(108, 99, 255, 0.3);
+  background: linear-gradient(135deg, rgba(108, 99, 255, 0.07), rgba(139, 92, 246, 0.04));
+  flex-wrap: wrap;
+}
+
+.custom-order-icon {
+  font-size: 2.4rem;
+  flex-shrink: 0;
+}
+
+.custom-order-text {
+  flex: 1;
+  min-width: 180px;
+}
+
+.custom-order-text h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: .25rem;
+}
+
+.custom-order-text p {
+  font-size: .82rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+.custom-order-form {
+  flex: 2;
+  min-width: 260px;
+}
+
+.custom-order-fields {
+  display: flex;
+  gap: .6rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.custom-product-input {
+  flex: 1;
+  min-width: 180px;
+  padding: .65rem 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: var(--text);
+  font-size: .9rem;
+  font-family: inherit;
+  transition: border-color .25s;
+}
+
+.custom-product-input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.custom-product-input::placeholder {
+  color: var(--text-muted);
+  font-size: .82rem;
+}
+
+.custom-product-select {
+  padding: .65rem .75rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: var(--text);
+  font-size: .9rem;
+  font-family: inherit;
+  cursor: pointer;
+  transition: border-color .25s;
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238892b0' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right .6rem center;
+  padding-right: 2rem;
+}
+
+.custom-product-select:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.custom-product-select option {
+  background: #1a1f3a;
+  color: var(--text);
+}
+
+.custom-order-btn {
+  white-space: nowrap;
+  padding: .65rem 1.25rem;
+  font-size: .88rem;
+}
+
+.custom-order-note {
+  font-size: .72rem;
+  color: var(--text-muted);
+  margin-top: .6rem;
+  padding-left: .2rem;
+}
+
+@media (max-width: 700px) {
+  .custom-order-inner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1.25rem;
+  }
+
+  .custom-order-fields {
+    width: 100%;
+  }
+
+  .custom-product-input {
+    width: 100%;
+  }
+}
+
+/* ══════════════════════════════════
+   SEZIONE RECENSIONI
+══════════════════════════════════ */
+.reviews-section {
+  padding: 5rem 0;
+  background: var(--bg2);
+  overflow: hidden;
+}
+
+.reviews-carousel-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 2.5rem;
+}
+
+.reviews-track-outer {
+  flex: 1;
+  overflow: hidden;
+  border-radius: var(--radius);
+}
+
+.reviews-track {
+  display: flex;
+  gap: 1.25rem;
+  transition: transform 0.45s cubic-bezier(.4, 0, .2, 1);
+  will-change: transform;
+}
+
+/* ── SINGOLA CARD ── */
+.review-card {
+  min-width: 320px;
+  flex-shrink: 0;
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  border: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: .75rem;
+  transition: transform .3s, box-shadow .3s;
+}
+
+.review-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(108, 99, 255, 0.2);
+}
+
+.review-header {
+  display: flex;
+  align-items: center;
+  gap: .85rem;
+}
+
+.review-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 1rem;
+  color: #fff;
+  flex-shrink: 0;
+  letter-spacing: .5px;
+}
+
+.review-name {
+  font-weight: 700;
+  font-size: .95rem;
+  color: var(--text);
+  margin: 0;
+}
+
+.review-location {
+  font-size: .75rem;
+  color: var(--text-muted);
+  margin: 2px 0 0;
+}
+
+.review-verified {
+  margin-left: auto;
+  font-size: .7rem;
+  color: #27ae60;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.review-stars {
+  color: #ffd700;
+  font-size: 1.1rem;
+  letter-spacing: 2px;
+}
+
+.review-text {
+  font-size: .88rem;
+  color: var(--text-muted);
+  line-height: 1.65;
+  font-style: italic;
+  flex: 1;
+}
+
+.review-product {
+  font-size: .75rem;
+  color: var(--accent);
+  font-weight: 600;
+  padding-top: .5rem;
+  border-top: 1px solid var(--border);
+}
+
+/* ── FOTO RECENSIONE ── */
+.review-photo {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 10px;
+  display: block;
+}
+
+.review-photo-placeholder {
+  width: 100%;
+  height: 180px;
+  border-radius: 10px;
+  border: 2px dashed var(--border);
+  display: none;
+  /* mostrato via JS solo se l'immagine non carica */
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: .4rem;
+  color: var(--text-muted);
+  font-size: 1.8rem;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.review-photo-placeholder small {
+  font-size: .7rem;
+  letter-spacing: .5px;
+  color: var(--text-muted);
+}
+
+/* ── FRECCE ── */
+.reviews-arrow {
+  background: rgba(108, 99, 255, .15);
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  border-radius: 50%;
+  width: 44px;
+  height: 44px;
+  font-size: 1.8rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: var(--transition);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.reviews-arrow:hover {
+  background: var(--accent);
+  color: #fff;
+  transform: scale(1.1);
+}
+
+/* ── DOTS ── */
+.reviews-dots {
+  display: flex;
+  justify-content: center;
+  gap: .5rem;
+  margin-top: 1.5rem;
+}
+
+.reviews-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--border);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.reviews-dot.active {
+  background: var(--accent);
+  width: 24px;
+  border-radius: 4px;
+}
+
+/* ── MOBILE ── */
+@media (max-width: 600px) {
+  .review-card {
+    min-width: 280px;
+  }
+
+  .reviews-arrow {
+    width: 36px;
+    height: 36px;
+    font-size: 1.4rem;
+  }
+}
+
+/* ── ADMIN / VENDOR BUTTONS ── */
+.admin-btn {
+  position: fixed;
+  bottom: 2rem;
+  left: 2rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  border-radius: 50px;
+  padding: .5rem 1rem;
+  font-size: .75rem;
+  cursor: pointer;
+  z-index: 900;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  gap: .4rem;
+}
+
+.admin-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.vendor-reply-btn {
+  position: fixed;
+  bottom: 2rem;
+  left: 9rem;
+  background: linear-gradient(135deg, var(--accent), #8b5cf6);
+  border: none;
+  color: #fff;
+  border-radius: 50px;
+  padding: .5rem 1.1rem;
+  font-size: .78rem;
+  font-weight: 600;
+  cursor: pointer;
+  z-index: 900;
+  transition: var(--transition);
+  display: none;
+  /* shown via JS only when EmailJS is configured */
+  align-items: center;
+  gap: .4rem;
+  box-shadow: 0 4px 16px rgba(108, 99, 255, .4);
+}
+
+.vendor-reply-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(108, 99, 255, .55);
+}
+
+/* ── VENDOR REPLY TEMPLATE GRID ── */
+.reply-tpl-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: .5rem;
+  margin-top: .3rem;
+}
+
+.reply-tpl-btn {
+  padding: .6rem .8rem;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text-muted);
+  font-size: .82rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition);
+  text-align: center;
+}
+
+.reply-tpl-btn:hover {
+  border-color: var(--accent);
+  color: var(--text);
+}
+
+.reply-tpl-btn.active {
+  background: rgba(108, 99, 255, .15);
+  border-color: var(--accent);
+  color: var(--accent);
+  font-weight: 700;
 }

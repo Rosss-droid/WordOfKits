@@ -1,17 +1,22 @@
 <!DOCTYPE html>
 <html lang="it">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>WorldofKits — Maglie da Calcio Premium</title>
-  <meta name="description" content="GoalKit: il tuo store online per maglie da calcio e articoli sportivi premium. Acquista le migliori maglie delle nazionali e dei club." />
+  <meta name="description"
+    content="GoalKit: il tuo store online per maglie da calcio e articoli sportivi premium. Acquista le migliori maglie delle nazionali e dei club." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Bebas+Neue&display=swap" rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Bebas+Neue&display=swap"
+    rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
   <!-- EmailJS SDK -->
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 </head>
+
 <body>
 
   <!-- ═══════════════════ HEADER / NAV ═══════════════════ -->
@@ -44,12 +49,11 @@
     <div class="hero-content">
       <div class="hero-badge">🏆 Store Ufficiale</div>
       <h1 class="hero-title">
-        Vesti con <br />
-        <span class="gradient-text">Classe</span>
+
       </h1>
       <p class="hero-subtitle">
-        Maglie da calcio originali, accessori e articoli sportivi per i veri appassionati.
-        Qualità premium, spedizione rapida in tutta Italia.
+        Maglie da calcio originali, accessori e articoli sportivi .
+        Qualità premium.
       </p>
       <div class="hero-actions">
         <a href="#products" class="btn btn-primary">
@@ -65,13 +69,11 @@
         </div>
         <div class="stat-divider"></div>
         <div class="stat">
-          <span class="stat-number">500+</span>
-          <span class="stat-label">Clienti</span>
+
         </div>
         <div class="stat-divider"></div>
         <div class="stat">
-          <span class="stat-number">72h</span>
-          <span class="stat-label">Spedizione</span>
+
         </div>
       </div>
     </div>
@@ -97,13 +99,8 @@
       <!-- ── SEARCH BAR ── -->
       <div class="search-wrap">
         <span class="search-icon">🔍</span>
-        <input
-          type="text"
-          id="searchInput"
-          class="search-input"
-          placeholder="Cerca una maglia... (es. Napoli, Real Madrid)"
-          autocomplete="off"
-        />
+        <input type="text" id="searchInput" class="search-input"
+          placeholder="Cerca una maglia... (es. Napoli, Real Madrid)" autocomplete="off" />
         <button class="search-clear" id="searchClear" title="Cancella ricerca" aria-label="Cancella ricerca">✕</button>
       </div>
 
@@ -162,18 +159,198 @@
     </div>
   </section>
 
+  <!-- ═══════════════════ RICHIESTA PERSONALIZZATA ═══════════════════ -->
+  <section class="custom-order-section" id="customOrder">
+    <div class="container">
+      <div class="custom-order-inner glass">
+        <div class="custom-order-icon">🔍</div>
+        <div class="custom-order-text">
+          <h3>Non trovi quello che cerchi?</h3>
+          <p>Scrivi il modello di maglia che vuoi e te la troviamo noi. Riceverai conferma e prezzo via email.</p>
+        </div>
+        <form class="custom-order-form" id="customOrderForm" autocomplete="off">
+          <div class="custom-order-fields">
+            <input type="text" id="customProductName" class="custom-product-input"
+              placeholder="Es: Maglia Barcellona Away 2024/25, Portogallo Home..." required />
+            <select id="customProductSize" class="custom-product-select">
+              <option value="XS">XS</option>
+              <option value="S">S</option>
+              <option value="M" selected>M</option>
+              <option value="L">L</option>
+              <option value="XL">XL</option>
+              <option value="XXL">XXL</option>
+            </select>
+            <select id="customProductQty" class="custom-product-select" style="max-width:80px;">
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+            </select>
+            <button type="submit" class="btn btn-primary custom-order-btn">
+              🛒 Aggiungi al Carrello
+            </button>
+          </div>
+          <p class="custom-order-note">💰 Prezzo fisso: <strong>€28,00 a maglia</strong> — Consegna in 3–5 giorni
+            lavorativi</p>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ RECENSIONI ═══════════════════ -->
+  <section class="reviews-section" id="reviews">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-badge">⭐ Recensioni</span>
+        <h2 class="section-title">Cosa Dicono i <span class="gradient-text">Nostri Clienti</span></h2>
+        <p class="section-sub">Oltre 500 clienti soddisfatti in tutta Italia</p>
+      </div>
+
+      <div class="reviews-carousel-wrap">
+        <button class="reviews-arrow reviews-arrow-left" id="reviewsPrev" aria-label="Precedente">&#8249;</button>
+
+        <div class="reviews-track-outer">
+          <div class="reviews-track" id="reviewsTrack">
+
+            <!-- Review 1 -->
+            <div class="review-card glass">
+              <div class="review-header">
+                <div class="review-avatar" style="background:linear-gradient(135deg,#6c63ff,#8b5cf6);">LM</div>
+                <div>
+                  <p class="review-name">Luca M.</p>
+                  <p class="review-location">📍 Milano</p>
+                </div>
+                <span class="review-verified">✅ Verificato</span>
+              </div>
+              <img class="review-photo" src="images/reviews/review1.jpg" alt="Foto cliente"
+                onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+              <div class="review-photo-placeholder"><span>📸</span><small>Aggiungi foto</small></div>
+              <div class="review-stars">★★★★★</div>
+              <p class="review-text">"Maglia del Napoli arrivata in 2 giorni, qualità assurda. Il tessuto è esattamente
+                come quello originale. Consigliatissimo! 🔥"</p>
+              <p class="review-product">🛒 Maglia Napoli Home 2025/26</p>
+            </div>
+
+            <!-- Review 2 -->
+            <div class="review-card glass">
+              <div class="review-header">
+                <div class="review-avatar" style="background:linear-gradient(135deg,#ff6584,#ff4757);">SF</div>
+                <div>
+                  <p class="review-name">Sara F.</p>
+                  <p class="review-location">📍 Roma</p>
+                </div>
+                <span class="review-verified">✅ Verificato</span>
+              </div>
+              <img class="review-photo" src="images/reviews/review2.jpg" alt="Foto cliente"
+                onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+              <div class="review-photo-placeholder"><span>📸</span><small>Aggiungi foto</small></div>
+              <div class="review-stars">★★★★★</div>
+              <p class="review-text">"Ho comprato la maglia di CR7 per mio figlio, è rimasto senza parole! Spedizione
+                velocissima e packaging curato. Tornerò sicuramente."</p>
+              <p class="review-product">🛒 Maglia Al Nassr CR7 Edition</p>
+            </div>
+
+            <!-- Review 3 -->
+            <div class="review-card glass">
+              <div class="review-header">
+                <div class="review-avatar" style="background:linear-gradient(135deg,#ffd700,#ff9f43);">AR</div>
+                <div>
+                  <p class="review-name">Andrea R.</p>
+                  <p class="review-location">📍 Torino</p>
+                </div>
+                <span class="review-verified">✅ Verificato</span>
+              </div>
+              <img class="review-photo" src="images/reviews/review3.jpg" alt="Foto cliente"
+                onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+              <div class="review-photo-placeholder"><span>📸</span><small>Aggiungi foto</small></div>
+              <div class="review-stars">★★★★★</div>
+              <p class="review-text">"Finalmente un sito affidabile! Ho ordinato la maglia del Real Madrid e in 3 giorni
+                era già a casa. Prezzo onestissimo per la qualità."</p>
+              <p class="review-product">🛒 Maglia Real Madrid Home 2025/26</p>
+            </div>
+
+            <!-- Review 4 -->
+            <div class="review-card glass">
+              <div class="review-header">
+                <div class="review-avatar" style="background:linear-gradient(135deg,#1abc9c,#27ae60);">GM</div>
+                <div>
+                  <p class="review-name">Giuseppe M.</p>
+                  <p class="review-location">📍 Napoli</p>
+                </div>
+                <span class="review-verified">✅ Verificato</span>
+              </div>
+              <img class="review-photo" src="images/reviews/review4.jpg" alt="Foto cliente"
+                onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+              <div class="review-photo-placeholder"><span>📸</span><small>Aggiungi foto</small></div>
+              <div class="review-stars">★★★★★</div>
+              <p class="review-text">"Acquisto la terza maglia da WorldOfKits. Mai avuto un problema. Assistenza clienti
+                sempre disponibile. 10/10 senza discussioni."</p>
+              <p class="review-product">🛒 Maglia Inter Away 2025/26</p>
+            </div>
+
+            <!-- Review 5 -->
+            <div class="review-card glass">
+              <div class="review-header">
+                <div class="review-avatar" style="background:linear-gradient(135deg,#3498db,#2980b9);">VB</div>
+                <div>
+                  <p class="review-name">Valentina B.</p>
+                  <p class="review-location">📍 Firenze</p>
+                </div>
+                <span class="review-verified">✅ Verificato</span>
+              </div>
+              <img class="review-photo" src="images/reviews/review5.jpg" alt="Foto cliente"
+                onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+              <div class="review-photo-placeholder"><span>📸</span><small>Aggiungi foto</small></div>
+              <div class="review-stars">★★★★★</div>
+              <p class="review-text">"Regalo perfetto per mio marito tifoso del Bayern. Confezionata benissimo, arrivata
+                prima del previsto. Grazie WorldOfKits! ⚽"</p>
+              <p class="review-product">🛒 Maglia Bayern Monaco Home 2025/26</p>
+            </div>
+
+            <!-- Review 6 -->
+            <div class="review-card glass">
+              <div class="review-header">
+                <div class="review-avatar" style="background:linear-gradient(135deg,#e74c3c,#c0392b);">MC</div>
+                <div>
+                  <p class="review-name">Marco C.</p>
+                  <p class="review-location">📍 Palermo</p>
+                </div>
+                <span class="review-verified">✅ Verificato</span>
+              </div>
+              <img class="review-photo" src="images/reviews/review6.jpg" alt="Foto cliente"
+                onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+              <div class="review-photo-placeholder"><span>📸</span><small>Aggiungi foto</small></div>
+              <div class="review-stars">★★★★★</div>
+              <p class="review-text">"Sito serio e professionale. Ho avuto una domanda sulla taglia e mi hanno risposto
+                in pochi minuti. Maglia bellissima, la indosso già!"</p>
+              <p class="review-product">🛒 Maglia Manchester City Home 2025/26</p>
+            </div>
+
+          </div>
+        </div>
+
+        <button class="reviews-arrow reviews-arrow-right" id="reviewsNext" aria-label="Successivo">&#8250;</button>
+      </div>
+
+      <!-- Dots -->
+      <div class="reviews-dots" id="reviewsDots"></div>
+    </div>
+  </section>
+
   <!-- ═══════════════════ ABOUT ═══════════════════ -->
   <section class="about-section" id="about">
     <div class="container">
       <div class="about-grid">
         <div class="about-text">
           <span class="section-badge">💬 Chi Siamo</span>
-          <h2 class="section-title">La Passione per il Calcio<br /><span class="gradient-text">è il nostro DNA</span></h2>
-          <p>GoalKit nasce dalla passione di tifosi veri. Offriamo maglie originali, accessori certificati e un servizio clienti che capisce davvero di calcio.</p>
+          <h2 class="section-title">La Nostra Passione per il Calcio<br />
+          </h2>
+          <p>WorldOfKits nasce dalla passione di tutti i tifosi. Offriamo maglie , accessori certificati e un servizio
+            clienti a cui teniamo che siano sempre soddisfatti.</p>
           <ul class="about-features">
-            <li><span class="feat-icon">✅</span> Prodotti 100% originali e certificati</li>
-            <li><span class="feat-icon">🚀</span> Spedizione express in 24-48 ore</li>
-            <li><span class="feat-icon">🔄</span> Reso gratuito entro 30 giorni</li>
+            <li><span class="feat-icon">✅</span> Prodotti di altissima qualità</li>
+            <li><span class="feat-icon">🚀</span> Spedizione entro 24/48 h</li>
             <li><span class="feat-icon">🛡️</span> Pagamento sicuro e garantito</li>
           </ul>
         </div>
@@ -235,9 +412,9 @@
         <div class="footer-brand">
           <div class="nav-logo">
             <span class="logo-icon">⚽</span>
-            <span class="logo-text">GoalKit</span>
+            <span class="logo-text">WorldOfKits</span>
           </div>
-          <p>Il tuo store di fiducia per maglie da calcio e articoli sportivi premium.</p>
+          <p>Il tuo store di fiducia per maglie da calcio e articoli sportivi.</p>
         </div>
         <div class="footer-links-group">
           <h4>Navigazione</h4>
@@ -255,13 +432,13 @@
         </div>
         <div class="footer-links-group">
           <h4>Contatti</h4>
-          <a href="mailto:info@goalkit.it">info@goalkit.it</a>
-          <a href="tel:+390000000000">+39 000 000 0000</a>
+
+
         </div>
       </div>
       <div class="footer-bottom">
-        <p>© 2026 GoalKit. Tutti i diritti riservati.</p>
-        <p>P.IVA: 12345678901</p>
+        <p>© 2026 WorldOfKits. Tutti i diritti riservati.</p>
+
       </div>
     </div>
   </footer>
@@ -343,7 +520,8 @@
         </div>
         <div class="form-group">
           <label for="orderNotes">Note sull'ordine</label>
-          <textarea id="orderNotes" rows="2" placeholder="Personalizzazione maglia (nome/numero), note speciali..."></textarea>
+          <textarea id="orderNotes" rows="2"
+            placeholder="Personalizzazione maglia (nome/numero), note speciali..."></textarea>
         </div>
 
         <!-- Order Summary inside modal -->
@@ -351,7 +529,8 @@
 
         <div class="form-group payment-notice">
           <span class="payment-icon">💳</span>
-          <span>Il pagamento avverrà al momento della consegna (contrassegno) o tramite bonifico bancario. Verrai contattato via email.</span>
+          <span>Il pagamento avverrà al momento della consegna (contrassegno) o tramite bonifico bancario. Verrai
+            contattato via email.</span>
         </div>
 
         <button type="submit" class="btn btn-primary btn-full" id="orderSubmitBtn">
@@ -374,21 +553,31 @@
         <div class="form-group">
           <label for="ejsPublicKey">Public Key EmailJS *</label>
           <input type="text" id="ejsPublicKey" placeholder="Es: user_xxxxxxxxxx" required />
-          <small>Trovalo su <a href="https://dashboard.emailjs.com/admin/account" target="_blank">dashboard.emailjs.com → Account</a></small>
+          <small>Trovalo su <a href="https://dashboard.emailjs.com/admin/account" target="_blank">dashboard.emailjs.com
+              → Account</a></small>
         </div>
         <div class="form-group">
           <label for="ejsServiceId">Service ID *</label>
           <input type="text" id="ejsServiceId" placeholder="Es: service_xxxxxxx" required />
-          <small>Trovalo su <a href="https://dashboard.emailjs.com/admin" target="_blank">dashboard.emailjs.com → Email Services</a></small>
+          <small>Trovalo su <a href="https://dashboard.emailjs.com/admin" target="_blank">dashboard.emailjs.com → Email
+              Services</a></small>
         </div>
         <div class="form-group">
           <label for="ejsTemplateId">Template ID *</label>
           <input type="text" id="ejsTemplateId" placeholder="Es: template_xxxxxxx" required />
-          <small>Trovalo su <a href="https://dashboard.emailjs.com/admin/templates" target="_blank">dashboard.emailjs.com → Email Templates</a></small>
+          <small>Trovalo su <a href="https://dashboard.emailjs.com/admin/templates"
+              target="_blank">dashboard.emailjs.com → Email Templates</a></small>
         </div>
         <div class="form-group">
           <label for="ejsOwnerEmail">Tua Email (destinatario notifiche) *</label>
           <input type="email" id="ejsOwnerEmail" placeholder="tuaemail@gmail.com" required />
+        </div>
+        <div class="form-group">
+          <label for="ejsCustomerTemplateId">Template ID Conferma Cliente <span
+              style="color:var(--accent);font-size:.75rem;">(consigliato)</span></label>
+          <input type="text" id="ejsCustomerTemplateId" placeholder="Es: template_xxxxxxx" />
+          <small>Crea un secondo template su EmailJS per la conferma automatica al cliente. Se vuoto, usa lo stesso
+            template del venditore.</small>
         </div>
         <button type="submit" class="btn btn-primary btn-full">💾 Salva Configurazione</button>
       </form>
@@ -410,7 +599,8 @@
           <li>
             <strong>⭐ Per rispondere al cliente direttamente:</strong><br>
             Nel template, in <em>Settings → Reply To</em>, inserisci <code>{{reply_to}}</code>.<br>
-            Così quando ricevi l'email e clicchi <strong>"Rispondi"</strong>, la risposta andrà automaticamente all'email del cliente!
+            Così quando ricevi l'email e clicchi <strong>"Rispondi"</strong>, la risposta andrà automaticamente
+            all'email del cliente!
           </li>
           <li>Copia le credenziali nei campi sopra e salva</li>
         </ol>
@@ -432,10 +622,13 @@
     </div>
   </div>
 
-  <!-- Admin Setup Button (hidden, click logo 5 times) -->
+  <!-- Admin Setup Button -->
   <button class="admin-btn" id="adminBtn" title="Configura Email">⚙️ Setup Email</button>
+
+
 
   <script src="products.js"></script>
   <script src="app.js"></script>
 </body>
+
 </html>
