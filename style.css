@@ -929,6 +929,37 @@ img {
   font-weight: 700;
 }
 
+/* ── QUICK VIEW: taglia + tessuto ── */
+.qv-fabric-row {
+  display: flex;
+  gap: .4rem;
+  margin-bottom: .75rem;
+}
+
+.qv-size-btn {
+  font-size: .7rem;
+  padding: .2rem .55rem;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  color: var(--text-muted);
+  background: transparent;
+  cursor: pointer;
+  font-family: inherit;
+  transition: border-color .2s, color .2s, background .2s;
+}
+
+.qv-size-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.qv-size-btn.active {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: #fff;
+  font-weight: 700;
+}
+
 .card-footer {
   display: flex;
   align-items: center;

@@ -16,7 +16,7 @@ const DEFAULT_EMAIL_CONFIG = {
 let EMAIL_CONFIG = Object.assign({}, DEFAULT_EMAIL_CONFIG, JSON.parse(localStorage.getItem('gk_email_config') || '{}'));
 
 // ── STATO ──
-let cart = JSON.parse(localStorage.getItem('gk_cart') || '[]').map(function(item) {
+let cart = JSON.parse(localStorage.getItem('gk_cart') || '[]').map(function (item) {
   if (!item._uid) item._uid = Date.now() + '-' + Math.random().toString(36).slice(2);
   return item;
 });
@@ -407,7 +407,7 @@ function selectQvFabric(btn) {
   // aggiorna prezzo
   const priceEl = document.getElementById('qvPriceDisplay');
   if (priceEl) {
-    const base  = parseFloat(priceEl.dataset.base || 0);
+    const base = parseFloat(priceEl.dataset.base || 0);
     const extra = parseFloat(btn.dataset.extra || 0);
     priceEl.innerHTML = `€${(base + extra).toFixed(2)}`;
   }
@@ -417,13 +417,13 @@ function addToCartFromQV(productId) {
   const p = PRODUCTS.find(x => x.id === productId);
   if (!p) return;
 
-  const activeSize   = document.querySelector('.qv-sizes .qv-size-btn.active');
+  const activeSize = document.querySelector('.qv-sizes .qv-size-btn.active');
   const activeFabric = document.querySelector('.qv-fabric-row .fabric-btn.active');
 
-  const selectedSize  = activeSize   ? activeSize.textContent.trim()                       : (p.sizes[0] || 'M');
-  const fabricLabel   = activeFabric ? activeFabric.textContent.replace('+€4', '').trim()  : '👕 Tifoso';
-  const fabricExtra   = activeFabric ? parseFloat(activeFabric.dataset.extra || 0)         : 0;
-  const finalPrice    = p.price + fabricExtra;
+  const selectedSize = activeSize ? activeSize.textContent.trim() : (p.sizes[0] || 'M');
+  const fabricLabel = activeFabric ? activeFabric.textContent.replace('+€4', '').trim() : '👕 Tifoso';
+  const fabricExtra = activeFabric ? parseFloat(activeFabric.dataset.extra || 0) : 0;
+  const finalPrice = p.price + fabricExtra;
 
   const existing = cart.find(item =>
     item.id === productId && item.size === selectedSize && item.fabric === fabricLabel
@@ -509,8 +509,6 @@ function selectCardFabric(btn) {
   }
 }
 
-function removeFromCart(id) {
-  // eslint-disable-next-line eqeqeq
 function removeFromCart(uid) {
   cart = cart.filter(item => item._uid !== uid && item.id != uid);
   saveCart();
@@ -1255,7 +1253,7 @@ function setupCustomOrder() {
 // MINI-CAROSELLO RECENSIONI
 // ══════════════════════════════════
 function setupReviewMiniCarousels() {
-  document.querySelectorAll('[data-rmc]').forEach(function(rmc) {
+  document.querySelectorAll('[data-rmc]').forEach(function (rmc) {
     const imgs = rmc.querySelectorAll('.rmc-img');
     const dots = rmc.querySelectorAll('.rmc-dot');
     if (imgs.length <= 1) return;
@@ -1270,11 +1268,11 @@ function setupReviewMiniCarousels() {
       dots[idx].classList.add('active');
     }
 
-    dots.forEach(function(dot, i) {
-      dot.addEventListener('click', function() { goTo(i); clearInterval(timer); timer = setInterval(function() { goTo(idx + 1); }, 3000); });
+    dots.forEach(function (dot, i) {
+      dot.addEventListener('click', function () { goTo(i); clearInterval(timer); timer = setInterval(function () { goTo(idx + 1); }, 3000); });
     });
 
-    var timer = setInterval(function() { goTo(idx + 1); }, 3000);
+    var timer = setInterval(function () { goTo(idx + 1); }, 3000);
   });
 }
 
