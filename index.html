@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Bebas+Neue&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700;800;900&display=swap"
     rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
   <!-- EmailJS SDK -->
@@ -49,7 +49,8 @@
     <div class="hero-content">
       <div class="hero-badge">🏆 Store Ufficiale</div>
       <h1 class="hero-title">
-
+        <span class="hero-title-main">WORLD OF KITS</span>
+        <span class="hero-title-sub">dai tifosi ai tifosi</span>
       </h1>
       <p class="hero-subtitle">
         Maglie da calcio originali, accessori e articoli sportivi .
@@ -65,15 +66,18 @@
       <div class="hero-stats">
         <div class="stat">
           <span class="stat-number">1K+</span>
-          <span class="stat-label">Prodotti</span>
+          <span class="stat-label">Modelli</span>
         </div>
         <div class="stat-divider"></div>
-        <div class="stat">
-
-        </div>
-        <div class="stat-divider"></div>
-        <div class="stat">
-
+        <div class="hero-brands">
+          <img src="https://cdn.simpleicons.org/nike/ffffff" alt="Nike" class="brand-logo" title="Nike">
+          <img src="https://cdn.simpleicons.org/adidas/ffffff" alt="Adidas" class="brand-logo" title="Adidas">
+          <img src="https://cdn.simpleicons.org/puma/ffffff" alt="Puma" class="brand-logo" title="Puma">
+          <img src="https://cdn.simpleicons.org/newbalance/ffffff" alt="New Balance" class="brand-logo"
+            title="New Balance">
+          <img src="https://cdn.simpleicons.org/underarmour/ffffff" alt="Under Armour" class="brand-logo"
+            title="Under Armour">
+          <img src="https://cdn.simpleicons.org/reebok/ffffff" alt="Reebok" class="brand-logo" title="Reebok">
         </div>
       </div>
     </div>
@@ -81,7 +85,7 @@
       <div class="hero-img-glow"></div>
       <div class="hero-carousel" id="heroCarousel">
         <div class="hero-carousel-track" id="heroCarouselTrack">
-          <img src="images/models/image.png"                   alt="WorldOfKits modello" class="hero-carousel-img active">
+          <img src="images/models/image.png" alt="WorldOfKits modello" class="hero-carousel-img active">
           <img src="images/models/photo_2026-05-03_02-27-40.jpg" alt="WorldOfKits modello" class="hero-carousel-img">
           <img src="images/models/photo_2026-05-03_02-28-20.jpg" alt="WorldOfKits modello" class="hero-carousel-img">
           <img src="images/models/photo_2026-05-03_02-28-36.jpg" alt="WorldOfKits modello" class="hero-carousel-img">
@@ -100,26 +104,39 @@
   <section class="filter-section" id="products">
     <div class="container">
       <div class="section-header">
-        <span class="section-badge">🏅 Collezione</span>
-        <h2 class="section-title">I Nostri Prodotti</h2>
-        <p class="section-sub">Seleziona la categoria e trova il prodotto perfetto</p>
+        <span class="section-badge">⚽ La Nostra Collezione</span>
+        <h2 class="section-title">Trova il tuo Articolo</h2>
+        <p class="section-sub"> Seleziona i tuoi prodotti dal catalogo
+        </p>
       </div>
 
       <!-- ── SEARCH BAR ── -->
       <div class="search-wrap">
-        <span class="search-icon">🔍</span>
-        <input type="text" id="searchInput" class="search-input"
-          placeholder="Cerca una maglia... (es. Napoli, Real Madrid)" autocomplete="off" />
-        <button class="search-clear" id="searchClear" title="Cancella ricerca" aria-label="Cancella ricerca">✕</button>
+        <span class="search-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8" />
+            <line x1="21" y1="21" x2="16.65" y2="16.65" />
+          </svg>
+        </span>
+        <input type="text" id="searchInput" class="search-input" placeholder="Cerca squadra, campionato o stagione..."
+          autocomplete="off" />
+        <button class="search-clear" id="searchClear" title="Cancella" aria-label="Cancella ricerca">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+            stroke-linecap="round">
+            <line x1="18" y1="6" x2="6" y2="18" />
+            <line x1="6" y1="6" x2="18" y2="18" />
+          </svg>
+        </button>
       </div>
 
       <div class="filter-bar" id="filterBar">
-        <button class="filter-btn active" data-filter="all" id="filterAll">Tutti</button>
+        <button class="filter-btn active" data-filter="all" id="filterAll">🌍 Tutte le Maglie</button>
 
         <!-- Champions League -->
         <div class="filter-dropdown" id="ddChampions">
           <button class="filter-btn" data-filter="Champions" id="filterChampions">
-            Champions League <span class="dd-arrow">▾</span>
+            🏆 Champions League <span class="dd-arrow">▾</span>
           </button>
           <ul class="dd-menu" id="menuChampions"></ul>
         </div>
@@ -127,7 +144,7 @@
         <!-- Premier League -->
         <div class="filter-dropdown" id="ddPremier">
           <button class="filter-btn" data-filter="Premier" id="filterPremier">
-            Premier League <span class="dd-arrow">▾</span>
+            🏴󠁧󠁢󠁥󠁮󠁧󠁿 Premier League <span class="dd-arrow">▾</span>
           </button>
           <ul class="dd-menu" id="menuPremier"></ul>
         </div>
@@ -135,7 +152,7 @@
         <!-- Serie A -->
         <div class="filter-dropdown" id="ddSerieA">
           <button class="filter-btn" data-filter="SerieA" id="filterSerie">
-            Serie A <span class="dd-arrow">▾</span>
+            🇮🇹 Serie A <span class="dd-arrow">▾</span>
           </button>
           <ul class="dd-menu" id="menuSerieA"></ul>
         </div>
@@ -143,7 +160,7 @@
         <!-- Bundesliga -->
         <div class="filter-dropdown" id="ddBundesliga">
           <button class="filter-btn" data-filter="Bundesliga" id="filterBundesliga">
-            Bundesliga <span class="dd-arrow">▾</span>
+            🇩🇪 Bundesliga <span class="dd-arrow">▾</span>
           </button>
           <ul class="dd-menu" id="menuBundesliga"></ul>
         </div>
@@ -200,8 +217,7 @@
               🛒 Aggiungi al Carrello
             </button>
           </div>
-          <p class="custom-order-note">💰 Prezzo fisso: <strong>€28,00 a maglia</strong> — Consegna in 3–5 giorni
-            lavorativi</p>
+
         </form>
       </div>
     </div>
@@ -232,8 +248,7 @@
                 </div>
                 <span class="review-verified">✅ Verificato</span>
               </div>
-              <img class="review-photo" src="images/reviews/review1.jpg" alt="Foto cliente"
-                onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+              <img class="review-photo" src="images/foto_cliente.jpeg" alt="Foto cliente">
               <div class="review-photo-placeholder"><span>📸</span><small>Aggiungi foto</small></div>
               <div class="review-stars">★★★★★</div>
               <p class="review-text">"Maglia del Napoli arrivata in 2 giorni, qualità assurda. Il tessuto è esattamente
@@ -251,8 +266,7 @@
                 </div>
                 <span class="review-verified">✅ Verificato</span>
               </div>
-              <img class="review-photo" src="images/reviews/review2.jpg" alt="Foto cliente"
-                onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+              <img class="review-photo" src="images/foto_cliente1.jpeg" alt="Foto cliente">
               <div class="review-photo-placeholder"><span>📸</span><small>Aggiungi foto</small></div>
               <div class="review-stars">★★★★★</div>
               <p class="review-text">"Ho comprato la maglia di CR7 per mio figlio, è rimasto senza parole! Spedizione
@@ -270,8 +284,7 @@
                 </div>
                 <span class="review-verified">✅ Verificato</span>
               </div>
-              <img class="review-photo" src="images/reviews/review3.jpg" alt="Foto cliente"
-                onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+              <img class="review-photo" src="images/foto_cliente2.jpeg" alt="Foto cliente">
               <div class="review-photo-placeholder"><span>📸</span><small>Aggiungi foto</small></div>
               <div class="review-stars">★★★★★</div>
               <p class="review-text">"Finalmente un sito affidabile! Ho ordinato la maglia del Real Madrid e in 3 giorni
@@ -289,8 +302,7 @@
                 </div>
                 <span class="review-verified">✅ Verificato</span>
               </div>
-              <img class="review-photo" src="images/reviews/review4.jpg" alt="Foto cliente"
-                onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+              <img class="review-photo" src="images/foto_cliente3.jpeg" alt="Foto cliente">
               <div class="review-photo-placeholder"><span>📸</span><small>Aggiungi foto</small></div>
               <div class="review-stars">★★★★★</div>
               <p class="review-text">"Acquisto la terza maglia da WorldOfKits. Mai avuto un problema. Assistenza clienti
@@ -308,8 +320,7 @@
                 </div>
                 <span class="review-verified">✅ Verificato</span>
               </div>
-              <img class="review-photo" src="images/reviews/review5.jpg" alt="Foto cliente"
-                onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+              <img class="review-photo" src="images/foto_cliente4.jpeg" alt="Foto cliente">
               <div class="review-photo-placeholder"><span>📸</span><small>Aggiungi foto</small></div>
               <div class="review-stars">★★★★★</div>
               <p class="review-text">"Regalo perfetto per mio marito tifoso del Bayern. Confezionata benissimo, arrivata
@@ -327,8 +338,7 @@
                 </div>
                 <span class="review-verified">✅ Verificato</span>
               </div>
-              <img class="review-photo" src="images/reviews/review6.jpg" alt="Foto cliente"
-                onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+              <img class="review-photo" src="images/foto_cliente5.jpeg" alt="Foto cliente">
               <div class="review-photo-placeholder"><span>📸</span><small>Aggiungi foto</small></div>
               <div class="review-stars">★★★★★</div>
               <p class="review-text">"Sito serio e professionale. Ho avuto una domanda sulla taglia e mi hanno risposto
@@ -344,6 +354,23 @@
 
       <!-- Dots -->
       <div class="reviews-dots" id="reviewsDots"></div>
+
+      <!-- ── GRIGLIA FOTO CLIENTI ── -->
+      <div class="client-mosaic">
+        <img src="images/foto_cliente6.jpeg"  alt="Cliente" class="mosaic-img mosaic-sm">
+        <img src="images/foto_cliente7.jpeg"  alt="Cliente" class="mosaic-img mosaic-md">
+        <img src="images/foto_cliente8.jpeg"  alt="Cliente" class="mosaic-img mosaic-sm">
+        <img src="images/foto_cliente9.jpeg"  alt="Cliente" class="mosaic-img mosaic-lg">
+        <img src="images/foto_cliente10.jpeg" alt="Cliente" class="mosaic-img mosaic-sm">
+        <img src="images/foto_cliente11.jpeg" alt="Cliente" class="mosaic-img mosaic-md">
+        <img src="images/foto_cliente12.jpeg" alt="Cliente" class="mosaic-img mosaic-lg">
+        <img src="images/foto_cliente13.jpeg" alt="Cliente" class="mosaic-img mosaic-sm">
+        <img src="images/foto_cliente14.jpeg" alt="Cliente" class="mosaic-img mosaic-md">
+        <img src="images/foto_cliente15.jpeg" alt="Cliente" class="mosaic-img mosaic-xl">
+        <img src="images/foto_cliente16.jpeg" alt="Cliente" class="mosaic-img mosaic-sm">
+        <img src="images/foto_cliente17.jpeg" alt="Cliente" class="mosaic-img mosaic-md">
+        <img src="images/foto_cliente18.jpeg" alt="Cliente" class="mosaic-img mosaic-lg">
+      </div>
     </div>
   </section>
 

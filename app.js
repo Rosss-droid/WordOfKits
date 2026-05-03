@@ -201,9 +201,13 @@ function renderProducts(filter, team = null) {
           ${p.sizes.slice(0, 5).map((s, i) => `<button class="size-tag${i === 0 ? ' active' : ''}" onclick="selectCardSize(this)">${s}</button>`).join('')}
           ${p.sizes.length > 5 ? `<span class="size-tag">+${p.sizes.length - 5}</span>` : ''}
         </div>
+        <div class="card-fabric" data-product-id="${p.id}">
+          <button class="fabric-btn active" onclick="selectCardFabric(this)" data-extra="0">👕 Tifoso</button>
+          <button class="fabric-btn" onclick="selectCardFabric(this)" data-extra="4">⚡ Player <span class="fabric-plus">+€4</span></button>
+        </div>
         <div class="card-footer">
           <div>
-            <span class="card-price">€${p.price.toFixed(2)}</span>
+            <span class="card-price" data-base="${p.price}" data-product-id="${p.id}">€${p.price.toFixed(2)}</span>
             ${p.oldPrice ? `<span class="card-price-old">€${p.oldPrice.toFixed(2)}</span>` : ''}
           </div>
           <button class="card-add" onclick="addToCart(${p.id})">+ Aggiungi</button>
@@ -399,21 +403,38 @@ function addToCart(productId) {
   const p = PRODUCTS.find(x => x.id === productId);
   if (!p) return;
 
-  // Leggi la taglia attiva dalla card (bottone .size-tag.active)
+  // Taglia attiva
   const sizeContainer = document.querySelector('.card-sizes[data-product-id="' + productId + '"]');
-  const activeBtn = sizeContainer ? sizeContainer.querySelector('.size-tag.active') : null;
-  const selectedSize = activeBtn ? activeBtn.textContent.trim() : (p.sizes[0] || 'M');
+  const activeSize = sizeContainer ? sizeContainer.querySelector('.size-tag.active') : null;
+  const selectedSize = activeSize ? activeSize.textContent.trim() : (p.sizes[0] || 'M');
 
-  // Distingui per id + taglia (stesso prodotto in taglie diverse = righe separate)
-  const existing = cart.find(item => item.id === productId && item.size === selectedSize);
+  // Tessuto attivo (Tifoso / Player)
+  const fabricContainer = document.querySelector('.card-fabric[data-product-id="' + productId + '"]');
+  const activeFabric = fabricContainer ? fabricContainer.querySelector('.fabric-btn.active') : null;
+  const fabricLabel = activeFabric ? activeFabric.textContent.replace('+€4', '').trim() : '👕 Tifoso';
+  const fabricExtra = activeFabric ? parseFloat(activeFabric.dataset.extra || 0) : 0;
+  const finalPrice = p.price + fabricExtra;
+
+  // Distingui per id + taglia + tessuto
+  const existing = cart.find(item =>
+    item.id === productId && item.size === selectedSize && item.fabric === fabricLabel
+  );
   if (existing) {
     existing.qty += 1;
   } else {
-    cart.push({ id: p.id, name: p.name, price: p.price, image: p.image, qty: 1, size: selectedSize });
+    cart.push({
+      id: p.id,
+      name: p.name,
+      price: finalPrice,
+      image: p.image,
+      qty: 1,
+      size: selectedSize,
+      fabric: fabricLabel
+    });
   }
   saveCart();
   updateCartUI();
-  showToast('✅', '"' + p.name + '" (' + selectedSize + ') aggiunto al carrello!');
+  showToast('✅', '"' + p.name + '" (' + selectedSize + ' · ' + fabricLabel + ') aggiunto!');
   openCart();
 }
 
@@ -422,6 +443,22 @@ function selectCardSize(btn) {
   if (!container) return;
   container.querySelectorAll('.size-tag').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
+}
+
+function selectCardFabric(btn) {
+  const container = btn.closest('.card-fabric');
+  if (!container) return;
+  container.querySelectorAll('.fabric-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+
+  // Aggiorna il prezzo mostrato nella card
+  const productId = container.dataset.productId;
+  const priceEl = document.querySelector('.card-price[data-product-id="' + productId + '"]');
+  if (priceEl) {
+    const base = parseFloat(priceEl.dataset.base || 0);
+    const extra = parseFloat(btn.dataset.extra || 0);
+    priceEl.textContent = '\u20ac' + (base + extra).toFixed(2);
+  }
 }
 
 function removeFromCart(id) {
@@ -496,7 +533,7 @@ function renderCartItems() {
       + imgHtml
       + '<div class="cart-item-info">'
       + '<div class="cart-item-name">' + item.name + '</div>'
-      + '<div class="cart-item-meta">Taglia: ' + item.size + '</div>'
+      + '<div class="cart-item-meta">Taglia: ' + item.size + (item.fabric ? ' &nbsp;·&nbsp; ' + item.fabric : '') + '</div>'
       + '<div class="cart-item-price">' + priceLabel + '</div>'
       + '<div class="cart-item-qty">'
       + '<button class="qty-btn" onclick="changeQty(' + idRef + ', -1)">&minus;</button>'
