@@ -11,14 +11,79 @@ const PRODUCTS = [
   { id: 8, name: "Maglia Atalanta Away 2024/25", category: "SerieA", categoryLabel: "Serie A", price: 20.00, oldPrice: null, badge: null, badgeLabel: null, image: "images/3d/Serie A/Atalanta/2425/Atalanta Away 2425.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "La maglia della trasferta dell'Atalanta 2024/25. Bianco brillante con dettagli premium.", inStock: true },
   { id: 9, name: "Maglia Atalanta Europa League Final 2023/24", category: "SerieA", categoryLabel: "Serie A", price: 30.00, oldPrice: null, badge: "finali europee", badgeLabel: "vintage", image: "images/3d/Serie A/Atalanta/speciali/Atalanta Europe Final 2324.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "La maglia della finale di Europa League dell'Atalanta 2023/24.", inStock: true },
   { id: 10, name: "Maglia Atalanta Home 2022/23", category: "SerieA", categoryLabel: "Serie A", price: 20.00, oldPrice: null, badge: null, badgeLabel: null, image: "images/3d/Serie A/Atalanta/2223/Atalanta Home 2223.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "La maglia casalinga dell'Atalanta 2022/23. Azzurro brillante con dettagli premium.", inStock: true },
-  // ══════════════ REAL MADRID ══════════════
-  { id: 13, name: "Maglia Real Madrid Home 2025/26", category: ["Champions", "SerieA"], categoryLabel: ["Champions League", "Serie A"], price: 20.00, oldPrice: null, badge: null, badgeLabel: null, image: "images/3d/ChatGPT Image 29 apr 2026, 01_40_03.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "La divisa della squadra che ha vinto 15 Champions League.", inStock: true },
-  { id: 14, name: "Maglia Real Madrid Away 2025/26", category: "Champions", categoryLabel: "Champions League", price: 89.99, oldPrice: 110.00, badge: "sale", badgeLabel: "18% OFF", image: "images/teams/real_away.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "Maglia trasferta del Real Madrid 2025/26. Design elegante viola.", inStock: true },
+  
+  // ══════════════ Bologna (Serie A) ════════════
+  { id: 11, name: "Maglia Bologna Home 2025/26", category: "SerieA", categoryLabel: "Serie A", price: 20.00, oldPrice: null, badge: null, badgeLabel: null, image: "images/3d/Serie A/Bologna/2526/Bologna Home 2526.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "La maglia casalinga del Bologna 2025/26.", inStock: true },
+  { id: 12, name: "Maglia Bologna Away 2025/26", category: "SerieA", categoryLabel: "Serie A", price: 20.00, oldPrice: null, badge: null, badgeLabel: null, image: "images/3d/Serie A/Bologna/2526/Bologna Away 2526.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "La maglia della trasferta del Bologna 2025/26.", inStock: true },
+  { id: 13, name: "Maglia Bologna Third Kit 2025/26", category: "SerieA", categoryLabel: "Serie A", price: 20.00, oldPrice: null, badge: null, badgeLabel: null, image: "images/3d/Serie A/Bologna/2526/Bologna Third 2526.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "La terza maglia dell'Atalanta 2025/26.", inStock: true },
+  { id: 14, name: "Maglia Bologna Home 2024/25", category: "SerieA", categoryLabel: "Serie A", price: 20.00, oldPrice: null, badge: null, badgeLabel: null, image: "images/3d/Serie A/Bologna/2425/Bologna Home 2425.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "La maglia casalinga del Bologna 2024/25.", inStock: true },
+  { id: 15, name: "Maglia Bologna Away 2024/25", category: "SerieA", categoryLabel: "Serie A", price: 20.00, oldPrice: null, badge: null, badgeLabel: null, image: "images/3d/Serie A/Bologna/2425/Bologna Away 2425.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "La maglia della trasferta del Bologna 2024/25", inStock: true },
+  { id: 16, name: "Maglia Bologna Third Kit 2024/25", category: "SerieA", categoryLabel: "Serie A", price: 20.00, oldPrice: null, badge: null, badgeLabel: null, image: "images/3d/Serie A/Bologna/2425/Bologna Third 2425.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "La terza maglia del Bologna 2024/25.", inStock: true },
+  { id: 17, name: "Maglia Bologna Special Kit 2024/25", category: "SerieA", categoryLabel: "Serie A", price: 25.00, oldPrice: null, badge: null, badgeLabel: null, image: "images/3d/Serie A/Bologna/2425/Bologna Fourth 2425.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "La maglia speciale del Bologna 2024/25.", inStock: true },
+  { id: 18, name: "Maglia Bologna 2023/24", category: "SerieA", categoryLabel: "Serie A", price: 20.00, oldPrice: null, badge: null, badgeLabel: null, image: "images/3d/Serie A/Bologna/2324/Bologna Home 2324.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "La maglia casalinga del Bologna 2023/24.", inStock: true },
 
-  // ══════════════ PSG ══════════════
-  { id: 15, name: "Maglia PSG Home 2025/26", category: "Champions", categoryLabel: "Champions League", price: 94.99, oldPrice: null, badge: "new", badgeLabel: "NUOVO", image: "images/teams/psg_home.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "La maglia casalinga del Paris Saint-Germain 2025/26. Blu con dettagli rossi.", inStock: true },
-  { id: 16, name: "Maglia PSG Away 2025/26", category: "Champions", categoryLabel: "Champions League", price: 89.99, oldPrice: null, badge: null, badgeLabel: null, image: "images/teams/psg_away.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "Maglia trasferta PSG 2025/26. Bianco con bordi colorati.", inStock: true },
+  // ══════════════ Cagliari (Serie A) ══════════════
+  { id: 19, name: "Maglia Cagliari Home 2025/26", category: "SerieA", categoryLabel: "Serie A", price: 20.00, oldPrice: null, badge: null, badgeLabel: null, image: "images/3d/Serie A/Cagliari/2526/Cagliari Home 2526.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "La maglia casalinga del Cagliari 2025/26.", inStock: true },
+  { id: 20, name: "Maglia Cagliari Away 2025/26", category: "SerieA", categoryLabel: "Serie A", price: 20.00, oldPrice: null, badge: null, badgeLabel: null, image: "images/3d/Serie A/Cagliari/2526/Cagliari Away 2526.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "La maglia della trasferta del Cagliari 2025/26.", inStock: true },
+  { id: 21, name: "Maglia Cagliari Third Kit 2025/26", category: "SerieA", categoryLabel: "Serie A", price: 20.00, oldPrice: null, badge: null, badgeLabel: null, image: "images/3d/Serie A/Cagliari/2526/Cagliari Third 2526.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "La terza maglia del Cagliari 2025/26.", inStock: true },
 
+  // ══════════════ Como (Serie A) ══════════════
+  { id: 22, name: "Maglia Como Home 2026/27", category: "SerieA", categoryLabel: "Serie A", price: 25.00, oldPrice: null, badge: "new", badgeLabel: "Novità", image: "images/3d/Serie A/Como/2627/Como Home 2627.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "La maglia casalinga del Como 2026/27.", inStock: true },
+  { id: 23, name: "Maglia Como Home 2025/26", category: "SerieA", categoryLabel: "Serie A", price: 20.00, oldPrice: null, badge: null, badgeLabel: null, image: "images/3d/Serie A/Como/2526/Como Home 2526.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "La maglia casalinga del Como 2025/26.", inStock: true },
+  { id: 24, name: "Maglia Como Away 2025/26", category: "SerieA", categoryLabel: "Serie A", price: 20.00, oldPrice: null, badge: null, badgeLabel: null, image: "images/3d/Serie A/Como/2526/Como Away 2526.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "La maglia della trasferta del Como 2025/26.", inStock: true },
+  { id: 25, name: "Maglia Como Third Kit 2025/26", category: "SerieA", categoryLabel: "Serie A", price: 20.00, oldPrice: null, badge: null, badgeLabel: null, image: "images/3d/Serie A/Como/2526/Como Third 2526.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "La terza maglia del Como 2025/26.", inStock: true },
+  { id: 26, name: "Maglia Como Home 2024/25", category: "SerieA", categoryLabel: "Serie A", price: 20.00, oldPrice: null, badge: null, badgeLabel: null, image: "images/3d/Serie A/Como/2425/Como Home 2425.png", sizes: ["XS", "S", "M", "L",("XL"), ("XXL")], description: "La maglia casalinga del Como 2024/25.", inStock: true },
+  { id: 27, name: "Maglia Como Away 2024/25", category: "SerieA", categoryLabel: "Serie A", price: 20.00, oldPrice: null, badge: null, badgeLabel: null, image: "images/3d/Serie A/Como/2425/Como Away 2425.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "La maglia della trasferta del Como 2024/25.", inStock: true },
+  { id: 28, name: "Maglia Como Third Kit 2024/25", category: "SerieA", categoryLabel: "Serie A", price: 20.00, oldPrice: null, badge: null, badgeLabel: null, image: "images/3d/Serie A/Como/2425/Como Third 2425.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "La terza maglia del Como 2024/25.", inStock: true },
+  
+  // ══════════════ Cremonese (Serie A) ══════════════
+  { id: 29, name: "Maglia Cremonese Home 2025/26", category: "SerieA", categoryLabel: "Serie A", price: 20.00, oldPrice: null, badge: null, badgeLabel: null, image: "images/3d/Serie A/Cremonese/2526/Cremonese Home 2526.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "La maglia casalinga della Cremonese 2025/26.", inStock: true },
+  { id: 30, name: "Maglia Cremonese Home 2024/25", category: "SerieA", categoryLabel: "Serie A", price: 20.00, oldPrice: null, badge: null, badgeLabel: null, image: "images/3d/Serie A/Cremonese/2425/Cremonese Home 2425.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "La maglia casalinga della Cremonese 2024/25.", inStock: true },
+
+  //Fiorentina (Serie A) ══════════════
+  { id: 31, name: "Maglia Fiorentina Home 2025/26", category: "SerieA", categoryLabel: "Serie A", price: 20.00, oldPrice: null, badge: null, badgeLabel: null, image: "images/3d/Serie A/Fiorentina/2526/Fiorentina Home 2526.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "La maglia casalinga della Fiorentina 2025/26.", inStock: true },
+  { id: 32, name: "Maglia Fiorentina Away 2025/26", category: "SerieA", categoryLabel: "Serie A", price: 20.00, oldPrice: null, badge: null, badgeLabel: null, image: "images/3d/Serie A/Fiorentina/2526/Fiorentina Away 2526.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "La maglia della trasferta della Fiorentina 2025/26.", inStock: true },
+  { id: 33, name: "Maglia Fiorentina Home 1998/99", category: "SerieA", categoryLabel: "Serie A", price: 28.00, oldPrice: null, badge: null, badgeLabel: null, image: "images/3d/Serie A/Fiorentina/speciali/Fiorentina Home 9899.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "La storica maglia casalinga della Fiorentina 1998/99.", inStock: true },
+
+  //Genoa (Serie A) ══════════════
+  { id: 34, name: "Maglia Genoa Home 2025/26", category: "SerieA", categoryLabel: "Serie A", price: 20.00, oldPrice: null, badge: null, badgeLabel: null, image: "images/3d/Serie A/Genoa/2526/Genoa Home 2526.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "La maglia casalinga del Genoa 2025/26.", inStock: true },
+  { id: 35, name: "Maglia Genoa Away 2024/25", category: "SerieA", categoryLabel: "Serie A", price: 22.00, oldPrice: null, badge: null, badgeLabel: null, image: "images/3d/Serie A/Genoa/speciali/Genoa Away 2425.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "La maglia della trasferta del Genoa 2024/25.", inStock: true },
+  { id: 36, name: "Maglia Genoa Special 2024/25", category: "SerieA", categoryLabel: "Serie A", price: 24.00, oldPrice: null, badge: null, badgeLabel: null, image: "images/3d/Serie A/Genoa/speciali/Genoa Fourth 2425.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "La quarta maglia del Genoa 2024/25.", inStock: true },
+ 
+  // ══════════════ Inter (Serie A) ══════════════
+
+  // ══════════════ Juve (Serie A) ══════════════
+
+  // ══════════════ Lazio (Serie A) ══════════════
+
+  // ══════════════ Lecce (Serie A) ══════════════
+  { id: 37, name: "Maglia Lecce Home 2025/26", category: "SerieA", categoryLabel: "Serie A", price: 20.00, oldPrice: null, badge: null, badgeLabel: null, image: "images/3d/Serie A/Lecce/2526/Lecce Home 2526.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "La maglia casalinga del Lecce 2025/26.", inStock: true },
+
+  // ══════════════ Milan (Serie A) ══════════════
+
+  // ══════════════ Napoli (Serie A) ══════════════
+
+  // ══════════════ Parma (Serie A) ══════════════
+  { id: 38, name: "Maglia Parma Home 2025/26", category: "SerieA", categoryLabel: "Serie A", price: 20.00, oldPrice: null, badge: null, badgeLabel: null, image: "images/3d/Serie A/Parma/2526/Parma Home 2526.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "La maglia casalinga del Parma 2025/26.", inStock: true },
+
+  // ══════════════ Pisa (Serie A) ══════════════
+  { id: 39, name: "Maglia Pisa Home 2025/26", category: "SerieA", categoryLabel: "Serie A", price: 20.00, oldPrice: null, badge: null, badgeLabel: null, image: "images/3d/Serie A/Pisa/2526/Pisa Home 2526.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "La maglia casalinga del Pisa 2025/26.", inStock: true },
+ 
+  // ══════════════ Roma (Serie A) ══════════════
+  { id: 40, name: "Maglia Roma Home 2024/25", category: "SerieA", categoryLabel: "Serie A", price: 20.00, oldPrice: null, badge: null, badgeLabel: null, image: "images/3d/Serie A/-Roma/2425/Roma Home 2425.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "La maglia casalinga della Roma 2024/25.", inStock: true },
+ 
+  // ══════════════ Sassuolo (Serie A) ══════════════
+  { id: 41, name: "Maglia Sassuolo Home 2025/26", category: "SerieA", categoryLabel: "Serie A", price: 20.00, oldPrice: null, badge: null, badgeLabel: null, image: "images/3d/Serie A/Sassuolo/2526/Sassuolo Home 2526.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "La maglia casalinga del Sassuolo 2025/26.", inStock: true },
+
+  // ══════════════ Torino (Serie A) ══════════════
+  { id: 42, name: "Maglia Torino Home 2025/26", category: "SerieA", categoryLabel: "Serie A", price: 20.00, oldPrice: null, badge: null, badgeLabel: null, image: "images/3d/Serie A/Torino/2526/Torino Home 2526.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "La maglia casalinga del Torino 2025/26.", inStock: true },
+
+  // ══════════════ Udinese (Serie A) ══════════════
+
+  // ══════════════ Verona (Serie A) ══════════════
+  
+
+  //La liga 
   // ══════════════ BARCELLONA ══════════════
   { id: 17, name: "Maglia Barcellona Home 2025/26", category: "Champions", categoryLabel: "Champions League", price: 92.00, oldPrice: null, badge: "new", badgeLabel: "NUOVO", image: "images/teams/barca_home.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "La classica blaugrana del Barcellona 2025/26. Tessuto tecnico Dri-FIT.", inStock: true },
   { id: 18, name: "Maglia Barcellona Away 2025/26", category: "Champions", categoryLabel: "Champions League", price: 87.00, oldPrice: 100.00, badge: "sale", badgeLabel: "13% OFF", image: "images/teams/barca_away.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "Maglia trasferta Barcellona 2025/26. Oro e bordò.", inStock: true },
@@ -55,32 +120,6 @@ const PRODUCTS = [
 
   // ══════════════ NEWCASTLE ══════════════
   { id: 33, name: "Maglia Newcastle Home 2025/26", category: "Premier", categoryLabel: "Premier League", price: 84.00, oldPrice: null, badge: null, badgeLabel: null, image: "images/teams/newcastle_home.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "Maglia casalinga Newcastle 2025/26. Strisce bianco-nere iconiche.", inStock: true },
-
-  // ══════════════ INTER (Serie A) ══════════════
-  { id: 34, name: "Maglia Inter Home 2025/26", category: ["Champions", "SerieA"], categoryLabel: ["Champions League", "Serie A"], price: 91.00, oldPrice: null, badge: "new", badgeLabel: "NUOVO", image: "images/teams/inter_home.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "Maglia casalinga Inter 2025/26. Strisce nerazzurre con Nike.", inStock: true },
-  { id: 35, name: "Maglia Inter Away 2025/26", category: "SerieA", categoryLabel: "Serie A", price: 86.00, oldPrice: 100.00, badge: "sale", badgeLabel: "14% OFF", image: "images/teams/inter_away.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "Maglia trasferta Inter 2025/26. Bianco con dettagli nerazzurri.", inStock: true },
-
-  // ══════════════ JUVENTUS (Serie A) ══════════════
-  { id: 36, name: "Maglia Juventus Home 2025/26", category: ["Champions", "SerieA"], categoryLabel: ["Champions League", "Serie A"], price: 90.00, oldPrice: null, badge: "new", badgeLabel: "NUOVO", image: "images/teams/juve_home.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "Maglia casalinga Juventus 2025/26. Strisce bianconere iconiche.", inStock: true },
-  { id: 37, name: "Maglia Juventus Away 2025/26", category: "SerieA", categoryLabel: "Serie A", price: 85.00, oldPrice: null, badge: null, badgeLabel: null, image: "images/teams/juve_away.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "Maglia trasferta Juventus 2025/26. Nero con dettagli oro.", inStock: true },
-
-  // ══════════════ MILAN (Serie A) ══════════════
-  { id: 38, name: "Maglia Milan Home 2025/26", category: ["Champions", "SerieA"], categoryLabel: ["Champions League", "Serie A"], price: 89.00, oldPrice: null, badge: "new", badgeLabel: "NUOVO", image: "images/teams/milan_home.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "Maglia casalinga Milan 2025/26. Strisce rossonere con Puma.", inStock: true },
-  { id: 39, name: "Maglia Milan Away 2025/26", category: "SerieA", categoryLabel: "Serie A", price: 84.00, oldPrice: 100.00, badge: "sale", badgeLabel: "16% OFF", image: "images/teams/milan_away.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "Maglia trasferta Milan 2025/26. Bianco con banda rossa.", inStock: true },
-
-  // ══════════════ ROMA (Serie A) ══════════════
-  { id: 40, name: "Maglia Roma Home 2025/26", category: "SerieA", categoryLabel: "Serie A", price: 82.00, oldPrice: null, badge: null, badgeLabel: null, image: "images/teams/roma_home.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "Maglia casalinga Roma 2025/26. Rosso giallorosso con lupo ricamato.", inStock: true },
-  { id: 41, name: "Maglia Roma Away 2025/26", category: "SerieA", categoryLabel: "Serie A", price: 78.00, oldPrice: null, badge: null, badgeLabel: null, image: "images/teams/roma_away.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "Maglia trasferta Roma 2025/26. Bianco con bordi gialli.", inStock: true },
-
-  // ══════════════ LAZIO (Serie A) ══════════════
-  { id: 42, name: "Maglia Lazio Home 2025/26", category: "SerieA", categoryLabel: "Serie A", price: 82.00, oldPrice: null, badge: null, badgeLabel: null, image: "images/teams/lazio_home.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "Maglia casalinga Lazio 2025/26. Celeste con aquila ricamata.", inStock: true },
-  { id: 43, name: "Maglia Lazio Away 2025/26", category: "SerieA", categoryLabel: "Serie A", price: 77.00, oldPrice: null, badge: null, badgeLabel: null, image: "images/teams/lazio_away.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "Maglia trasferta Lazio 2025/26. Bianco con dettagli celesti.", inStock: true },
-
-  // ══════════════ FIORENTINA (Serie A) ══════════════
-  { id: 44, name: "Maglia Fiorentina Home 2025/26", category: "SerieA", categoryLabel: "Serie A", price: 79.00, oldPrice: null, badge: null, badgeLabel: null, image: "images/teams/fiorentina_home.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "Maglia casalinga Fiorentina 2025/26. Viola con giglio ricamato.", inStock: true },
-
-  // ══════════════ ATALANTA (Serie A) ══════════════
-  { id: 45, name: "Maglia Atalanta Home 2025/26", category: ["Champions", "SerieA"], categoryLabel: ["Champions League", "Serie A"], price: 80.00, oldPrice: null, badge: "new", badgeLabel: "NUOVO", image: "images/teams/atalanta_home.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "Maglia casalinga Atalanta 2025/26. Strisce neroazzurre bergamasche.", inStock: true },
 
   // ══════════════ BORUSSIA DORTMUND ══════════════
   { id: 46, name: "Maglia Borussia Dortmund Home 2025/26", category: ["Champions", "Bundesliga"], categoryLabel: ["Champions League", "Bundesliga"], price: 88.00, oldPrice: null, badge: "new", badgeLabel: "NUOVO", image: "images/teams/dortmund_home.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "Maglia casalinga BVB 2025/26. Giallo-nero iconico di Dortmund.", inStock: true },
