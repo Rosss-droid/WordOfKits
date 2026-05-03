@@ -380,6 +380,62 @@ img {
   filter: blur(30px);
 }
 
+/* ── HERO CAROUSEL ── */
+.hero-carousel {
+  position: relative;
+  width: 100%;
+  max-width: 480px;
+  z-index: 1;
+}
+
+.hero-carousel-track {
+  position: relative;
+  width: 100%;
+  height: 500px;
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+
+.hero-carousel-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+
+.hero-carousel-img.active {
+  opacity: 1;
+}
+
+.hero-carousel-dots {
+  display: flex;
+  justify-content: center;
+  gap: .45rem;
+  margin-top: .75rem;
+}
+
+.hero-carousel-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.3);
+  cursor: pointer;
+  transition: var(--transition);
+  border: none;
+}
+
+.hero-carousel-dot.active {
+  background: var(--accent);
+  width: 20px;
+  border-radius: 4px;
+}
+
+/* vecchio hero-img (fallback) */
 .hero-img {
   border-radius: var(--radius);
   max-height: 500px;
@@ -387,6 +443,10 @@ img {
   position: relative;
   z-index: 1;
   box-shadow: var(--shadow);
+}
+
+@media (max-width: 900px) {
+  .hero-carousel-track { height: 360px; }
 }
 
 .hero-scroll-hint {

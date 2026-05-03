@@ -68,6 +68,7 @@ document.addEventListener('DOMContentLoaded', () => {
   setupVendorPanel();
   setupReviews();
   setupCustomOrder();
+  setupHeroCarousel();
 });
 
 // ── EMAILJS INIT ──
@@ -1162,4 +1163,39 @@ function setupCustomOrder() {
     document.getElementById('customProductSize').value = 'M';
     document.getElementById('customProductQty').value = '1';
   });
+}
+
+// ══════════════════════════════════
+// HERO CAROUSEL (immagini modelli)
+// ══════════════════════════════════
+function setupHeroCarousel() {
+  const imgs = document.querySelectorAll('.hero-carousel-img');
+  const dotsEl = document.getElementById('heroCarouselDots');
+  if (!imgs.length || !dotsEl) return;
+
+  let current = 0;
+  let interval = null;
+
+  // Crea dots
+  imgs.forEach(function (_, i) {
+    const dot = document.createElement('button');
+    dot.className = 'hero-carousel-dot' + (i === 0 ? ' active' : '');
+    dot.setAttribute('aria-label', 'Foto ' + (i + 1));
+    dot.addEventListener('click', function () { goTo(i); resetAuto(); });
+    dotsEl.appendChild(dot);
+  });
+
+  function goTo(index) {
+    imgs[current].classList.remove('active');
+    dotsEl.querySelectorAll('.hero-carousel-dot')[current].classList.remove('active');
+    current = (index + imgs.length) % imgs.length;
+    imgs[current].classList.add('active');
+    dotsEl.querySelectorAll('.hero-carousel-dot')[current].classList.add('active');
+  }
+
+  function startAuto() {
+    interval = setInterval(function () { goTo(current + 1); }, 2000);
+  }
+  function resetAuto() { clearInterval(interval); startAuto(); }
+  startAuto();
 }
