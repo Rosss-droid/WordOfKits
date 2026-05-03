@@ -28,7 +28,38 @@
       </div>
       <ul class="nav-links" id="navLinks">
         <li><a href="#home" class="nav-link active">Home</a></li>
-        <li><a href="#products" class="nav-link">Prodotti</a></li>
+        <!-- Campionati dropdown navbar -->
+        <li class="nav-dropdown-wrap" id="navCampionatiWrap">
+          <button class="nav-link nav-dropdown-btn" id="navCampionatiBtn" aria-haspopup="true" aria-expanded="false">
+            🏆 Campionati <span class="nav-dd-arrow">▾</span>
+          </button>
+          <ul class="nav-dd-menu" id="navCampionatiMenu">
+            <li>
+              <button class="nav-dd-item" data-league="SerieA" id="navLeagueSerieA">
+                <span class="nav-dd-flag">🇮🇹</span>
+                <span>Serie A</span>
+              </button>
+            </li>
+            <li>
+              <button class="nav-dd-item" data-league="LaLiga" id="navLeagueLaLiga">
+                <span class="nav-dd-flag">🇪🇸</span>
+                <span>La Liga</span>
+              </button>
+            </li>
+            <li>
+              <button class="nav-dd-item" data-league="Bundesliga" id="navLeagueBundesliga">
+                <span class="nav-dd-flag">🇩🇪</span>
+                <span>Bundesliga</span>
+              </button>
+            </li>
+            <li>
+              <button class="nav-dd-item" data-league="Premier" id="navLeaguePremier">
+                <span class="nav-dd-flag">🏴󠁧󠁢󠁥󠁮󠁧󠁿</span>
+                <span>Premier League</span>
+              </button>
+            </li>
+          </ul>
+        </li>
         <li><a href="#about" class="nav-link">Chi Siamo</a></li>
         <li><a href="#contact" class="nav-link">Contatti</a></li>
       </ul>
@@ -112,6 +143,72 @@
     </div>
   </section>
 
+  <!-- ═══════════════════ FEATURED HOME ═══════════════════ -->
+  <section class="featured-section" id="featured">
+    <div class="container">
+
+      <!-- Titolo -->
+      <div class="section-header">
+        <span class="section-badge">⚡ Esplora il Catalogo</span>
+        <h2 class="section-title">Scegli il tuo <span class="gradient-text">Campionato</span></h2>
+        <p class="section-sub">Naviga per categoria e trova la maglia dei tuoi colori</p>
+      </div>
+
+      <!-- Category cards -->
+      <div class="feat-league-grid" id="featLeagueGrid">
+        <button class="feat-league-card" data-league="SerieA" id="featCardSerieA">
+          <div class="feat-league-flag">🇮🇹</div>
+          <div class="feat-league-name">Serie A</div>
+          <div class="feat-league-sub">Atalanta, Milan, Inter e altro</div>
+          <div class="feat-league-arrow">→</div>
+        </button>
+        <button class="feat-league-card" data-league="LaLiga" id="featCardLaLiga">
+          <div class="feat-league-flag">🇪🇸</div>
+          <div class="feat-league-name">La Liga</div>
+          <div class="feat-league-sub">Barcellona, Real Madrid e altro</div>
+          <div class="feat-league-arrow">→</div>
+        </button>
+        <button class="feat-league-card" data-league="Bundesliga" id="featCardBundesliga">
+          <div class="feat-league-flag">🇩🇪</div>
+          <div class="feat-league-name">Bundesliga</div>
+          <div class="feat-league-sub">Bayern, Dortmund e altro</div>
+          <div class="feat-league-arrow">→</div>
+        </button>
+        <button class="feat-league-card" data-league="Premier" id="featCardPremier">
+          <div class="feat-league-flag">🏴󠁧󠁢󠁥󠁮󠁧󠁿</div>
+          <div class="feat-league-name">Premier League</div>
+          <div class="feat-league-sub">Arsenal, Liverpool, City e altro</div>
+          <div class="feat-league-arrow">→</div>
+        </button>
+      </div>
+
+      <!-- Ultimi Arrivi -->
+      <div class="feat-row-header">
+        <div>
+          <span class="section-badge">🆕 Ultimi Arrivi</span>
+          <h3 class="feat-row-title">Nuovi nel Catalogo</h3>
+        </div>
+        <button class="feat-see-all" id="featSeeAllNew">Vedi tutti →</button>
+      </div>
+      <div class="feat-products-row" id="featNewRow">
+        <!-- Populate via JS -->
+      </div>
+
+      <!-- I Più Richiesti -->
+      <div class="feat-row-header" style="margin-top:3rem">
+        <div>
+          <span class="section-badge">🔥 Top Venduti</span>
+          <h3 class="feat-row-title">I Più Richiesti</h3>
+        </div>
+        <button class="feat-see-all" id="featSeeAllTop">Vedi tutti →</button>
+      </div>
+      <div class="feat-products-row" id="featTopRow">
+        <!-- Populate via JS -->
+      </div>
+
+    </div>
+  </section>
+
   <!-- ═══════════════════ FILTER BAR ═══════════════════ -->
   <section class="filter-section" id="products">
     <div class="container">
@@ -143,7 +240,8 @@
       </div>
 
       <div class="filter-bar" id="filterBar">
-        <button class="filter-btn active" data-filter="all" id="filterAll">🌍 Tutte le Maglie</button>
+        <button class="filter-btn active" id="filterNew">🆕 Novità</button>
+        <button class="filter-btn" id="filterVintage">🏅 Vintage</button>
 
         <!-- Champions League -->
         <div class="filter-dropdown" id="ddChampions">
@@ -153,38 +251,56 @@
           <ul class="dd-menu" id="menuChampions"></ul>
         </div>
 
-        <!-- Premier League -->
-        <div class="filter-dropdown" id="ddPremier">
-          <button class="filter-btn" data-filter="Premier" id="filterPremier">
-            🏴󠁧󠁢󠁥󠁮󠁧󠁿 Premier League <span class="dd-arrow">▾</span>
+        <!-- MEGA MENU CAMPIONATI -->
+        <div class="filter-dropdown mega-dropdown" id="ddCampionati">
+          <button class="filter-btn" id="filterCampionati">
+            ⚽ Campionati <span class="dd-arrow">▾</span>
           </button>
-          <ul class="dd-menu" id="menuPremier"></ul>
-        </div>
-
-        <!-- Serie A -->
-        <div class="filter-dropdown" id="ddSerieA">
-          <button class="filter-btn" data-filter="SerieA" id="filterSerie">
-            🇮🇹 Serie A <span class="dd-arrow">▾</span>
-          </button>
-          <ul class="dd-menu" id="menuSerieA"></ul>
-        </div>
-
-        <!-- Bundesliga -->
-        <div class="filter-dropdown" id="ddBundesliga">
-          <button class="filter-btn" data-filter="Bundesliga" id="filterBundesliga">
-            🇩🇪 Bundesliga <span class="dd-arrow">▾</span>
-          </button>
-          <ul class="dd-menu" id="menuBundesliga"></ul>
-        </div>
-
-        <!-- Saudi Pro League -->
-        <div class="filter-dropdown" id="ddSaudi">
-          <button class="filter-btn" data-filter="SaudiLeague" id="filterSaudi">
-            🇸🇦 Saudi Pro League <span class="dd-arrow">▾</span>
-          </button>
-          <ul class="dd-menu" id="menuSaudi"></ul>
+          <div class="mega-menu" id="megaMenuCampionati">
+            <!-- Colonna Serie A -->
+            <div class="mega-col">
+              <div class="mega-col-header">
+                <span class="mega-col-flag">🇮🇹</span>
+                <button class="mega-col-title" data-filter="SerieA" id="megaBtnSerieA">Serie A</button>
+              </div>
+              <ul class="mega-col-list" id="megaListSerieA"></ul>
+            </div>
+            <!-- Colonna La Liga -->
+            <div class="mega-col">
+              <div class="mega-col-header">
+                <span class="mega-col-flag">🇪🇸</span>
+                <button class="mega-col-title" data-filter="LaLiga" id="megaBtnLaLiga">La Liga</button>
+              </div>
+              <ul class="mega-col-list" id="megaListLaLiga"></ul>
+            </div>
+            <!-- Colonna Bundesliga -->
+            <div class="mega-col">
+              <div class="mega-col-header">
+                <span class="mega-col-flag">🇩🇪</span>
+                <button class="mega-col-title" data-filter="Bundesliga" id="megaBtnBundesliga">Bundesliga</button>
+              </div>
+              <ul class="mega-col-list" id="megaListBundesliga"></ul>
+            </div>
+            <!-- Colonna Premier League -->
+            <div class="mega-col">
+              <div class="mega-col-header">
+                <span class="mega-col-flag">🏴󠁧󠁢󠁥󠁮󠁧󠁿</span>
+                <button class="mega-col-title" data-filter="Premier" id="megaBtnPremier">Premier League</button>
+              </div>
+              <ul class="mega-col-list" id="megaListPremier"></ul>
+            </div>
+            <!-- Colonna Saudi Pro League -->
+            <div class="mega-col">
+              <div class="mega-col-header">
+                <span class="mega-col-flag">🇸🇦</span>
+                <button class="mega-col-title" data-filter="SaudiLeague" id="megaBtnSaudi">Saudi Pro League</button>
+              </div>
+              <ul class="mega-col-list" id="megaListSaudi"></ul>
+            </div>
+          </div>
         </div>
       </div>
+
     </div>
   </section>
 
