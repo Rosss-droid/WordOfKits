@@ -678,6 +678,182 @@ img {
   margin: .3rem .5rem;
 }
 
+/* ── CHAMPIONS DROPDOWN A 2 COLONNE ── */
+#menuChampions {
+  min-width: 340px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+/* "Tutte le squadre" e divisore: span full width */
+#menuChampions li:first-child,
+#menuChampions li:nth-child(2) {
+  grid-column: 1 / -1;
+}
+
+/* ── MEGA MENU CAMPIONATI ── */
+.mega-dropdown {
+  position: relative;
+}
+
+.mega-menu {
+  position: absolute;
+  top: calc(100% + 10px);
+  left: 50%;
+  transform: translateX(-50%) scaleY(0);
+  transform-origin: top center;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  overflow: hidden;
+  z-index: 600;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, .6);
+  min-width: 880px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .25s ease, transform .25s cubic-bezier(.4, 0, .2, 1);
+}
+
+.mega-dropdown.open .mega-menu {
+  opacity: 1;
+  transform: translateX(-50%) scaleY(1);
+  pointer-events: all;
+}
+
+.mega-dropdown.open > .filter-btn {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+  box-shadow: 0 4px 16px rgba(108, 99, 255, .4);
+}
+
+/* Ogni colonna */
+.mega-col {
+  border-right: 1px solid var(--border);
+  min-height: 100%;
+}
+.mega-col:last-child {
+  border-right: none;
+}
+
+/* Header colonna (bandiera + nome campionato cliccabile) */
+.mega-col-header {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  padding: .9rem 1rem .65rem;
+  border-bottom: 1px solid var(--border);
+  background: rgba(108, 99, 255, .06);
+}
+
+.mega-col-flag {
+  font-size: 1.15rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.mega-col-title {
+  font-size: .85rem;
+  font-weight: 800;
+  color: var(--text);
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: 'Barlow Condensed', inherit;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  transition: color var(--transition);
+  padding: 0;
+  line-height: 1;
+}
+
+.mega-col-title:hover {
+  color: var(--accent);
+}
+
+/* Lista squadre dentro ogni colonna */
+.mega-col-list {
+  list-style: none;
+  padding: .4rem .4rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.mega-col-list li button {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: .45rem .85rem;
+  font-size: .82rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  background: none;
+  border: none;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: background var(--transition), color var(--transition);
+  font-family: inherit;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mega-col-list li button:hover {
+  background: rgba(108, 99, 255, .15);
+  color: var(--text);
+}
+
+.mega-col-list li button.dd-item-active {
+  background: rgba(108, 99, 255, .2);
+  color: var(--accent);
+  font-weight: 700;
+}
+
+/* Responsive: sotto 900px il mega menu diventa 2 colonne */
+@media (max-width: 1000px) {
+  .mega-menu {
+    grid-template-columns: repeat(3, 1fr);
+    min-width: 380px;
+    left: 0;
+    transform: translateX(0) scaleY(0);
+  }
+  .mega-dropdown.open .mega-menu {
+    transform: translateX(0) scaleY(1);
+  }
+  .mega-col {
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+  }
+  .mega-col:nth-child(3n) {
+    border-right: none;
+  }
+  .mega-col:not(:nth-child(3n)) {
+    border-right: 1px solid var(--border);
+  }
+}
+
+/* Responsive: sotto 500px il mega menu diventa 1 colonna */
+@media (max-width: 500px) {
+  .mega-menu {
+    grid-template-columns: 1fr;
+    min-width: 260px;
+    max-height: 60vh;
+    overflow-y: auto;
+  }
+  .mega-col:nth-child(odd) {
+    border-right: none;
+  }
+  .mega-col:nth-last-child(-n+2) {
+    border-bottom: 1px solid var(--border);
+  }
+  .mega-col:last-child {
+    border-bottom: none;
+  }
+}
+
 /* ── SEARCH BAR ── */
 .search-wrap {
   position: relative;
@@ -753,6 +929,342 @@ img {
 .search-clear:hover {
   background: rgba(255, 101, 132, .15);
   color: var(--accent2);
+}
+
+/* ── NAVBAR DROPDOWN CAMPIONATI ── */
+.nav-dropdown-wrap {
+  position: relative;
+}
+
+.nav-dropdown-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  display: flex;
+  align-items: center;
+  gap: .3rem;
+  padding-bottom: 2px;
+}
+
+.nav-dd-arrow {
+  font-size: .65rem;
+  transition: transform var(--transition);
+  display: inline-block;
+}
+
+.nav-dropdown-wrap.open .nav-dd-arrow {
+  transform: rotate(180deg);
+}
+
+.nav-dropdown-wrap.open .nav-dropdown-btn {
+  color: var(--text);
+}
+
+.nav-dd-menu {
+  list-style: none;
+  position: absolute;
+  top: calc(100% + 14px);
+  left: 50%;
+  transform: translateX(-50%) scaleY(0);
+  transform-origin: top center;
+  min-width: 200px;
+  background: rgba(15, 21, 37, .97);
+  backdrop-filter: blur(24px);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: .6rem;
+  z-index: 2000;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, .6);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .22s ease, transform .22s cubic-bezier(.4, 0, .2, 1);
+}
+
+.nav-dropdown-wrap.open .nav-dd-menu {
+  opacity: 1;
+  transform: translateX(-50%) scaleY(1);
+  pointer-events: all;
+}
+
+.nav-dd-menu li {
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.nav-dd-item {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  width: 100%;
+  text-align: left;
+  padding: .65rem 1rem;
+  font-size: .9rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  background: none;
+  border: none;
+  cursor: pointer;
+  border-radius: 10px;
+  transition: background var(--transition), color var(--transition);
+  font-family: inherit;
+  letter-spacing: .01em;
+}
+
+.nav-dd-item:hover {
+  background: rgba(108, 99, 255, .15);
+  color: var(--text);
+}
+
+.nav-dd-flag {
+  font-size: 1.2rem;
+}
+
+/* ── FEATURED HOME SECTION ── */
+.featured-section {
+  padding: 5rem 0 4rem;
+  background: linear-gradient(180deg, transparent 0%, rgba(108, 99, 255, .04) 50%, transparent 100%);
+}
+
+/* League cards grid */
+.feat-league-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.25rem;
+  margin-bottom: 4rem;
+}
+
+@media (max-width: 900px) {
+  .feat-league-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 500px) {
+  .feat-league-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.feat-league-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: .5rem;
+  padding: 2rem 1.5rem;
+  background: rgba(255, 255, 255, .04);
+  border: 1px solid rgba(255, 255, 255, .08);
+  border-radius: 20px;
+  cursor: pointer;
+  transition: var(--transition);
+  text-align: center;
+  overflow: hidden;
+}
+
+.feat-league-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(108, 99, 255, .12) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity var(--transition);
+  border-radius: 20px;
+}
+
+.feat-league-card:hover::before {
+  opacity: 1;
+}
+
+.feat-league-card:hover {
+  border-color: var(--accent);
+  transform: translateY(-6px);
+  box-shadow: 0 16px 48px rgba(108, 99, 255, .25);
+}
+
+.feat-league-flag {
+  font-size: 2.6rem;
+  line-height: 1;
+  margin-bottom: .25rem;
+  transition: transform var(--transition);
+}
+
+.feat-league-card:hover .feat-league-flag {
+  transform: scale(1.15);
+}
+
+.feat-league-name {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: .04em;
+  font-family: 'Barlow Condensed', sans-serif;
+  text-transform: uppercase;
+}
+
+.feat-league-sub {
+  font-size: .8rem;
+  color: var(--text-muted);
+  font-weight: 400;
+}
+
+.feat-league-arrow {
+  font-size: 1.1rem;
+  color: var(--accent);
+  opacity: 0;
+  transform: translateX(-6px);
+  transition: opacity .25s ease, transform .25s ease;
+}
+
+.feat-league-card:hover .feat-league-arrow {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Featured rows (ultimi arrivi / top venduti) */
+.feat-row-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+  gap: 1rem;
+}
+
+.feat-row-title {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #fff;
+  margin-top: .4rem;
+  font-family: 'Barlow Condensed', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+}
+
+.feat-see-all {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 50px;
+  padding: .45rem 1.1rem;
+  font-size: .82rem;
+  font-weight: 600;
+  color: var(--accent);
+  cursor: pointer;
+  transition: var(--transition);
+  white-space: nowrap;
+  font-family: inherit;
+}
+
+.feat-see-all:hover {
+  background: rgba(108, 99, 255, .12);
+  border-color: var(--accent);
+}
+
+.feat-products-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.25rem;
+}
+
+@media (max-width: 1000px) {
+  .feat-products-row {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 720px) {
+  .feat-products-row {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 420px) {
+  .feat-products-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Mini product card per featured rows */
+.feat-product-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  overflow: hidden;
+  transition: var(--transition);
+  cursor: pointer;
+  position: relative;
+}
+
+.feat-product-card:hover {
+  transform: translateY(-5px);
+  border-color: var(--accent);
+  box-shadow: 0 10px 36px rgba(108, 99, 255, .22);
+}
+
+.feat-product-img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  background: var(--bg2);
+  transition: transform .4s ease;
+  display: block;
+}
+
+.feat-product-card:hover .feat-product-img {
+  transform: scale(1.07);
+}
+
+.feat-product-body {
+  padding: .85rem 1rem;
+}
+
+.feat-product-league {
+  font-size: .72rem;
+  font-weight: 600;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  margin-bottom: .25rem;
+}
+
+.feat-product-name {
+  font-size: .92rem;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+  margin-bottom: .5rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.feat-product-price {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #fff;
+}
+
+.feat-product-badge {
+  position: absolute;
+  top: .6rem;
+  left: .6rem;
+  font-size: .68rem;
+  font-weight: 700;
+  padding: .25rem .6rem;
+  border-radius: 50px;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+}
+
+.feat-product-badge.new {
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: #fff;
+}
+
+.feat-product-badge.sale {
+  background: linear-gradient(135deg, #ff6584, #ff4757);
+  color: #fff;
 }
 
 /* ── PRODUCTS GRID ── */
@@ -1129,6 +1641,151 @@ img {
   color: var(--accent);
 }
 
+<<<<<<< HEAD
+=======
+/* ══════════════════════════════════
+   ABOUT SECTION
+══════════════════════════════════ */
+.about-section {
+  padding: 6rem 0;
+}
+
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: center;
+}
+
+.about-desc {
+  color: var(--text-muted);
+  font-size: 1rem;
+  line-height: 1.75;
+  margin: 1.2rem 0 2rem;
+}
+
+.about-features {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.about-features li {
+  display: flex;
+  align-items: center;
+  gap: .9rem;
+}
+
+.feat-icon-wrap {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border-radius: 10px;
+  background: rgba(108, 99, 255, .12);
+  border: 1px solid rgba(108, 99, 255, .2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+}
+
+.about-features li div {
+  display: flex;
+  flex-direction: column;
+  gap: .1rem;
+}
+
+.about-features li strong {
+  color: var(--text);
+  font-size: .95rem;
+}
+
+.about-features li small {
+  color: var(--text-muted);
+  font-size: .78rem;
+}
+
+/* ── CARDS ── */
+.about-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.about-card {
+  background: rgba(255, 255, 255, .04);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+  transition: transform .3s ease, box-shadow .3s ease;
+}
+
+.about-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, .3);
+}
+
+.about-card-top {
+  height: 5px;
+  width: 100%;
+}
+
+.about-card-body {
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.about-card-icon-wrap {
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+}
+
+.about-card-body h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: .25rem;
+}
+
+.about-card-body p {
+  font-size: .8rem;
+  color: var(--text-muted);
+  line-height: 1.55;
+}
+
+.about-card-body>div {
+  flex: 1;
+}
+
+.about-card-tag {
+  flex-shrink: 0;
+  background: rgba(255, 255, 255, .06);
+  border: 1px solid var(--border);
+  border-radius: 50px;
+  padding: .2rem .65rem;
+  font-size: .7rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+@media (max-width: 900px) {
+  .about-grid {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+}
+
+>>>>>>> 178be5a082d59c8cdee522b2e73cd76d1ed8a200
 /* ── FOOTER ── */
 .footer {
   background: var(--bg2);
@@ -1678,6 +2335,25 @@ img {
     border-bottom: 1px solid var(--border);
     padding: 1rem 1.5rem;
     gap: 1rem;
+  }
+
+  /* Dropdown Campionati su mobile: si espande inline */
+  .nav-links.open .nav-dd-menu {
+    position: static;
+    transform: none;
+    opacity: 1;
+    pointer-events: all;
+    box-shadow: none;
+    border: none;
+    background: rgba(108, 99, 255, .07);
+    border-radius: 12px;
+    padding: .4rem;
+    margin-top: .3rem;
+    display: none;
+  }
+
+  .nav-links.open .nav-dropdown-wrap.open .nav-dd-menu {
+    display: block;
   }
 
   .hamburger {

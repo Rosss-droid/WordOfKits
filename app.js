@@ -20,7 +20,7 @@ let cart = JSON.parse(localStorage.getItem('gk_cart') || '[]').map(function (ite
   if (!item._uid) item._uid = Date.now() + '-' + Math.random().toString(36).slice(2);
   return item;
 });
-let currentFilter = 'all';
+let currentFilter = 'new';
 let currentTeam = null; // filtra per squadra specifica
 let currentSearch = '';   // testo libero della search bar
 let quickViewProduct = null;
@@ -30,8 +30,8 @@ const TEAMS = {
   Champions: [
     'Real Madrid', 'Manchester City', 'Bayern Monaco', 'PSG', 'Inter', 'Juventus',
     'Atletico Madrid', 'Borussia Dortmund', 'Arsenal', 'Barcellona', 'Napoli', 'Porto',
-    'Ajax', 'Chelsea', 'Liverpool', 'Milan', 'Tottenham', 'Benfica', 'Leverkusen', 
-    'RB Leipzig', 'Atalanta', 
+    'Ajax', 'Chelsea', 'Liverpool', 'Milan', 'Tottenham', 'Benfica', 'Leverkusen',
+    'RB Leipzig', 'Atalanta',
   ],
   Premier: [
     'Arsenal FC', 'Aston Villa', 'Brighton', 'Chelsea', 'Crystal Palace', 'Liverpool FC',
@@ -50,8 +50,8 @@ const TEAMS = {
     'Al Qadsiah', 'Al Shabab', 'Al Ettifaq', 'Al Fayha'
   ],
   LaLiga: [
-    'Al Nassr', 'Al Hilal', 'Al Ittihad', 'Al Ahli',
-    'Al Qadsiah', 'Al Shabab', 'Al Ettifaq', 'Al Fayha'
+    'Real Madrid', 'Barcellona', 'Atletico Madrid', 'Siviglia', 'Villarreal',
+    'Real Betis', 'Athletic Bilbao', 'Real Sociedad', 'Osasuna', 'Valencia'
   ],
 };
 
@@ -62,6 +62,8 @@ document.addEventListener('DOMContentLoaded', () => {
   updateCartUI();
   setupParticles();
   setupNav();
+  setupNavCampionati();
+  setupFeatured();
   setupCartSidebar();
   setupOrderModal();
   setupQuickView();
@@ -145,6 +147,10 @@ function setupScrollSpy() {
 // Controlla se un prodotto appartiene a una categoria (supporta stringa e array)
 function productMatchesCategory(p, filter) {
   if (filter === 'all') return true;
+  if (filter === 'new') return p.badge === 'new';
+  if (filter === 'vintage') {
+    return p.badgeLabel && p.badgeLabel.toLowerCase() === 'vintage';
+  }
   const cats = Array.isArray(p.category) ? p.category : [p.category];
   return cats.includes(filter);
 }
@@ -227,91 +233,115 @@ function renderProducts(filter, team = null) {
 
 // ── SETUP FILTRI + DROPDOWN ──
 function setupFilters() {
-  // Bottone "Tutti"
-  const allBtn = document.getElementById('filterAll');
-  allBtn?.addEventListener('click', () => {
-    setActiveFilter('all', null);
+  // ── Bottone Novità ──
+  document.getElementById('filterNew')?.addEventListener('click', () => {
+    setActiveFilter('new', null);
     closeAllDropdowns();
   });
 
-  // Configura ogni dropdown
-  const ddConfigs = [
-    { ddId: 'ddChampions', menuId: 'menuChampions', filter: 'Champions', btnId: 'filterChampions' },
-    { ddId: 'ddPremier', menuId: 'menuPremier', filter: 'Premier', btnId: 'filterPremier' },
-    { ddId: 'ddSerieA', menuId: 'menuSerieA', filter: 'SerieA', btnId: 'filterSerie' },
-    { ddId: 'ddBundesliga', menuId: 'menuBundesliga', filter: 'Bundesliga', btnId: 'filterBundesliga' },
-    { ddId: 'ddSaudi', menuId: 'menuSaudi', filter: 'SaudiLeague', btnId: 'filterSaudi' },
-  ];
+  // ── Bottone Vintage ──
+  document.getElementById('filterVintage')?.addEventListener('click', () => {
+    setActiveFilter('vintage', null);
+    closeAllDropdowns();
+  });
 
-  ddConfigs.forEach(({ ddId, menuId, filter, btnId }) => {
-    const dd = document.getElementById(ddId);
-    const menu = document.getElementById(menuId);
-    const btn = document.getElementById(btnId);
-    if (!dd || !menu || !btn) return;
-
-    // Popola il menu con le squadre
-    const teams = TEAMS[filter] || [];
-    menu.innerHTML = `
-      <li>
-        <button data-team="" class="dd-item-all">⚽ Tutte le squadre</button>
-      </li>
+  // ── Dropdown singolo Champions ──
+  const champDD  = document.getElementById('ddChampions');
+  const champMenu = document.getElementById('menuChampions');
+  const champBtn  = document.getElementById('filterChampions');
+  if (champDD && champMenu && champBtn) {
+    const teams = TEAMS['Champions'] || [];
+    champMenu.innerHTML = `
+      <li><button data-team="" class="dd-item-all">⚽ Tutte le squadre</button></li>
       <li><div class="dd-divider"></div></li>
       ${teams.map(t => `<li><button data-team="${t}">${t}</button></li>`).join('')}
     `;
-
-    // Click sul bottone principale: filtra la categoria + apre/chiude dropdown
-    btn.addEventListener('click', (e) => {
+    champBtn.addEventListener('click', (e) => {
       e.stopPropagation();
-      const isOpen = dd.classList.contains('open');
+      const isOpen = champDD.classList.contains('open');
       closeAllDropdowns();
-      if (!isOpen) {
-        dd.classList.add('open');
-        setActiveFilter(filter, null, false); // filtra categoria senza toccare lo stile active
-      } else {
-        setActiveFilter(filter, null);
-      }
+      if (!isOpen) { champDD.classList.add('open'); setActiveFilter('Champions', null, false); }
+      else { setActiveFilter('Champions', null); }
     });
-
-    // Click su una voce del menu
-    menu.addEventListener('click', (e) => {
+    champMenu.addEventListener('click', (e) => {
       const item = e.target.closest('button[data-team]');
       if (!item) return;
       e.stopPropagation();
-      const team = item.dataset.team || null;
-      // Aggiorna stile voce attiva
-      menu.querySelectorAll('button').forEach(b => b.classList.remove('dd-item-active'));
+      champMenu.querySelectorAll('button').forEach(b => b.classList.remove('dd-item-active'));
       item.classList.add('dd-item-active');
-      setActiveFilter(filter, team);
+      setActiveFilter('Champions', item.dataset.team || null);
       closeAllDropdowns();
     });
-  });
+  }
 
-  // Chiudi dropdown cliccando fuori
+  // ── Mega Menu CAMPIONATI (5 campionati) ──
+  const megaDD   = document.getElementById('ddCampionati');
+  const megaBtn  = document.getElementById('filterCampionati');
+  const megaMenu = document.getElementById('megaMenuCampionati');
+  if (megaDD && megaBtn && megaMenu) {
+    const megaCols = [
+      { listId: 'megaListSerieA',     titleId: 'megaBtnSerieA',     filter: 'SerieA'      },
+      { listId: 'megaListLaLiga',     titleId: 'megaBtnLaLiga',     filter: 'LaLiga'      },
+      { listId: 'megaListBundesliga', titleId: 'megaBtnBundesliga', filter: 'Bundesliga'  },
+      { listId: 'megaListPremier',    titleId: 'megaBtnPremier',    filter: 'Premier'     },
+      { listId: 'megaListSaudi',      titleId: 'megaBtnSaudi',      filter: 'SaudiLeague' },
+    ];
+
+    megaCols.forEach(({ listId, titleId, filter }) => {
+      // Titolo: filtra intera lega
+      document.getElementById(titleId)?.addEventListener('click', (e) => {
+        e.stopPropagation();
+        megaMenu.querySelectorAll('.dd-item-active').forEach(b => b.classList.remove('dd-item-active'));
+        setActiveFilter(filter, null);
+        closeAllDropdowns();
+      });
+      // Lista squadre
+      const listEl = document.getElementById(listId);
+      if (!listEl) return;
+      listEl.innerHTML = (TEAMS[filter] || []).map(t =>
+        `<li><button data-team="${t}" data-filter="${filter}">${t}</button></li>`
+      ).join('');
+      listEl.addEventListener('click', (e) => {
+        const item = e.target.closest('button[data-team]');
+        if (!item) return;
+        e.stopPropagation();
+        megaMenu.querySelectorAll('.dd-item-active').forEach(b => b.classList.remove('dd-item-active'));
+        item.classList.add('dd-item-active');
+        setActiveFilter(item.dataset.filter, item.dataset.team || null);
+        closeAllDropdowns();
+      });
+    });
+
+    megaBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isOpen = megaDD.classList.contains('open');
+      closeAllDropdowns();
+      if (!isOpen) megaDD.classList.add('open');
+    });
+  }
+
+  // Chiudi cliccando fuori
   document.addEventListener('click', () => closeAllDropdowns());
 }
 
 function closeAllDropdowns() {
-  document.querySelectorAll('.filter-dropdown.open').forEach(dd => dd.classList.remove('open'));
+  document.querySelectorAll('.filter-dropdown.open, .mega-dropdown.open')
+    .forEach(dd => dd.classList.remove('open'));
 }
 
 function setActiveFilter(filter, team, updateActiveBtn = true) {
   currentFilter = filter;
   currentTeam = team || null;
   if (updateActiveBtn) {
-    // Resetta tutti i filter-btn
     document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-    // Attiva il bottone corretto
-    if (filter === 'all') {
-      document.getElementById('filterAll')?.classList.add('active');
-    } else {
-      const mapping = {
-        Champions: 'filterChampions',
-        Premier: 'filterPremier',
-        SerieA: 'filterSerie',
-        Bundesliga: 'filterBundesliga',
-        SaudiLeague: 'filterSaudi'
-      };
-      document.getElementById(mapping[filter])?.classList.add('active');
+    if (filter === 'new') {
+      document.getElementById('filterNew')?.classList.add('active');
+    } else if (filter === 'vintage') {
+      document.getElementById('filterVintage')?.classList.add('active');
+    } else if (filter === 'Champions') {
+      document.getElementById('filterChampions')?.classList.add('active');
+    } else if (['SerieA','LaLiga','Bundesliga','Premier','SaudiLeague'].includes(filter)) {
+      document.getElementById('filterCampionati')?.classList.add('active');
     }
   }
   renderProducts(currentFilter, currentTeam);
@@ -1312,4 +1342,121 @@ function setupHeroCarousel() {
   }
   function resetAuto() { clearInterval(interval); startAuto(); }
   startAuto();
+}
+
+// ═══════════════════════════════════════════════
+// NAVBAR DROPDOWN CAMPIONATI
+// ═══════════════════════════════════════════════
+function setupNavCampionati() {
+  const wrap = document.getElementById('navCampionatiWrap');
+  const btn = document.getElementById('navCampionatiBtn');
+  const menu = document.getElementById('navCampionatiMenu');
+  if (!wrap || !btn || !menu) return;
+
+  // Apri/chiudi al click sul bottone
+  btn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const isOpen = wrap.classList.contains('open');
+    closeNavDropdown();
+    if (!isOpen) {
+      wrap.classList.add('open');
+      btn.setAttribute('aria-expanded', 'true');
+    }
+  });
+
+  // Click su una voce: filtra e scrolla ai prodotti
+  menu.addEventListener('click', (e) => {
+    const item = e.target.closest('.nav-dd-item');
+    if (!item) return;
+    e.stopPropagation();
+    const league = item.dataset.league;
+    closeNavDropdown();
+    // Applica il filtro
+    setActiveFilter(league, null);
+    // Scrolla alla sezione prodotti
+    document.getElementById('products')?.scrollIntoView({ behavior: 'smooth' });
+  });
+
+  // Chiudi cliccando fuori
+  document.addEventListener('click', closeNavDropdown);
+}
+
+function closeNavDropdown() {
+  const wrap = document.getElementById('navCampionatiWrap');
+  const btn = document.getElementById('navCampionatiBtn');
+  wrap?.classList.remove('open');
+  btn?.setAttribute('aria-expanded', 'false');
+}
+
+// ═══════════════════════════════════════════════
+// FEATURED HOME — Category cards + Prodotti in evidenza
+// ═══════════════════════════════════════════════
+function setupFeatured() {
+  // ── 1. Category cards: click → filtra e scrolla ──
+  document.querySelectorAll('.feat-league-card').forEach(card => {
+    card.addEventListener('click', () => {
+      const league = card.dataset.league;
+      setActiveFilter(league, null);
+      document.getElementById('products')?.scrollIntoView({ behavior: 'smooth' });
+    });
+  });
+
+  // ── 2. Ultimi Arrivi: prodotti con badge "new" (max 4) ──
+  const newRow = document.getElementById('featNewRow');
+  if (newRow) {
+    const newProducts = PRODUCTS.filter(p => p.badge === 'new').slice(0, 4);
+    newRow.innerHTML = newProducts.length
+      ? newProducts.map(p => featProductCardHTML(p)).join('')
+      : '<p style="color:var(--text-muted);grid-column:1/-1">Nessuna novità al momento.</p>';
+  }
+
+  // ── 3. Più Richiesti: prime 4 maglie Serie A + La Liga con prezzi bassi ──
+  const topRow = document.getElementById('featTopRow');
+  if (topRow) {
+    // Seleziona 4 prodotti: i primi disponibili da categorie principali
+    const topCats = ['SerieA', 'LaLiga', 'Bundesliga', 'Premier'];
+    const topProducts = [];
+    topCats.forEach(cat => {
+      const found = PRODUCTS.find(p => {
+        const cats = Array.isArray(p.category) ? p.category : [p.category];
+        return cats.includes(cat) && !topProducts.includes(p);
+      });
+      if (found) topProducts.push(found);
+    });
+    topRow.innerHTML = topProducts.length
+      ? topProducts.map(p => featProductCardHTML(p)).join('')
+      : '<p style="color:var(--text-muted);grid-column:1/-1">Nessun prodotto disponibile.</p>';
+  }
+
+  // ── 4. Pulsanti "Vedi tutti" ──
+  document.getElementById('featSeeAllNew')?.addEventListener('click', () => {
+    setActiveFilter('all', null);
+    document.getElementById('products')?.scrollIntoView({ behavior: 'smooth' });
+  });
+  document.getElementById('featSeeAllTop')?.addEventListener('click', () => {
+    setActiveFilter('all', null);
+    document.getElementById('products')?.scrollIntoView({ behavior: 'smooth' });
+  });
+}
+
+// HTML di una mini product card per le featured rows
+function featProductCardHTML(p) {
+  const label = Array.isArray(p.categoryLabel)
+    ? p.categoryLabel[0]
+    : (p.categoryLabel || '');
+  const badgeHTML = p.badge
+    ? `<span class="feat-product-badge ${p.badge}">${p.badgeLabel}</span>`
+    : '';
+  return `
+    <div class="feat-product-card" onclick="openQuickView(${p.id})" title="${p.name}">
+      ${badgeHTML}
+      <img class="feat-product-img"
+           src="${p.image}" alt="${p.name}" loading="lazy"
+           onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22180%22><rect fill=%22%230f1525%22 width=%22300%22 height=%22180%22/><text x=%2250%25%22 y=%2250%25%22 fill=%22%236c63ff%22 text-anchor=%22middle%22 dominant-baseline=%22middle%22 font-size=%2240%22>⚽</text></svg>'">
+      <div class="feat-product-body">
+        <div class="feat-product-league">${label}</div>
+        <div class="feat-product-name">${p.name}</div>
+        <div class="feat-product-price">€${p.price.toFixed(2)}</div>
+      </div>
+    </div>`;
 }
