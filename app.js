@@ -16,7 +16,10 @@ const DEFAULT_EMAIL_CONFIG = {
 let EMAIL_CONFIG = Object.assign({}, DEFAULT_EMAIL_CONFIG, JSON.parse(localStorage.getItem('gk_email_config') || '{}'));
 
 // ── STATO ──
-let cart = JSON.parse(localStorage.getItem('gk_cart') || '[]');
+let cart = JSON.parse(localStorage.getItem('gk_cart') || '[]').map(function(item) {
+  if (!item._uid) item._uid = Date.now() + '-' + Math.random().toString(36).slice(2);
+  return item;
+});
 let currentFilter = 'all';
 let currentTeam = null; // filtra per squadra specifica
 let currentSearch = '';   // testo libero della search bar
@@ -69,6 +72,7 @@ document.addEventListener('DOMContentLoaded', () => {
   setupReviews();
   setupCustomOrder();
   setupHeroCarousel();
+  setupReviewMiniCarousels();
 });
 
 // ── EMAILJS INIT ──
@@ -370,7 +374,7 @@ function openQuickView(id) {
         <div class="qv-category">${p.categoryLabel}</div>
         <div class="qv-name">${p.name}</div>
         <div class="qv-desc">${p.description}</div>
-        <div class="qv-price">
+        <div class="qv-price" id="qvPriceDisplay" data-base="${p.price}">
           €${p.price.toFixed(2)}
           ${p.oldPrice ? `<small style="font-size:.9rem;color:var(--text-muted);text-decoration:line-through;margin-left:.4rem">€${p.oldPrice.toFixed(2)}</small>` : ''}
         </div>
@@ -378,7 +382,12 @@ function openQuickView(id) {
         <div class="qv-sizes">
           ${p.sizes.map((s, i) => `<button class="qv-size-btn${i === 0 ? ' active' : ''}" onclick="selectQvSize(this)">${s}</button>`).join('')}
         </div>
-        <button class="btn btn-primary btn-full" onclick="addToCart(${p.id}); closeQuickView();">
+        <div class="qv-size-label" style="margin-top:.75rem">Tessuto</div>
+        <div class="qv-fabric-row">
+          <button class="fabric-btn active" data-extra="0" onclick="selectQvFabric(this)">👕 Tifoso</button>
+          <button class="fabric-btn" data-extra="4" onclick="selectQvFabric(this)">⚡ Player <span class="fabric-plus">+€4</span></button>
+        </div>
+        <button class="btn btn-primary btn-full" onclick="addToCartFromQV(${p.id}); closeQuickView();">
           🛒 Aggiungi al Carrello
         </button>
       </div>
@@ -390,6 +399,44 @@ function openQuickView(id) {
 function selectQvSize(btn) {
   btn.closest('.qv-sizes').querySelectorAll('.qv-size-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
+}
+
+function selectQvFabric(btn) {
+  btn.closest('.qv-fabric-row').querySelectorAll('.fabric-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  // aggiorna prezzo
+  const priceEl = document.getElementById('qvPriceDisplay');
+  if (priceEl) {
+    const base  = parseFloat(priceEl.dataset.base || 0);
+    const extra = parseFloat(btn.dataset.extra || 0);
+    priceEl.innerHTML = `€${(base + extra).toFixed(2)}`;
+  }
+}
+
+function addToCartFromQV(productId) {
+  const p = PRODUCTS.find(x => x.id === productId);
+  if (!p) return;
+
+  const activeSize   = document.querySelector('.qv-sizes .qv-size-btn.active');
+  const activeFabric = document.querySelector('.qv-fabric-row .fabric-btn.active');
+
+  const selectedSize  = activeSize   ? activeSize.textContent.trim()                       : (p.sizes[0] || 'M');
+  const fabricLabel   = activeFabric ? activeFabric.textContent.replace('+€4', '').trim()  : '👕 Tifoso';
+  const fabricExtra   = activeFabric ? parseFloat(activeFabric.dataset.extra || 0)         : 0;
+  const finalPrice    = p.price + fabricExtra;
+
+  const existing = cart.find(item =>
+    item.id === productId && item.size === selectedSize && item.fabric === fabricLabel
+  );
+  if (existing) {
+    existing.qty += 1;
+  } else {
+    cart.push({ id: p.id, name: p.name, price: finalPrice, image: p.image, qty: 1, size: selectedSize, fabric: fabricLabel, _uid: Date.now() + '-' + Math.random().toString(36).slice(2) });
+  }
+  saveCart();
+  updateCartUI();
+  showToast('✅', `"${p.name}" (${selectedSize} · ${fabricLabel}) aggiunto!`);
+  openCart();
 }
 
 function closeQuickView() {
@@ -429,7 +476,8 @@ function addToCart(productId) {
       image: p.image,
       qty: 1,
       size: selectedSize,
-      fabric: fabricLabel
+      fabric: fabricLabel,
+      _uid: Date.now() + '-' + Math.random().toString(36).slice(2)
     });
   }
   saveCart();
@@ -463,15 +511,15 @@ function selectCardFabric(btn) {
 
 function removeFromCart(id) {
   // eslint-disable-next-line eqeqeq
-  cart = cart.filter(item => item.id != id);
+function removeFromCart(uid) {
+  cart = cart.filter(item => item._uid !== uid && item.id != uid);
   saveCart();
   updateCartUI();
   renderCartItems();
 }
 
-function changeQty(id, delta) {
-  // eslint-disable-next-line eqeqeq
-  const item = cart.find(x => x.id == id);
+function changeQty(uid, delta) {
+  const item = cart.find(x => x._uid === uid || x.id == uid);
   if (!item) return;
   item.qty = Math.max(1, item.qty + delta);
   saveCart();
@@ -519,7 +567,8 @@ function renderCartItems() {
   let html = '';
   cart.forEach(function (item) {
     const isCustom = !!item.custom;
-    const idRef = isCustom ? ("'" + item.id + "'") : item.id;
+    const uid = item._uid || item.id;
+    const uidRef = "'" + uid + "'";
     const imgSrc = item.image || '';
     const safeName = String(item.name).replace(/"/g, '&quot;');
 
@@ -536,12 +585,12 @@ function renderCartItems() {
       + '<div class="cart-item-meta">Taglia: ' + item.size + (item.fabric ? ' &nbsp;·&nbsp; ' + item.fabric : '') + '</div>'
       + '<div class="cart-item-price">' + priceLabel + '</div>'
       + '<div class="cart-item-qty">'
-      + '<button class="qty-btn" onclick="changeQty(' + idRef + ', -1)">&minus;</button>'
+      + '<button class="qty-btn" onclick="changeQty(' + uidRef + ', -1)">&minus;</button>'
       + '<span class="qty-val">' + item.qty + '</span>'
-      + '<button class="qty-btn" onclick="changeQty(' + idRef + ', +1)">+</button>'
+      + '<button class="qty-btn" onclick="changeQty(' + uidRef + ', +1)">+</button>'
       + '</div>'
       + '</div>'
-      + '<button class="cart-item-remove" onclick="removeFromCart(' + idRef + ')" title="Rimuovi">&#128465;&#65039;</button>'
+      + '<button class="cart-item-remove" onclick="removeFromCart(' + uidRef + ')" title="Rimuovi">&#128465;&#65039;</button>'
       + '</div>';
   });
   container.innerHTML = html;
@@ -1199,6 +1248,33 @@ function setupCustomOrder() {
     form.reset();
     document.getElementById('customProductSize').value = 'M';
     document.getElementById('customProductQty').value = '1';
+  });
+}
+
+// ══════════════════════════════════
+// MINI-CAROSELLO RECENSIONI
+// ══════════════════════════════════
+function setupReviewMiniCarousels() {
+  document.querySelectorAll('[data-rmc]').forEach(function(rmc) {
+    const imgs = rmc.querySelectorAll('.rmc-img');
+    const dots = rmc.querySelectorAll('.rmc-dot');
+    if (imgs.length <= 1) return;
+
+    let idx = 0;
+
+    function goTo(n) {
+      imgs[idx].classList.remove('active');
+      dots[idx].classList.remove('active');
+      idx = (n + imgs.length) % imgs.length;
+      imgs[idx].classList.add('active');
+      dots[idx].classList.add('active');
+    }
+
+    dots.forEach(function(dot, i) {
+      dot.addEventListener('click', function() { goTo(i); clearInterval(timer); timer = setInterval(function() { goTo(idx + 1); }, 3000); });
+    });
+
+    var timer = setInterval(function() { goTo(idx + 1); }, 3000);
   });
 }
 

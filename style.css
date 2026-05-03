@@ -1912,35 +1912,55 @@ img {
   border-top: 1px solid var(--border);
 }
 
-/* ── FOTO RECENSIONE ── */
-.review-photo {
+/* ── MINI-CAROSELLO RECENSIONE ── */
+.rmc {
   width: 100%;
-  height: 180px;
-  object-fit: cover;
+  margin-bottom: .75rem;
   border-radius: 10px;
+  overflow: hidden;
+}
+
+.rmc-track {
+  position: relative;
+  width: 100%;
+}
+
+.rmc-img {
+  width: 100%;
+  height: auto;
+  display: none;
+  border-radius: 10px;
+  object-fit: contain;
+  max-height: 420px;
+  transition: opacity .35s ease;
+}
+
+.rmc-img.active {
   display: block;
 }
 
-.review-photo-placeholder {
-  width: 100%;
-  height: 180px;
-  border-radius: 10px;
-  border: 2px dashed var(--border);
-  display: none;
-  /* mostrato via JS solo se l'immagine non carica */
-  flex-direction: column;
-  align-items: center;
+.rmc-dots {
+  display: flex;
   justify-content: center;
-  gap: .4rem;
-  color: var(--text-muted);
-  font-size: 1.8rem;
-  background: rgba(255, 255, 255, 0.02);
+  gap: .35rem;
+  margin-top: .5rem;
 }
 
-.review-photo-placeholder small {
-  font-size: .7rem;
-  letter-spacing: .5px;
-  color: var(--text-muted);
+.rmc-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--border);
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: background .2s, width .2s;
+}
+
+.rmc-dot.active {
+  background: var(--accent);
+  width: 18px;
+  border-radius: 4px;
 }
 
 /* ── FRECCE ── */
@@ -2000,6 +2020,74 @@ img {
     width: 36px;
     height: 36px;
     font-size: 1.4rem;
+  }
+}
+
+/* ── GRIGLIA MOSAIC FOTO CLIENTI ── */
+.client-mosaic {
+  columns: 4;
+  column-gap: .75rem;
+  margin-top: 3rem;
+}
+
+.mosaic-img {
+  width: 100%;
+  display: block;
+  border-radius: 12px;
+  object-fit: cover;
+  margin-bottom: .75rem;
+  break-inside: avoid;
+  cursor: pointer;
+  transition: transform .3s ease, box-shadow .3s ease;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, .35);
+}
+
+.mosaic-img:hover {
+  transform: scale(1.03);
+  box-shadow: 0 8px 32px rgba(108, 99, 255, .35);
+}
+
+.mosaic-sm {
+  height: 160px;
+}
+
+.mosaic-md {
+  height: 230px;
+}
+
+.mosaic-lg {
+  height: 310px;
+}
+
+.mosaic-xl {
+  height: 400px;
+}
+
+@media (max-width: 900px) {
+  .client-mosaic {
+    columns: 3;
+  }
+}
+
+@media (max-width: 600px) {
+  .client-mosaic {
+    columns: 2;
+  }
+
+  .mosaic-sm {
+    height: 120px;
+  }
+
+  .mosaic-md {
+    height: 170px;
+  }
+
+  .mosaic-lg {
+    height: 220px;
+  }
+
+  .mosaic-xl {
+    height: 280px;
   }
 }
 
