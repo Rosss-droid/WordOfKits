@@ -723,7 +723,7 @@ img {
   pointer-events: all;
 }
 
-.mega-dropdown.open > .filter-btn {
+.mega-dropdown.open>.filter-btn {
   background: var(--accent);
   border-color: var(--accent);
   color: #fff;
@@ -735,6 +735,7 @@ img {
   border-right: 1px solid var(--border);
   min-height: 100%;
 }
+
 .mega-col:last-child {
   border-right: none;
 }
@@ -820,16 +821,20 @@ img {
     left: 0;
     transform: translateX(0) scaleY(0);
   }
+
   .mega-dropdown.open .mega-menu {
     transform: translateX(0) scaleY(1);
   }
+
   .mega-col {
     border-right: none;
     border-bottom: 1px solid var(--border);
   }
+
   .mega-col:nth-child(3n) {
     border-right: none;
   }
+
   .mega-col:not(:nth-child(3n)) {
     border-right: 1px solid var(--border);
   }
@@ -843,12 +848,15 @@ img {
     max-height: 60vh;
     overflow-y: auto;
   }
+
   .mega-col:nth-child(odd) {
     border-right: none;
   }
+
   .mega-col:nth-last-child(-n+2) {
     border-bottom: 1px solid var(--border);
   }
+
   .mega-col:last-child {
     border-bottom: none;
   }
