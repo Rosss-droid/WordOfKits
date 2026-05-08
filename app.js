@@ -21,8 +21,9 @@ let cart = JSON.parse(localStorage.getItem('gk_cart') || '[]').map(function (ite
   return item;
 });
 let currentFilter = 'new';
-let currentTeam = null; // filtra per squadra specifica
-let currentSearch = '';   // testo libero della search bar
+let currentTeam = null;
+let currentSearch = '';
+let currentSort = 'default';
 let quickViewProduct = null;
 
 // ── SQUADRE PER CATEGORIA ──
@@ -176,11 +177,19 @@ function renderProducts(filter, team = null) {
   const grid = document.getElementById('productsGrid');
   if (!grid) return;
 
-  const filtered = PRODUCTS.filter(p =>
+  let filtered = PRODUCTS.filter(p =>
     productMatchesCategory(p, filter) &&
     productMatchesTeam(p, team) &&
     productMatchesSearch(p, currentSearch)
   );
+
+  // Sort
+  if (currentSort === 'price-asc') filtered = [...filtered].sort((a, b) => a.price - b.price);
+  if (currentSort === 'price-desc') filtered = [...filtered].sort((a, b) => b.price - a.price);
+
+  // Aggiorna contatore
+  const countEl = document.getElementById('shopCount');
+  if (countEl) countEl.textContent = `(${filtered.length})`;
 
   grid.innerHTML = '';
 
@@ -197,33 +206,22 @@ function renderProducts(filter, team = null) {
     const card = document.createElement('div');
     card.className = 'product-card';
     card.style.animationDelay = `${i * 0.06}s`;
+    card.setAttribute('onclick', `openQuickView(${p.id})`);
     const catLabel = Array.isArray(p.categoryLabel)
-      ? p.categoryLabel.join(', ')
+      ? p.categoryLabel[0]
       : p.categoryLabel;
     card.innerHTML = `
       <div class="card-img-wrap">
         <img src="${p.image}" alt="${p.name}" loading="lazy"
-             onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22220%22><rect fill=%22%230f1525%22 width=%22300%22 height=%22220%22/><text x=%2250%25%22 y=%2250%25%22 fill=%22%236c63ff%22 text-anchor=%22middle%22 dominant-baseline=%22middle%22 font-size=%2240%22>⚽</text></svg>'">
+             onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22360%22><rect fill=%22%230f1525%22 width=%22300%22 height=%22360%22/><text x=%2250%25%22 y=%2250%25%22 fill=%22%236c63ff%22 text-anchor=%22middle%22 dominant-baseline=%22middle%22 font-size=%2260%22>⚽</text></svg>'">
         ${p.badge ? `<span class="card-badge ${p.badge}">${p.badgeLabel}</span>` : ''}
-        <div class="card-quick" onclick="openQuickView(${p.id})">🔍 Vista Rapida</div>
       </div>
-      <div class="card-body">
+      <div class="card-info">
         <div class="card-category">${catLabel}</div>
         <div class="card-name">${p.name}</div>
-        <div class="card-sizes" data-product-id="${p.id}">
-          ${p.sizes.slice(0, 5).map((s, i) => `<button class="size-tag${i === 0 ? ' active' : ''}" onclick="selectCardSize(this)">${s}</button>`).join('')}
-          ${p.sizes.length > 5 ? `<span class="size-tag">+${p.sizes.length - 5}</span>` : ''}
-        </div>
-        <div class="card-fabric" data-product-id="${p.id}">
-          <button class="fabric-btn active" onclick="selectCardFabric(this)" data-extra="0">👕 Tifoso</button>
-          <button class="fabric-btn" onclick="selectCardFabric(this)" data-extra="4">⚡ Player <span class="fabric-plus">+€4</span></button>
-        </div>
-        <div class="card-footer">
-          <div>
-            <span class="card-price" data-base="${p.price}" data-product-id="${p.id}">€${p.price.toFixed(2)}</span>
-            ${p.oldPrice ? `<span class="card-price-old">€${p.oldPrice.toFixed(2)}</span>` : ''}
-          </div>
-          <button class="card-add" onclick="addToCart(${p.id})">+ Aggiungi</button>
+        <div class="card-price-row">
+          <span class="card-price">€${p.price.toFixed(2)}</span>
+          ${p.oldPrice ? `<span class="card-price-old">€${p.oldPrice.toFixed(2)}</span>` : ''}
         </div>
       </div>
     `;
@@ -231,118 +229,168 @@ function renderProducts(filter, team = null) {
   });
 }
 
-// ── SETUP FILTRI + DROPDOWN ──
+// ── SETUP FILTRI SIDEBAR 3-LEVEL ──
 function setupFilters() {
-  // ── Bottone Novità ──
-  document.getElementById('filterNew')?.addEventListener('click', () => {
-    setActiveFilter('new', null);
-    closeAllDropdowns();
-  });
 
-  // ── Bottone Vintage ──
-  document.getElementById('filterVintage')?.addEventListener('click', () => {
-    setActiveFilter('vintage', null);
-    closeAllDropdowns();
-  });
+  // ── Novità / Vintage ──
+  document.getElementById('filterNew')?.addEventListener('click', () => setActiveFilter('new', null));
+  document.getElementById('filterVintage')?.addEventListener('click', () => setActiveFilter('vintage', null));
 
-  // ── Dropdown singolo Champions ──
-  const champDD  = document.getElementById('ddChampions');
-  const champMenu = document.getElementById('menuChampions');
-  const champBtn  = document.getElementById('filterChampions');
-  if (champDD && champMenu && champBtn) {
-    const teams = TEAMS['Champions'] || [];
-    champMenu.innerHTML = `
-      <li><button data-team="" class="dd-item-all">⚽ Tutte le squadre</button></li>
-      <li><div class="dd-divider"></div></li>
-      ${teams.map(t => `<li><button data-team="${t}">${t}</button></li>`).join('')}
-    `;
-    champBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      const isOpen = champDD.classList.contains('open');
-      closeAllDropdowns();
-      if (!isOpen) { champDD.classList.add('open'); setActiveFilter('Champions', null, false); }
-      else { setActiveFilter('Champions', null); }
+  // ── CALCIO: toggle apre/chiude l'intera sezione campionati ──
+  const calcioBtn = document.getElementById('calcioToggleBtn');
+  const calcioList = document.getElementById('calcioSubList');
+  if (calcioBtn && calcioList) {
+    calcioBtn.addEventListener('click', () => {
+      const isOpen = calcioList.classList.contains('open');
+      // Chiudi Accessori se aperto
+      document.getElementById('accessoriSubList')?.classList.remove('open');
+      document.getElementById('accessoriToggleBtn')?.classList.remove('active');
+      if (isOpen) {
+        calcioList.classList.remove('open');
+        calcioBtn.classList.remove('active');
+      } else {
+        calcioList.classList.add('open');
+        calcioBtn.classList.add('active');
+      }
     });
-    champMenu.addEventListener('click', (e) => {
+  }
+
+  // ── League buttons (livello 2 dentro Calcio) ──
+  const leagueDefs = [
+    { btnId: 'filterChampions', listId: 'menuChampions', filter: 'Champions' },
+    { btnId: 'megaBtnSerieA', listId: 'megaListSerieA', filter: 'SerieA' },
+    { btnId: 'megaBtnLaLiga', listId: 'megaListLaLiga', filter: 'LaLiga' },
+    { btnId: 'megaBtnPremier', listId: 'megaListPremier', filter: 'Premier' },
+    { btnId: 'megaBtnBundesliga', listId: 'megaListBundesliga', filter: 'Bundesliga' },
+    { btnId: 'megaBtnSaudi', listId: 'megaListSaudi', filter: 'SaudiLeague' },
+  ];
+
+  leagueDefs.forEach(({ btnId, listId, filter }) => {
+    const btn = document.getElementById(btnId);
+    const list = document.getElementById(listId);
+    if (!btn || !list) return;
+
+    // Popola lista squadre (livello 3)
+    list.innerHTML = (TEAMS[filter] || []).map(t =>
+      `<li><button data-team="${t}" data-filter="${filter}">${t}</button></li>`
+    ).join('');
+
+    // Click campionato: filtra lega + toggle squadre, non chiude Calcio
+    btn.addEventListener('click', () => {
+      const isOpen = list.classList.contains('open');
+      // Chiudi tutte le altre sub-list di livello 3 dentro calcio (non calcioSubList)
+      if (calcioList) {
+        calcioList.querySelectorAll('.sidebar-sub-list.open').forEach(sl => {
+          if (sl !== list) sl.classList.remove('open');
+        });
+        calcioList.querySelectorAll('.sidebar-nested-btn').forEach(b => {
+          if (b !== btn) b.classList.remove('active');
+        });
+      }
+      if (!isOpen) {
+        list.classList.add('open');
+        btn.classList.add('active');
+      } else {
+        list.classList.remove('open');
+        btn.classList.remove('active');
+      }
+      setActiveFilter(filter, null);
+    });
+
+    // Click team (livello 3)
+    list.addEventListener('click', (e) => {
       const item = e.target.closest('button[data-team]');
       if (!item) return;
-      e.stopPropagation();
-      champMenu.querySelectorAll('button').forEach(b => b.classList.remove('dd-item-active'));
+      list.querySelectorAll('button').forEach(b => b.classList.remove('dd-item-active'));
       item.classList.add('dd-item-active');
-      setActiveFilter('Champions', item.dataset.team || null);
-      closeAllDropdowns();
+      setActiveFilter(filter, item.dataset.team || null);
+    });
+  });
+
+  // ── ACCESSORI: toggle apre/chiude la sezione ──
+  const accessoriBtn = document.getElementById('accessoriToggleBtn');
+  const accessoriList = document.getElementById('accessoriSubList');
+  if (accessoriBtn && accessoriList) {
+    accessoriBtn.addEventListener('click', () => {
+      const isOpen = accessoriList.classList.contains('open');
+      // Chiudi Calcio se aperto
+      calcioList?.classList.remove('open');
+      calcioBtn?.classList.remove('active');
+      if (isOpen) {
+        accessoriList.classList.remove('open');
+        accessoriBtn.classList.remove('active');
+      } else {
+        accessoriList.classList.add('open');
+        accessoriBtn.classList.add('active');
+      }
+    });
+
+    // Sub-item Accessori
+    accessoriList.querySelectorAll('.sidebar-nested-btn[data-filter]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        accessoriList.querySelectorAll('.sidebar-nested-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        setActiveFilter(btn.dataset.filter, null);
+      });
     });
   }
 
-  // ── Mega Menu CAMPIONATI (5 campionati) ──
-  const megaDD   = document.getElementById('ddCampionati');
-  const megaBtn  = document.getElementById('filterCampionati');
-  const megaMenu = document.getElementById('megaMenuCampionati');
-  if (megaDD && megaBtn && megaMenu) {
-    const megaCols = [
-      { listId: 'megaListSerieA',     titleId: 'megaBtnSerieA',     filter: 'SerieA'      },
-      { listId: 'megaListLaLiga',     titleId: 'megaBtnLaLiga',     filter: 'LaLiga'      },
-      { listId: 'megaListBundesliga', titleId: 'megaBtnBundesliga', filter: 'Bundesliga'  },
-      { listId: 'megaListPremier',    titleId: 'megaBtnPremier',    filter: 'Premier'     },
-      { listId: 'megaListSaudi',      titleId: 'megaBtnSaudi',      filter: 'SaudiLeague' },
-    ];
-
-    megaCols.forEach(({ listId, titleId, filter }) => {
-      // Titolo: filtra intera lega
-      document.getElementById(titleId)?.addEventListener('click', (e) => {
-        e.stopPropagation();
-        megaMenu.querySelectorAll('.dd-item-active').forEach(b => b.classList.remove('dd-item-active'));
-        setActiveFilter(filter, null);
-        closeAllDropdowns();
-      });
-      // Lista squadre
-      const listEl = document.getElementById(listId);
-      if (!listEl) return;
-      listEl.innerHTML = (TEAMS[filter] || []).map(t =>
-        `<li><button data-team="${t}" data-filter="${filter}">${t}</button></li>`
-      ).join('');
-      listEl.addEventListener('click', (e) => {
-        const item = e.target.closest('button[data-team]');
-        if (!item) return;
-        e.stopPropagation();
-        megaMenu.querySelectorAll('.dd-item-active').forEach(b => b.classList.remove('dd-item-active'));
-        item.classList.add('dd-item-active');
-        setActiveFilter(item.dataset.filter, item.dataset.team || null);
-        closeAllDropdowns();
-      });
+  // ── Toggle sidebar ("Nascondi filtri" / "Mostra filtri") ──
+  const toggleBtn = document.getElementById('sidebarToggleBtn');
+  const layout = document.getElementById('shopLayout');
+  if (toggleBtn && layout) {
+    toggleBtn.addEventListener('click', () => {
+      const hidden = layout.classList.toggle('sidebar-hidden');
+      toggleBtn.innerHTML = hidden
+        ? `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/></svg> Mostra filtri`
+        : `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/></svg> Nascondi filtri`;
     });
+  }
 
-    megaBtn.addEventListener('click', (e) => {
+  // ── Sort menu ──
+  const sortWrap = document.querySelector('.shop-sort-wrap');
+  const sortBtn = document.getElementById('shopSortBtn');
+  if (sortBtn && sortWrap) {
+    sortBtn.addEventListener('click', (e) => {
       e.stopPropagation();
-      const isOpen = megaDD.classList.contains('open');
-      closeAllDropdowns();
-      if (!isOpen) megaDD.classList.add('open');
+      sortWrap.classList.toggle('open');
+    });
+    document.addEventListener('click', () => sortWrap.classList.remove('open'));
+    document.querySelectorAll('.shop-sort-item').forEach(item => {
+      item.addEventListener('click', () => {
+        document.querySelectorAll('.shop-sort-item').forEach(i => i.classList.remove('active'));
+        item.classList.add('active');
+        currentSort = item.dataset.sort || 'default';
+        sortWrap.classList.remove('open');
+        renderProducts(currentFilter, currentTeam);
+      });
     });
   }
-
-  // Chiudi cliccando fuori
-  document.addEventListener('click', () => closeAllDropdowns());
 }
 
 function closeAllDropdowns() {
-  document.querySelectorAll('.filter-dropdown.open, .mega-dropdown.open')
-    .forEach(dd => dd.classList.remove('open'));
+  // (kept for compatibility)
 }
 
 function setActiveFilter(filter, team, updateActiveBtn = true) {
   currentFilter = filter;
   currentTeam = team || null;
   if (updateActiveBtn) {
-    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-    if (filter === 'new') {
-      document.getElementById('filterNew')?.classList.add('active');
-    } else if (filter === 'vintage') {
-      document.getElementById('filterVintage')?.classList.add('active');
-    } else if (filter === 'Champions') {
-      document.getElementById('filterChampions')?.classList.add('active');
-    } else if (['SerieA','LaLiga','Bundesliga','Premier','SaudiLeague'].includes(filter)) {
-      document.getElementById('filterCampionati')?.classList.add('active');
-    }
+    // Resetta tutti i flat-btn e nested-btn
+    document.querySelectorAll('.sidebar-flat-btn, .sidebar-nested-btn').forEach(b => {
+      if (b.id !== 'calcioToggleBtn' && b.id !== 'accessoriToggleBtn') {
+        b.classList.remove('active');
+      }
+    });
+    if (filter === 'new') document.getElementById('filterNew')?.classList.add('active');
+    else if (filter === 'vintage') document.getElementById('filterVintage')?.classList.add('active');
+    else if (filter === 'Champions') document.getElementById('filterChampions')?.classList.add('active');
+    else if (filter === 'SerieA') document.getElementById('megaBtnSerieA')?.classList.add('active');
+    else if (filter === 'LaLiga') document.getElementById('megaBtnLaLiga')?.classList.add('active');
+    else if (filter === 'Premier') document.getElementById('megaBtnPremier')?.classList.add('active');
+    else if (filter === 'Bundesliga') document.getElementById('megaBtnBundesliga')?.classList.add('active');
+    else if (filter === 'SaudiLeague') document.getElementById('megaBtnSaudi')?.classList.add('active');
+    // Accessori sub-items sono già gestiti direttamente
   }
   renderProducts(currentFilter, currentTeam);
 }
@@ -399,28 +447,57 @@ function openQuickView(id) {
   if (!p) return;
   quickViewProduct = p;
   const content = document.getElementById('quickViewContent');
+  const catLabel = Array.isArray(p.categoryLabel) ? p.categoryLabel[0] : p.categoryLabel;
   content.innerHTML = `
     <div class="qv-grid">
-      <img src="${p.image}" alt="${p.name}" class="qv-img"
-           onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22300%22><rect fill=%22%230f1525%22 width=%22300%22 height=%22300%22/><text x=%2250%25%22 y=%2250%25%22 fill=%22%236c63ff%22 text-anchor=%22middle%22 dominant-baseline=%22middle%22 font-size=%2260%22>⚽</text></svg>'">
-      <div>
-        <div class="qv-category">${p.categoryLabel}</div>
+      <div class="qv-img-wrap">
+        <img src="${p.image}" alt="${p.name}" class="qv-img"
+             onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22480%22><rect fill=%22%230f1525%22 width=%22400%22 height=%22480%22/><text x=%2250%25%22 y=%2250%25%22 fill=%22%236c63ff%22 text-anchor=%22middle%22 dominant-baseline=%22middle%22 font-size=%2270%22>⚽</text></svg>'">
+        ${p.badge ? `<span class="card-badge ${p.badge} qv-badge">${p.badgeLabel}</span>` : ''}
+      </div>
+      <div class="qv-details">
+        <div class="qv-category">${catLabel}</div>
         <div class="qv-name">${p.name}</div>
         <div class="qv-desc">${p.description}</div>
-        <div class="qv-price" id="qvPriceDisplay" data-base="${p.price}">
-          €${p.price.toFixed(2)}
-          ${p.oldPrice ? `<small style="font-size:.9rem;color:var(--text-muted);text-decoration:line-through;margin-left:.4rem">€${p.oldPrice.toFixed(2)}</small>` : ''}
+
+        <div class="qv-price-wrap">
+          <span class="qv-price" id="qvPriceDisplay" data-base="${p.price}">€${p.price.toFixed(2)}</span>
+          ${p.oldPrice ? `<span class="qv-price-old">€${p.oldPrice.toFixed(2)}</span>` : ''}
         </div>
-        <div class="qv-size-label">Taglia</div>
+
+        <!-- Taglia -->
+        <div class="qv-section-label">Taglia</div>
         <div class="qv-sizes">
           ${p.sizes.map((s, i) => `<button class="qv-size-btn${i === 0 ? ' active' : ''}" onclick="selectQvSize(this)">${s}</button>`).join('')}
         </div>
-        <div class="qv-size-label" style="margin-top:.75rem">Tessuto</div>
+
+        <!-- Tessuto -->
+        <div class="qv-section-label">Tessuto</div>
         <div class="qv-fabric-row">
-          <button class="fabric-btn active" data-extra="0" onclick="selectQvFabric(this)">👕 Tifoso</button>
-          <button class="fabric-btn" data-extra="4" onclick="selectQvFabric(this)">⚡ Player <span class="fabric-plus">+€4</span></button>
+          <button class="qv-option-btn active" data-extra="0" onclick="selectQvFabric(this)">
+            <span class="qv-opt-icon">👕</span>
+            <span class="qv-opt-text"><strong>Tifoso</strong><small>Standard</small></span>
+          </button>
+          <button class="qv-option-btn" data-extra="4" onclick="selectQvFabric(this)">
+            <span class="qv-opt-icon">⚡</span>
+            <span class="qv-opt-text"><strong>Player</strong><small>+€4,00</small></span>
+          </button>
         </div>
-        <button class="btn btn-primary btn-full" onclick="addToCartFromQV(${p.id}); closeQuickView();">
+
+        <!-- Kit Completo -->
+        <div class="qv-section-label">Composizione</div>
+        <div class="qv-kit-row">
+          <button class="qv-option-btn active" data-kit="0" onclick="selectQvKit(this)">
+            <span class="qv-opt-icon">👕</span>
+            <span class="qv-opt-text"><strong>Solo Maglia</strong><small>Inclusa nel prezzo</small></span>
+          </button>
+          <button class="qv-option-btn" data-kit="10" onclick="selectQvKit(this)">
+            <span class="qv-opt-icon">⚽</span>
+            <span class="qv-opt-text"><strong>Kit Completo</strong><small>Maglia + Pantaloncini +€10</small></span>
+          </button>
+        </div>
+
+        <button class="btn btn-primary btn-full qv-add-btn" onclick="addToCartFromQV(${p.id}); closeQuickView();">
           🛒 Aggiungi al Carrello
         </button>
       </div>
@@ -435,15 +512,26 @@ function selectQvSize(btn) {
 }
 
 function selectQvFabric(btn) {
-  btn.closest('.qv-fabric-row').querySelectorAll('.fabric-btn').forEach(b => b.classList.remove('active'));
+  btn.closest('.qv-fabric-row').querySelectorAll('.qv-option-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
-  // aggiorna prezzo
+  updateQvPrice();
+}
+
+function selectQvKit(btn) {
+  btn.closest('.qv-kit-row').querySelectorAll('.qv-option-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  updateQvPrice();
+}
+
+function updateQvPrice() {
   const priceEl = document.getElementById('qvPriceDisplay');
-  if (priceEl) {
-    const base = parseFloat(priceEl.dataset.base || 0);
-    const extra = parseFloat(btn.dataset.extra || 0);
-    priceEl.innerHTML = `€${(base + extra).toFixed(2)}`;
-  }
+  if (!priceEl) return;
+  const base = parseFloat(priceEl.dataset.base || 0);
+  const fabricBtn = document.querySelector('.qv-fabric-row .qv-option-btn.active');
+  const kitBtn = document.querySelector('.qv-kit-row .qv-option-btn.active');
+  const fabricExtra = fabricBtn ? parseFloat(fabricBtn.dataset.extra || 0) : 0;
+  const kitExtra = kitBtn ? parseFloat(kitBtn.dataset.kit || 0) : 0;
+  priceEl.textContent = `€${(base + fabricExtra + kitExtra).toFixed(2)}`;
 }
 
 function addToCartFromQV(productId) {
@@ -451,13 +539,18 @@ function addToCartFromQV(productId) {
   if (!p) return;
 
   const activeSize = document.querySelector('.qv-sizes .qv-size-btn.active');
-  const activeFabric = document.querySelector('.qv-fabric-row .fabric-btn.active');
+  const activeFabric = document.querySelector('.qv-fabric-row .qv-option-btn.active');
+  const activeKit = document.querySelector('.qv-kit-row .qv-option-btn.active');
 
   const selectedSize = activeSize ? activeSize.textContent.trim() : (p.sizes[0] || 'M');
-  const fabricLabel = activeFabric ? activeFabric.textContent.replace('+€4', '').trim() : '👕 Tifoso';
+  const fabricText = activeFabric ? activeFabric.querySelector('strong').textContent.trim() : 'Tifoso';
+  const fabricLabel = `👕 ${fabricText}`;
   const fabricExtra = activeFabric ? parseFloat(activeFabric.dataset.extra || 0) : 0;
+  const kitExtra = activeKit ? parseFloat(activeKit.dataset.kit || 0) : 0;
+  const isKit = kitExtra > 0;
   const finalPrice = p.price + fabricExtra;
 
+  // Aggiungi maglia
   const existing = cart.find(item =>
     item.id === productId && item.size === selectedSize && item.fabric === fabricLabel
   );
@@ -466,9 +559,20 @@ function addToCartFromQV(productId) {
   } else {
     cart.push({ id: p.id, name: p.name, price: finalPrice, image: p.image, qty: 1, size: selectedSize, fabric: fabricLabel, _uid: Date.now() + '-' + Math.random().toString(36).slice(2) });
   }
+
+  // Se Kit Completo, aggiungi anche pantaloncini
+  if (isKit) {
+    const shortsName = `Pantaloncini – ${p.name.replace(/Maglia\s*/i, '').trim()}`;
+    const shortsPrice = 10 + fabricExtra;
+    cart.push({ id: `shorts-${p.id}`, name: shortsName, price: shortsPrice, image: p.image, qty: 1, size: selectedSize, fabric: fabricLabel, _uid: Date.now() + '-s-' + Math.random().toString(36).slice(2) });
+  }
+
   saveCart();
   updateCartUI();
-  showToast('✅', `"${p.name}" (${selectedSize} · ${fabricLabel}) aggiunto!`);
+  const msg = isKit
+    ? `Kit Completo (${selectedSize} · ${fabricText}) aggiunto!`
+    : `"${p.name}" (${selectedSize} · ${fabricText}) aggiunto!`;
+  showToast('✅', msg);
   openCart();
 }
 
