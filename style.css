@@ -3184,45 +3184,88 @@ img {
   border-radius: 3px;
 }
 
-/* ── Mobile: card recensioni compatte ── */
+/* ── Mobile: recensioni compatte ── */
 @media (max-width: 640px) {
+  .reviews-section {
+    padding: 2.5rem 0;
+  }
+
+  .reviews-carousel-wrap {
+    gap: .4rem;
+    margin-top: 1.25rem;
+  }
+
+  /* Nascondi le frecce su mobile: si swipa */
+  .reviews-arrow {
+    display: none;
+  }
+
   .review-card {
-    min-width: calc(85vw);
-    padding: 1rem;
-    gap: .5rem;
+    min-width: 92vw;
+    max-width: 92vw;
+    padding: .85rem;
+    gap: .4rem;
   }
 
   .rmc {
-    height: 180px;
+    height: 160px;
   }
 
-  .review-name {
-    font-size: .82rem;
-  }
-
-  .review-text {
-    font-size: .78rem;
-    line-height: 1.5;
+  .review-header {
+    gap: .5rem;
   }
 
   .review-avatar {
-    width: 36px;
-    height: 36px;
-    font-size: .8rem;
+    width: 32px;
+    height: 32px;
+    font-size: .7rem;
   }
 
-  .review-stars {
-    font-size: .9rem;
+  .review-name {
+    font-size: .78rem;
+  }
+
+  .review-location {
+    font-size: .65rem;
   }
 
   .review-verified {
-    font-size: .62rem;
+    font-size: .58rem;
+    white-space: normal;
+    text-align: right;
+    max-width: 60px;
   }
 
-  .reviews-arrow {
-    width: 32px;
-    height: 32px;
-    font-size: 1.3rem;
+  .review-stars {
+    font-size: .85rem;
+    letter-spacing: 1px;
+  }
+
+  .review-text {
+    font-size: .73rem;
+    line-height: 1.45;
+  }
+
+  .review-product {
+    font-size: .65rem;
+  }
+
+  .reviews-track {
+    gap: .75rem;
+  }
+
+  /* Titolo sezione recensioni mobile */
+  .reviews-section .section-title {
+    font-size: 1.4rem;
+  }
+
+  .reviews-section .section-sub {
+    font-size: .78rem;
+  }
+
+  .reviews-section .section-badge {
+    font-size: .7rem;
+    padding: .25rem .7rem;
   }
 }
 

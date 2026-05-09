@@ -304,15 +304,15 @@ function setupFilters() {
       list.querySelectorAll('button').forEach(b => b.classList.remove('dd-item-active'));
       item.classList.add('dd-item-active');
       setActiveFilter(filter, item.dataset.team || null);
-      // Scroll ai prodotti (funziona anche su iOS Safari)
+      // Su mobile la sidebar è sopra la griglia → scroll alla griglia prodotti
       setTimeout(() => {
-        const productsEl = document.getElementById('products');
-        if (productsEl) {
-          const navbarH = document.querySelector('.header')?.offsetHeight || 70;
-          const top = productsEl.getBoundingClientRect().top + window.pageYOffset - navbarH;
+        const gridEl = document.getElementById('productsGrid');
+        if (gridEl) {
+          const navbarH = (document.querySelector('.header')?.offsetHeight || 60) + 16;
+          const top = gridEl.getBoundingClientRect().top + window.pageYOffset - navbarH;
           window.scrollTo({ top, behavior: 'smooth' });
         }
-      }, 100);
+      }, 120);
     });
   });
 
