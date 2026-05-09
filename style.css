@@ -24,6 +24,7 @@
 
 html {
   scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
 body {
@@ -270,7 +271,9 @@ img {
   padding: 6rem 1.5rem 4rem;
   gap: 3rem;
   max-width: 1200px;
+  width: 100%;
   margin: 0 auto;
+  box-sizing: border-box;
 }
 
 .hero-bg {
@@ -3046,6 +3049,7 @@ img {
   border-radius: var(--radius);
   padding: 1.5rem;
   border: 1px solid var(--border);
+  background: #ffffff;
   display: flex;
   flex-direction: column;
   gap: .75rem;
@@ -3122,43 +3126,52 @@ img {
 
 /* ── MINI-CAROSELLO RECENSIONE ── */
 .rmc {
-  width: 100%;
-  margin-bottom: .75rem;
-  border-radius: 10px;
+  position: relative;
   overflow: hidden;
+  border-radius: 10px;
+  margin-bottom: .75rem;
+  background: #f0f0f0;
+  height: 240px;
+  width: 100%;
 }
 
 .rmc-track {
   position: relative;
   width: 100%;
+  height: 100%;
 }
 
 .rmc-img {
+  position: absolute;
+  inset: 0;
   width: 100%;
-  height: auto;
-  display: none;
-  border-radius: 10px;
-  object-fit: contain;
-  max-height: 420px;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+  opacity: 0;
   transition: opacity .35s ease;
-}
-
-.rmc-img.active {
   display: block;
 }
 
+.rmc-img.active {
+  opacity: 1;
+}
+
 .rmc-dots {
+  position: absolute;
+  bottom: .5rem;
+  left: 50%;
+  transform: translateX(-50%);
   display: flex;
-  justify-content: center;
   gap: .35rem;
-  margin-top: .5rem;
+  z-index: 2;
 }
 
 .rmc-dot {
-  width: 7px;
-  height: 7px;
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
-  background: var(--border);
+  background: rgba(0, 0, 0, .35);
   border: none;
   cursor: pointer;
   padding: 0;
@@ -3166,9 +3179,51 @@ img {
 }
 
 .rmc-dot.active {
-  background: var(--accent);
+  background: #111;
   width: 18px;
-  border-radius: 4px;
+  border-radius: 3px;
+}
+
+/* ── Mobile: card recensioni compatte ── */
+@media (max-width: 640px) {
+  .review-card {
+    min-width: calc(85vw);
+    padding: 1rem;
+    gap: .5rem;
+  }
+
+  .rmc {
+    height: 180px;
+  }
+
+  .review-name {
+    font-size: .82rem;
+  }
+
+  .review-text {
+    font-size: .78rem;
+    line-height: 1.5;
+  }
+
+  .review-avatar {
+    width: 36px;
+    height: 36px;
+    font-size: .8rem;
+  }
+
+  .review-stars {
+    font-size: .9rem;
+  }
+
+  .review-verified {
+    font-size: .62rem;
+  }
+
+  .reviews-arrow {
+    width: 32px;
+    height: 32px;
+    font-size: 1.3rem;
+  }
 }
 
 /* ── FRECCE ── */
@@ -3382,71 +3437,5 @@ img {
   font-weight: 700;
 }
 
-/* ══════════════════════════════════
-   REVIEW MINI CAROUSEL (rmc)
-══════════════════════════════════ */
-.rmc {
-  position: relative;
-  overflow: hidden;
-  border-radius: 10px;
-  margin-bottom: .75rem;
-  background: #f0f0f0;
-  height: 280px;
-}
 
-.rmc-track {
-  position: relative;
-  width: 100%;
-  height: 100%;
-}
-
-.rmc-img {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center center;
-  opacity: 0;
-  transition: opacity .35s ease;
-  display: block;
-  max-width: none;
-}
-
-.rmc-img.active {
-  opacity: 1;
-}
-
-.rmc-dots {
-  position: absolute;
-  bottom: .5rem;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  gap: .35rem;
-  z-index: 2;
-}
-
-.rmc-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  border: none;
-  background: rgba(0, 0, 0, .3);
-  cursor: pointer;
-  padding: 0;
-  transition: background .2s;
-}
-
-.rmc-dot.active {
-  background: #111;
-  width: 18px;
-  border-radius: 3px;
-}
-
-/* Mobile: altezza ridotta */
-@media (max-width: 600px) {
-  .rmc {
-    height: 220px;
-  }
-}
+

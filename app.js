@@ -304,13 +304,15 @@ function setupFilters() {
       list.querySelectorAll('button').forEach(b => b.classList.remove('dd-item-active'));
       item.classList.add('dd-item-active');
       setActiveFilter(filter, item.dataset.team || null);
-      // Scroll automatico ai prodotti (utile su mobile dove la sidebar occupa spazio)
-      const productsEl = document.getElementById('products');
-      if (productsEl) {
-        setTimeout(() => {
-          productsEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }, 80);
-      }
+      // Scroll ai prodotti (funziona anche su iOS Safari)
+      setTimeout(() => {
+        const productsEl = document.getElementById('products');
+        if (productsEl) {
+          const navbarH = document.querySelector('.header')?.offsetHeight || 70;
+          const top = productsEl.getBoundingClientRect().top + window.pageYOffset - navbarH;
+          window.scrollTo({ top, behavior: 'smooth' });
+        }
+      }, 100);
     });
   });
 
