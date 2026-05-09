@@ -304,6 +304,13 @@ function setupFilters() {
       list.querySelectorAll('button').forEach(b => b.classList.remove('dd-item-active'));
       item.classList.add('dd-item-active');
       setActiveFilter(filter, item.dataset.team || null);
+      // Scroll automatico ai prodotti (utile su mobile dove la sidebar occupa spazio)
+      const productsEl = document.getElementById('products');
+      if (productsEl) {
+        setTimeout(() => {
+          productsEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 80);
+      }
     });
   });
 
