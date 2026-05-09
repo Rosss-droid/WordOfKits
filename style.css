@@ -3187,85 +3187,211 @@ img {
 /* ── Mobile: recensioni compatte ── */
 @media (max-width: 640px) {
   .reviews-section {
-    padding: 2.5rem 0;
+    padding: 1.75rem 0;
   }
 
   .reviews-carousel-wrap {
-    gap: .4rem;
-    margin-top: 1.25rem;
+    gap: .3rem;
+    margin-top: 1rem;
   }
 
-  /* Nascondi le frecce su mobile: si swipa */
   .reviews-arrow {
     display: none;
   }
 
   .review-card {
-    min-width: 92vw;
-    max-width: 92vw;
-    padding: .85rem;
-    gap: .4rem;
+    min-width: 90vw;
+    max-width: 90vw;
+    padding: .6rem;
+    gap: .3rem;
+    border-radius: 10px;
   }
 
   .rmc {
-    height: 160px;
+    height: 130px;
+    border-radius: 8px;
+    margin-bottom: .4rem;
   }
 
   .review-header {
-    gap: .5rem;
+    gap: .4rem;
   }
 
   .review-avatar {
-    width: 32px;
-    height: 32px;
-    font-size: .7rem;
+    width: 28px;
+    height: 28px;
+    font-size: .62rem;
+    flex-shrink: 0;
   }
 
   .review-name {
-    font-size: .78rem;
+    font-size: .72rem;
+    line-height: 1.2;
   }
 
   .review-location {
-    font-size: .65rem;
+    font-size: .6rem;
   }
 
   .review-verified {
-    font-size: .58rem;
+    font-size: .55rem;
     white-space: normal;
     text-align: right;
-    max-width: 60px;
+    max-width: 52px;
+    line-height: 1.2;
   }
 
   .review-stars {
-    font-size: .85rem;
-    letter-spacing: 1px;
+    font-size: .8rem;
+    letter-spacing: .5px;
   }
 
   .review-text {
-    font-size: .73rem;
-    line-height: 1.45;
+    font-size: .67rem;
+    line-height: 1.4;
   }
 
   .review-product {
-    font-size: .65rem;
+    font-size: .6rem;
+    padding-top: .3rem;
   }
 
   .reviews-track {
-    gap: .75rem;
+    gap: .6rem;
   }
 
-  /* Titolo sezione recensioni mobile */
   .reviews-section .section-title {
-    font-size: 1.4rem;
+    font-size: 1.2rem;
   }
 
   .reviews-section .section-sub {
-    font-size: .78rem;
+    font-size: .72rem;
   }
 
   .reviews-section .section-badge {
-    font-size: .7rem;
-    padding: .25rem .7rem;
+    font-size: .65rem;
+    padding: .2rem .6rem;
+  }
+}
+
+/* ── Mobile: About / Contact / Footer più compatti ── */
+@media (max-width: 640px) {
+  /* About */
+  .about-section {
+    padding: 2.5rem 0;
+  }
+
+  .about-section .section-title,
+  .about-section h2 {
+    font-size: 1.3rem;
+    line-height: 1.25;
+  }
+
+  .about-section .section-badge {
+    font-size: .65rem;
+    padding: .2rem .6rem;
+  }
+
+  .about-desc {
+    font-size: .78rem;
+    line-height: 1.5;
+  }
+
+  .about-features li {
+    font-size: .78rem;
+    gap: .5rem;
+  }
+
+  .about-features strong {
+    font-size: .78rem;
+  }
+
+  .about-features small {
+    font-size: .68rem;
+  }
+
+  .feat-icon-wrap {
+    font-size: .9rem;
+    width: 28px;
+    height: 28px;
+  }
+
+  .about-cards {
+    grid-template-columns: 1fr;
+    gap: .75rem;
+  }
+
+  .about-card-body h3 {
+    font-size: .88rem;
+  }
+
+  .about-card-body p {
+    font-size: .75rem;
+  }
+
+  .about-card-tag {
+    font-size: .65rem;
+  }
+
+  /* Contact */
+  .contact-section {
+    padding: 2.5rem 0;
+  }
+
+  .contact-section .section-title {
+    font-size: 1.3rem;
+  }
+
+  .contact-section .section-sub,
+  .contact-section label {
+    font-size: .78rem;
+  }
+
+  .contact-section input,
+  .contact-section textarea {
+    font-size: .82rem;
+    padding: .55rem .8rem;
+  }
+
+  /* Footer */
+  .footer {
+    padding: 2rem 0 1rem;
+  }
+
+  .footer p,
+  .footer a {
+    font-size: .75rem;
+  }
+
+  .footer h4 {
+    font-size: .82rem;
+  }
+
+  .footer .logo-text {
+    font-size: .9rem;
+  }
+
+  .footer-bottom p {
+    font-size: .68rem;
+  }
+
+  /* Sezione richiesta personalizzata */
+  .custom-order-section {
+    padding: 1.5rem 0;
+  }
+
+  .custom-order-text h3 {
+    font-size: .9rem;
+  }
+
+  .custom-order-text p {
+    font-size: .72rem;
+  }
+
+  .custom-product-input,
+  .custom-product-select {
+    font-size: .78rem;
+    padding: .5rem .7rem;
   }
 }
 
