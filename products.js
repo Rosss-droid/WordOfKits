@@ -68,7 +68,17 @@ const PRODUCTS = [
   // ══════════════ Lecce (Serie A) ══════════════
   { id: 46, name: "Maglia Lecce Home 2025/26", category: "SerieA", categoryLabel: "Serie A", price: 20.00, oldPrice: null, badge: null, badgeLabel: null, image: "images/3d/Serie A/Lecce/2526/Lecce Home 2526.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "La maglia casalinga del Lecce 2025/26.", inStock: true },
 
+  // ══════════════ Inter (Serie A) ══════════════
+  { id: 125, name: "Terza Maglia Inter 1997/98", category: "SerieA", categoryLabel: "Serie A", price: 28.00, oldPrice: null, badge: "vintage", badgeLabel: "Vintage", image: "images/3d/terza maglia inter 9798.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "La leggendaria terza maglia dell'Inter stagione 1997/98.", inStock: true },
+  { id: 126, name: "Maglia Inter Finale Champions League 2008/09", category: "SerieA", categoryLabel: "Serie A", price: 28.00, oldPrice: null, badge: "vintage", badgeLabel: "Vintage", image: "images/3d/maglia inter finale champions 2009.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "La maglia indossata dall'Inter nella finale di Champions League 2008/09. Edizione storica.", inStock: true },
+  { id: 129, name: "Tuta Inter 2025/26", category: "SerieA", categoryLabel: "Serie A", price: 40.00, oldPrice: null, badge: "new", badgeLabel: "NUOVO", image: "images/3d/tuta inter 2526.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "La tuta ufficiale dell'Inter stagione 2025/26.", inStock: true },
+
+  // ══════════════ Juventus (Serie A) ═════════════
+  { id: 123, name: "Maglia Juventus Home 2025/26", category: "SerieA", categoryLabel: "Serie A", price: 22.00, oldPrice: null, badge: "new", badgeLabel: "NUOVO", image: "images/3d/Serie A/-Juventus/ChatGPT Image 29 apr 2026, 01_51_03.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "La maglia casalinga della Juventus 2025/26.", inStock: true },
+  { id: 124, name: "Maglia Juventus Away 2025/26", category: "SerieA", categoryLabel: "Serie A", price: 22.00, oldPrice: null, badge: "new", badgeLabel: "NUOVO", image: "images/3d/Serie A/-Juventus/ChatGPT Image 29 apr 2026, 01_58_08.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "La maglia da trasferta della Juventus 2025/26.", inStock: true },
+
   // ══════════════ Milan (Serie A) ══════════════
+  // (immagini in arrivo)
 
   // ══════════════ Napoli (Serie A) ══════════════
   { id: 47, name: "Maglia Napoli Home 2025/26", category: "SerieA", categoryLabel: "Serie A", price: 20.00, oldPrice: null, badge: null, badgeLabel: null, image: "images/3d/Serie A/Napoli/2526/Napoli Home 2526.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "La maglia casalinga del Napoli 2025/26.", inStock: true },
@@ -120,82 +130,101 @@ const PRODUCTS = [
   { id: 83, name: "Maglia Torino Home 2025/26", category: "SerieA", categoryLabel: "Serie A", price: 20.00, oldPrice: null, badge: null, badgeLabel: null, image: "images/3d/Serie A/Torino/2526/Torino Home 2526.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "La maglia casalinga del Torino 2025/26.", inStock: true },
 
   // ══════════════ Udinese (Serie A) ══════════════
+  { id: 84, name: "Maglia Udinese Home 2025/26", category: "SerieA", categoryLabel: "Serie A", price: 20.00, oldPrice: null, badge: null, badgeLabel: null, image: "images/3d/Serie A/Udinese/2526/Udinese Home 2526.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "La maglia casalinga dell'Udinese 2025/26.", inStock: true },
 
   // ══════════════ Verona (Serie A) ══════════════
+  { id: 85, name: "Maglia Verona Home 2025/26", category: "SerieA", categoryLabel: "Serie A", price: 20.00, oldPrice: null, badge: null, badgeLabel: null, image: "images/3d/Serie A/Verona/2526/Verona Home 2526.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "La maglia casalinga del Verona 2025/26.", inStock: true },
 
+  // ══════════════════════════════════════
+  // LA LIGA
+  // ══════════════════════════════════════
 
-  //La liga 
   // ══════════════ BARCELLONA ══════════════
-  { id: 42, name: "Maglia Barcellona Special 2026/27", category: "La Liga", categoryLabel: "La Liga", price: 24.00, oldPrice: null, badge: "new", badgeLabel: "NUOVO", image: "images/3d/La Liga/Barcellona/Speciali/Barca Special 2627.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "La special blaugrana del Barcellona 2026/27. Tessuto tecnico Dri-FIT.", inStock: true },
-  { id: 43, name: "Maglia Barcellona Home 2025/26", category: "La Liga", categoryLabel: "La Liga", price: 20.00, oldPrice: null, badge: null, badgeLabel: null, image: "images/3d/La Liga/Barcellona/Barca Home 2526.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "La classica blaugrana del Barcellona 2025/26. Tessuto tecnico Dri-FIT.", inStock: true },
-  { id: 44, name: "Maglia Barcellona Special 2025/26", category: "La Liga", categoryLabel: "La Liga", price: 22.00, oldPrice: null, badge: "sale", badgeLabel: "13% OFF", image: "images/3d/La Liga/Barcellona/Speciali/Barca Special 2526.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "Maglia special Barcellona 2025/26.", inStock: true },
+  { id: 86, name: "Maglia Barcellona Special 2026/27", category: "LaLiga", categoryLabel: "La Liga", price: 24.00, oldPrice: null, badge: "new", badgeLabel: "NUOVO", image: "images/3d/La Liga/Barcellona/Speciali/Barca Special 2627.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "La special blaugrana del Barcellona 2026/27.", inStock: true },
+  { id: 87, name: "Maglia Barcellona Home 2025/26", category: "LaLiga", categoryLabel: "La Liga", price: 20.00, oldPrice: null, badge: null, badgeLabel: null, image: "images/3d/La Liga/Barcellona/Barca Home 2526.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "La classica blaugrana del Barcellona 2025/26.", inStock: true },
+  { id: 88, name: "Maglia Barcellona Special 2025/26", category: "LaLiga", categoryLabel: "La Liga", price: 22.00, oldPrice: null, badge: "sale", badgeLabel: "13% OFF", image: "images/3d/La Liga/Barcellona/Speciali/Barca Special 2526.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "Maglia special Barcellona 2025/26.", inStock: true },
 
-
+  // ══════════════ REAL MADRID ══════════════
+  { id: 121, name: "Maglia Real Madrid Special", category: "LaLiga", categoryLabel: "La Liga", price: 26.00, oldPrice: null, badge: "new", badgeLabel: "NUOVO", image: "images/3d/La Liga/Real Madrid/ChatGPT Image 29 apr 2026, 12_39_32.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "Maglia special del Real Madrid.", inStock: true },
+  { id: 122, name: "Maglia Real Madrid Third 2023/24", category: "LaLiga", categoryLabel: "La Liga", price: 22.00, oldPrice: null, badge: null, badgeLabel: null, image: "images/3d/La Liga/Real Madrid/Real Third 2324.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "La terza maglia del Real Madrid 2023/24.", inStock: true },
 
   // ══════════════ ATLETICO MADRID ══════════════
-  { id: 45, name: "Maglia Atletico Madrid Home 2025/26", category: "Champions", categoryLabel: "Champions League", price: 85.00, oldPrice: null, badge: null, badgeLabel: null, image: "images/teams/atletico_home.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "Maglia casalinga Atletico Madrid 2025/26. Strisce bianche e rosse iconiche.", inStock: true },
-  { id: 46, name: "Maglia Atletico Madrid Away 2025/26", category: "Champions", categoryLabel: "Champions League", price: 80.00, oldPrice: null, badge: null, badgeLabel: null, image: "images/teams/atletico_away.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "Maglia trasferta Atletico Madrid 2025/26.", inStock: true },
+  { id: 89, name: "Maglia Atletico Madrid Home 2025/26", category: ["LaLiga", "Champions"], categoryLabel: ["La Liga", "Champions League"], price: 85.00, oldPrice: null, badge: null, badgeLabel: null, image: "images/teams/atletico_home.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "Maglia casalinga Atletico Madrid 2025/26.", inStock: true },
+  { id: 90, name: "Maglia Atletico Madrid Away 2025/26", category: ["LaLiga", "Champions"], categoryLabel: ["La Liga", "Champions League"], price: 80.00, oldPrice: null, badge: null, badgeLabel: null, image: "images/teams/atletico_away.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "Maglia trasferta Atletico Madrid 2025/26.", inStock: true },
 
   // ══════════════ PORTO ══════════════
-  { id: 47, name: "Maglia Porto Home 2025/26", category: "Champions", categoryLabel: "Champions League", price: 75.00, oldPrice: null, badge: null, badgeLabel: null, image: "images/teams/porto_home.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "Maglia casalinga Porto 2025/26. Blu e bianco.", inStock: true },
+  { id: 91, name: "Maglia Porto Home 2025/26", category: "Champions", categoryLabel: "Champions League", price: 75.00, oldPrice: null, badge: null, badgeLabel: null, image: "images/teams/porto_home.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "Maglia casalinga Porto 2025/26.", inStock: true },
 
   // ══════════════ MANCHESTER CITY (Premier League) ══════════════
-  { id: 48, name: "Maglia Manchester City Home 2025/26", category: ["Champions", "Premier"], categoryLabel: ["Champions League", "Premier League"], price: 95.00, oldPrice: null, badge: "new", badgeLabel: "NUOVO", image: "images/teams/mancity_home.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "Maglia casalinga Manchester City 2025/26. Azzurro cielo con sponsor Puma.", inStock: true },
-  { id: 49, name: "Maglia Manchester City Away 2025/26", category: "Premier", categoryLabel: "Premier League", price: 90.00, oldPrice: 105.00, badge: "sale", badgeLabel: "14% OFF", image: "images/teams/mancity_away.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "Maglia trasferta Manchester City 2025/26. Design bianco elegante.", inStock: true },
+  { id: 92, name: "Maglia Manchester City Home 2025/26", category: ["Champions", "Premier"], categoryLabel: ["Champions League", "Premier League"], price: 95.00, oldPrice: null, badge: "new", badgeLabel: "NUOVO", image: "images/teams/mancity_home.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "Maglia casalinga Manchester City 2025/26.", inStock: true },
+  { id: 93, name: "Maglia Manchester City Away 2025/26", category: "Premier", categoryLabel: "Premier League", price: 90.00, oldPrice: 105.00, badge: "sale", badgeLabel: "14% OFF", image: "images/teams/mancity_away.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "Maglia trasferta Manchester City 2025/26.", inStock: true },
 
   // ══════════════ ARSENAL ══════════════
-  { id: 50, name: "Maglia Arsenal Home 2025/26", category: ["Champions", "Premier"], categoryLabel: ["Champions League", "Premier League"], price: 92.00, oldPrice: null, badge: "new", badgeLabel: "NUOVO", image: "images/teams/arsenal_home.png", sizes: ["XS", "S", "M", "L", ("XL"), ("XXL")], description: "La classica maglia rossa dell'Arsenal 2025/26. Adidas con dettagli bianchi.", inStock: true },
-  { id: 51, name: "Maglia Arsenal Away 2025/26", category: "Premier", categoryLabel: "Premier League", price: 88.00, oldPrice: 100.00, badge: "sale", badgeLabel: "12% OFF", image: "images/teams/arsenal_away.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "Maglia trasferta Arsenal 2025/26. Bianco con dettagli rossi.", inStock: true },
-  { id: 26, name: "Maglia Liverpool Home 2025/26", category: ["Champions", "Premier"], categoryLabel: ["Champions League", "Premier League"], price: 94.00, oldPrice: null, badge: "new", badgeLabel: "NUOVO", image: "images/teams/liverpool_home.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "Maglia casalinga Liverpool 2025/26. Rosso intenso con logo LFC ricamato.", inStock: true },
-  { id: 27, name: "Maglia Liverpool Away 2025/26", category: "Premier", categoryLabel: "Premier League", price: 88.00, oldPrice: 100.00, badge: "sale", badgeLabel: "12% OFF", image: "images/teams/liverpool_away.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "Maglia trasferta Liverpool 2025/26. Verde menta con dettagli rossi.", inStock: true },
+  { id: 94, name: "Maglia Arsenal Home 2025/26", category: ["Champions", "Premier"], categoryLabel: ["Champions League", "Premier League"], price: 92.00, oldPrice: null, badge: "new", badgeLabel: "NUOVO", image: "images/teams/arsenal_home.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "La classica maglia rossa dell'Arsenal 2025/26.", inStock: true },
+  { id: 95, name: "Maglia Arsenal Away 2025/26", category: "Premier", categoryLabel: "Premier League", price: 88.00, oldPrice: 100.00, badge: "sale", badgeLabel: "12% OFF", image: "images/teams/arsenal_away.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "Maglia trasferta Arsenal 2025/26.", inStock: true },
+  { id: 96, name: "Maglia Liverpool Home 2025/26", category: ["Champions", "Premier"], categoryLabel: ["Champions League", "Premier League"], price: 94.00, oldPrice: null, badge: "new", badgeLabel: "NUOVO", image: "images/teams/liverpool_home.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "Maglia casalinga Liverpool 2025/26.", inStock: true },
+  { id: 97, name: "Maglia Liverpool Away 2025/26", category: "Premier", categoryLabel: "Premier League", price: 88.00, oldPrice: 100.00, badge: "sale", badgeLabel: "12% OFF", image: "images/teams/liverpool_away.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "Maglia trasferta Liverpool 2025/26.", inStock: true },
 
   // ══════════════ CHELSEA ══════════════
-  { id: 28, name: "Maglia Chelsea Home 2025/26", category: "Premier", categoryLabel: "Premier League", price: 90.00, oldPrice: null, badge: null, badgeLabel: null, image: "images/teams/chelsea_home.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "Maglia casalinga Chelsea 2025/26. Blu reale con logo CFC.", inStock: true },
-  { id: 29, name: "Maglia Chelsea Away 2025/26", category: "Premier", categoryLabel: "Premier League", price: 85.00, oldPrice: null, badge: null, badgeLabel: null, image: "images/teams/chelsea_away.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "Maglia trasferta Chelsea 2025/26. Bianco con bordi blu.", inStock: true },
+  { id: 98, name: "Maglia Chelsea Home 2025/26", category: "Premier", categoryLabel: "Premier League", price: 90.00, oldPrice: null, badge: null, badgeLabel: null, image: "images/teams/chelsea_home.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "Maglia casalinga Chelsea 2025/26.", inStock: true },
+  { id: 99, name: "Maglia Chelsea Away 2025/26", category: "Premier", categoryLabel: "Premier League", price: 85.00, oldPrice: null, badge: null, badgeLabel: null, image: "images/teams/chelsea_away.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "Maglia trasferta Chelsea 2025/26.", inStock: true },
 
   // ══════════════ MANCHESTER UNITED ══════════════
-  { id: 30, name: "Maglia Manchester United Home 2025/26", category: "Premier", categoryLabel: "Premier League", price: 93.00, oldPrice: null, badge: "new", badgeLabel: "NUOVO", image: "images/teams/manutd_home.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "Maglia casalinga Manchester United 2025/26. Rosso iconico con logo diavolo.", inStock: true },
-  { id: 31, name: "Maglia Manchester United Away 2025/26", category: "Premier", categoryLabel: "Premier League", price: 88.00, oldPrice: 100.00, badge: "sale", badgeLabel: "12% OFF", image: "images/teams/manutd_away.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "Maglia trasferta Manchester United 2025/26. Bianco con dettagli neri.", inStock: true },
+  { id: 100, name: "Maglia Manchester United Home 2025/26", category: "Premier", categoryLabel: "Premier League", price: 93.00, oldPrice: null, badge: "new", badgeLabel: "NUOVO", image: "images/teams/manutd_home.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "Maglia casalinga Manchester United 2025/26.", inStock: true },
+  { id: 101, name: "Maglia Manchester United Away 2025/26", category: "Premier", categoryLabel: "Premier League", price: 88.00, oldPrice: 100.00, badge: "sale", badgeLabel: "12% OFF", image: "images/teams/manutd_away.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "Maglia trasferta Manchester United 2025/26.", inStock: true },
 
   // ══════════════ TOTTENHAM ══════════════
-  { id: 32, name: "Maglia Tottenham Home 2025/26", category: "Premier", categoryLabel: "Premier League", price: 86.00, oldPrice: null, badge: null, badgeLabel: null, image: "images/teams/tottenham_home.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "Maglia casalinga Tottenham 2025/26. Bianco con gallo ricamato.", inStock: true },
+  { id: 102, name: "Maglia Tottenham Home 2025/26", category: "Premier", categoryLabel: "Premier League", price: 86.00, oldPrice: null, badge: null, badgeLabel: null, image: "images/teams/tottenham_home.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "Maglia casalinga Tottenham 2025/26.", inStock: true },
+  { id: 119, name: "Maglia Tottenham Away 2025/26", category: "Premier", categoryLabel: "Premier League", price: 83.00, oldPrice: null, badge: null, badgeLabel: null, image: "images/teams/tottenham_away.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "Maglia trasferta Tottenham 2025/26.", inStock: true },
 
   // ══════════════ NEWCASTLE ══════════════
-  { id: 33, name: "Maglia Newcastle Home 2025/26", category: "Premier", categoryLabel: "Premier League", price: 84.00, oldPrice: null, badge: null, badgeLabel: null, image: "images/teams/newcastle_home.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "Maglia casalinga Newcastle 2025/26. Strisce bianco-nere iconiche.", inStock: true },
+  { id: 103, name: "Maglia Newcastle Home 2025/26", category: "Premier", categoryLabel: "Premier League", price: 84.00, oldPrice: null, badge: null, badgeLabel: null, image: "images/teams/newcastle_home.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "Maglia casalinga Newcastle 2025/26.", inStock: true },
+  { id: 120, name: "Maglia Newcastle Away 2025/26", category: "Premier", categoryLabel: "Premier League", price: 81.00, oldPrice: null, badge: null, badgeLabel: null, image: "images/teams/newcastle_away.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "Maglia trasferta Newcastle 2025/26.", inStock: true },
+
+  // ══════════════ NOTTINGHAM FOREST ══════════════
+  { id: 127, name: "Terza Maglia Nottingham Forest 2025/26", category: "Premier", categoryLabel: "Premier League", price: 22.00, oldPrice: null, badge: "new", badgeLabel: "NUOVO", image: "images/3d/terza maglia nottingham forest 2526.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "La terza maglia del Nottingham Forest 2025/26.", inStock: true },
 
   // ══════════════ BORUSSIA DORTMUND ══════════════
-  { id: 46, name: "Maglia Borussia Dortmund Home 2025/26", category: ["Champions", "Bundesliga"], categoryLabel: ["Champions League", "Bundesliga"], price: 88.00, oldPrice: null, badge: "new", badgeLabel: "NUOVO", image: "images/teams/dortmund_home.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "Maglia casalinga BVB 2025/26. Giallo-nero iconico di Dortmund.", inStock: true },
-  { id: 47, name: "Maglia Borussia Dortmund Away 2025/26", category: "Bundesliga", categoryLabel: "Bundesliga", price: 83.00, oldPrice: null, badge: null, badgeLabel: null, image: "images/teams/dortmund_away.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "Maglia trasferta BVB 2025/26. Nero con dettagli gialli.", inStock: true },
+  { id: 104, name: "Maglia Borussia Dortmund Home 2025/26", category: ["Champions", "Bundesliga"], categoryLabel: ["Champions League", "Bundesliga"], price: 88.00, oldPrice: null, badge: "new", badgeLabel: "NUOVO", image: "images/teams/dortmund_home.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "Maglia casalinga BVB 2025/26.", inStock: true },
+  { id: 105, name: "Maglia Borussia Dortmund Away 2025/26", category: "Bundesliga", categoryLabel: "Bundesliga", price: 83.00, oldPrice: null, badge: null, badgeLabel: null, image: "images/teams/dortmund_away.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "Maglia trasferta BVB 2025/26.", inStock: true },
 
   // ══════════════ BAYERN MONACO ══════════════
-  { id: 48, name: "Maglia Bayern Monaco Home 2025/26", category: ["Champions", "Bundesliga"], categoryLabel: ["Champions League", "Bundesliga"], price: 92.00, oldPrice: null, badge: "new", badgeLabel: "NUOVO", image: "images/jersey_germany.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "Maglia casalinga Bayern Monaco 2025/26. Rosso Adidas con stemma ricamato.", inStock: true },
-  { id: 49, name: "Maglia Bayern Monaco Away 2025/26", category: "Bundesliga", categoryLabel: "Bundesliga", price: 87.00, oldPrice: 100.00, badge: "sale", badgeLabel: "13% OFF", image: "images/teams/bayern_away.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "Maglia trasferta Bayern Monaco 2025/26. Bianco con bordi rossi.", inStock: true },
+  { id: 106, name: "Maglia Bayern Monaco Home 2025/26", category: ["Champions", "Bundesliga"], categoryLabel: ["Champions League", "Bundesliga"], price: 92.00, oldPrice: null, badge: "new", badgeLabel: "NUOVO", image: "images/jersey_germany.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "Maglia casalinga Bayern Monaco 2025/26.", inStock: true },
+  { id: 107, name: "Maglia Bayern Monaco Away 2025/26", category: "Bundesliga", categoryLabel: "Bundesliga", price: 87.00, oldPrice: 100.00, badge: "sale", badgeLabel: "13% OFF", image: "images/teams/bayern_away.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "Maglia trasferta Bayern Monaco 2025/26.", inStock: true },
 
   // ══════════════ BAYER LEVERKUSEN ══════════════
-  { id: 50, name: "Maglia Bayer Leverkusen Home 2025/26", category: "Bundesliga", categoryLabel: "Bundesliga", price: 82.00, oldPrice: null, badge: null, badgeLabel: null, image: "images/teams/leverkusen_home.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "Maglia casalinga Bayer Leverkusen 2025/26. Rosso-nero dei campioni.", inStock: true },
+  { id: 108, name: "Maglia Bayer Leverkusen Home 2025/26", category: "Bundesliga", categoryLabel: "Bundesliga", price: 82.00, oldPrice: null, badge: null, badgeLabel: null, image: "images/teams/leverkusen_home.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "Maglia casalinga Bayer Leverkusen 2025/26.", inStock: true },
 
   // ══════════════ RB LEIPZIG ══════════════
-  { id: 51, name: "Maglia RB Leipzig Home 2025/26", category: "Bundesliga", categoryLabel: "Bundesliga", price: 80.00, oldPrice: null, badge: null, badgeLabel: null, image: "images/teams/leipzig_home.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "Maglia casalinga RB Leipzig 2025/26. Bianco e rosso con Nike.", inStock: true },
+  { id: 109, name: "Maglia RB Leipzig Home 2025/26", category: "Bundesliga", categoryLabel: "Bundesliga", price: 80.00, oldPrice: null, badge: null, badgeLabel: null, image: "images/teams/leipzig_home.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "Maglia casalinga RB Leipzig 2025/26.", inStock: true },
 
   // ══════════════ EINTRACHT FRANCOFORTE ══════════════
-  { id: 52, name: "Maglia Eintracht Francoforte Home 2025/26", category: "Bundesliga", categoryLabel: "Bundesliga", price: 78.00, oldPrice: null, badge: null, badgeLabel: null, image: "images/teams/eintracht_home.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "Maglia casalinga Eintracht Francoforte 2025/26. Bianco-nero-rosso.", inStock: true },
+  { id: 110, name: "Maglia Eintracht Francoforte Home 2025/26", category: "Bundesliga", categoryLabel: "Bundesliga", price: 78.00, oldPrice: null, badge: null, badgeLabel: null, image: "images/teams/eintracht_home.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "Maglia casalinga Eintracht Francoforte 2025/26.", inStock: true },
 
   // ══════════════ AL NASSR (Saudi Pro League) ══════════════
-  { id: 53, name: "Maglia Al Nassr Home 2025/26", category: "SaudiLeague", categoryLabel: "Saudi Pro League", price: 75.00, oldPrice: null, badge: "new", badgeLabel: "NUOVO", image: "images/teams/alnassr_home.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "La maglia di Cristiano Ronaldo! Al Nassr Home 2025/26. Giallo e blu iconici.", inStock: true },
-  { id: 54, name: "Maglia Al Nassr Away 2025/26", category: "SaudiLeague", categoryLabel: "Saudi Pro League", price: 70.00, oldPrice: 85.00, badge: "sale", badgeLabel: "18% OFF", image: "images/teams/alnassr_away.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "Maglia trasferta Al Nassr 2025/26 — la squadra di CR7. Bianco con dettagli blu.", inStock: true },
-  { id: 55, name: "Maglia Al Nassr CR7 Edition 2025", category: "SaudiLeague", categoryLabel: "Saudi Pro League", price: 99.00, oldPrice: null, badge: "new", badgeLabel: "SPECIALE", image: "images/teams/alnassr_cr7.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "Edizione speciale Al Nassr con il numero 7 di Cristiano Ronaldo. Collezione limitata.", inStock: true },
+  { id: 111, name: "Maglia Al Nassr Home 2025/26", category: "SaudiLeague", categoryLabel: "Saudi Pro League", price: 75.00, oldPrice: null, badge: "new", badgeLabel: "NUOVO", image: "images/teams/alnassr_home.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "Al Nassr Home 2025/26.", inStock: true },
+  { id: 112, name: "Maglia Al Nassr Away 2025/26", category: "SaudiLeague", categoryLabel: "Saudi Pro League", price: 70.00, oldPrice: 85.00, badge: "sale", badgeLabel: "18% OFF", image: "images/teams/alnassr_away.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "Maglia trasferta Al Nassr 2025/26.", inStock: true },
+  { id: 113, name: "Maglia Al Nassr CR7 Edition 2025", category: "SaudiLeague", categoryLabel: "Saudi Pro League", price: 99.00, oldPrice: null, badge: "new", badgeLabel: "SPECIALE", image: "images/teams/alnassr_cr7.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "Edizione speciale Al Nassr CR7.", inStock: true },
 
   // ══════════════ AL HILAL ══════════════
-  { id: 56, name: "Maglia Al Hilal Home 2025/26", category: "SaudiLeague", categoryLabel: "Saudi Pro League", price: 72.00, oldPrice: null, badge: null, badgeLabel: null, image: "images/teams/alhilal_home.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "Maglia casalinga Al Hilal 2025/26. Blu con mezzaluna ricamata.", inStock: true },
-  { id: 57, name: "Maglia Al Hilal Away 2025/26", category: "SaudiLeague", categoryLabel: "Saudi Pro League", price: 68.00, oldPrice: null, badge: null, badgeLabel: null, image: "images/teams/alhilal_away.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "Maglia trasferta Al Hilal 2025/26. Bianco con dettagli blu.", inStock: true },
+  { id: 114, name: "Maglia Al Hilal Home 2025/26", category: "SaudiLeague", categoryLabel: "Saudi Pro League", price: 72.00, oldPrice: null, badge: null, badgeLabel: null, image: "images/teams/alhilal_home.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "Maglia casalinga Al Hilal 2025/26.", inStock: true },
+  { id: 115, name: "Maglia Al Hilal Away 2025/26", category: "SaudiLeague", categoryLabel: "Saudi Pro League", price: 68.00, oldPrice: null, badge: null, badgeLabel: null, image: "images/teams/alhilal_away.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "Maglia trasferta Al Hilal 2025/26.", inStock: true },
 
   // ══════════════ AL ITTIHAD ══════════════
-  { id: 58, name: "Maglia Al Ittihad Home 2025/26", category: "SaudiLeague", categoryLabel: "Saudi Pro League", price: 70.00, oldPrice: null, badge: null, badgeLabel: null, image: "images/teams/alittihad_home.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "Maglia casalinga Al Ittihad 2025/26. Strisce giallo-nere.", inStock: true },
+  { id: 116, name: "Maglia Al Ittihad Home 2025/26", category: "SaudiLeague", categoryLabel: "Saudi Pro League", price: 70.00, oldPrice: null, badge: null, badgeLabel: null, image: "images/teams/alittihad_home.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "Maglia casalinga Al Ittihad 2025/26.", inStock: true },
 
   // ══════════════ AL AHLI ══════════════
-  { id: 59, name: "Maglia Al Ahli Home 2025/26", category: "SaudiLeague", categoryLabel: "Saudi Pro League", price: 68.00, oldPrice: null, badge: null, badgeLabel: null, image: "images/teams/alahli_home.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "Maglia casalinga Al Ahli 2025/26. Verde con dettagli bianchi.", inStock: true },
+  { id: 117, name: "Maglia Al Ahli Home 2025/26", category: "SaudiLeague", categoryLabel: "Saudi Pro League", price: 68.00, oldPrice: null, badge: null, badgeLabel: null, image: "images/teams/alahli_home.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "Maglia casalinga Al Ahli 2025/26.", inStock: true },
 
   // ══════════════ AL QADSIAH ══════════════
-  { id: 60, name: "Maglia Al Qadsiah Home 2025/26", category: "SaudiLeague", categoryLabel: "Saudi Pro League", price: 65.00, oldPrice: null, badge: null, badgeLabel: null, image: "images/teams/alqadsiah_home.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "Maglia casalinga Al Qadsiah 2025/26.", inStock: true },
+  { id: 118, name: "Maglia Al Qadsiah Home 2025/26", category: "SaudiLeague", categoryLabel: "Saudi Pro League", price: 65.00, oldPrice: null, badge: null, badgeLabel: null, image: "images/teams/alqadsiah_home.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "Maglia casalinga Al Qadsiah 2025/26.", inStock: true },
+
+  // ══════════════════════════════════════
+  // NAZIONALI
+  // ══════════════════════════════════════
+
+  // ══════════════ BRASILE ══════════════
+  { id: 128, name: "Maglia Brasile Edizione Cristo del Rio", category: "Nazionali", categoryLabel: "Nazionali", price: 24.00, oldPrice: null, badge: "new", badgeLabel: "SPECIALE", image: "images/3d/Cristo Del Rio 2526 .png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "Edizione limitata della maglia del Brasile con il Cristo del Rio. Collezione esclusiva.", inStock: true },
 
 ];
+
