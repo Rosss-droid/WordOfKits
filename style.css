@@ -3088,7 +3088,144 @@ img {
   font-size: 1.2rem;
 }
 
-/* ── ADMIN BTN ── */
+/* ── NAV ACTIONS (cuore + carrello affiancati) ── */
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+/* ── BOTTONE PREFERITI (navbar) ── */
+.fav-btn {
+  position: relative;
+  background: none;
+  border: none;
+  color: var(--text);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  transition: background .2s, color .2s;
+  margin-right: .15rem;
+}
+.fav-btn:hover {
+  background: rgba(0,0,0,.06);
+  color: #e44545;
+}
+.fav-btn svg {
+  transition: fill .2s, stroke .2s;
+}
+.fav-btn.has-items svg {
+  fill: #e44545;
+  stroke: #e44545;
+}
+.fav-badge {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  background: #e44545;
+  color: #fff;
+  font-size: .6rem;
+  font-weight: 700;
+  min-width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Inter', sans-serif;
+  line-height: 1;
+  padding: 0 2px;
+}
+.fav-badge.show {
+  display: flex;
+}
+
+/* ── SIDEBAR PREFERITI: card con bottone apri ── */
+.fav-item {
+  display: flex;
+  gap: .85rem;
+  padding: .9rem 1rem;
+  border-bottom: 1px solid var(--border);
+  align-items: center;
+  transition: background .15s;
+}
+.fav-item:hover {
+  background: #fafafa;
+}
+.fav-item-img {
+  width: 64px;
+  height: 64px;
+  object-fit: cover;
+  border-radius: 10px;
+  background: var(--bg);
+  flex-shrink: 0;
+  cursor: pointer;
+}
+.fav-item-info {
+  flex: 1;
+  min-width: 0;
+}
+.fav-item-name {
+  font-size: .88rem;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: .15rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+}
+.fav-item-name:hover {
+  text-decoration: underline;
+}
+.fav-item-price {
+  font-size: .85rem;
+  font-weight: 700;
+  color: #111;
+  margin-bottom: .3rem;
+}
+.fav-item-actions {
+  display: flex;
+  gap: .4rem;
+}
+.fav-item-add {
+  background: #111;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: .3rem .7rem;
+  font-size: .75rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background .2s;
+}
+.fav-item-add:hover {
+  background: #333;
+}
+.fav-item-remove {
+  background: none;
+  border: 1px solid rgba(0,0,0,.15);
+  border-radius: 8px;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: .9rem;
+  color: var(--text-muted);
+  transition: border-color .2s, color .2s;
+}
+.fav-item-remove:hover {
+  border-color: #e44545;
+  color: #e44545;
+}
+
 .admin-btn {
   position: fixed;
   bottom: 2rem;

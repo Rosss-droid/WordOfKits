@@ -1632,7 +1632,7 @@ function featProductCardHTML(p) {
 }
 
 // ═══════════════════════════════════════════════
-// PREFERITI — Cuore sulle card + Sezione dedicata
+// PREFERITI — Sidebar laterale + badge navbar
 // ═══════════════════════════════════════════════
 
 function saveFavorites() {
@@ -1641,6 +1641,32 @@ function saveFavorites() {
 
 function isFavorite(productId) {
   return favorites.includes(productId);
+}
+
+function updateFavBadge() {
+  const badge = document.getElementById('favBadge');
+  const btn = document.getElementById('favBtn');
+  const count = favorites.length;
+  if (badge) {
+    badge.textContent = count;
+    badge.classList.toggle('show', count > 0);
+  }
+  if (btn) {
+    btn.classList.toggle('has-items', count > 0);
+  }
+}
+
+function openFavSidebar() {
+  document.getElementById('favOverlay')?.classList.add('open');
+  document.getElementById('favSidebar')?.classList.add('open');
+  document.body.style.overflow = 'hidden';
+  renderFavoritesSidebar();
+}
+
+function closeFavSidebar() {
+  document.getElementById('favOverlay')?.classList.remove('open');
+  document.getElementById('favSidebar')?.classList.remove('open');
+  document.body.style.overflow = '';
 }
 
 function toggleFavorite(productId, btnEl) {
@@ -1653,6 +1679,7 @@ function toggleFavorite(productId, btnEl) {
     showToast('🤍', 'Rimosso dai preferiti.');
   }
   saveFavorites();
+  updateFavBadge();
   // Aggiorna icona cuore sulla card cliccata
   if (btnEl) {
     const isFav = isFavorite(productId);
@@ -1663,7 +1690,10 @@ function toggleFavorite(productId, btnEl) {
       svg.setAttribute('stroke', isFav ? '#e44545' : '#999');
     }
   }
-  renderFavorites();
+  // Se la sidebar è aperta, aggiorna anche quella
+  if (document.getElementById('favSidebar')?.classList.contains('open')) {
+    renderFavoritesSidebar();
+  }
 }
 
 function toggleFavoriteFromQV(productId) {
@@ -1676,6 +1706,7 @@ function toggleFavoriteFromQV(productId) {
     showToast('🤍', 'Rimosso dai preferiti.');
   }
   saveFavorites();
+  updateFavBadge();
   // Aggiorna il bottone nel quick view
   const btn = document.getElementById('qvFavBtn');
   if (btn) {
@@ -1688,61 +1719,119 @@ function toggleFavoriteFromQV(productId) {
       svg.setAttribute('stroke', isFav ? '#e44545' : '#aaa');
     }
   }
-  renderFavorites();
+  // Aggiorna anche le card nella griglia prodotti
+  document.querySelectorAll('[data-pid="' + productId + '"]').forEach(cardBtn => {
+    const isFav = isFavorite(productId);
+    cardBtn.classList.toggle('active', isFav);
+    const svg = cardBtn.querySelector('svg');
+    if (svg) {
+      svg.setAttribute('fill', isFav ? '#e44545' : 'none');
+      svg.setAttribute('stroke', isFav ? '#e44545' : '#999');
+    }
+  });
 }
 
-function renderFavorites() {
-  const section = document.getElementById('favorites');
-  const grid = document.getElementById('favoritesGrid');
-  const badge = document.getElementById('favCountBadge');
-  if (!section || !grid) return;
+function renderFavoritesSidebar() {
+  const container = document.getElementById('favItems');
+  const footer = document.getElementById('favFooter');
+  const empty = document.getElementById('favEmpty');
+  if (!container) return;
 
   const favProducts = favorites.map(id => PRODUCTS.find(p => p.id === id)).filter(Boolean);
 
-  if (badge) badge.textContent = favProducts.length;
-
   if (favProducts.length === 0) {
-    section.classList.remove('has-items');
-    grid.innerHTML = '';
+    if (empty) empty.style.display = 'flex';
+    if (footer) footer.style.display = 'none';
+    // Rimuovi vecchi item
+    container.querySelectorAll('.fav-item').forEach(el => el.remove());
     return;
   }
 
-  section.classList.add('has-items');
-  grid.innerHTML = favProducts.map(p => {
-    const catLabel = Array.isArray(p.categoryLabel) ? p.categoryLabel[0] : p.categoryLabel;
-    return `
-      <div class="product-card" style="cursor:pointer;">
-        <div class="card-img-wrap">
-          <img src="${p.image}" alt="${p.name}" loading="lazy" onclick="openQuickView(${p.id})"
-               onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22360%22><rect fill=%22%23f5f5f5%22 width=%22300%22 height=%22360%22/><text x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 dominant-baseline=%22middle%22 font-size=%2260%22>⚽</text></svg>'"
-               style="cursor:pointer;width:100%;height:100%;object-fit:cover;display:block;">
-          ${p.badge ? `<span class="card-badge ${p.badge}">${p.badgeLabel}</span>` : ''}
-          <button class="card-fav-btn active" onclick="event.stopPropagation();toggleFavorite(${p.id},this)" title="Rimuovi dai preferiti" aria-label="Rimuovi dai preferiti">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="#e44545" stroke="#e44545" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-          </button>
-        </div>
-        <div class="card-info" onclick="openQuickView(${p.id})" style="cursor:pointer;">
-          <div class="card-category">${catLabel}</div>
-          <div class="card-name">${p.name}</div>
-          <div class="card-price-row">
-            <span class="card-price">&#x20AC;${p.price.toFixed(2)}</span>
-            ${p.oldPrice ? `<span class="card-price-old">&#x20AC;${p.oldPrice.toFixed(2)}</span>` : ''}
-          </div>
-        </div>
-      </div>`;
-  }).join('');
+  if (empty) empty.style.display = 'none';
+  if (footer) footer.style.display = 'block';
+
+  // Ricostruisci lista
+  container.querySelectorAll('.fav-item').forEach(el => el.remove());
+
+  favProducts.forEach(p => {
+    const div = document.createElement('div');
+    div.className = 'fav-item';
+    div.innerHTML =
+      '<img class="fav-item-img" src="' + p.image + '" alt="' + p.name + '" onclick="closeFavSidebar();openQuickView(' + p.id + ')" ' +
+      'onerror="this.style.display=\'none\'">' +
+      '<div class="fav-item-info">' +
+        '<div class="fav-item-name" onclick="closeFavSidebar();openQuickView(' + p.id + ')">' + p.name + '</div>' +
+        '<div class="fav-item-price">&#x20AC;' + p.price.toFixed(2) + '</div>' +
+        '<div class="fav-item-actions">' +
+          '<button class="fav-item-add" onclick="closeFavSidebar();openQuickView(' + p.id + ')">Vedi prodotto</button>' +
+          '<button class="fav-item-remove" onclick="removeFavoriteFromSidebar(' + p.id + ')" title="Rimuovi dai preferiti">&#x2665;</button>' +
+        '</div>' +
+      '</div>';
+    container.insertBefore(div, empty ? empty.nextSibling : null);
+    container.appendChild(div);
+  });
+}
+
+function removeFavoriteFromSidebar(productId) {
+  const idx = favorites.indexOf(productId);
+  if (idx !== -1) favorites.splice(idx, 1);
+  saveFavorites();
+  updateFavBadge();
+  // Aggiorna cuore sulla card prodotto
+  document.querySelectorAll('[data-pid="' + productId + '"]').forEach(btn => {
+    btn.classList.remove('active');
+    const svg = btn.querySelector('svg');
+    if (svg) { svg.setAttribute('fill','none'); svg.setAttribute('stroke','#999'); }
+  });
+  renderFavoritesSidebar();
 }
 
 function setupFavorites() {
-  // Bottone svuota preferiti
+  // Badge iniziale
+  updateFavBadge();
+
+  // Apri sidebar al click sul cuore navbar
+  document.getElementById('favBtn')?.addEventListener('click', openFavSidebar);
+
+  // Chiudi sidebar
+  document.getElementById('favClose')?.addEventListener('click', closeFavSidebar);
+  document.getElementById('favOverlay')?.addEventListener('click', closeFavSidebar);
+
+  // Vai ai prodotti
+  document.getElementById('goShopFromFavBtn')?.addEventListener('click', closeFavSidebar);
+
+  // Svuota preferiti
   document.getElementById('favClearBtn')?.addEventListener('click', () => {
     favorites = [];
     saveFavorites();
-    renderFavorites();
+    updateFavBadge();
+    // Aggiorna tutti i cuori nelle card
+    document.querySelectorAll('.card-fav-btn').forEach(btn => {
+      btn.classList.remove('active');
+      const svg = btn.querySelector('svg');
+      if (svg) { svg.setAttribute('fill','none'); svg.setAttribute('stroke','#999'); }
+    });
+    renderFavoritesSidebar();
     showToast('🤍', 'Preferiti svuotati.');
   });
-  // Render iniziale
-  renderFavorites();
+
+  // Aggiungi tutti al carrello
+  document.getElementById('favAddAllBtn')?.addEventListener('click', () => {
+    const favProducts = favorites.map(id => PRODUCTS.find(p => p.id === id)).filter(Boolean);
+    favProducts.forEach(p => {
+      const existing = cart.find(i => i.id === p.id && !i.custNote);
+      if (existing) {
+        existing.qty += 1;
+      } else {
+        cart.push({ id: p.id, name: p.name, price: p.price, image: p.image, qty: 1, size: p.sizes[0] || 'M', fabric: '\uD83D\uDC55 Standard', custNote: '', _uid: Date.now() + '-' + Math.random().toString(36).slice(2) });
+      }
+    });
+    saveCart();
+    updateCartUI();
+    closeFavSidebar();
+    showToast('✅', favProducts.length + ' prodotti aggiunti al carrello!');
+    openCart();
+  });
 }
 
 // ═══════════════════════════════════════════════
@@ -1801,17 +1890,13 @@ function setupCustomizeModal() {
 
   if (!overlay) return;
 
-  // Chiudi cliccando fuori
   overlay.addEventListener('click', e => {
     if (e.target === overlay) closeCustomizeModal();
   });
   closeBtn?.addEventListener('click', closeCustomizeModal);
-
-  // Aggiorna preview live
   custName?.addEventListener('input', updateCustomizePreview);
   custNumber?.addEventListener('input', updateCustomizePreview);
 
-  // Conferma personalizzazione
   confirmBtn?.addEventListener('click', () => {
     const name = (custName?.value || '').trim();
     const number = (custNumber?.value || '').trim();
@@ -1827,7 +1912,6 @@ function setupCustomizeModal() {
 
     currentCustomization = { name, number };
 
-    // Mostra badge nel quick view
     const badge = document.getElementById('qvCustomizeBadge');
     if (badge) badge.style.display = 'block';
 

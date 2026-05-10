@@ -55,14 +55,19 @@
             </li>
           </ul>
         </li>
-        <li><a href="#favorites" class="nav-link" id="navFavLink">❤️ Preferiti</a></li>
         <li><a href="#about" class="nav-link">Chi Siamo</a></li>
         <li><a href="#contact" class="nav-link">Contatti</a></li>
       </ul>
-      <button class="cart-btn" id="cartBtn" aria-label="Carrello">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
-        <span class="cart-badge" id="cartBadge">0</span>
-      </button>
+      <div class="nav-actions">
+        <button class="fav-btn" id="favBtn" aria-label="Preferiti">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          <span class="fav-badge" id="favBadge">0</span>
+        </button>
+        <button class="cart-btn" id="cartBtn" aria-label="Carrello">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+          <span class="cart-badge" id="cartBadge">0</span>
+        </button>
+      </div>
       <button class="hamburger" id="hamburger" aria-label="Menu">
         <span></span><span></span><span></span>
       </button>
@@ -136,21 +141,6 @@
   </section>
 
 
-  <!-- ═══════════════════ PREFERITI ═══════════════════ -->
-  <section class="favorites-section" id="favorites">
-    <div class="container">
-      <div class="favorites-header">
-        <div class="favorites-title">
-          ❤️ I Tuoi Preferiti
-          <span class="favorites-count-badge" id="favCountBadge">0</span>
-        </div>
-        <button class="favorites-clear-btn" id="favClearBtn">Svuota preferiti</button>
-      </div>
-      <div class="favorites-grid" id="favoritesGrid">
-        <!-- Popolato dinamicamente da JS -->
-      </div>
-    </div>
-  </section>
 
   <!-- ═══════════════════ SHOP (Nike-style layout) ═══════════════════ -->
   <section class="shop-section" id="products">
@@ -708,6 +698,26 @@
       <button class="btn btn-primary btn-full" id="checkoutBtn">
         Procedi all'Ordine →
       </button>
+    </div>
+  </aside>
+
+  <!-- ═══════════════════ PREFERITI SIDEBAR ═══════════════════ -->
+  <div class="cart-overlay" id="favOverlay"></div>
+  <aside class="cart-sidebar" id="favSidebar">
+    <div class="cart-header">
+      <h2>❤️ I Tuoi Preferiti</h2>
+      <button class="cart-close" id="favClose" aria-label="Chiudi">✕</button>
+    </div>
+    <div class="cart-items" id="favItems">
+      <div class="cart-empty" id="favEmpty">
+        <span class="cart-empty-icon">🤍</span>
+        <p>Nessun preferito ancora</p>
+        <a href="#products" class="btn btn-outline btn-sm" id="goShopFromFavBtn">Sfoglia i Prodotti</a>
+      </div>
+    </div>
+    <div class="cart-footer" id="favFooter" style="display:none;">
+      <button class="favorites-clear-btn" id="favClearBtn" style="width:100%;margin-bottom:.75rem;">🗑️ Svuota tutti i preferiti</button>
+      <button class="btn btn-primary btn-full" id="favAddAllBtn">🛒 Aggiungi tutti al carrello</button>
     </div>
   </aside>
 
