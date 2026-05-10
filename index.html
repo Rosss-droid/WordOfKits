@@ -55,6 +55,7 @@
             </li>
           </ul>
         </li>
+        <li><a href="#favorites" class="nav-link" id="navFavLink">❤️ Preferiti</a></li>
         <li><a href="#about" class="nav-link">Chi Siamo</a></li>
         <li><a href="#contact" class="nav-link">Contatti</a></li>
       </ul>
@@ -134,6 +135,22 @@
     </div>
   </section>
 
+
+  <!-- ═══════════════════ PREFERITI ═══════════════════ -->
+  <section class="favorites-section" id="favorites">
+    <div class="container">
+      <div class="favorites-header">
+        <div class="favorites-title">
+          ❤️ I Tuoi Preferiti
+          <span class="favorites-count-badge" id="favCountBadge">0</span>
+        </div>
+        <button class="favorites-clear-btn" id="favClearBtn">Svuota preferiti</button>
+      </div>
+      <div class="favorites-grid" id="favoritesGrid">
+        <!-- Popolato dinamicamente da JS -->
+      </div>
+    </div>
+  </section>
 
   <!-- ═══════════════════ SHOP (Nike-style layout) ═══════════════════ -->
   <section class="shop-section" id="products">
@@ -842,6 +859,41 @@
 
   <!-- Admin Setup Button -->
   <button class="admin-btn" id="adminBtn" title="Configura Email">⚙️ Setup Email</button>
+
+  <!-- ═══════════════════ PERSONALIZZAZIONE MAGLIA ═══════════════════ -->
+  <div class="customize-modal-overlay" id="customizeOverlay">
+    <div class="customize-modal" id="customizeModal">
+      <div class="customize-modal-header">
+        <div class="customize-modal-title">✏️ Personalizza Maglia</div>
+        <button class="customize-modal-close" id="customizeClose">✕</button>
+      </div>
+
+      <!-- Preview live -->
+      <div class="customize-preview-box">
+        <div class="customize-preview-shirt">👕</div>
+        <div class="customize-preview-text">
+          <div class="customize-preview-name" id="prevName">IL TUO NOME</div>
+          <div class="customize-preview-number" id="prevNumber">10</div>
+        </div>
+      </div>
+
+      <!-- Campo nome -->
+      <div class="customize-field-group">
+        <label class="customize-field-label" for="custName">Nome sulla maglia</label>
+        <input type="text" id="custName" class="customize-input" placeholder="Es: Rossi" maxlength="15" autocomplete="off" />
+        <div class="customize-hint">Max 15 caratteri. Verrà stampato sulla schiena.</div>
+      </div>
+
+      <!-- Campo numero -->
+      <div class="customize-field-group">
+        <label class="customize-field-label" for="custNumber">Numero sulla maglia</label>
+        <input type="number" id="custNumber" class="customize-input" placeholder="Es: 10" min="1" max="99" autocomplete="off" />
+        <div class="customize-hint">Numero da 1 a 99.</div>
+      </div>
+
+      <button class="customize-confirm-btn" id="customizeConfirmBtn">✅ Conferma Personalizzazione</button>
+    </div>
+  </div>
 
 
 

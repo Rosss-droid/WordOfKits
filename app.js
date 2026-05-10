@@ -25,6 +25,8 @@ let currentTeam = null;
 let currentSearch = '';
 let currentSort = 'default';
 let quickViewProduct = null;
+let currentCustomization = null; // { name, number } per la personalizzazione maglia
+let favorites = JSON.parse(localStorage.getItem('gk_favorites') || '[]'); // array di product id
 
 // ── SQUADRE PER CATEGORIA ──
 const TEAMS = {
@@ -79,6 +81,8 @@ document.addEventListener('DOMContentLoaded', () => {
   setupCustomOrder();
   setupHeroCarousel();
   setupReviewMiniCarousels();
+  setupFavorites();
+  setupCustomizeModal();
 });
 
 // ── EMAILJS INIT ──
@@ -206,27 +210,31 @@ function renderProducts(filter, team = null) {
     const card = document.createElement('div');
     card.className = 'product-card';
     card.style.animationDelay = `${i * 0.06}s`;
-    card.setAttribute('onclick', `openQuickView(${p.id})`);
     const catLabel = Array.isArray(p.categoryLabel)
       ? p.categoryLabel[0]
       : p.categoryLabel;
+    const fav = isFavorite(p.id);
     card.innerHTML = `
       <div class="card-img-wrap">
-        <img src="${p.image}" alt="${p.name}" loading="lazy"
-             onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22360%22><rect fill=%22%230f1525%22 width=%22300%22 height=%22360%22/><text x=%2250%25%22 y=%2250%25%22 fill=%22%236c63ff%22 text-anchor=%22middle%22 dominant-baseline=%22middle%22 font-size=%2260%22>⚽</text></svg>'">
+        <img src="${p.image}" alt="${p.name}" loading="lazy" onclick="openQuickView(${p.id})"
+             onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22360%22><rect fill=%22%230f1525%22 width=%22300%22 height=%22360%22/><text x=%2250%25%22 y=%2250%25%22 fill=%22%236c63ff%22 text-anchor=%22middle%22 dominant-baseline=%22middle%22 font-size=%2260%22>&#x26BD;</text></svg>'" style="cursor:pointer;width:100%;height:100%;object-fit:cover;display:block;">
         ${p.badge ? `<span class="card-badge ${p.badge}">${p.badgeLabel}</span>` : ''}
+        <button class="card-fav-btn${fav ? ' active' : ''}" data-pid="${p.id}" onclick="event.stopPropagation();toggleFavorite(${p.id},this)" title="${fav ? 'Rimuovi dai preferiti' : 'Aggiungi ai preferiti'}" aria-label="Preferiti">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="${fav ? '#e44545' : 'none'}" stroke="${fav ? '#e44545' : '#999'}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        </button>
       </div>
-      <div class="card-info">
+      <div class="card-info" onclick="openQuickView(${p.id})" style="cursor:pointer;">
         <div class="card-category">${catLabel}</div>
         <div class="card-name">${p.name}</div>
         <div class="card-price-row">
-          <span class="card-price">€${p.price.toFixed(2)}</span>
-          ${p.oldPrice ? `<span class="card-price-old">€${p.oldPrice.toFixed(2)}</span>` : ''}
+          <span class="card-price">&#x20AC;${p.price.toFixed(2)}</span>
+          ${p.oldPrice ? `<span class="card-price-old">&#x20AC;${p.oldPrice.toFixed(2)}</span>` : ''}
         </div>
       </div>
     `;
     grid.appendChild(card);
   });
+
 }
 
 // ── SETUP FILTRI SIDEBAR 3-LEVEL ──
@@ -455,23 +463,30 @@ function openQuickView(id) {
   const p = PRODUCTS.find(x => x.id === id);
   if (!p) return;
   quickViewProduct = p;
+  currentCustomization = null;
   const content = document.getElementById('quickViewContent');
   const catLabel = Array.isArray(p.categoryLabel) ? p.categoryLabel[0] : p.categoryLabel;
+  const isFav = isFavorite(p.id);
   content.innerHTML = `
     <div class="qv-grid">
       <div class="qv-img-wrap">
         <img src="${p.image}" alt="${p.name}" class="qv-img"
-             onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22480%22><rect fill=%22%230f1525%22 width=%22400%22 height=%22480%22/><text x=%2250%25%22 y=%2250%25%22 fill=%22%236c63ff%22 text-anchor=%22middle%22 dominant-baseline=%22middle%22 font-size=%2270%22>⚽</text></svg>'">
+             onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22480%22><rect fill=%22%230f1525%22 width=%22400%22 height=%22480%22/><text x=%2250%25%22 y=%2250%25%22 fill=%22%236c63ff%22 text-anchor=%22middle%22 dominant-baseline=%22middle%22 font-size=%2270%22>&#x26BD;</text></svg>'">
         ${p.badge ? `<span class="card-badge ${p.badge} qv-badge">${p.badgeLabel}</span>` : ''}
       </div>
       <div class="qv-details">
-        <div class="qv-category">${catLabel}</div>
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:.5rem;margin-bottom:.2rem;">
+          <div class="qv-category">${catLabel}</div>
+          <button class="card-fav-btn${isFav ? ' active' : ''}" id="qvFavBtn" onclick="toggleFavoriteFromQV(${p.id})" title="${isFav ? 'Rimuovi dai preferiti' : 'Aggiungi ai preferiti'}" style="position:static;box-shadow:none;background:transparent;border:1.5px solid rgba(0,0,0,.12);width:34px;height:34px;flex-shrink:0;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="${isFav ? '#e44545' : 'none'}" stroke="${isFav ? '#e44545' : '#aaa'}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          </button>
+        </div>
         <div class="qv-name">${p.name}</div>
         <div class="qv-desc">${p.description}</div>
 
         <div class="qv-price-wrap">
-          <span class="qv-price" id="qvPriceDisplay" data-base="${p.price}">€${p.price.toFixed(2)}</span>
-          ${p.oldPrice ? `<span class="qv-price-old">€${p.oldPrice.toFixed(2)}</span>` : ''}
+          <span class="qv-price" id="qvPriceDisplay" data-base="${p.price}">&#x20AC;${p.price.toFixed(2)}</span>
+          ${p.oldPrice ? `<span class="qv-price-old">&#x20AC;${p.oldPrice.toFixed(2)}</span>` : ''}
         </div>
 
         <!-- Taglia -->
@@ -480,34 +495,51 @@ function openQuickView(id) {
           ${p.sizes.map((s, i) => `<button class="qv-size-btn${i === 0 ? ' active' : ''}" onclick="selectQvSize(this)">${s}</button>`).join('')}
         </div>
 
-        <!-- Tessuto -->
-        <div class="qv-section-label">Tessuto</div>
+        <!-- Tipo Maglia -->
+        <div class="qv-section-label">Tipo Maglia</div>
         <div class="qv-fabric-row">
           <button class="qv-option-btn active" data-extra="0" onclick="selectQvFabric(this)">
-            <span class="qv-opt-icon">👕</span>
-            <span class="qv-opt-text"><strong>Tifoso</strong><small>Standard</small></span>
+            <span class="qv-opt-icon">&#x1F455;</span>
+            <span class="qv-opt-text"><strong>Standard</strong><small>Tifoso</small></span>
           </button>
           <button class="qv-option-btn" data-extra="4" onclick="selectQvFabric(this)">
-            <span class="qv-opt-icon">⚡</span>
-            <span class="qv-opt-text"><strong>Player</strong><small>+€4,00</small></span>
+            <span class="qv-opt-icon">&#x26A1;</span>
+            <span class="qv-opt-text"><strong>Player</strong><small>+&#x20AC;4,00</small></span>
           </button>
         </div>
 
-        <!-- Kit Completo -->
+        <!-- Composizione -->
         <div class="qv-section-label">Composizione</div>
         <div class="qv-kit-row">
           <button class="qv-option-btn active" data-kit="0" onclick="selectQvKit(this)">
-            <span class="qv-opt-icon">👕</span>
+            <span class="qv-opt-icon">&#x1F455;</span>
             <span class="qv-opt-text"><strong>Solo Maglia</strong><small>Inclusa nel prezzo</small></span>
           </button>
           <button class="qv-option-btn" data-kit="10" onclick="selectQvKit(this)">
-            <span class="qv-opt-icon">⚽</span>
-            <span class="qv-opt-text"><strong>Kit Completo</strong><small>Maglia + Pantaloncini +€10</small></span>
+            <span class="qv-opt-icon">&#x26BD;</span>
+            <span class="qv-opt-text"><strong>Kit Completo</strong><small>+ Pantaloncini +&#x20AC;10</small></span>
           </button>
         </div>
 
+        <!-- Checkbox numero pantaloncino (solo Kit Completo) -->
+        <label class="qv-shorts-number-row" id="qvShortsNumberRow">
+          <input type="checkbox" id="qvShortsNumberCheck" />
+          <span>Aggiungi numero anche sul pantaloncino</span>
+        </label>
+
+        <!-- Badge personalizzazione applicata -->
+        <div id="qvCustomizeBadge" style="display:none;margin-top:.5rem;">
+          <span class="customize-applied-badge">&#x270F;&#xFE0F; Personalizzazione applicata</span>
+        </div>
+
         <button class="btn btn-primary btn-full qv-add-btn" onclick="addToCartFromQV(${p.id}); closeQuickView();">
-          🛒 Aggiungi al Carrello
+          &#x1F6D2; Aggiungi al Carrello
+        </button>
+
+        <!-- Pulsante Personalizza -->
+        <button class="qv-customize-btn" id="qvCustomizeBtn" onclick="openCustomizeModal(${p.id})">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          &#x270F;&#xFE0F; Personalizza (Nome &amp; Numero)
         </button>
       </div>
     </div>
@@ -530,6 +562,14 @@ function selectQvKit(btn) {
   btn.closest('.qv-kit-row').querySelectorAll('.qv-option-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
   updateQvPrice();
+  // Mostra/nasconde checkbox numero pantaloncino
+  const isKit = parseFloat(btn.dataset.kit || 0) > 0;
+  const shortsRow = document.getElementById('qvShortsNumberRow');
+  if (shortsRow) shortsRow.classList.toggle('visible', isKit);
+  if (!isKit) {
+    const check = document.getElementById('qvShortsNumberCheck');
+    if (check) check.checked = false;
+  }
 }
 
 function updateQvPrice() {
@@ -550,40 +590,57 @@ function addToCartFromQV(productId) {
   const activeSize = document.querySelector('.qv-sizes .qv-size-btn.active');
   const activeFabric = document.querySelector('.qv-fabric-row .qv-option-btn.active');
   const activeKit = document.querySelector('.qv-kit-row .qv-option-btn.active');
+  const shortsNumberCheck = document.getElementById('qvShortsNumberCheck');
 
   const selectedSize = activeSize ? activeSize.textContent.trim() : (p.sizes[0] || 'M');
-  const fabricText = activeFabric ? activeFabric.querySelector('strong').textContent.trim() : 'Tifoso';
-  const fabricLabel = `👕 ${fabricText}`;
+  const fabricText = activeFabric ? activeFabric.querySelector('strong').textContent.trim() : 'Standard';
+  const fabricLabel = '\uD83D\uDC55 ' + fabricText;
   const fabricExtra = activeFabric ? parseFloat(activeFabric.dataset.extra || 0) : 0;
   const kitExtra = activeKit ? parseFloat(activeKit.dataset.kit || 0) : 0;
   const isKit = kitExtra > 0;
+  const shortsWithNumber = isKit && shortsNumberCheck && shortsNumberCheck.checked;
   const finalPrice = p.price + fabricExtra;
+
+  // Testo personalizzazione
+  let custNote = '';
+  if (currentCustomization && (currentCustomization.name || currentCustomization.number)) {
+    const parts = [];
+    if (currentCustomization.name) parts.push('Nome: ' + currentCustomization.name);
+    if (currentCustomization.number) parts.push('N.' + currentCustomization.number);
+    custNote = parts.join(' | ');
+  }
 
   // Aggiungi maglia
   const existing = cart.find(item =>
-    item.id === productId && item.size === selectedSize && item.fabric === fabricLabel
+    item.id === productId && item.size === selectedSize && item.fabric === fabricLabel && item.custNote === custNote
   );
   if (existing) {
     existing.qty += 1;
   } else {
-    cart.push({ id: p.id, name: p.name, price: finalPrice, image: p.image, qty: 1, size: selectedSize, fabric: fabricLabel, _uid: Date.now() + '-' + Math.random().toString(36).slice(2) });
+    cart.push({ id: p.id, name: p.name, price: finalPrice, image: p.image, qty: 1, size: selectedSize, fabric: fabricLabel, custNote: custNote, _uid: Date.now() + '-' + Math.random().toString(36).slice(2) });
   }
 
-  // Se Kit Completo, aggiungi anche pantaloncini
+  // Se Kit Completo, aggiungi pantaloncini
   if (isKit) {
-    const shortsName = `Pantaloncini – ${p.name.replace(/Maglia\s*/i, '').trim()}`;
+    const shortsName = 'Pantaloncini \u2013 ' + p.name.replace(/Maglia\s*/i, '').trim();
     const shortsPrice = 10 + fabricExtra;
-    cart.push({ id: `shorts-${p.id}`, name: shortsName, price: shortsPrice, image: p.image, qty: 1, size: selectedSize, fabric: fabricLabel, _uid: Date.now() + '-s-' + Math.random().toString(36).slice(2) });
+    const shortsCustNote = (shortsWithNumber && currentCustomization && currentCustomization.number)
+      ? 'N.' + currentCustomization.number + ' sul pantaloncino'
+      : '';
+    cart.push({ id: 'shorts-' + p.id, name: shortsName, price: shortsPrice, image: p.image, qty: 1, size: selectedSize, fabric: fabricLabel, custNote: shortsCustNote, _uid: Date.now() + '-s-' + Math.random().toString(36).slice(2) });
   }
 
   saveCart();
   updateCartUI();
+  const custSuffix = custNote ? ' + personalizzazione' : '';
   const msg = isKit
-    ? `Kit Completo (${selectedSize} · ${fabricText}) aggiunto!`
-    : `"${p.name}" (${selectedSize} · ${fabricText}) aggiunto!`;
-  showToast('✅', msg);
+    ? 'Kit Completo (' + selectedSize + ' \u00B7 ' + fabricText + ')' + custSuffix + ' aggiunto!'
+    : '"' + p.name + '" (' + selectedSize + ' \u00B7 ' + fabricText + ')' + custSuffix + ' aggiunto!';
+  showToast('\u2705', msg);
   openCart();
+  currentCustomization = null;
 }
+
 
 function closeQuickView() {
   closeOverlay('quickViewOverlay');
@@ -726,7 +783,7 @@ function renderCartItems() {
       + imgHtml
       + '<div class="cart-item-info">'
       + '<div class="cart-item-name">' + item.name + '</div>'
-      + '<div class="cart-item-meta">Taglia: ' + item.size + (item.fabric ? ' &nbsp;·&nbsp; ' + item.fabric : '') + '</div>'
+      + '<div class="cart-item-meta">Taglia: ' + item.size + (item.fabric ? ' &nbsp;&middot;&nbsp; ' + item.fabric : '') + (item.custNote ? '<br><span style="color:#2e7d32;font-size:.72rem;">\u270F\uFE0F ' + item.custNote + '</span>' : '') + '</div>'
       + '<div class="cart-item-price">' + priceLabel + '</div>'
       + '<div class="cart-item-qty">'
       + '<button class="qty-btn" onclick="changeQty(' + uidRef + ', -1)">&minus;</button>'
@@ -1572,4 +1629,212 @@ function featProductCardHTML(p) {
         <div class="feat-product-price">€${p.price.toFixed(2)}</div>
       </div>
     </div>`;
+}
+
+// ═══════════════════════════════════════════════
+// PREFERITI — Cuore sulle card + Sezione dedicata
+// ═══════════════════════════════════════════════
+
+function saveFavorites() {
+  localStorage.setItem('gk_favorites', JSON.stringify(favorites));
+}
+
+function isFavorite(productId) {
+  return favorites.includes(productId);
+}
+
+function toggleFavorite(productId, btnEl) {
+  const idx = favorites.indexOf(productId);
+  if (idx === -1) {
+    favorites.push(productId);
+    showToast('❤️', 'Aggiunto ai preferiti!');
+  } else {
+    favorites.splice(idx, 1);
+    showToast('🤍', 'Rimosso dai preferiti.');
+  }
+  saveFavorites();
+  // Aggiorna icona cuore sulla card cliccata
+  if (btnEl) {
+    const isFav = isFavorite(productId);
+    btnEl.classList.toggle('active', isFav);
+    const svg = btnEl.querySelector('svg');
+    if (svg) {
+      svg.setAttribute('fill', isFav ? '#e44545' : 'none');
+      svg.setAttribute('stroke', isFav ? '#e44545' : '#999');
+    }
+  }
+  renderFavorites();
+}
+
+function toggleFavoriteFromQV(productId) {
+  const idx = favorites.indexOf(productId);
+  if (idx === -1) {
+    favorites.push(productId);
+    showToast('❤️', 'Aggiunto ai preferiti!');
+  } else {
+    favorites.splice(idx, 1);
+    showToast('🤍', 'Rimosso dai preferiti.');
+  }
+  saveFavorites();
+  // Aggiorna il bottone nel quick view
+  const btn = document.getElementById('qvFavBtn');
+  if (btn) {
+    const isFav = isFavorite(productId);
+    btn.classList.toggle('active', isFav);
+    btn.title = isFav ? 'Rimuovi dai preferiti' : 'Aggiungi ai preferiti';
+    const svg = btn.querySelector('svg');
+    if (svg) {
+      svg.setAttribute('fill', isFav ? '#e44545' : 'none');
+      svg.setAttribute('stroke', isFav ? '#e44545' : '#aaa');
+    }
+  }
+  renderFavorites();
+}
+
+function renderFavorites() {
+  const section = document.getElementById('favorites');
+  const grid = document.getElementById('favoritesGrid');
+  const badge = document.getElementById('favCountBadge');
+  if (!section || !grid) return;
+
+  const favProducts = favorites.map(id => PRODUCTS.find(p => p.id === id)).filter(Boolean);
+
+  if (badge) badge.textContent = favProducts.length;
+
+  if (favProducts.length === 0) {
+    section.classList.remove('has-items');
+    grid.innerHTML = '';
+    return;
+  }
+
+  section.classList.add('has-items');
+  grid.innerHTML = favProducts.map(p => {
+    const catLabel = Array.isArray(p.categoryLabel) ? p.categoryLabel[0] : p.categoryLabel;
+    return `
+      <div class="product-card" style="cursor:pointer;">
+        <div class="card-img-wrap">
+          <img src="${p.image}" alt="${p.name}" loading="lazy" onclick="openQuickView(${p.id})"
+               onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22360%22><rect fill=%22%23f5f5f5%22 width=%22300%22 height=%22360%22/><text x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 dominant-baseline=%22middle%22 font-size=%2260%22>⚽</text></svg>'"
+               style="cursor:pointer;width:100%;height:100%;object-fit:cover;display:block;">
+          ${p.badge ? `<span class="card-badge ${p.badge}">${p.badgeLabel}</span>` : ''}
+          <button class="card-fav-btn active" onclick="event.stopPropagation();toggleFavorite(${p.id},this)" title="Rimuovi dai preferiti" aria-label="Rimuovi dai preferiti">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="#e44545" stroke="#e44545" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          </button>
+        </div>
+        <div class="card-info" onclick="openQuickView(${p.id})" style="cursor:pointer;">
+          <div class="card-category">${catLabel}</div>
+          <div class="card-name">${p.name}</div>
+          <div class="card-price-row">
+            <span class="card-price">&#x20AC;${p.price.toFixed(2)}</span>
+            ${p.oldPrice ? `<span class="card-price-old">&#x20AC;${p.oldPrice.toFixed(2)}</span>` : ''}
+          </div>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+function setupFavorites() {
+  // Bottone svuota preferiti
+  document.getElementById('favClearBtn')?.addEventListener('click', () => {
+    favorites = [];
+    saveFavorites();
+    renderFavorites();
+    showToast('🤍', 'Preferiti svuotati.');
+  });
+  // Render iniziale
+  renderFavorites();
+}
+
+// ═══════════════════════════════════════════════
+// MODALE PERSONALIZZAZIONE MAGLIA
+// ═══════════════════════════════════════════════
+
+let _customizeProductId = null;
+
+function openCustomizeModal(productId) {
+  _customizeProductId = productId;
+  const overlay = document.getElementById('customizeOverlay');
+  if (!overlay) return;
+
+  // Precompila con personalizzazione esistente
+  const custName = document.getElementById('custName');
+  const custNumber = document.getElementById('custNumber');
+  if (currentCustomization) {
+    if (custName) custName.value = currentCustomization.name || '';
+    if (custNumber) custNumber.value = currentCustomization.number || '';
+  } else {
+    if (custName) custName.value = '';
+    if (custNumber) custNumber.value = '';
+  }
+  updateCustomizePreview();
+
+  overlay.style.display = 'flex';
+  requestAnimationFrame(() => overlay.classList.add('open'));
+  document.body.style.overflow = 'hidden';
+}
+
+function closeCustomizeModal() {
+  const overlay = document.getElementById('customizeOverlay');
+  if (!overlay) return;
+  overlay.classList.remove('open');
+  setTimeout(() => {
+    overlay.style.display = 'none';
+    document.body.style.overflow = '';
+  }, 320);
+}
+
+function updateCustomizePreview() {
+  const name = (document.getElementById('custName')?.value || '').trim().toUpperCase() || 'IL TUO NOME';
+  const number = (document.getElementById('custNumber')?.value || '').trim() || '10';
+  const prevName = document.getElementById('prevName');
+  const prevNumber = document.getElementById('prevNumber');
+  if (prevName) prevName.textContent = name;
+  if (prevNumber) prevNumber.textContent = number;
+}
+
+function setupCustomizeModal() {
+  const overlay = document.getElementById('customizeOverlay');
+  const closeBtn = document.getElementById('customizeClose');
+  const confirmBtn = document.getElementById('customizeConfirmBtn');
+  const custName = document.getElementById('custName');
+  const custNumber = document.getElementById('custNumber');
+
+  if (!overlay) return;
+
+  // Chiudi cliccando fuori
+  overlay.addEventListener('click', e => {
+    if (e.target === overlay) closeCustomizeModal();
+  });
+  closeBtn?.addEventListener('click', closeCustomizeModal);
+
+  // Aggiorna preview live
+  custName?.addEventListener('input', updateCustomizePreview);
+  custNumber?.addEventListener('input', updateCustomizePreview);
+
+  // Conferma personalizzazione
+  confirmBtn?.addEventListener('click', () => {
+    const name = (custName?.value || '').trim();
+    const number = (custNumber?.value || '').trim();
+
+    if (!name && !number) {
+      showToast('⚠️', 'Inserisci almeno il nome o il numero!');
+      return;
+    }
+    if (number && (parseInt(number) < 1 || parseInt(number) > 99)) {
+      showToast('⚠️', 'Il numero deve essere tra 1 e 99.');
+      return;
+    }
+
+    currentCustomization = { name, number };
+
+    // Mostra badge nel quick view
+    const badge = document.getElementById('qvCustomizeBadge');
+    if (badge) badge.style.display = 'block';
+
+    const parts = [];
+    if (name) parts.push(name);
+    if (number) parts.push('#' + number);
+    showToast('✏️', 'Personalizzazione impostata: ' + parts.join(', '));
+    closeCustomizeModal();
+  });
 }
