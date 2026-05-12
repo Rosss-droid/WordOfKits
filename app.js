@@ -506,7 +506,7 @@ function openQuickView(id) {
           </button>
           <button class="qv-option-btn" data-extra="4" onclick="selectQvFabric(this)">
             <span class="qv-opt-icon">&#x26A1;</span>
-            <span class="qv-opt-text"><strong>Player</strong><small>+&#x20AC;4,00</small></span>
+            <span class="qv-opt-text"><strong>Player</strong><small>+&#x20AC;3,00</small></span>
           </button>
         </div>
 
@@ -517,13 +517,13 @@ function openQuickView(id) {
             <span class="qv-opt-icon">&#x1F455;</span>
             <span class="qv-opt-text"><strong>Solo Maglia</strong><small>Inclusa nel prezzo</small></span>
           </button>` : ''}
-          <button class="qv-option-btn${!isSoloAllowed ? ' active' : ''}" data-kit="shorts" data-extra="10" onclick="selectQvKit(this)">
+          <button class="qv-option-btn${!isSoloAllowed ? ' active' : ''}" data-kit="shorts" data-extra="6" onclick="selectQvKit(this)">
             <span class="qv-opt-icon">&#x26BD;</span>
-            <span class="qv-opt-text"><strong>Maglia + Pantaloncino</strong><small>+&#x20AC;10,00</small></span>
+            <span class="qv-opt-text"><strong>Maglia + Pantaloncino</strong><small>+&#x20AC;6,00</small></span>
           </button>
-          <button class="qv-option-btn" data-kit="full" data-extra="15" onclick="selectQvKit(this)">
+          <button class="qv-option-btn" data-kit="full" data-extra="10" onclick="selectQvKit(this)">
             <span class="qv-opt-icon">&#x1F3C6;</span>
-            <span class="qv-opt-text"><strong>Kit Completo</strong><small>Maglia+Pant+Calzettoni +&#x20AC;15</small></span>
+            <span class="qv-opt-text"><strong>Kit Completo</strong><small>Maglia+Pant+Calzettoni +&#x20AC;10,00</small></span>
           </button>
         </div>
 
@@ -629,22 +629,34 @@ function addToCartFromQV(productId) {
 
   // Aggiungi pantaloncino (Maglia+Pantaloncino oppure Kit Completo)
   if (isWithShorts) {
-    const shortsName = 'Pantaloncini \u2013 ' + p.name.replace(/Maglia\s*/i, '').trim();
-    const shortsPrice = 10 + fabricExtra;
+    // Se la maglia ha un prodotto pantaloncino reale collegato, usa nome e immagine da quel prodotto
+    // ma il PREZZO è sempre quello del kit (6€), non il prezzo standalone del prodotto
+    const shortsProduct = p.shortsProductId ? PRODUCTS.find(x => x.id === p.shortsProductId) : null;
+    const shortsName = shortsProduct
+      ? shortsProduct.name
+      : 'Pantaloncini \u2013 ' + p.name.replace(/Maglia\s*/i, '').trim();
+    const shortsKitPrice = 6; // prezzo scontato in kit (standalone = 10, in kit = 6)
+    const shortsPrice = shortsKitPrice + fabricExtra;
+    const shortsImage = shortsProduct ? shortsProduct.image : (p.shortsImage || p.image);
     const shortsWithNumber = currentCustomization && currentCustomization.shortsNumber;
     const shortsCustNote = (shortsWithNumber && currentCustomization.number)
       ? 'N.' + currentCustomization.number + ' sul pantaloncino'
       : '';
-    cart.push({ id: 'shorts-' + p.id, name: shortsName, price: shortsPrice, image: p.image, qty: 1, size: selectedSize, fabric: fabricLabel, custNote: shortsCustNote, _uid: Date.now() + '-s-' + Math.random().toString(36).slice(2) });
+    cart.push({ id: 'shorts-' + p.id, name: shortsName, price: shortsPrice, image: shortsImage, qty: 1, size: selectedSize, fabric: fabricLabel, custNote: shortsCustNote, _uid: Date.now() + '-s-' + Math.random().toString(36).slice(2) });
   }
 
   // Aggiungi calzettoni (solo Kit Completo)
   if (isFullKit) {
     const sockSize = (currentCustomization && currentCustomization.sockSize) || '';
-    const socksName = 'Calzettoni \u2013 ' + p.name.replace(/Maglia\s*/i, '').trim();
-    const socksPrice = 5;
+    // Se la maglia ha un prodotto calzettoni reale collegato, usalo
+    const socksProduct = p.socksProductId ? PRODUCTS.find(x => x.id === p.socksProductId) : null;
+    const socksName = socksProduct
+      ? socksProduct.name
+      : 'Calzettoni \u2013 ' + p.name.replace(/Maglia\s*/i, '').trim();
+    const socksPrice = socksProduct ? socksProduct.price : 4; // kit completo: 6 (pant) + 4 (calzettoni) = 10 extra
+    const socksImage = socksProduct ? socksProduct.image : (p.socksImage || p.shortsImage || p.image);
     const socksCustNote = sockSize ? 'Taglia scarpa: ' + sockSize : '';
-    cart.push({ id: 'socks-' + p.id, name: socksName, price: socksPrice, image: p.image, qty: 1, size: sockSize || selectedSize, fabric: fabricLabel, custNote: socksCustNote, _uid: Date.now() + '-k-' + Math.random().toString(36).slice(2) });
+    cart.push({ id: 'socks-' + p.id, name: socksName, price: socksPrice, image: socksImage, qty: 1, size: sockSize || selectedSize, fabric: fabricLabel, custNote: socksCustNote, _uid: Date.now() + '-k-' + Math.random().toString(36).slice(2) });
   }
 
   saveCart();
@@ -1779,12 +1791,12 @@ function renderFavoritesSidebar() {
       '<img class="fav-item-img" src="' + p.image + '" alt="' + p.name + '" onclick="closeFavSidebar();openQuickView(' + p.id + ')" ' +
       'onerror="this.style.display=\'none\'">' +
       '<div class="fav-item-info">' +
-        '<div class="fav-item-name" onclick="closeFavSidebar();openQuickView(' + p.id + ')">' + p.name + '</div>' +
-        '<div class="fav-item-price">&#x20AC;' + p.price.toFixed(2) + '</div>' +
-        '<div class="fav-item-actions">' +
-          '<button class="fav-item-add" onclick="closeFavSidebar();openQuickView(' + p.id + ')">Vedi prodotto</button>' +
-          '<button class="fav-item-remove" onclick="removeFavoriteFromSidebar(' + p.id + ')" title="Rimuovi dai preferiti">&#x2665;</button>' +
-        '</div>' +
+      '<div class="fav-item-name" onclick="closeFavSidebar();openQuickView(' + p.id + ')">' + p.name + '</div>' +
+      '<div class="fav-item-price">&#x20AC;' + p.price.toFixed(2) + '</div>' +
+      '<div class="fav-item-actions">' +
+      '<button class="fav-item-add" onclick="closeFavSidebar();openQuickView(' + p.id + ')">Vedi prodotto</button>' +
+      '<button class="fav-item-remove" onclick="removeFavoriteFromSidebar(' + p.id + ')" title="Rimuovi dai preferiti">&#x2665;</button>' +
+      '</div>' +
       '</div>';
     container.insertBefore(div, empty ? empty.nextSibling : null);
     container.appendChild(div);
@@ -1800,7 +1812,7 @@ function removeFavoriteFromSidebar(productId) {
   document.querySelectorAll('[data-pid="' + productId + '"]').forEach(btn => {
     btn.classList.remove('active');
     const svg = btn.querySelector('svg');
-    if (svg) { svg.setAttribute('fill','none'); svg.setAttribute('stroke','#999'); }
+    if (svg) { svg.setAttribute('fill', 'none'); svg.setAttribute('stroke', '#999'); }
   });
   renderFavoritesSidebar();
 }
@@ -1828,7 +1840,7 @@ function setupFavorites() {
     document.querySelectorAll('.card-fav-btn').forEach(btn => {
       btn.classList.remove('active');
       const svg = btn.querySelector('svg');
-      if (svg) { svg.setAttribute('fill','none'); svg.setAttribute('stroke','#999'); }
+      if (svg) { svg.setAttribute('fill', 'none'); svg.setAttribute('stroke', '#999'); }
     });
     renderFavoritesSidebar();
     showToast('🤍', 'Preferiti svuotati.');
