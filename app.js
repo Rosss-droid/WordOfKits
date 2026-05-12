@@ -56,6 +56,16 @@ const TEAMS = {
     'Real Madrid', 'Barcellona', 'Atletico Madrid', 'Siviglia', 'Villarreal',
     'Real Betis', 'Athletic Bilbao', 'Real Sociedad', 'Osasuna', 'Valencia'
   ],
+  Nazionali: [
+    'Italia', 'Francia', 'Spagna', 'Germania', 'Brasile', 'Argentina',
+    'Portogallo', 'Inghilterra', 'Belgio', 'Olanda', 'Marocco', 'Giappone'
+  ],
+  Mondiale2026: [
+    'Italia', 'Francia', 'Spagna', 'Germania', 'Brasile', 'Argentina',
+    'Portogallo', 'Inghilterra', 'USA', 'Messico', 'Canada', 'Marocco',
+    'Giappone', 'Corea del Sud', 'Australia', 'Olanda', 'Belgio', 'Svizzera',
+    'Colombia', 'Uraguay', 'Senegal', 'Croazia'
+  ],
 };
 
 // ── INIT ──
@@ -271,7 +281,16 @@ function setupFilters() {
     { btnId: 'megaBtnPremier', listId: 'megaListPremier', filter: 'Premier' },
     { btnId: 'megaBtnBundesliga', listId: 'megaListBundesliga', filter: 'Bundesliga' },
     { btnId: 'megaBtnSaudi', listId: 'megaListSaudi', filter: 'SaudiLeague' },
+    { btnId: 'megaBtnNazionali', listId: 'megaListNazionali', filter: 'Nazionali' },
   ];
+
+  // ── MONDIALE 2026: pulsante flat diretto ──
+  const mondialBtn = document.getElementById('megaBtnMondiale2026');
+  if (mondialBtn) {
+    mondialBtn.addEventListener('click', () => {
+      setActiveFilter('Mondiale2026', null);
+    });
+  }
 
   leagueDefs.forEach(({ btnId, listId, filter }) => {
     const btn = document.getElementById(btnId);
@@ -407,6 +426,8 @@ function setActiveFilter(filter, team, updateActiveBtn = true) {
     else if (filter === 'Premier') document.getElementById('megaBtnPremier')?.classList.add('active');
     else if (filter === 'Bundesliga') document.getElementById('megaBtnBundesliga')?.classList.add('active');
     else if (filter === 'SaudiLeague') document.getElementById('megaBtnSaudi')?.classList.add('active');
+    else if (filter === 'Nazionali') document.getElementById('megaBtnNazionali')?.classList.add('active');
+    else if (filter === 'Mondiale2026') document.getElementById('megaBtnMondiale2026')?.classList.add('active');
     // Accessori sub-items sono già gestiti direttamente
   }
   renderProducts(currentFilter, currentTeam);
@@ -536,19 +557,14 @@ function openQuickView(id) {
           &#x1F6D2; Aggiungi al Carrello
         </button>
 
-        <!-- Pulsante Personalizza (visibile solo con Kit Completo) -->
-        <button class="qv-customize-btn" id="qvCustomizeBtn" onclick="openCustomizeModal(${p.id})" style="display:none;">
+        <!-- Pulsante Personalizza (sempre visibile) -->
+        <button class="qv-customize-btn" id="qvCustomizeBtn" onclick="openCustomizeModal(${p.id})" style="display:flex;">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
           &#x270F;&#xFE0F; Personalizza (Nome &amp; Numero)
         </button>
       </div>
     </div>
   `;
-  // Per prodotti "unico" il pulsante Personalizza è visibile subito (kit default = shorts)
-  if (!isSoloAllowed) {
-    const customizeBtn = document.getElementById('qvCustomizeBtn');
-    if (customizeBtn) customizeBtn.style.display = 'flex';
-  }
   openOverlay('quickViewOverlay');
 }
 
@@ -567,16 +583,16 @@ function selectQvKit(btn) {
   btn.closest('.qv-kit-row').querySelectorAll('.qv-option-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
   updateQvPrice();
-  // Mostra/nasconde pulsante personalizza in base alla selezione
+  // Il pulsante Personalizza è sempre visibile per qualsiasi kit
   const kit = btn.dataset.kit || 'solo';
-  const needsCustomize = kit === 'shorts' || kit === 'full';
   const customizeBtn = document.getElementById('qvCustomizeBtn');
-  if (customizeBtn) customizeBtn.style.display = needsCustomize ? 'flex' : 'none';
-  if (!needsCustomize) {
-    // Resetta personalizzazione se si torna a Solo Maglia
-    currentCustomization = null;
-    const badge = document.getElementById('qvCustomizeBadge');
-    if (badge) badge.style.display = 'none';
+  if (customizeBtn) customizeBtn.style.display = 'flex';
+  // Se si cambia kit, resetta la personalizzazione precedente per non creare confusione
+  currentCustomization = null;
+  const badge = document.getElementById('qvCustomizeBadge');
+  if (badge) badge.style.display = 'none';
+  // Placeholder: mantiene compatibilità con il resto del codice
+  if (false) {
   }
 }
 
@@ -1474,7 +1490,7 @@ function setupCustomOrder() {
 
     saveCart();
     updateCartUI();
-    openCart();  // openCart() chiama renderCartItems() internamente
+    openCart();
 
     showToast('✅', `"${name}" aggiunto! Il prezzo ti verrà comunicato via email.`);
     form.reset();
@@ -1877,15 +1893,18 @@ function openCustomizeModal(productId) {
 
   // Determina il tipo di kit selezionato nel quick view
   const activeKitBtn = document.querySelector('.qv-kit-row .qv-option-btn.active');
-  _customizeKitType = activeKitBtn ? (activeKitBtn.dataset.kit || 'shorts') : 'shorts';
+  _customizeKitType = activeKitBtn ? (activeKitBtn.dataset.kit || 'solo') : 'solo';
 
   const overlay = document.getElementById('customizeOverlay');
   if (!overlay) return;
 
   // Mostra/nascondi sezioni in base al tipo di kit
+  // Solo Maglia → solo nome/numero, niente shorts checkbox né calzettoni
+  // Maglia+Pantaloncino → nome/numero + checkbox pantaloncino
+  // Kit Completo → tutto
   const shortsGroup = document.getElementById('custShortsNumberGroup');
   const sockGroup = document.getElementById('custSockGroup');
-  if (shortsGroup) shortsGroup.style.display = 'block'; // sempre visibile (shorts o full)
+  if (shortsGroup) shortsGroup.style.display = (_customizeKitType === 'shorts' || _customizeKitType === 'full') ? 'block' : 'none';
   if (sockGroup) sockGroup.style.display = _customizeKitType === 'full' ? 'block' : 'none';
 
   // Precompila con personalizzazione esistente

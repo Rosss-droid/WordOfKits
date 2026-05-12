@@ -25,7 +25,7 @@
       <div class="nav-logo">
         <span class="logo-text">WorldofKits</span>
       </div>
-      <ul class="nav-links" id="navLinks">
+        <ul class="nav-links" id="navLinks">
         <li><a href="#home" class="nav-link active">Home</a></li>
         <!-- Campionati dropdown navbar -->
         <li class="nav-dropdown-wrap" id="navCampionatiWrap">
@@ -51,6 +51,11 @@
             <li>
               <button class="nav-dd-item" data-league="Premier" id="navLeaguePremier">
                 <span>Premier League</span>
+              </button>
+            </li>
+            <li>
+              <button class="nav-dd-item" data-league="Mondiale2026" id="navLeagueMondiale2026">
+                <span>🌍 Mondiale 2026</span>
               </button>
             </li>
           </ul>
@@ -273,7 +278,26 @@
                   <ul class="sidebar-sub-list" id="megaListSaudi"></ul>
                 </li>
 
+                <!-- Nazionali -->
+                <li>
+                  <button class="sidebar-nested-btn sidebar-league-btn" data-filter="Nazionali" id="megaBtnNazionali">
+                    Nazionali
+                  </button>
+                  <ul class="sidebar-sub-list" id="megaListNazionali"></ul>
+                </li>
+
               </ul>
+            </li>
+          </ul>
+
+          <div class="sidebar-divider"></div>
+
+          <!-- ── MONDIALE 2026 ── -->
+          <ul class="sidebar-flat-list">
+            <li>
+              <button class="sidebar-flat-btn sidebar-league-btn sidebar-mondiale-btn" id="megaBtnMondiale2026" data-filter="Mondiale2026">
+                🌍 Mondiale 2026
+              </button>
             </li>
           </ul>
 
