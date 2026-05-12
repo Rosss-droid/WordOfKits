@@ -25,7 +25,7 @@ let currentTeam = null;
 let currentSearch = '';
 let currentSort = 'default';
 let quickViewProduct = null;
-let currentCustomization = null; // { name, number } per la personalizzazione maglia
+let currentCustomization = null; // { name, number, shortsNumber, sockSize }
 let favorites = JSON.parse(localStorage.getItem('gk_favorites') || '[]'); // array di product id
 
 // ── SQUADRE PER CATEGORIA ──
@@ -466,6 +466,8 @@ function openQuickView(id) {
   currentCustomization = null;
   const content = document.getElementById('quickViewContent');
   const catLabel = Array.isArray(p.categoryLabel) ? p.categoryLabel[0] : p.categoryLabel;
+  const kitType = p.kitType || 'solo';
+  const isSoloAllowed = kitType !== 'unico';
   const isFav = isFavorite(p.id);
   content.innerHTML = `
     <div class="qv-grid">
@@ -511,21 +513,19 @@ function openQuickView(id) {
         <!-- Composizione -->
         <div class="qv-section-label">Composizione</div>
         <div class="qv-kit-row">
-          <button class="qv-option-btn active" data-kit="0" onclick="selectQvKit(this)">
+          ${isSoloAllowed ? `<button class="qv-option-btn active" data-kit="solo" data-extra="0" onclick="selectQvKit(this)">
             <span class="qv-opt-icon">&#x1F455;</span>
             <span class="qv-opt-text"><strong>Solo Maglia</strong><small>Inclusa nel prezzo</small></span>
-          </button>
-          <button class="qv-option-btn" data-kit="10" onclick="selectQvKit(this)">
+          </button>` : ''}
+          <button class="qv-option-btn${!isSoloAllowed ? ' active' : ''}" data-kit="shorts" data-extra="10" onclick="selectQvKit(this)">
             <span class="qv-opt-icon">&#x26BD;</span>
-            <span class="qv-opt-text"><strong>Kit Completo</strong><small>+ Pantaloncini +&#x20AC;10</small></span>
+            <span class="qv-opt-text"><strong>Maglia + Pantaloncino</strong><small>+&#x20AC;10,00</small></span>
+          </button>
+          <button class="qv-option-btn" data-kit="full" data-extra="15" onclick="selectQvKit(this)">
+            <span class="qv-opt-icon">&#x1F3C6;</span>
+            <span class="qv-opt-text"><strong>Kit Completo</strong><small>Maglia+Pant+Calzettoni +&#x20AC;15</small></span>
           </button>
         </div>
-
-        <!-- Checkbox numero pantaloncino (solo Kit Completo) -->
-        <label class="qv-shorts-number-row" id="qvShortsNumberRow">
-          <input type="checkbox" id="qvShortsNumberCheck" />
-          <span>Aggiungi numero anche sul pantaloncino</span>
-        </label>
 
         <!-- Badge personalizzazione applicata -->
         <div id="qvCustomizeBadge" style="display:none;margin-top:.5rem;">
@@ -536,14 +536,19 @@ function openQuickView(id) {
           &#x1F6D2; Aggiungi al Carrello
         </button>
 
-        <!-- Pulsante Personalizza -->
-        <button class="qv-customize-btn" id="qvCustomizeBtn" onclick="openCustomizeModal(${p.id})">
+        <!-- Pulsante Personalizza (visibile solo con Kit Completo) -->
+        <button class="qv-customize-btn" id="qvCustomizeBtn" onclick="openCustomizeModal(${p.id})" style="display:none;">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
           &#x270F;&#xFE0F; Personalizza (Nome &amp; Numero)
         </button>
       </div>
     </div>
   `;
+  // Per prodotti "unico" il pulsante Personalizza è visibile subito (kit default = shorts)
+  if (!isSoloAllowed) {
+    const customizeBtn = document.getElementById('qvCustomizeBtn');
+    if (customizeBtn) customizeBtn.style.display = 'flex';
+  }
   openOverlay('quickViewOverlay');
 }
 
@@ -562,13 +567,16 @@ function selectQvKit(btn) {
   btn.closest('.qv-kit-row').querySelectorAll('.qv-option-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
   updateQvPrice();
-  // Mostra/nasconde checkbox numero pantaloncino
-  const isKit = parseFloat(btn.dataset.kit || 0) > 0;
-  const shortsRow = document.getElementById('qvShortsNumberRow');
-  if (shortsRow) shortsRow.classList.toggle('visible', isKit);
-  if (!isKit) {
-    const check = document.getElementById('qvShortsNumberCheck');
-    if (check) check.checked = false;
+  // Mostra/nasconde pulsante personalizza in base alla selezione
+  const kit = btn.dataset.kit || 'solo';
+  const needsCustomize = kit === 'shorts' || kit === 'full';
+  const customizeBtn = document.getElementById('qvCustomizeBtn');
+  if (customizeBtn) customizeBtn.style.display = needsCustomize ? 'flex' : 'none';
+  if (!needsCustomize) {
+    // Resetta personalizzazione se si torna a Solo Maglia
+    currentCustomization = null;
+    const badge = document.getElementById('qvCustomizeBadge');
+    if (badge) badge.style.display = 'none';
   }
 }
 
@@ -579,7 +587,7 @@ function updateQvPrice() {
   const fabricBtn = document.querySelector('.qv-fabric-row .qv-option-btn.active');
   const kitBtn = document.querySelector('.qv-kit-row .qv-option-btn.active');
   const fabricExtra = fabricBtn ? parseFloat(fabricBtn.dataset.extra || 0) : 0;
-  const kitExtra = kitBtn ? parseFloat(kitBtn.dataset.kit || 0) : 0;
+  const kitExtra = kitBtn ? parseFloat(kitBtn.dataset.extra || 0) : 0;
   priceEl.textContent = `€${(base + fabricExtra + kitExtra).toFixed(2)}`;
 }
 
@@ -590,18 +598,17 @@ function addToCartFromQV(productId) {
   const activeSize = document.querySelector('.qv-sizes .qv-size-btn.active');
   const activeFabric = document.querySelector('.qv-fabric-row .qv-option-btn.active');
   const activeKit = document.querySelector('.qv-kit-row .qv-option-btn.active');
-  const shortsNumberCheck = document.getElementById('qvShortsNumberCheck');
 
   const selectedSize = activeSize ? activeSize.textContent.trim() : (p.sizes[0] || 'M');
   const fabricText = activeFabric ? activeFabric.querySelector('strong').textContent.trim() : 'Standard';
   const fabricLabel = '\uD83D\uDC55 ' + fabricText;
   const fabricExtra = activeFabric ? parseFloat(activeFabric.dataset.extra || 0) : 0;
-  const kitExtra = activeKit ? parseFloat(activeKit.dataset.kit || 0) : 0;
-  const isKit = kitExtra > 0;
-  const shortsWithNumber = isKit && shortsNumberCheck && shortsNumberCheck.checked;
+  const kitMode = activeKit ? activeKit.dataset.kit : 'solo';
+  const isWithShorts = kitMode === 'shorts' || kitMode === 'full';
+  const isFullKit = kitMode === 'full';
   const finalPrice = p.price + fabricExtra;
 
-  // Testo personalizzazione
+  // Testo personalizzazione maglia
   let custNote = '';
   if (currentCustomization && (currentCustomization.name || currentCustomization.number)) {
     const parts = [];
@@ -620,22 +627,34 @@ function addToCartFromQV(productId) {
     cart.push({ id: p.id, name: p.name, price: finalPrice, image: p.image, qty: 1, size: selectedSize, fabric: fabricLabel, custNote: custNote, _uid: Date.now() + '-' + Math.random().toString(36).slice(2) });
   }
 
-  // Se Kit Completo, aggiungi pantaloncini
-  if (isKit) {
+  // Aggiungi pantaloncino (Maglia+Pantaloncino oppure Kit Completo)
+  if (isWithShorts) {
     const shortsName = 'Pantaloncini \u2013 ' + p.name.replace(/Maglia\s*/i, '').trim();
     const shortsPrice = 10 + fabricExtra;
-    const shortsCustNote = (shortsWithNumber && currentCustomization && currentCustomization.number)
+    const shortsWithNumber = currentCustomization && currentCustomization.shortsNumber;
+    const shortsCustNote = (shortsWithNumber && currentCustomization.number)
       ? 'N.' + currentCustomization.number + ' sul pantaloncino'
       : '';
     cart.push({ id: 'shorts-' + p.id, name: shortsName, price: shortsPrice, image: p.image, qty: 1, size: selectedSize, fabric: fabricLabel, custNote: shortsCustNote, _uid: Date.now() + '-s-' + Math.random().toString(36).slice(2) });
   }
 
+  // Aggiungi calzettoni (solo Kit Completo)
+  if (isFullKit) {
+    const sockSize = (currentCustomization && currentCustomization.sockSize) || '';
+    const socksName = 'Calzettoni \u2013 ' + p.name.replace(/Maglia\s*/i, '').trim();
+    const socksPrice = 5;
+    const socksCustNote = sockSize ? 'Taglia scarpa: ' + sockSize : '';
+    cart.push({ id: 'socks-' + p.id, name: socksName, price: socksPrice, image: p.image, qty: 1, size: sockSize || selectedSize, fabric: fabricLabel, custNote: socksCustNote, _uid: Date.now() + '-k-' + Math.random().toString(36).slice(2) });
+  }
+
   saveCart();
   updateCartUI();
   const custSuffix = custNote ? ' + personalizzazione' : '';
-  const msg = isKit
+  const msg = isFullKit
     ? 'Kit Completo (' + selectedSize + ' \u00B7 ' + fabricText + ')' + custSuffix + ' aggiunto!'
-    : '"' + p.name + '" (' + selectedSize + ' \u00B7 ' + fabricText + ')' + custSuffix + ' aggiunto!';
+    : isWithShorts
+      ? 'Maglia + Pantaloncino (' + selectedSize + ' \u00B7 ' + fabricText + ')' + custSuffix + ' aggiunto!'
+      : '"' + p.name + '" (' + selectedSize + ' \u00B7 ' + fabricText + ')' + custSuffix + ' aggiunto!';
   showToast('\u2705', msg);
   openCart();
   currentCustomization = null;
@@ -1839,21 +1858,39 @@ function setupFavorites() {
 // ═══════════════════════════════════════════════
 
 let _customizeProductId = null;
+let _customizeKitType = 'shorts'; // kit attivo quando si apre il modal
 
 function openCustomizeModal(productId) {
   _customizeProductId = productId;
+
+  // Determina il tipo di kit selezionato nel quick view
+  const activeKitBtn = document.querySelector('.qv-kit-row .qv-option-btn.active');
+  _customizeKitType = activeKitBtn ? (activeKitBtn.dataset.kit || 'shorts') : 'shorts';
+
   const overlay = document.getElementById('customizeOverlay');
   if (!overlay) return;
+
+  // Mostra/nascondi sezioni in base al tipo di kit
+  const shortsGroup = document.getElementById('custShortsNumberGroup');
+  const sockGroup = document.getElementById('custSockGroup');
+  if (shortsGroup) shortsGroup.style.display = 'block'; // sempre visibile (shorts o full)
+  if (sockGroup) sockGroup.style.display = _customizeKitType === 'full' ? 'block' : 'none';
 
   // Precompila con personalizzazione esistente
   const custName = document.getElementById('custName');
   const custNumber = document.getElementById('custNumber');
+  const custShortsNumber = document.getElementById('custShortsNumber');
+  const custSockSize = document.getElementById('custSockSize');
   if (currentCustomization) {
     if (custName) custName.value = currentCustomization.name || '';
     if (custNumber) custNumber.value = currentCustomization.number || '';
+    if (custShortsNumber) custShortsNumber.checked = !!currentCustomization.shortsNumber;
+    if (custSockSize) custSockSize.value = currentCustomization.sockSize || '';
   } else {
     if (custName) custName.value = '';
     if (custNumber) custNumber.value = '';
+    if (custShortsNumber) custShortsNumber.checked = false;
+    if (custSockSize) custSockSize.value = '';
   }
   updateCustomizePreview();
 
@@ -1900,17 +1937,23 @@ function setupCustomizeModal() {
   confirmBtn?.addEventListener('click', () => {
     const name = (custName?.value || '').trim();
     const number = (custNumber?.value || '').trim();
+    const shortsNumber = document.getElementById('custShortsNumber')?.checked || false;
+    const sockSize = document.getElementById('custSockSize')?.value || '';
 
     if (!name && !number) {
-      showToast('⚠️', 'Inserisci almeno il nome o il numero!');
+      showToast('\u26A0\uFE0F', 'Inserisci almeno il nome o il numero!');
       return;
     }
     if (number && (parseInt(number) < 1 || parseInt(number) > 99)) {
-      showToast('⚠️', 'Il numero deve essere tra 1 e 99.');
+      showToast('\u26A0\uFE0F', 'Il numero deve essere tra 1 e 99.');
+      return;
+    }
+    if (_customizeKitType === 'full' && !sockSize) {
+      showToast('\u26A0\uFE0F', 'Seleziona la taglia dei calzettoni!');
       return;
     }
 
-    currentCustomization = { name, number };
+    currentCustomization = { name, number, shortsNumber, sockSize };
 
     const badge = document.getElementById('qvCustomizeBadge');
     if (badge) badge.style.display = 'block';
@@ -1918,7 +1961,9 @@ function setupCustomizeModal() {
     const parts = [];
     if (name) parts.push(name);
     if (number) parts.push('#' + number);
-    showToast('✏️', 'Personalizzazione impostata: ' + parts.join(', '));
+    if (shortsNumber) parts.push('N. pantaloncino');
+    if (sockSize) parts.push('Calzettoni ' + sockSize);
+    showToast('\u270F\uFE0F', 'Personalizzazione: ' + parts.join(' | '));
     closeCustomizeModal();
   });
 }

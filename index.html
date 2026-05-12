@@ -871,7 +871,7 @@
 
   <!-- ═══════════════════ QUICK VIEW MODAL ═══════════════════ -->
   <div class="modal-overlay" id="quickViewOverlay">
-    <div class="modal glass" id="quickViewModal" style="max-width:640px;">
+    <div class="modal glass" id="quickViewModal" style="max-width:860px;">
       <button class="modal-close" id="quickViewClose">✕</button>
       <div id="quickViewContent"></div>
     </div>
@@ -911,6 +911,30 @@
         <input type="number" id="custNumber" class="customize-input" placeholder="Es: 10" min="1" max="99"
           autocomplete="off" />
         <div class="customize-hint">Numero da 1 a 99.</div>
+      </div>
+
+      <!-- Checkbox numero pantaloncino (Maglia+Pantaloncino / Kit Completo) -->
+      <div class="customize-field-group" id="custShortsNumberGroup" style="display:none;">
+        <label class="customize-field-label customize-checkbox-label">
+          <input type="checkbox" id="custShortsNumber" />
+          <span>Aggiungi numero anche sul pantaloncino</span>
+        </label>
+      </div>
+
+      <!-- Taglia calzettoni (solo Kit Completo) -->
+      <div class="customize-field-group" id="custSockGroup" style="display:none;">
+        <label class="customize-field-label" for="custSockSize">Taglia Calzettoni (numero di scarpa)</label>
+        <select id="custSockSize" class="customize-input">
+          <option value="">-- Seleziona taglia --</option>
+          <option value="35-36">35-36</option>
+          <option value="37-38">37-38</option>
+          <option value="39-40">39-40</option>
+          <option value="41-42">41-42</option>
+          <option value="43-44">43-44</option>
+          <option value="45-46">45-46</option>
+          <option value="47-48">47-48</option>
+        </select>
+        <div class="customize-hint">Taglia in numero di scarpa europeo.</div>
       </div>
 
       <button class="customize-confirm-btn" id="customizeConfirmBtn">✅ Conferma Personalizzazione</button>
