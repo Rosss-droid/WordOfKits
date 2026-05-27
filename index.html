@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html lang="it">
 
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" href="logo-wok-png-versione-nero.png" />
   <title>WorldofKits — Maglie da Calcio Premium</title>
   <meta name="description"
     content="GoalKit: il tuo store online per maglie da calcio e articoli sportivi premium. Acquista le migliori maglie delle nazionali e dei club." />
@@ -17,53 +19,209 @@
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 </head>
 
+
 <body>
+  <!-- ═══════════════════ TOP BAR NERA FISSA ═══════════════════ -->
+  <div class="top-announcement-bar" id="topBar">
+    <span>Sconto del 10% su tutte le maglie!</span>
+  </div>
 
   <!-- ═══════════════════ HEADER / NAV ═══════════════════ -->
   <header class="header" id="top">
     <nav class="navbar">
-      <div class="nav-logo">
-        <span class="logo-text">WorldofKits</span>
+
+      <!-- LOGO sinistra -->
+      <div class="nav-logo" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+        <img src="logo-wok-png-versione-nero.png" alt="WorldOfKits" class="logo-img" />
       </div>
-        <ul class="nav-links" id="navLinks">
-        <li><a href="#home" class="nav-link active">Home</a></li>
-        <!-- Campionati dropdown navbar -->
-        <li class="nav-dropdown-wrap" id="navCampionatiWrap">
-          <button class="nav-link nav-dropdown-btn" id="navCampionatiBtn" aria-haspopup="true" aria-expanded="false">
-            Campionati <span class="nav-dd-arrow">▾</span>
-          </button>
-          <ul class="nav-dd-menu" id="navCampionatiMenu">
-            <li>
-              <button class="nav-dd-item" data-league="SerieA" id="navLeagueSerieA">
-                <span>Serie A</span>
-              </button>
-            </li>
-            <li>
-              <button class="nav-dd-item" data-league="LaLiga" id="navLeagueLaLiga">
-                <span>La Liga</span>
-              </button>
-            </li>
-            <li>
-              <button class="nav-dd-item" data-league="Bundesliga" id="navLeagueBundesliga">
-                <span>Bundesliga</span>
-              </button>
-            </li>
-            <li>
-              <button class="nav-dd-item" data-league="Premier" id="navLeaguePremier">
-                <span>Premier League</span>
-              </button>
-            </li>
-            <li>
-              <button class="nav-dd-item" data-league="Mondiale2026" id="navLeagueMondiale2026">
-                <span>🌍 Mondiale 2026</span>
-              </button>
-            </li>
-          </ul>
+
+      <!-- MEGA MENU centrale -->
+      <ul class="nav-links" id="navLinks">
+
+        <!-- CALCIO -->
+        <li class="nav-mega-item" id="megaCalcioItem">
+          <a class="nav-link nav-mega-trigger" href="#products">Calcio</a>
+          <div class="nav-mega-panel" id="megaCalcioPanel">
+            <div class="nav-mega-grid">
+              <div class="nav-mega-col">
+                <div class="nav-mega-col-title">Campionati</div>
+                <ul>
+                  <li><button class="nav-mega-link" data-league="SerieA" id="navLeagueSerieA">Serie A</button></li>
+                  <li><button class="nav-mega-link" data-league="LaLiga" id="navLeagueLaLiga">La Liga</button></li>
+                  <li><button class="nav-mega-link" data-league="Bundesliga"
+                      id="navLeagueBundesliga">Bundesliga</button></li>
+                  <li><button class="nav-mega-link" data-league="Premier" id="navLeaguePremier">Premier League</button>
+                  </li>
+                  <li><button class="nav-mega-link" data-league="Champions" id="navLeagueChampions">Champions
+                      League</button></li>
+                  <li><button class="nav-mega-link" data-league="SaudiLeague" id="navLeagueSaudi">Saudi Pro
+                      League</button></li>
+                </ul>
+              </div>
+              <div class="nav-mega-col">
+                <div class="nav-mega-col-title">Tipo Maglia</div>
+                <ul>
+                  <li><button class="nav-mega-link" data-filter-type="new" id="navFilterNew">Novità</button></li>
+                  <li><button class="nav-mega-link" data-filter-type="vintage" id="navFilterVintage">Vintage</button>
+                  </li>
+                </ul>
+              </div>
+              <div class="nav-mega-col">
+                <div class="nav-mega-col-title">Tipo Maglia</div>
+                <ul>
+                  <li><button class="nav-mega-link" data-filter-type="new" id="navFilterNew">Novità</button></li>
+                  <li><button class="nav-mega-link" data-filter-type="vintage" id="navFilterVintage">Vintage</button>
+                  </li>
+                </ul>
+              </div>
+              <div class="nav-mega-col">
+                <div class="nav-mega-col-title">Tipo Maglia</div>
+                <ul>
+                  <li><button class="nav-mega-link" data-filter-type="new" id="navFilterNew">Novità</button></li>
+                  <li><button class="nav-mega-link" data-filter-type="vintage" id="navFilterVintage">Vintage</button>
+                  </li>
+                </ul>
+              </div>
+              <div class="nav-mega-col">
+                <div class="nav-mega-col-title">Tipo Maglia</div>
+                <ul>
+                  <li><button class="nav-mega-link" data-filter-type="new" id="navFilterNew">Novità</button></li>
+                  <li><button class="nav-mega-link" data-filter-type="vintage" id="navFilterVintage">Vintage</button>
+                  </li>
+                </ul>
+              </div>
+             </div>
+          </div>
         </li>
-        <li><a href="#about" class="nav-link">Chi Siamo</a></li>
-        <li><a href="#contact" class="nav-link">Contatti</a></li>
+
+        <!-- SPORT -->
+        <li class="nav-mega-item" id="megaSportItem">
+          <a class="nav-link nav-mega-trigger" href="#products">Sport</a>
+          <div class="nav-mega-panel" id="megaSportPanel">
+            <div class="nav-mega-grid">
+              <div class="nav-mega-col">
+                <div class="nav-mega-col-title">Abbigliamento</div>
+                <ul>
+                  <li><button class="nav-mega-link" data-filter="tute" id="navFilterTute">Tute</button></li>
+                  <li><button class="nav-mega-link" data-filter="felpe" id="navFilterFelpe">Felpe</button></li>
+                  <li><button class="nav-mega-link" data-filter="tshirt" id="navFilterTshirt">T-Shirt</button></li>
+                  <li><button class="nav-mega-link" data-filter="pantaloni" id="navFilterPantaloni">Pantaloni</button>
+                  </li>
+                </ul>
+              </div>
+              <div class="nav-mega-col">
+                <div class="nav-mega-col-title">Scarpe</div>
+                <ul>
+                  <li><a class="nav-mega-link" href="#products">Da calcio</a></li>
+                  <li><a class="nav-mega-link" href="#products">Running</a></li>
+                  <li><a class="nav-mega-link" href="#products">Lifestyle</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </li>
+
+        <!-- MONDIALI -->
+        <li class="nav-mega-item" id="megaMondialiItem">
+          <a class="nav-link nav-mega-trigger" href="#products">Mondiali</a>
+          <div class="nav-mega-panel" id="megaMondialiPanel">
+            <div class="nav-mega-grid">
+              <div class="nav-mega-col">
+                <div class="nav-mega-col-title">Competizioni</div>
+                <ul>
+                  <li><button class="nav-mega-link" data-league="Mondiale2026" id="navLeagueMondiale2026">🌍 Mondiale
+                      2026</button></li>
+                  <li><button class="nav-mega-link" data-league="Nazionali" id="navLeagueNazionali">Nazionali</button>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </li>
+
+
+        <!-- Scarpe -->
+        <li class="nav-mega-item" id="megaScarpeItem">
+          <a class="nav-link nav-mega-trigger" href="#products">Scarpe</a>
+          <div class="nav-mega-panel" id="megaScarpePanel">
+            <div class="nav-mega-grid">
+              <div class="nav-mega-col">
+                <div class="nav-mega-col-title">Brand</div>
+                <ul>
+                  <li><a class="nav-mega-link" href="#products">Nike</a></li>
+                  <li><a class="nav-mega-link" href="#products">Adidas</a></li>
+                  <li><a class="nav-mega-link" href="#products">Puma</a></li>
+                  <li><a class="nav-mega-link" href="#products">New Balance</a></li>
+                </ul>
+              </div>
+              <div class="nav-mega-col">
+                <div class="nav-mega-col-title">Tipo</div>
+                <ul>
+                  <li><a class="nav-mega-link" href="#products">Da calcio</a></li>
+                  <li><a class="nav-mega-link" href="#products">Lifestyle</a></li>
+                  <li><a class="nav-mega-link" href="#products">Running</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </li>
+
+
+
+        <!-- Vestiario -->
+        <li class="nav-mega-item" id="megaVestiarioItem">
+          <a class="nav-link nav-mega-trigger" href="#products">Vestiario</a>
+          <div class="nav-mega-panel" id="megaVestiarioPanel">
+            <div class="nav-mega-grid">
+              <div class="nav-mega-col">
+                <div class="nav-mega-col-title">Abbigliamento</div>
+                <ul>
+                  <li><button class="nav-mega-link" data-filter="tute" id="navFilterTute2">Tute</button></li>
+                  <li><button class="nav-mega-link" data-filter="felpe" id="navFilterFelpe2">Felpe</button></li>
+                  <li><button class="nav-mega-link" data-filter="tshirt" id="navFilterTshirt2">T-Shirt</button></li>
+                  <li><button class="nav-mega-link" data-filter="pantaloni" id="navFilterPantaloni2">Pantaloni</button>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </li>
+
+        <!-- Outlet -->
+
+        <li class="nav-mega-item" id="megaOutletItem">
+          <a class="nav-link nav-mega-trigger nav-link-outlet" href="#products">Outlet</a>
+          <div class="nav-mega-panel" id="megaOutletPanel">
+            <div class="nav-mega-grid">
+              <div class="nav-mega-col">
+                <div class="nav-mega-col-title">Offerte</div>
+                <ul>
+                  <li><a class="nav-mega-link" href="#products">Promozioni</a></li>
+                  <li><a class="nav-mega-link" href="#products">Ultimi pezzi</a></li>
+                  <li><a class="nav-mega-link" href="#products">Sconti stagionali</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </li>
+
       </ul>
+
+      <!-- AZIONI destra: cerca + preferiti + carrello -->
       <div class="nav-actions">
+        <!-- Cerca -->
+        <div class="nav-search-wrap" id="navSearchWrap">
+          <input type="text" class="nav-search-input" id="navSearchInput" placeholder="Cerca..." autocomplete="off" />
+          <button class="nav-search-btn" id="navSearchBtn" aria-label="Cerca">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8" />
+              <line x1="21" y1="21" x2="16.65" y2="16.65" />
+            </svg>
+          </button>
+        </div>
+
+        <!-- Preferiti -->
         <button class="fav-btn" id="favBtn" aria-label="Preferiti">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
             stroke-linecap="round" stroke-linejoin="round">
@@ -72,6 +230,8 @@
           </svg>
           <span class="fav-badge" id="favBadge">0</span>
         </button>
+
+        <!-- Carrello -->
         <button class="cart-btn" id="cartBtn" aria-label="Carrello">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
             stroke-linecap="round" stroke-linejoin="round">
@@ -82,255 +242,149 @@
           <span class="cart-badge" id="cartBadge">0</span>
         </button>
       </div>
+
       <button class="hamburger" id="hamburger" aria-label="Menu">
         <span></span><span></span><span></span>
       </button>
     </nav>
   </header>
 
-  <!-- ═══════════════════ HERO SECTION ═══════════════════ -->
-  <section class="hero" id="home">
-    <div class="hero-bg"></div>
-    <div class="hero-particles" id="heroParticles"></div>
-    <div class="hero-content">
-      <div class="hero-badge">Store Ufficiale</div>
-      <p class="hero-subtitle">
-        Maglie da calcio, accessori e articoli sportivi.<br>
-        Qualità premium per ogni tifoso.
-      </p>
-      <div class="hero-actions">
-        <a href="#products" class="btn btn-primary">
-          <span>Scopri i Prodotti</span>
-          <span class="btn-arrow">→</span>
-        </a>
-        <a href="#about" class="btn btn-outline">Ordina</a>
-      </div>
-      <div class="hero-stats">
-        <div class="stat">
-          <span class="stat-number">1K+</span>
-          <span class="stat-label">Modelli</span>
-        </div>
-        <div class="stat-divider"></div>
-        <div class="hero-brands">
-          <img src="https://cdn.simpleicons.org/nike/ffffff" alt="Nike" class="brand-logo" title="Nike">
-          <img src="https://cdn.simpleicons.org/adidas/ffffff" alt="Adidas" class="brand-logo" title="Adidas">
-          <img src="https://cdn.simpleicons.org/puma/ffffff" alt="Puma" class="brand-logo" title="Puma">
-          <img src="https://cdn.simpleicons.org/newbalance/ffffff" alt="New Balance" class="brand-logo"
-            title="New Balance">
-          <img src="https://cdn.simpleicons.org/underarmour/ffffff" alt="Under Armour" class="brand-logo"
-            title="Under Armour">
-          <img src="https://cdn.simpleicons.org/reebok/ffffff" alt="Reebok" class="brand-logo" title="Reebok">
-        </div>
+  <!-- ═══════════════════ EDITORIAL HERO (3 pannelli foto) ═══════════════════ -->
+  <section class="editorial-hero" id="editorialHero">
+    <!-- Pannello 1 — grande, maglia con testo e bottone -->
+    <div class="ed-panel ed-panel--main" id="edPanel1">
+      <img src="images/models/Immagine 2026-05-03 111700.png" alt="Kit WorldOfKits" class="ed-panel-img" />
+      <div class="ed-panel-overlay"></div>
+      <div class="ed-panel-content">
+        <p class="ed-panel-eyebrow">Nuova collezione</p>
+        <h2 class="ed-panel-title">Kit Home<br>2025/26</h2>
+        <p class="ed-panel-sub">Un tributo all'iconico calcio europeo</p>
+        <button class="ed-panel-btn" id="edBtn1"
+          onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">
+          Acquista <span class="ed-btn-arrow">→</span>
+        </button>
       </div>
     </div>
-    <div class="hero-image-wrap">
-      <div class="hero-img-glow"></div>
-      <div class="hero-carousel" id="heroCarousel">
-        <div class="hero-carousel-track" id="heroCarouselTrack">
-          <img src="images/models/image.png" alt="WorldOfKits modello" class="hero-carousel-img active">
-          <img src="images/models/photo_2026-05-03_02-27-40.jpg" alt="WorldOfKits modello" class="hero-carousel-img">
-          <img src="images/models/photo_2026-05-03_02-28-20.jpg" alt="WorldOfKits modello" class="hero-carousel-img">
-          <img src="images/models/photo_2026-05-03_02-28-36.jpg" alt="WorldOfKits modello" class="hero-carousel-img">
-          <img src="images/models/photo_2026-05-03_02-28-43.jpg" alt="WorldOfKits modello" class="hero-carousel-img">
-          <img src="images/models/Immagine 2026-05-03 111519.png" alt="WorldOfKits modello" class="hero-carousel-img">
-          <img src="images/models/Immagine 2026-05-03 111612.png" alt="WorldOfKits modello" class="hero-carousel-img">
-          <img src="images/models/Immagine 2026-05-03 111700.png" alt="WorldOfKits modello" class="hero-carousel-img">
-          <img src="images/models/Immagine 2026-05-03 111851.png" alt="WorldOfKits modello" class="hero-carousel-img">
-          <img src="images/models/Immagine 2026-05-03 111929.png" alt="WorldOfKits modello" class="hero-carousel-img">
-          <img src="images/models/Immagine 2026-05-03 112008.png" alt="WorldOfKits modello" class="hero-carousel-img">
-          <img src="images/models/Immagine 2026-05-03 112108.png" alt="WorldOfKits modello" class="hero-carousel-img">
-          <img src="images/models/Immagine 2026-05-03 112132.png" alt="WorldOfKits modello" class="hero-carousel-img">
-          <img src="images/models/Immagine 2026-05-03 112204.png" alt="WorldOfKits modello" class="hero-carousel-img">
-          <img src="images/models/Immagine 2026-05-03 112241.png" alt="WorldOfKits modello" class="hero-carousel-img">
-          <img src="images/models/Immagine 2026-05-03 112335.png" alt="WorldOfKits modello" class="hero-carousel-img">
-          <img src="images/models/Immagine 2026-05-03 112444.png" alt="WorldOfKits modello" class="hero-carousel-img">
-        </div>
-        <div class="hero-carousel-dots" id="heroCarouselDots"></div>
+
+    <!-- Pannello 2 — dettaglio maglia -->
+    <div class="ed-panel ed-panel--detail" id="edPanel2">
+      <img src="images/models/Immagine 2026-05-03 112008.png" alt="Dettaglio kit" class="ed-panel-img" />
+      <div class="ed-panel-overlay ed-panel-overlay--dark"></div>
+      <div class="ed-panel-content ed-panel-content--center">
+        <p class="ed-panel-eyebrow">Qualità Premium</p>
+        <h2 class="ed-panel-title ed-panel-title--sm">Tessuto<br>Originale</h2>
+        <button class="ed-panel-btn" id="edBtn1"
+          onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">
+          Acquista <span class="ed-btn-arrow">→</span>
+        </button>
       </div>
     </div>
-    <div class="hero-scroll-hint">
-      <span>Scorri</span>
-      <div class="scroll-arrow">↓</div>
-    </div>
-  </section>
 
-
-
-  <!-- ═══════════════════ SHOP (Nike-style layout) ═══════════════════ -->
-  <section class="shop-section" id="products">
-    <div class="container">
-
-      <!-- ── SHOP HEADER (Nike-style) ── -->
-      <div class="shop-page-header">
-        <h2 class="shop-page-title">WorldOfKits <span class="shop-page-count" id="shopCount"></span></h2>
-        <div class="shop-header-controls">
-          <button class="shop-ctrl-btn" id="sidebarToggleBtn">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-              stroke-linecap="round">
-              <line x1="4" y1="6" x2="20" y2="6" />
-              <line x1="4" y1="12" x2="20" y2="12" />
-              <line x1="4" y1="18" x2="20" y2="18" />
-            </svg>
-            Nascondi filtri
-          </button>
-          <div class="shop-sort-wrap">
-            <button class="shop-ctrl-btn shop-sort-btn" id="shopSortBtn">
-              Ordina per
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                <polyline points="6 9 12 15 18 9" />
-              </svg>
-            </button>
-            <ul class="shop-sort-menu" id="shopSortMenu">
-              <li><button class="shop-sort-item active" data-sort="default">In evidenza</button></li>
-              <li><button class="shop-sort-item" data-sort="price-asc">Prezzo: dal più basso</button></li>
-              <li><button class="shop-sort-item" data-sort="price-desc">Prezzo: dal più alto</button></li>
-            </ul>
-          </div>
-        </div>
-      </div>
-
-      <div class="shop-layout" id="shopLayout">
-
-        <!-- ── SIDEBAR FILTRI ── -->
-        <aside class="shop-sidebar" id="shopSidebar">
-
-          <!-- Search -->
-          <div class="search-wrap sidebar-search">
-            <span class="search-icon">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
-                stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="11" cy="11" r="8" />
-                <line x1="21" y1="21" x2="16.65" y2="16.65" />
-              </svg>
-            </span>
-            <input type="text" id="searchInput" class="search-input" placeholder="Cerca squadra..."
-              autocomplete="off" />
-            <button class="search-clear" id="searchClear" title="Cancella" aria-label="Cancella ricerca">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
-                stroke-linecap="round">
-                <line x1="18" y1="6" x2="6" y2="18" />
-                <line x1="6" y1="6" x2="18" y2="18" />
-              </svg>
-            </button>
-          </div>
-
-          <!-- Tipo -->
-          <ul class="sidebar-flat-list">
-            <li><button class="sidebar-flat-btn active" id="filterNew">Novità</button></li>
-            <li><button class="sidebar-flat-btn" id="filterVintage">Vintage</button></li>
-          </ul>
-
-          <div class="sidebar-divider"></div>
-
-          <!-- ── CALCIO (parent, collassabile) ── -->
-          <ul class="sidebar-flat-list">
-            <li>
-              <button class="sidebar-flat-btn sidebar-league-btn" id="calcioToggleBtn">Calcio</button>
-
-              <!-- Sub-list campionati (livello 2) -->
-              <ul class="sidebar-sub-list sidebar-level2" id="calcioSubList">
-
-                <!-- Champions League -->
-                <li>
-                  <button class="sidebar-nested-btn sidebar-league-btn" data-filter="Champions" id="filterChampions">
-                    Champions League
-                  </button>
-                  <ul class="sidebar-sub-list" id="menuChampions"></ul>
-                </li>
-
-                <!-- Serie A -->
-                <li>
-                  <button class="sidebar-nested-btn sidebar-league-btn" data-filter="SerieA" id="megaBtnSerieA">
-                    Serie A
-                  </button>
-                  <ul class="sidebar-sub-list" id="megaListSerieA"></ul>
-                </li>
-
-                <!-- La Liga -->
-                <li>
-                  <button class="sidebar-nested-btn sidebar-league-btn" data-filter="LaLiga" id="megaBtnLaLiga">
-                    La Liga
-                  </button>
-                  <ul class="sidebar-sub-list" id="megaListLaLiga"></ul>
-                </li>
-
-                <!-- Premier League -->
-                <li>
-                  <button class="sidebar-nested-btn sidebar-league-btn" data-filter="Premier" id="megaBtnPremier">
-                    Premier League
-                  </button>
-                  <ul class="sidebar-sub-list" id="megaListPremier"></ul>
-                </li>
-
-                <!-- Bundesliga -->
-                <li>
-                  <button class="sidebar-nested-btn sidebar-league-btn" data-filter="Bundesliga" id="megaBtnBundesliga">
-                    Bundesliga
-                  </button>
-                  <ul class="sidebar-sub-list" id="megaListBundesliga"></ul>
-                </li>
-
-                <!-- Saudi Pro League -->
-                <li>
-                  <button class="sidebar-nested-btn sidebar-league-btn" data-filter="SaudiLeague" id="megaBtnSaudi">
-                    Saudi Pro League
-                  </button>
-                  <ul class="sidebar-sub-list" id="megaListSaudi"></ul>
-                </li>
-
-                <!-- Nazionali -->
-                <li>
-                  <button class="sidebar-nested-btn sidebar-league-btn" data-filter="Nazionali" id="megaBtnNazionali">
-                    Nazionali
-                  </button>
-                  <ul class="sidebar-sub-list" id="megaListNazionali"></ul>
-                </li>
-
-              </ul>
-            </li>
-          </ul>
-
-          <div class="sidebar-divider"></div>
-
-          <!-- ── MONDIALE 2026 ── -->
-          <ul class="sidebar-flat-list">
-            <li>
-              <button class="sidebar-flat-btn sidebar-league-btn sidebar-mondiale-btn" id="megaBtnMondiale2026" data-filter="Mondiale2026">
-                🌍 Mondiale 2026
-              </button>
-            </li>
-          </ul>
-
-          <div class="sidebar-divider"></div>
-
-          <!-- ── ACCESSORI (collassabile) ── -->
-          <ul class="sidebar-flat-list">
-            <li>
-              <button class="sidebar-flat-btn sidebar-league-btn" id="accessoriToggleBtn">Accessori</button>
-
-              <ul class="sidebar-sub-list sidebar-level2" id="accessoriSubList">
-                <li><button class="sidebar-nested-btn" data-filter="tute" id="filterTute">Tute</button></li>
-                <li><button class="sidebar-nested-btn" data-filter="felpe" id="filterFelpe">Felpe</button></li>
-                <li><button class="sidebar-nested-btn" data-filter="tshirt" id="filterTshirt">T-Shirt</button></li>
-                <li><button class="sidebar-nested-btn" data-filter="pantaloni" id="filterPantaloni">Pantaloni</button>
-                </li>
-              </ul>
-            </li>
-          </ul>
-
-        </aside>
-
-        <!-- ── MAIN: griglia ── -->
-        <div class="shop-main">
-          <div class="products-grid" id="productsGrid">
-            <!-- Cards generate dynamically via JS -->
-          </div>
-        </div>
-
+    <!-- Pannello 3 — brand / campagna -->
+    <div class="ed-panel ed-panel--brand" id="edPanel3">
+      <img src="images/models/Immagine 2026-05-03 112204.png" alt="WorldOfKits store" class="ed-panel-img" />
+      <div class="ed-panel-overlay"></div>
+      <div class="ed-panel-content">
+        <p class="ed-panel-eyebrow ed-eyebrow--light">WorldOfKits</p>
+        <h2 class="ed-panel-title ed-title--brand">STORE<br>UFFICIALE</h2>
+        <p class="ed-panel-sub ed-sub--light">Maglie da calcio premium<br>per ogni tifoso</p>
+        <button class="ed-panel-btn ed-btn--outline" id="edBtn3"
+          onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">
+          Scopri tutto <span class="ed-btn-arrow">→</span>
+        </button>
       </div>
     </div>
   </section>
 
+  <!-- ═══════════════════ SEZIONE MUST HAVE ═══════════════════ -->
+  <section class="mustHaveSection" id="mustHaveSection">
+    <div class="mustHave-header">
+      <div class="mustHave-header-left">
+        <span class="mustHave-eyebrow">I Nostri</span>
+        <h2 class="mustHave-title">MUST HAVE</h2>
+      </div>
+      <button class="mustHave-see-all" id="mustHaveSeeAll">
+        Vedi tutti i bestseller <span class="mustHave-arrow">→</span>
+      </button>
+    </div>
+    <!-- Viewport scroll orizzontale -->
+    <div class="mustHave-scroll-viewport" id="mustHaveViewport">
+      <div class="mustHave-grid" id="mustHaveGrid"></div>
+    </div>
+    <!-- Scrollbar nera custom -->
+    <div class="mustHave-scrollbar-track" id="mustHaveTrack">
+      <div class="mustHave-scrollbar-thumb" id="mustHaveThumb"></div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ Vintage Editorial (1 pannello foto) ═══════════════════ -->
+  <div class="vintage-editorial">
+    <div class="ed-panel ed-panel--main" id="edPanelVintage">
+      <img src="images/models/Immagine 2026-05-03 111700.png" alt="Kit WorldOfKits" class="ed-panel-img" />
+      <div class="ed-panel-overlay"></div>
+      <div class="ed-panel-content">
+        <p class="ed-panel-eyebrow">Nuova collezione</p>
+        <h2 class="ed-panel-title">Kit Home<br>2025/26</h2>
+        <p class="ed-panel-sub">Un tributo all'iconico calcio europeo</p>
+      </div>
+    </div>
+  </div>
+  
+
+  <!-- ═══════════════════ SEZIONE Maglie Vintage ═══════════════════ -->
+  <section class="vintage" id="maglieVintage">
+    <div class="vintage-header">
+      <div class="vintage-header-left">
+        <h2 class="vintage-title">MAGLIE VINTAGE</h2>
+      </div>
+      <button class="vintage-see-all" id="vintageSeeAll">
+        Acquista prodotti Vintage <span class="vintage-arrow">→</span>
+      </button>
+    </div>
+    <!-- Viewport scroll orizzontale -->
+    <div class="vintage-scroll-viewport" id="vintageViewport">
+      <div class="vintage-grid" id="vintageGrid"></div>
+    </div>
+    <!-- Scrollbar nera custom -->
+    <div class="vintage-scrollbar-track" id="vintageTrack">
+      <div class="vintage-scrollbar-thumb" id="vintageThumb"></div>
+    </div>
+  </section>
+
+  
+  <!-- ═══════════════════ Mondiale Editorial (1 pannello foto) ═══════════════════ -->
+  <div class="mondiale-editorial">
+    <div class="ed-panel ed-panel--main" id="edPanelMondiale">
+      <img src="images/models/Immagine 2026-05-03 112204.png" alt="Kit WorldOfKits" class="ed-panel-img" />
+      <div class="ed-panel-overlay"></div>
+      <div class="ed-panel-content">
+        <p class="ed-panel-eyebrow">Nuova collezione</p>
+        <h2 class="ed-panel-title">Kit Home<br>2025/26</h2>
+        <p class="ed-panel-sub">Un tributo all'iconico calcio europeo</p>
+      </div>
+    </div>
+  </div>
+  
+
+  <!-- ═══════════════════ SEZIONE MONDIALI ═══════════════════ -->
+  <section class="mondiali-section" id="mondialiSection">
+    <div class="mondiali-header">
+      <div class="mondiali-header-left">
+        <h2 class="mondiali-title">MAGLIE DEL MONDIALE</h2>
+      </div>
+      <button class="mondiali-see-all" id="mondialiSeeAll">
+        Acquista prodotti Mondiali <span class="mondiali-arrow">→</span>
+      </button>
+    </div>
+    <!-- Viewport scroll orizzontale -->
+    <div class="mondiali-scroll-viewport" id="mondialiViewport">
+      <div class="mondiali-grid" id="mondialiGrid"></div>
+    </div>
+    <!-- Scrollbar nera custom -->
+    <div class="mondiali-scrollbar-track" id="mondialiTrack">
+      <div class="mondiali-scrollbar-thumb" id="mondialiThumb"></div>
+    </div>
+  </section>
 
   <!-- ═══════════════════ RICHIESTA PERSONALIZZATA ═══════════════════ -->
   <section class="custom-order-section" id="customOrder">
@@ -339,12 +393,12 @@
         <div class="custom-order-icon"></div>
         <div class="custom-order-text">
           <h3>Non trovi quello che cerchi?</h3>
-          <p>Scrivi il modello di maglia che vuoi e te la troviamo noi. Riceverai conferma e prezzo via email.</p>
+          <p>Scrivi il modello di maglia che desideri, ed effettua l'ordine. Riceverai conferma della disponibilità e info sul prezzo via email.</p>
         </div>
         <form class="custom-order-form" id="customOrderForm" autocomplete="off">
           <div class="custom-order-fields">
             <input type="text" id="customProductName" class="custom-product-input"
-              placeholder="Es: Maglia Barcellona Away 2024/25, Portogallo Home..." required />
+              placeholder="Es: Maglia Barcellona Away 2024/25, Maglia Portogallo Home..." required />
             <select id="customProductSize" class="custom-product-select">
               <option value="XS">XS</option>
               <option value="S">S</option>
@@ -701,6 +755,24 @@
     </div>
   </footer>
 
+  <!-- ═══════════════════ SEARCH DROPDOWN PANEL ═══════════════════ -->
+  <div class="search-dropdown" id="searchDropdown" aria-hidden="true">
+    <div class="search-dropdown-inner">
+      <!-- Colonna sinistra: categorie -->
+      <div class="sd-categories" id="sdCategories">
+        <p class="sd-col-title">Categorie</p>
+        <ul class="sd-cat-list" id="sdCatList"></ul>
+      </div>
+      <!-- Colonna destra: prodotti -->
+      <div class="sd-products" id="sdProducts">
+        <p class="sd-col-title">Prodotti</p>
+        <div class="sd-products-grid" id="sdProductsGrid"></div>
+      </div>
+    </div>
+  </div>
+  <!-- Backdrop per chiudere il dropdown -->
+  <div class="search-dropdown-backdrop" id="searchDropdownBackdrop"></div>
+
   <!-- ═══════════════════ CART SIDEBAR ═══════════════════ -->
   <div class="cart-overlay" id="cartOverlay"></div>
   <aside class="cart-sidebar" id="cartSidebar">
@@ -965,7 +1037,122 @@
     </div>
   </div>
 
+  <!-- ═══════════════════ HERO SECTION ═══════════════════ -->
+  <section class="hero" id="home">
+    <div class="hero-bg"></div>
+    <div class="hero-particles" id="heroParticles"></div>
+    <div class="hero-content">
+      <div class="hero-badge">Store Ufficiale</div>
+      <p class="hero-subtitle">
+        Maglie da calcio, accessori e articoli sportivi.<br>
+        Qualità premium per ogni tifoso.
+      </p>
+      <div class="hero-actions">
+        <a href="#products" class="btn btn-primary">
+          <span>Scopri i Prodotti</span>
+          <span class="btn-arrow">→</span>
+        </a>
+        <a href="#about" class="btn btn-outline">Ordina</a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat">
+          <span class="stat-number">1K+</span>
+          <span class="stat-label">Modelli</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="hero-brands">
+          <img src="https://cdn.simpleicons.org/nike/ffffff" alt="Nike" class="brand-logo" title="Nike">
+          <img src="https://cdn.simpleicons.org/adidas/ffffff" alt="Adidas" class="brand-logo" title="Adidas">
+          <img src="https://cdn.simpleicons.org/puma/ffffff" alt="Puma" class="brand-logo" title="Puma">
+          <img src="https://cdn.simpleicons.org/newbalance/ffffff" alt="New Balance" class="brand-logo"
+            title="New Balance">
+          <img src="https://cdn.simpleicons.org/underarmour/ffffff" alt="Under Armour" class="brand-logo"
+            title="Under Armour">
+          <img src="https://cdn.simpleicons.org/reebok/ffffff" alt="Reebok" class="brand-logo" title="Reebok">
+        </div>
+      </div>
+    </div>
+    <div class="hero-image-wrap">
+      <div class="hero-img-glow"></div>
+      <div class="hero-carousel" id="heroCarousel">
+        <div class="hero-carousel-track" id="heroCarouselTrack">
+          <img src="images/models/image.png" alt="WorldOfKits modello" class="hero-carousel-img active">
+          <img src="images/models/photo_2026-05-03_02-27-40.jpg" alt="WorldOfKits modello" class="hero-carousel-img">
+          <img src="images/models/photo_2026-05-03_02-28-20.jpg" alt="WorldOfKits modello" class="hero-carousel-img">
+          <img src="images/models/photo_2026-05-03_02-28-36.jpg" alt="WorldOfKits modello" class="hero-carousel-img">
+          <img src="images/models/photo_2026-05-03_02-28-43.jpg" alt="WorldOfKits modello" class="hero-carousel-img">
+          <img src="images/models/Immagine 2026-05-03 111519.png" alt="WorldOfKits modello" class="hero-carousel-img">
+          <img src="images/models/Immagine 2026-05-03 111612.png" alt="WorldOfKits modello" class="hero-carousel-img">
+          <img src="images/models/Immagine 2026-05-03 111700.png" alt="WorldOfKits modello" class="hero-carousel-img">
+          <img src="images/models/Immagine 2026-05-03 111851.png" alt="WorldOfKits modello" class="hero-carousel-img">
+          <img src="images/models/Immagine 2026-05-03 111929.png" alt="WorldOfKits modello" class="hero-carousel-img">
+          <img src="images/models/Immagine 2026-05-03 112008.png" alt="WorldOfKits modello" class="hero-carousel-img">
+          <img src="images/models/Immagine 2026-05-03 112108.png" alt="WorldOfKits modello" class="hero-carousel-img">
+          <img src="images/models/Immagine 2026-05-03 112132.png" alt="WorldOfKits modello" class="hero-carousel-img">
+          <img src="images/models/Immagine 2026-05-03 112204.png" alt="WorldOfKits modello" class="hero-carousel-img">
+          <img src="images/models/Immagine 2026-05-03 112241.png" alt="WorldOfKits modello" class="hero-carousel-img">
+          <img src="images/models/Immagine 2026-05-03 112335.png" alt="WorldOfKits modello" class="hero-carousel-img">
+          <img src="images/models/Immagine 2026-05-03 112444.png" alt="WorldOfKits modello" class="hero-carousel-img">
+        </div>
+        <div class="hero-carousel-dots" id="heroCarouselDots"></div>
+      </div>
+    </div>
+    <div class="hero-scroll-hint">
+      <span>Scorri</span>
+      <div class="scroll-arrow">↓</div>
+    </div>
+  </section>
 
+
+
+  <!-- ═══════════════════ CATEGORY SHOP PAGE (Adidas-style) ═══════════════════ -->
+  <div class="cat-page-overlay" id="catPageOverlay" aria-hidden="true">
+    <!-- sticky header inside the page -->
+    <div class="cat-page-topbar" id="catPageTopbar">
+      <div class="cat-page-breadcrumb">
+        <button class="cat-page-back-btn" id="catPageBackBtn" aria-label="Indietro">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+          Indietro
+        </button>
+        <span class="cat-page-sep">/</span>
+        <span class="cat-page-bc-home">Home</span>
+        <span class="cat-page-sep">/</span>
+        <span class="cat-page-bc-label" id="catPageBcLabel">Categoria</span>
+      </div>
+    </div>
+
+    <div class="cat-page-inner">
+      <!-- HERO BANNER della categoria -->
+      <div class="cat-page-hero" id="catPageHero">
+        <h1 class="cat-page-title" id="catPageTitle">Categoria</h1>
+        <span class="cat-page-count" id="catPageCount"></span>
+      </div>
+
+      <!-- TABS sottocategoria (tipo Adidas: COLLEZIONE LIFESTYLE / SCARPE / …) -->
+      <div class="cat-page-tabs-bar" id="catPageTabsBar" style="display:none;">
+        <div class="cat-page-tabs" id="catPageTabs"></div>
+      </div>
+
+      <!-- BARRA ORDINA -->
+      <div class="cat-page-sort-bar">
+        <span class="cat-page-results" id="catPageResults"></span>
+        <div class="cat-sort-wrap" id="catSortWrap">
+          <button class="cat-sort-btn" id="catSortBtn">
+            Filtra e ordina
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="11" y1="18" x2="13" y2="18"/></svg>
+          </button>
+          <div class="cat-sort-dropdown" id="catSortDropdown">
+            <button class="cat-sort-item active" data-sort="default">Rilevanza</button>
+            <button class="cat-sort-item" data-sort="price-asc">Prezzo crescente</button>
+            <button class="cat-sort-item" data-sort="price-desc">Prezzo decrescente</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- GRIGLIA PRODOTTI -->
+      <div class="cat-page-grid" id="catPageGrid"></div>
+    </div>
+  </div>
 
   <script src="products.js"></script>
   <script src="app.js"></script>

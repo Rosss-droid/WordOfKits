@@ -75,8 +75,10 @@ document.addEventListener('DOMContentLoaded', () => {
   updateCartUI();
   setupParticles();
   setupNav();
-  setupNavCampionati();
+  setupNavMegaMenu();
+  setupNavSearch();
   setupFeatured();
+  setupMondiali();
   setupCartSidebar();
   setupOrderModal();
   setupQuickView();
@@ -93,6 +95,8 @@ document.addEventListener('DOMContentLoaded', () => {
   setupReviewMiniCarousels();
   setupFavorites();
   setupCustomizeModal();
+  setupVintage();
+  setupMustHave();
 });
 
 // ── EMAILJS INIT ──
@@ -137,6 +141,48 @@ function setupNav() {
   document.querySelector('.nav-logo')?.addEventListener('click', () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   });
+
+  // ── MEGA MENU: apri/chiudi con timeout per evitare chiusura sul gap ──
+  const megaItems = document.querySelectorAll('.nav-mega-item');
+  let closeTimer = null;
+
+  function openMega(item) {
+    // Cancella eventuale timer di chiusura in corso
+    if (closeTimer) { clearTimeout(closeTimer); closeTimer = null; }
+    // Chiudi tutti gli altri panel
+    megaItems.forEach(other => { if (other !== item) other.classList.remove('active'); });
+    item.classList.add('active');
+  }
+
+  function closeMega(item) {
+    // Aspetta 120ms prima di chiudere: se il cursore entra nel panel il timer viene annullato
+    closeTimer = setTimeout(() => {
+      item.classList.remove('active');
+      closeTimer = null;
+    }, 120);
+  }
+
+  function closeAllMega() {
+    if (closeTimer) { clearTimeout(closeTimer); closeTimer = null; }
+    megaItems.forEach(item => item.classList.remove('active'));
+  }
+
+  megaItems.forEach(item => {
+    // Apri quando il cursore entra sul nav-mega-item (trigger + panel sono dentro)
+    item.addEventListener('mouseenter', () => openMega(item));
+    // Avvia timer chiusura quando il cursore esce dall'intero nav-mega-item
+    item.addEventListener('mouseleave', () => closeMega(item));
+  });
+
+  // Chiudi anche se si clicca fuori dalla navbar
+  document.addEventListener('click', e => {
+    if (!e.target.closest('.nav-mega-item')) closeAllMega();
+  });
+
+  // Chiudi se si preme ESC
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeAllMega();
+  });
 }
 
 // ── SCROLL SPY ──
@@ -164,7 +210,7 @@ function productMatchesCategory(p, filter) {
   if (filter === 'all') return true;
   if (filter === 'new') return p.badge === 'new';
   if (filter === 'vintage') {
-    return p.badgeLabel && p.badgeLabel.toLowerCase() === 'vintage';
+    return p.badge === 'vintage';
   }
   const cats = Array.isArray(p.category) ? p.category : [p.category];
   return cats.includes(filter);
@@ -1562,47 +1608,422 @@ function setupHeroCarousel() {
 }
 
 // ═══════════════════════════════════════════════
-// NAVBAR DROPDOWN CAMPIONATI
+// NAVBAR MEGA MENU (hover) — collega filtri ai link
 // ═══════════════════════════════════════════════
-function setupNavCampionati() {
-  const wrap = document.getElementById('navCampionatiWrap');
-  const btn = document.getElementById('navCampionatiBtn');
-  const menu = document.getElementById('navCampionatiMenu');
-  if (!wrap || !btn || !menu) return;
-
-  // Apri/chiudi al click sul bottone
-  btn.addEventListener('click', (e) => {
-    e.stopPropagation();
-    const isOpen = wrap.classList.contains('open');
-    closeNavDropdown();
-    if (!isOpen) {
-      wrap.classList.add('open');
-      btn.setAttribute('aria-expanded', 'true');
-    }
+function setupNavMegaMenu() {
+  // Delegazione click su tutti i bottoni con data-league nel mega menu
+  document.querySelectorAll('.nav-mega-link[data-league]').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      const league = btn.dataset.league;
+      setActiveFilter(league, null);
+      document.getElementById('products')?.scrollIntoView({ behavior: 'smooth' });
+    });
   });
 
-  // Click su una voce: filtra e scrolla ai prodotti
-  menu.addEventListener('click', (e) => {
-    const item = e.target.closest('.nav-dd-item');
-    if (!item) return;
-    e.stopPropagation();
-    const league = item.dataset.league;
-    closeNavDropdown();
-    // Applica il filtro
-    setActiveFilter(league, null);
-    // Scrolla alla sezione prodotti
-    document.getElementById('products')?.scrollIntoView({ behavior: 'smooth' });
+  // Bottoni con data-filter (Tute, Felpe, ecc.)
+  document.querySelectorAll('.nav-mega-link[data-filter]').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      const filter = btn.dataset.filter;
+      setActiveFilter('all', filter);
+      document.getElementById('products')?.scrollIntoView({ behavior: 'smooth' });
+    });
   });
 
-  // Chiudi cliccando fuori
-  document.addEventListener('click', closeNavDropdown);
+  // Bottoni tipo (new/vintage)
+  document.querySelectorAll('.nav-mega-link[data-filter-type]').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      const type = btn.dataset.filterType;
+      setActiveFilter(type, null);
+      document.getElementById('products')?.scrollIntoView({ behavior: 'smooth' });
+    });
+  });
 }
 
-function closeNavDropdown() {
-  const wrap = document.getElementById('navCampionatiWrap');
-  const btn = document.getElementById('navCampionatiBtn');
-  wrap?.classList.remove('open');
-  btn?.setAttribute('aria-expanded', 'false');
+// ═══════════════════════════════════════════════
+// BARRA DI RICERCA NAVBAR → Dropdown sotto navbar
+// ═══════════════════════════════════════════════
+
+// Mappa categorie: nome display → filtro da passare a setActiveFilter
+const SEARCH_CATEGORIES = [
+  { label: 'Serie A', icon: '🇮🇹', filter: 'SerieA' },
+  { label: 'Champions League', icon: '⭐', filter: 'Champions' },
+  { label: 'Premier League', icon: '🏴󠁧󠁢󠁥󠁮󠁧󠁿', filter: 'Premier' },
+  { label: 'La Liga', icon: '🇪🇸', filter: 'LaLiga' },
+  { label: 'Bundesliga', icon: '🇩🇪', filter: 'Bundesliga' },
+  { label: 'Nazionali', icon: '🌍', filter: 'Nazionali' },
+  { label: 'Mondiale 2026', icon: '🏆', filter: 'Mondiale2026' },
+  { label: 'Saudi Pro League', icon: '🇸🇦', filter: 'SaudiLeague' },
+];
+
+function setupNavSearch() {
+  const navInput = document.getElementById('navSearchInput');
+  const navBtn = document.getElementById('navSearchBtn');
+  const dropdown = document.getElementById('searchDropdown');
+  const backdrop = document.getElementById('searchDropdownBackdrop');
+  if (!navInput || !dropdown) return;
+
+  // ── Aggiorna dropdown ad ogni input ──
+  navInput.addEventListener('input', () => {
+    clearTimeout(navInput._sdDebounce);
+    navInput._sdDebounce = setTimeout(() => {
+      const q = navInput.value.trim();
+      if (!q) { closeSearchDropdown(); return; }
+      openSearchDropdown(q);
+    }, 180);
+  });
+
+  // Invio o click icona
+  navBtn?.addEventListener('click', () => {
+    const q = navInput.value.trim();
+    if (q) openSearchDropdown(q);
+  });
+  navInput.addEventListener('keydown', e => {
+    if (e.key === 'Enter') {
+      const q = navInput.value.trim();
+      if (q) openSearchDropdown(q);
+    }
+    if (e.key === 'Escape') closeSearchDropdown();
+  });
+
+  // Chiudi cliccando sul backdrop
+  backdrop?.addEventListener('click', () => {
+    closeSearchDropdown();
+    navInput.value = '';
+  });
+
+  // Chiudi con ESC globale
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeSearchDropdown();
+  });
+}
+
+function openSearchDropdown(query) {
+  const dropdown = document.getElementById('searchDropdown');
+  const backdrop = document.getElementById('searchDropdownBackdrop');
+  if (!dropdown) return;
+  renderSearchDropdown(query);
+  dropdown.classList.add('open');
+  backdrop?.classList.add('open');
+}
+
+function closeSearchDropdown() {
+  const dropdown = document.getElementById('searchDropdown');
+  const backdrop = document.getElementById('searchDropdownBackdrop');
+  dropdown?.classList.remove('open');
+  backdrop?.classList.remove('open');
+}
+
+function renderSearchDropdown(query) {
+  const catList = document.getElementById('sdCatList');
+  const prodGrid = document.getElementById('sdProductsGrid');
+  if (!catList || !prodGrid) return;
+
+  const q = query.toLowerCase();
+
+  // ── 1. CATEGORIE: le 5 più rilevanti in base alla query ──
+  // Una categoria è rilevante se contiene prodotti che matchano la query
+  // oppure se il suo nome matcha la query
+  const relevantCats = [];
+  for (const cat of SEARCH_CATEGORIES) {
+    if (relevantCats.length >= 5) break;
+    const catMatches = cat.label.toLowerCase().includes(q);
+    const hasProducts = PRODUCTS.some(p => {
+      const cats = Array.isArray(p.category) ? p.category : [p.category];
+      if (!cats.includes(cat.filter)) return false;
+      const name = p.name.toLowerCase();
+      const label = Array.isArray(p.categoryLabel) ? p.categoryLabel.join(' ').toLowerCase() : (p.categoryLabel || '').toLowerCase();
+      return name.includes(q) || label.includes(q) || catMatches;
+    });
+    if (hasProducts || catMatches) relevantCats.push(cat);
+  }
+
+  // Se non ci sono categorie rilevanti, mostra tutte (max 5)
+  const catsToShow = relevantCats.length > 0 ? relevantCats : SEARCH_CATEGORIES.slice(0, 5);
+
+  catList.innerHTML = catsToShow.map(cat => `
+    <li class="sd-cat-item">
+      <button class="sd-cat-btn" onclick="closeSearchDropdown(); setActiveFilter('${cat.filter}', null); document.getElementById('products').scrollIntoView({behavior:'smooth'});">
+        <span class="sd-cat-icon">${cat.icon}</span>
+        <span class="sd-cat-label">${cat.label}</span>
+      </button>
+    </li>
+  `).join('');
+
+  // ── 2. PRODOTTI: max 5 che matchano la query ──
+  const results = PRODUCTS.filter(p => {
+    const name = p.name.toLowerCase();
+    const label = Array.isArray(p.categoryLabel) ? p.categoryLabel.join(' ').toLowerCase() : (p.categoryLabel || '').toLowerCase();
+    const cats = Array.isArray(p.category) ? p.category.join(' ').toLowerCase() : (p.category || '').toLowerCase();
+    return name.includes(q) || label.includes(q) || cats.includes(q);
+  }).slice(0, 5);
+
+  if (results.length === 0) {
+    prodGrid.innerHTML = `<div class="sd-empty">Nessun prodotto trovato per "<strong>${query}</strong>"</div>`;
+    return;
+  }
+
+  prodGrid.innerHTML = '';
+  results.forEach(p => {
+    const card = document.createElement('div');
+    card.className = 'sd-card';
+    card.onclick = () => {
+      closeSearchDropdown();
+      openQuickView(p.id);
+    };
+    card.innerHTML = `
+      <div class="sd-card-img-wrap">
+        <img class="sd-card-img" src="${p.image}" alt="${p.name}" loading="lazy"
+             onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22267%22><rect fill=%22%23f5f5f5%22 width=%22200%22 height=%22267%22/><text x=%2250%25%22 y=%2250%25%22 fill=%22%23ccc%22 text-anchor=%22middle%22 dominant-baseline=%22middle%22 font-size=%2240%22>⚽</text></svg>'">
+      </div>
+      <div class="sd-card-name">${p.name}</div>
+      <div class="sd-card-price">€${p.price.toFixed(2)}</div>
+    `;
+    prodGrid.appendChild(card);
+  });
+}
+
+// ═══════════════════════════════════════════════
+// SEZIONE VINTAGE — Maglie con badge "vintage"
+// ═══════════════════════════════════════════════
+function setupVintage() {
+  const grid     = document.getElementById('vintageGrid');
+  const viewport = document.getElementById('vintageViewport');
+  const track    = document.getElementById('vintageTrack');
+  const thumb    = document.getElementById('vintageThumb');
+  const seeAll   = document.getElementById('vintageSeeAll');
+
+  if (grid) {
+    // Filtra per badge === 'vintage' (campo badge nei prodotti)
+    const products = PRODUCTS.filter(p => p.badge === 'vintage').slice(0, 12);
+
+    if (products.length === 0) {
+      grid.innerHTML = '<div class="vintage-empty">Nessuna maglia vintage disponibile al momento.</div>';
+    } else {
+      grid.innerHTML = '';
+      products.forEach(p => {
+        const catLabel = Array.isArray(p.categoryLabel) ? p.categoryLabel[0] : (p.categoryLabel || '');
+        const card = document.createElement('div');
+        card.className = 'vintage-card';
+        card.onclick = () => openQuickView(p.id);
+        card.innerHTML = `
+          <div class="vintage-card-img-wrap">
+            <img class="vintage-card-img" src="${p.image}" alt="${p.name}" loading="lazy"
+                 onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22400%22><rect fill=%22%23f5f5f5%22 width=%22300%22 height=%22400%22/><text x=%2250%25%22 y=%2250%25%22 fill=%22%23ccc%22 text-anchor=%22middle%22 dominant-baseline=%22middle%22 font-size=%2260%22>⚽</text></svg>'">
+          </div>
+          ${p.badgeLabel ? `<div class="vintage-card-tag">${p.badgeLabel}</div>` : ''}
+          <div class="vintage-card-name">${p.name}</div>
+          <div class="vintage-card-cat">${catLabel}</div>
+          <div class="vintage-card-price">€${p.price.toFixed(2)}${p.oldPrice ? ` <span style="font-size:.82em;color:#aaa;font-weight:400;text-decoration:line-through;">€${p.oldPrice.toFixed(2)}</span>` : ''}</div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+  }
+
+  // "Acquista prodotti Vintage" → gestito da setupCatPage (openCatPage)
+  // (listener rimosso per evitare duplicazioni)
+
+  if (!viewport || !track || !thumb) return;
+  function updateThumb() {
+    const scrollRatio = viewport.scrollLeft / (viewport.scrollWidth - viewport.clientWidth || 1);
+    const thumbW = (viewport.clientWidth / viewport.scrollWidth) * 100;
+    thumb.style.width = Math.max(thumbW, 10) + '%';
+    thumb.style.left = scrollRatio * (100 - parseFloat(thumb.style.width)) + '%';
+  }
+  viewport.addEventListener('scroll', updateThumb, { passive: true });
+  window.addEventListener('load', updateThumb);
+  setTimeout(updateThumb, 400);
+  track.addEventListener('click', e => {
+    if (e.target === thumb) return;
+    const rect = track.getBoundingClientRect();
+    viewport.scrollLeft = ((e.clientX - rect.left) / rect.width) * (viewport.scrollWidth - viewport.clientWidth);
+  });
+  let dragging = false, dragStartX = 0, dragStartScroll = 0;
+  thumb.addEventListener('pointerdown', e => {
+    dragging = true; dragStartX = e.clientX; dragStartScroll = viewport.scrollLeft;
+    thumb.setPointerCapture(e.pointerId); e.preventDefault();
+  });
+  thumb.addEventListener('pointermove', e => {
+    if (!dragging) return;
+    viewport.scrollLeft = dragStartScroll + ((e.clientX - dragStartX) / track.clientWidth) * (viewport.scrollWidth - viewport.clientWidth);
+  });
+  thumb.addEventListener('pointerup', () => { dragging = false; });
+  thumb.addEventListener('pointercancel', () => { dragging = false; });
+}
+
+// ═══════════════════════════════════════════════
+// SEZIONE MUST HAVE — Articoli più venduti / bestseller
+// ═══════════════════════════════════════════════
+function setupMustHave() {
+  const grid     = document.getElementById('mustHaveGrid');
+  const viewport = document.getElementById('mustHaveViewport');
+  const track    = document.getElementById('mustHaveTrack');
+  const thumb    = document.getElementById('mustHaveThumb');
+  const seeAll   = document.getElementById('mustHaveSeeAll');
+
+  if (grid) {
+    // Priorità: badge "bestseller" o "hot", poi badge "sale", poi badge "new", poi per prezzo desc
+    const scored = PRODUCTS.map(p => {
+      let score = 0;
+      if (p.badge === 'bestseller' || p.badge === 'hot') score += 100;
+      else if (p.badge === 'sale') score += 50;
+      else if (p.badge === 'new') score += 30;
+      if (p.oldPrice) score += 20; // in offerta → più rilevante
+      return { p, score };
+    });
+    scored.sort((a, b) => b.score - a.score);
+    const products = scored.slice(0, 12).map(x => x.p);
+
+    if (products.length === 0) {
+      grid.innerHTML = '<div class="mustHave-empty">Nessun prodotto disponibile al momento.</div>';
+    } else {
+      grid.innerHTML = '';
+      products.forEach((p, i) => {
+        const catLabel = Array.isArray(p.categoryLabel) ? p.categoryLabel[0] : (p.categoryLabel || '');
+        const card = document.createElement('div');
+        card.className = 'mustHave-card';
+        card.onclick = () => openQuickView(p.id);
+        const badgeHtml = i < 3 ? '<span class="mustHave-badge">🔥 Bestseller</span>' : '';
+        card.innerHTML = `
+          ${badgeHtml}
+          <div class="mustHave-card-img-wrap">
+            <img class="mustHave-card-img" src="${p.image}" alt="${p.name}" loading="lazy"
+                 onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22400%22><rect fill=%22%23f5f5f5%22 width=%22300%22 height=%22400%22/><text x=%2250%25%22 y=%2250%25%22 fill=%22%23ccc%22 text-anchor=%22middle%22 dominant-baseline=%22middle%22 font-size=%2260%22>⚽</text></svg>'">
+          </div>
+          ${p.badgeLabel ? `<div class="mustHave-card-tag">${p.badgeLabel}</div>` : ''}
+          <div class="mustHave-card-name">${p.name}</div>
+          <div class="mustHave-card-cat">${catLabel}</div>
+          <div class="mustHave-card-price">€${p.price.toFixed(2)}${p.oldPrice ? ` <span style="font-size:.82em;color:#aaa;font-weight:400;text-decoration:line-through;">€${p.oldPrice.toFixed(2)}</span>` : ''}</div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+  }
+
+  // "Vedi tutti i bestseller" → gestito da setupCatPage (openCatPage)
+
+  if (!viewport || !track || !thumb) return;
+  function updateThumb() {
+    const scrollRatio = viewport.scrollLeft / (viewport.scrollWidth - viewport.clientWidth || 1);
+    const thumbW = (viewport.clientWidth / viewport.scrollWidth) * 100;
+    thumb.style.width = Math.max(thumbW, 10) + '%';
+    thumb.style.left = scrollRatio * (100 - parseFloat(thumb.style.width)) + '%';
+  }
+  viewport.addEventListener('scroll', updateThumb, { passive: true });
+  window.addEventListener('load', updateThumb);
+  setTimeout(updateThumb, 400);
+  track.addEventListener('click', e => {
+    if (e.target === thumb) return;
+    const rect = track.getBoundingClientRect();
+    viewport.scrollLeft = ((e.clientX - rect.left) / rect.width) * (viewport.scrollWidth - viewport.clientWidth);
+  });
+  let dragging = false, dragStartX = 0, dragStartScroll = 0;
+  thumb.addEventListener('pointerdown', e => {
+    dragging = true; dragStartX = e.clientX; dragStartScroll = viewport.scrollLeft;
+    thumb.setPointerCapture(e.pointerId); e.preventDefault();
+  });
+  thumb.addEventListener('pointermove', e => {
+    if (!dragging) return;
+    viewport.scrollLeft = dragStartScroll + ((e.clientX - dragStartX) / track.clientWidth) * (viewport.scrollWidth - viewport.clientWidth);
+  });
+  thumb.addEventListener('pointerup', () => { dragging = false; });
+  thumb.addEventListener('pointercancel', () => { dragging = false; });
+}
+
+// ═══════════════════════════════════════════════
+// SEZIONE MONDIALI — Maglie Mondiale 2026
+// ═══════════════════════════════════════════════
+function setupMondiali() {
+  const grid = document.getElementById('mondialiGrid');
+  const viewport = document.getElementById('mondialiViewport');
+  const track = document.getElementById('mondialiTrack');
+  const thumb = document.getElementById('mondialiThumb');
+  const seeAll = document.getElementById('mondialiSeeAll');
+
+  // ── 1. Popola la griglia (max 8 prodotti) ──
+  if (grid) {
+    const products = PRODUCTS.filter(p => {
+      const cats = Array.isArray(p.category) ? p.category : [p.category];
+      return cats.includes('Mondiale2026') || cats.includes('Nazionali');
+    }).slice(0, 12);
+
+    if (products.length === 0) {
+      grid.innerHTML = '<div class="mondiali-empty">Nessuna maglia del mondiale disponibile al momento.</div>';
+    } else {
+      grid.innerHTML = '';
+      products.forEach(p => {
+        const catLabel = Array.isArray(p.categoryLabel) ? p.categoryLabel[0] : (p.categoryLabel || '');
+        const card = document.createElement('div');
+        card.className = 'mondiali-card';
+        card.onclick = () => openQuickView(p.id);
+        card.innerHTML = `
+          <div class="mondiali-card-img-wrap">
+            <img class="mondiali-card-img" src="${p.image}" alt="${p.name}" loading="lazy"
+                 onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22400%22><rect fill=%22%23f5f5f5%22 width=%22300%22 height=%22400%22/><text x=%2250%25%22 y=%2250%25%22 fill=%22%23ccc%22 text-anchor=%22middle%22 dominant-baseline=%22middle%22 font-size=%2260%22>⚽</text></svg>'">
+          </div>
+          ${p.badgeLabel ? `<div class="mondiali-card-tag">${p.badgeLabel}</div>` : ''}
+          <div class="mondiali-card-name">${p.name}</div>
+          <div class="mondiali-card-cat">${catLabel}</div>
+          <div class="mondiali-card-price">€${p.price.toFixed(2)}${p.oldPrice ? ` <span style="font-size:.82em;color:#aaa;font-weight:400;text-decoration:line-through;">€${p.oldPrice.toFixed(2)}</span>` : ''}</div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+  }
+
+  // ── 2. "Acquista prodotti Mondiali" → gestito da setupCatPage (openCatPage) ──
+
+  // ── 3. Scrollbar custom ──
+  if (!viewport || !track || !thumb) return;
+
+  // Aggiorna posizione e larghezza thumb in base allo scroll corrente
+  function updateThumb() {
+    const scrollRatio = viewport.scrollLeft / (viewport.scrollWidth - viewport.clientWidth || 1);
+    const thumbW = (viewport.clientWidth / viewport.scrollWidth) * 100;
+    thumb.style.width = Math.max(thumbW, 10) + '%';
+    thumb.style.left = scrollRatio * (100 - parseFloat(thumb.style.width)) + '%';
+  }
+
+  // Sync thumb ↔ scroll
+  viewport.addEventListener('scroll', updateThumb, { passive: true });
+  // Ricalcola dopo che le immagini sono caricate
+  window.addEventListener('load', updateThumb);
+  setTimeout(updateThumb, 400);
+
+  // Click sul track → salto diretto
+  track.addEventListener('click', e => {
+    if (e.target === thumb) return; // gestito sotto
+    const rect = track.getBoundingClientRect();
+    const ratio = (e.clientX - rect.left) / rect.width;
+    viewport.scrollLeft = ratio * (viewport.scrollWidth - viewport.clientWidth);
+  });
+
+  // Drag del thumb
+  let dragging = false;
+  let dragStartX = 0;
+  let dragStartScroll = 0;
+
+  thumb.addEventListener('pointerdown', e => {
+    dragging = true;
+    dragStartX = e.clientX;
+    dragStartScroll = viewport.scrollLeft;
+    thumb.setPointerCapture(e.pointerId);
+    e.preventDefault();
+  });
+
+  thumb.addEventListener('pointermove', e => {
+    if (!dragging) return;
+    const dx = e.clientX - dragStartX;
+    const trackW = track.clientWidth;
+    const scrollRange = viewport.scrollWidth - viewport.clientWidth;
+    viewport.scrollLeft = dragStartScroll + (dx / trackW) * scrollRange;
+  });
+
+  thumb.addEventListener('pointerup', () => { dragging = false; });
+  thumb.addEventListener('pointercancel', () => { dragging = false; });
 }
 
 // ═══════════════════════════════════════════════
@@ -1998,3 +2419,254 @@ function setupCustomizeModal() {
     closeCustomizeModal();
   });
 }
+
+// ══════════════════════════════════════════════════════════
+//  CATEGORY PAGE — Adidas-style full-screen shop view
+// ══════════════════════════════════════════════════════════
+
+let _catFilter  = 'all';
+let _catTeam    = null;
+let _catSort    = 'default';
+let _catTabs    = [];  // [{label, filter}]
+
+/**
+ * Apre la pagina categoria.
+ * @param {string}   filter    — filtro categoria principale (es. 'Mondiale2026', 'vintage', 'SerieA')
+ * @param {string}   title     — titolo della pagina (es. "MAGLIE DEL MONDIALE")
+ * @param {string}   bcLabel   — label breadcrumb (es. "Mondiale 2026")
+ * @param {Array}    tabs      — array di {label, filter} per i sub-tab, o [] per nessun tab
+ * @param {string}   [team]    — squadra opzionale da pre-selezionare
+ */
+function openCatPage(filter, title, bcLabel, tabs, team) {
+  _catFilter = filter;
+  _catTeam   = team || null;
+  _catSort   = 'default';
+  _catTabs   = tabs || [];
+
+  // Titolo e breadcrumb
+  document.getElementById('catPageTitle').textContent  = title;
+  document.getElementById('catPageBcLabel').textContent = bcLabel;
+
+  // Sub-tabs
+  const tabsBar = document.getElementById('catPageTabsBar');
+  const tabsEl  = document.getElementById('catPageTabs');
+  if (_catTabs.length > 0) {
+    tabsEl.innerHTML = _catTabs.map((t, i) =>
+      `<button class="cat-page-tab${i === 0 ? ' active' : ''}" data-filter="${t.filter}" data-label="${t.label}">${t.label}</button>`
+    ).join('');
+    tabsBar.style.display = '';
+    tabsEl.querySelectorAll('.cat-page-tab').forEach(btn => {
+      btn.addEventListener('click', () => {
+        tabsEl.querySelectorAll('.cat-page-tab').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        _catFilter = btn.dataset.filter;
+        _catTeam   = null;
+        renderCatPage();
+      });
+    });
+  } else {
+    tabsBar.style.display = 'none';
+    tabsEl.innerHTML = '';
+  }
+
+  // Reset sort
+  _catSort = 'default';
+  document.querySelectorAll('.cat-sort-item').forEach(i => {
+    i.classList.toggle('active', i.dataset.sort === 'default');
+  });
+
+  renderCatPage();
+
+  const overlay = document.getElementById('catPageOverlay');
+  overlay.removeAttribute('aria-hidden');
+  overlay.classList.add('open');
+  // Scroll interno all'inizio
+  overlay.scrollTop = 0;
+  // Blocca scroll della pagina sottostante
+  document.body.style.overflow = 'hidden';
+}
+
+function closeCatPage() {
+  const overlay = document.getElementById('catPageOverlay');
+  overlay.classList.remove('open');
+  overlay.setAttribute('aria-hidden', 'true');
+  document.body.style.overflow = '';
+}
+
+function renderCatPage() {
+  const grid = document.getElementById('catPageGrid');
+  if (!grid) return;
+
+  // Filtra prodotti
+  let filtered = PRODUCTS.filter(p =>
+    productMatchesCategory(p, _catFilter) &&
+    productMatchesTeam(p, _catTeam)
+  );
+
+  // Ordina
+  if (_catSort === 'price-asc')  filtered = [...filtered].sort((a, b) => a.price - b.price);
+  if (_catSort === 'price-desc') filtered = [...filtered].sort((a, b) => b.price - a.price);
+
+  // Aggiorna contatori
+  const countEl   = document.getElementById('catPageCount');
+  const resultsEl = document.getElementById('catPageResults');
+  const label     = `(${filtered.length})`;
+  if (countEl)   countEl.textContent   = label;
+  if (resultsEl) resultsEl.textContent = `${filtered.length} prodotti`;
+
+  grid.innerHTML = '';
+
+  if (filtered.length === 0) {
+    grid.innerHTML = `
+      <div class="cat-page-empty">
+        <span class="cat-page-empty-icon">🔍</span>
+        <p>Nessun prodotto trovato per questa selezione.</p>
+      </div>`;
+    return;
+  }
+
+  filtered.forEach((p, i) => {
+    const card = document.createElement('div');
+    card.className = 'product-card';
+    card.style.animationDelay = `${i * 0.04}s`;
+    const catLabel = Array.isArray(p.categoryLabel) ? p.categoryLabel[0] : p.categoryLabel;
+    const fav = isFavorite(p.id);
+    card.innerHTML = `
+      <div class="card-img-wrap">
+        <img src="${p.image}" alt="${p.name}" loading="lazy" onclick="openQuickView(${p.id})"
+             onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22360%22><rect fill=%22%230f1525%22 width=%22300%22 height=%22360%22/><text x=%2250%25%22 y=%2250%25%22 fill=%22%236c63ff%22 text-anchor=%22middle%22 dominant-baseline=%22middle%22 font-size=%2260%22>&#x26BD;</text></svg>'"
+             style="cursor:pointer;width:100%;height:100%;object-fit:cover;display:block;">
+        ${p.badge ? `<span class="card-badge ${p.badge}">${p.badgeLabel}</span>` : ''}
+        <button class="card-fav-btn${fav ? ' active' : ''}" data-pid="${p.id}"
+                onclick="event.stopPropagation();toggleFavorite(${p.id},this)"
+                title="${fav ? 'Rimuovi dai preferiti' : 'Aggiungi ai preferiti'}" aria-label="Preferiti">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="${fav ? '#e44545' : 'none'}"
+               stroke="${fav ? '#e44545' : '#999'}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+          </svg>
+        </button>
+      </div>
+      <div class="card-info" onclick="openQuickView(${p.id})" style="cursor:pointer;">
+        <div class="card-category">${catLabel}</div>
+        <div class="card-name">${p.name}</div>
+        <div class="card-price-row">
+          <span class="card-price">&#x20AC;${p.price.toFixed(2)}</span>
+          ${p.oldPrice ? `<span class="card-price-old">&#x20AC;${p.oldPrice.toFixed(2)}</span>` : ''}
+        </div>
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+// ── Setup category page (chiamato in DOMContentLoaded) ──
+function setupCatPage() {
+  // Pulsante Indietro
+  document.getElementById('catPageBackBtn')?.addEventListener('click', closeCatPage);
+
+  // Chiudi con ESC
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeCatPage();
+  });
+
+  // Sort dropdown
+  const sortWrap = document.getElementById('catSortWrap');
+  const sortBtn  = document.getElementById('catSortBtn');
+  sortBtn?.addEventListener('click', e => {
+    e.stopPropagation();
+    sortWrap.classList.toggle('open');
+  });
+  document.addEventListener('click', () => sortWrap?.classList.remove('open'));
+  document.querySelectorAll('.cat-sort-item').forEach(item => {
+    item.addEventListener('click', () => {
+      document.querySelectorAll('.cat-sort-item').forEach(i => i.classList.remove('active'));
+      item.classList.add('active');
+      _catSort = item.dataset.sort || 'default';
+      sortWrap.classList.remove('open');
+      renderCatPage();
+    });
+  });
+
+  // ── SEZIONE MONDIALI ──
+  document.getElementById('mondialiSeeAll')?.addEventListener('click', () => {
+    openCatPage(
+      'Mondiale2026',
+      'MAGLIE DEL MONDIALE',
+      'Mondiale 2026',
+      [
+        { label: 'Tutte le nazionali', filter: 'Mondiale2026' },
+        { label: 'Nazionali',          filter: 'Nazionali'    },
+      ]
+    );
+  });
+
+  // ── SEZIONE VINTAGE ──
+  document.getElementById('vintageSeeAll')?.addEventListener('click', () => {
+    openCatPage(
+      'vintage',
+      'MAGLIE VINTAGE',
+      'Vintage',
+      []
+    );
+  });
+
+  // ── SEZIONE MUST HAVE ──
+  document.getElementById('mustHaveSeeAll')?.addEventListener('click', () => {
+    openCatPage(
+      'new',
+      'MUST HAVE — BESTSELLER',
+      'Must Have',
+      [
+        { label: 'Novità',    filter: 'new'    },
+        { label: 'In offerta', filter: 'all'   },
+      ]
+    );
+  });
+
+  // ── NAV MEGA MENU — bottoni lega nel pannello CALCIO ──
+  const navLeagueMap = {
+    navLeagueSerieA:    { filter: 'SerieA',      title: 'SERIE A',          bc: 'Serie A',        tabs: [] },
+    navLeagueLaLiga:    { filter: 'LaLiga',       title: 'LA LIGA',          bc: 'La Liga',        tabs: [] },
+    navLeagueBundesliga:{ filter: 'Bundesliga',   title: 'BUNDESLIGA',       bc: 'Bundesliga',     tabs: [] },
+    navLeaguePremier:   { filter: 'Premier',      title: 'PREMIER LEAGUE',   bc: 'Premier League', tabs: [] },
+    navLeagueChampions: { filter: 'Champions',    title: 'CHAMPIONS LEAGUE', bc: 'Champions League', tabs: [] },
+    navLeagueSaudi:     { filter: 'SaudiLeague',  title: 'SAUDI PRO LEAGUE', bc: 'Saudi League',   tabs: [] },
+    navLeagueMondiale2026: {
+      filter: 'Mondiale2026',
+      title: 'MONDIALE 2026',
+      bc: 'Mondiale 2026',
+      tabs: [
+        { label: 'Tutte le nazionali', filter: 'Mondiale2026' },
+        { label: 'Nazionali',          filter: 'Nazionali'    },
+      ]
+    },
+    navLeagueNazionali: { filter: 'Nazionali',    title: 'NAZIONALI',        bc: 'Nazionali',      tabs: [] },
+  };
+
+  Object.entries(navLeagueMap).forEach(([id, cfg]) => {
+    // Cerca TUTTI i bottoni con quell'id (ci possono essere duplicati nel mega menu)
+    document.querySelectorAll(`[id="${id}"], [data-league="${cfg.filter}"]`).forEach(btn => {
+      btn.addEventListener('click', e => {
+        e.preventDefault();
+        openCatPage(cfg.filter, cfg.title, cfg.bc, cfg.tabs);
+      });
+    });
+  });
+
+  // ── NAV tipo-maglia: Novità / Vintage ──
+  document.querySelectorAll('[data-filter-type]').forEach(btn => {
+    btn.addEventListener('click', e => {
+      e.preventDefault();
+      const t = btn.dataset.filterType;
+      if (t === 'new') {
+        openCatPage('new', 'NOVITÀ', 'Novità', []);
+      } else if (t === 'vintage') {
+        openCatPage('vintage', 'VINTAGE', 'Vintage', []);
+      }
+    });
+  });
+}
+
+// ── Aggiunge setupCatPage al DOMContentLoaded ──
+document.addEventListener('DOMContentLoaded', setupCatPage);
+
