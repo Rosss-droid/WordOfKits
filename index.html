@@ -1154,8 +1154,146 @@
     </div>
   </div>
 
+  <!-- ═══════════════════ MOBILE BOTTOM NAV (solo ≤640px) ═══════════════════ -->
+  <nav class="mob-bottom-nav" id="mobBottomNav" aria-label="Navigazione mobile">
+
+    <!-- Home -->
+    <button class="mob-nav-item active" id="mobNavHome" aria-label="Home"
+      onclick="window.scrollTo({top:0,behavior:'smooth'}); document.querySelectorAll('.mob-nav-item').forEach(i=>i.classList.remove('active')); this.classList.add('active');">
+      <span class="mob-nav-icon">
+        <svg viewBox="0 0 24 24"><path d="M3 9.5L12 3l9 6.5V21a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5z"/><path d="M9 22V12h6v10"/></svg>
+      </span>
+      <span class="mob-nav-label">Home</span>
+    </button>
+
+    <!-- Cerca -->
+    <button class="mob-nav-item" id="mobNavSearch" aria-label="Cerca"
+      onclick="document.querySelectorAll('.mob-nav-item').forEach(i=>i.classList.remove('active')); this.classList.add('active'); document.getElementById('navSearchInput') && document.getElementById('navSearchInput').focus();">
+      <span class="mob-nav-icon">
+        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      </span>
+      <span class="mob-nav-label">Cerca</span>
+    </button>
+
+    <!-- Prodotti -->
+    <button class="mob-nav-item" id="mobNavProducts" aria-label="Prodotti"
+      onclick="document.querySelectorAll('.mob-nav-item').forEach(i=>i.classList.remove('active')); this.classList.add('active'); document.getElementById('products') && document.getElementById('products').scrollIntoView({behavior:'smooth'});">
+      <span class="mob-nav-icon">
+        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      </span>
+      <span class="mob-nav-label">Prodotti</span>
+    </button>
+
+    <!-- Preferiti -->
+    <button class="mob-nav-item" id="mobNavFav" aria-label="Preferiti"
+      onclick="document.querySelectorAll('.mob-nav-item').forEach(i=>i.classList.remove('active')); this.classList.add('active'); document.getElementById('favBtn') && document.getElementById('favBtn').click();">
+      <span class="mob-nav-icon">
+        <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+      </span>
+      <span class="mob-nav-badge" id="mobFavBadge" style="display:none">0</span>
+      <span class="mob-nav-label">Preferiti</span>
+    </button>
+
+    <!-- Carrello -->
+    <button class="mob-nav-item" id="mobNavCart" aria-label="Carrello"
+      onclick="document.querySelectorAll('.mob-nav-item').forEach(i=>i.classList.remove('active')); this.classList.add('active'); document.getElementById('cartBtn') && document.getElementById('cartBtn').click();">
+      <span class="mob-nav-icon">
+        <svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+      </span>
+      <span class="mob-nav-badge" id="mobCartBadge" style="display:none">0</span>
+      <span class="mob-nav-label">Carrello</span>
+    </button>
+
+  </nav>
+
   <script src="products.js"></script>
   <script src="app.js"></script>
+
+  <!-- ═══════════════════ MOBILE JS — Bottom nav sync + UX ═══════════════════ -->
+  <script>
+  (function() {
+    'use strict';
+
+    /* ── Sincronizza badge carrello/preferiti con la bottom nav ── */
+    function syncMobBadges() {
+      var cartBadge = document.getElementById('cartBadge');
+      var mobCartBadge = document.getElementById('mobCartBadge');
+      if (cartBadge && mobCartBadge) {
+        var n = parseInt(cartBadge.textContent) || 0;
+        mobCartBadge.textContent = n;
+        mobCartBadge.style.display = n > 0 ? 'flex' : 'none';
+      }
+      var favBadge = document.getElementById('favBadge');
+      var mobFavBadge = document.getElementById('mobFavBadge');
+      if (favBadge && mobFavBadge) {
+        var f = parseInt(favBadge.textContent) || 0;
+        mobFavBadge.textContent = f;
+        mobFavBadge.style.display = f > 0 ? 'flex' : 'none';
+      }
+    }
+
+    /* Polling leggero per tenere i badge sincronizzati */
+    setInterval(syncMobBadges, 400);
+    syncMobBadges();
+
+    /* ── Quando si chiude carrello/preferiti, torna "Home" attivo ── */
+    function resetMobActiveToHome() {
+      document.querySelectorAll('.mob-nav-item').forEach(function(i){ i.classList.remove('active'); });
+      var h = document.getElementById('mobNavHome');
+      if (h) h.classList.add('active');
+    }
+
+    var cartClose = document.getElementById('cartClose');
+    if (cartClose) cartClose.addEventListener('click', resetMobActiveToHome);
+    var cartOverlay = document.getElementById('cartOverlay');
+    if (cartOverlay) cartOverlay.addEventListener('click', resetMobActiveToHome);
+    var favClose = document.querySelector('.fav-close');
+    if (favClose) favClose.addEventListener('click', resetMobActiveToHome);
+
+    /* ── Nascondi bottom nav quando si apre un overlay full-screen ── */
+    var nav = document.getElementById('mobBottomNav');
+    function hideNav() { if (nav) nav.style.display = 'none'; }
+    function showNav() { if (nav) nav.style.display = ''; }
+
+    /* Osserva apertura cat-page-overlay */
+    var catOverlay = document.getElementById('catPageOverlay');
+    if (catOverlay && nav) {
+      var observer = new MutationObserver(function(mutations) {
+        mutations.forEach(function(m) {
+          if (m.type === 'attributes' && m.attributeName === 'class') {
+            catOverlay.classList.contains('open') ? hideNav() : showNav();
+          }
+        });
+      });
+      observer.observe(catOverlay, { attributes: true });
+    }
+
+    /* ── Home tab: riporta in cima e chiude drawer ── */
+    var mobHome = document.getElementById('mobNavHome');
+    if (mobHome) {
+      mobHome.addEventListener('click', function() {
+        var navLinks = document.getElementById('navLinks');
+        if (navLinks) navLinks.classList.remove('open');
+        var hamburger = document.getElementById('hamburger');
+        if (hamburger) hamburger.setAttribute('aria-expanded', 'false');
+      });
+    }
+
+    /* ── Drawer: chiude toccando l'overlay scuro ── */
+    document.addEventListener('click', function(e) {
+      var navLinks = document.getElementById('navLinks');
+      if (!navLinks || !navLinks.classList.contains('open')) return;
+      /* Se il click è fuori dalla larghezza del drawer (82vw) chiudi */
+      if (e.clientX > window.innerWidth * 0.82) {
+        navLinks.classList.remove('open');
+        var hamburger = document.getElementById('hamburger');
+        if (hamburger) hamburger.setAttribute('aria-expanded', 'false');
+      }
+    });
+
+  })();
+  </script>
+
 </body>
 
 </html>
