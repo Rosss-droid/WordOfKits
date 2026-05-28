@@ -6397,16 +6397,23 @@ img {
 
   /* ══════════════════════════
      CART SIDEBAR — full-screen su mobile
+     (cart-sidebar è usata sia per il carrello sia per i preferiti)
   ══════════════════════════ */
   .cart-sidebar {
     width: 100vw;
     max-width: 100vw;
     border-radius: 0;
     top: 0;
-    right: 0;
+    /* Mantiene il pannello FUORI schermo a destra finché non ha .open */
+    right: -100vw;
     padding-bottom: var(--mob-safe);
     height: 100dvh;
     overflow-y: auto;
+  }
+
+  /* Quando aperto: scivola a schermo pieno */
+  .cart-sidebar.open {
+    right: 0;
   }
 
   .cart-header {
@@ -6458,26 +6465,9 @@ img {
   }
 
   /* ══════════════════════════
-     FAV SIDEBAR — full-screen su mobile
+     FAV HEADER — sticky in cima al pannello (usa .cart-header già sopra)
+     N.B.: i Preferiti usano la classe .cart-sidebar, non .fav-sidebar
   ══════════════════════════ */
-  .fav-sidebar {
-    width: 100vw;
-    max-width: 100vw;
-    border-radius: 0;
-    top: 0;
-    height: 100dvh;
-    overflow-y: auto;
-    padding-bottom: var(--mob-safe);
-  }
-
-  .fav-header {
-    padding: calc(var(--mob-topbar) + var(--mob-header) + .5rem) 1.25rem 1rem;
-    position: sticky;
-    top: 0;
-    background: #fff;
-    z-index: 2;
-    border-bottom: 1px solid rgba(0,0,0,.07);
-  }
 
   /* ══════════════════════════
      QUICK VIEW MODAL
