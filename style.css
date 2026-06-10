@@ -1276,7 +1276,7 @@ img {
 /* ═══════════════════ SEZIONE VINTAGE ═══════════════════ */
 .vintage {
   background: #fff;
-  padding: 3rem 0rem 1.rem;
+  padding: 3rem 0rem 1rem;
   max-width: 1600px;
   margin: 0 auto;
 }
@@ -1737,8 +1737,6 @@ img {
 }
 
 
-
-
 .mondiali-card-img {
   width: 100%;
   height: 100%;
@@ -1788,12 +1786,10 @@ img {
   font-size: 0.9rem;
 }
 
-/* ═══════════════════ EDITORIAL HERO (3 pannelli) ═══════════════════ */
+/* ═══════════════════ EDITORIAL HERO (pannello singolo) ═══════════════════ */
 .editorial-hero {
-  /* Posizionaa subito sotto l'header fisso (top-bar 30px + navbar ~80px) */
-  margin-top: 50px;
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  /* Posizionato subito sotto l'header fisso (top-bar 30px + navbar 72px = 102px) */
+  margin-top: 60px;
   width: 100%;
   height: 95vh;
   min-height: 720px;
@@ -1803,12 +1799,10 @@ img {
   z-index: 1;
 }
 
-/* Variante ridotta — metà altezza, usata tra sezioni */
-.editorial-hero--mid {
-  margin-top: 0;
-  height: 47vh;
-  min-height: 340px;
-  max-height: 500px;
+.editorial-hero .ed-panel {
+  width: 100%;
+  height: 100%;
+  grid-column: unset;
 }
 
 /* ── Singolo pannello ── */
@@ -1989,61 +1983,21 @@ img {
   border-left: 1px solid rgba(255, 255, 255, 0.12);
 }
 
-/* ── Responsive ── */
+/* ── Responsive editorial-hero singolo ── */
 @media (max-width: 900px) {
   .editorial-hero {
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr 1fr;
-    height: auto;
-    min-height: 0;
-    max-height: none;
-  }
-
-  .ed-panel--main {
-    grid-column: 1 / 3;
-    grid-row: 1;
-    min-height: 52vw;
-  }
-
-  .ed-panel--detail {
-    grid-column: 1 / 2;
-    grid-row: 2;
-    min-height: 45vw;
-  }
-
-  .ed-panel--brand {
-    grid-column: 2 / 3;
-    grid-row: 2;
-    border-left: 1px solid rgba(255, 255, 255, 0.12);
-    min-height: 45vw;
+    height: 80vw;
+    min-height: 400px;
+    max-height: 900px;
   }
 }
 
 @media (max-width: 600px) {
   .editorial-hero {
-    grid-template-columns: 1fr;
-    grid-template-rows: auto auto auto;
     margin-top: 100px;
-  }
-
-  .ed-panel--main {
-    grid-column: 1;
-    grid-row: 1;
-    min-height: 70vw;
-  }
-
-  .ed-panel--detail {
-    grid-column: 1;
-    grid-row: 2;
-    border-left: none;
-    min-height: 55vw;
-  }
-
-  .ed-panel--brand {
-    grid-column: 1;
-    grid-row: 3;
-    border-left: none;
-    min-height: 55vw;
+    height: 110vw;
+    min-height: 300px;
+    max-height: none;
   }
 
   .ed-panel-content {
@@ -2053,6 +2007,7 @@ img {
 
 /* ── Vintage Editorial (1 pannello singolo, più basso dell'hero) ── */
 .vintage-editorial {
+  margin-top: 40px;
   width: 100%;
   height: 150vh;
   min-height: 300px;
@@ -2437,6 +2392,227 @@ img {
   }
 }
 
+
+/* ══════════════════════════════════════════════
+   ACQUISTA PER BRAND
+══════════════════════════════════════════════ */
+.brand-section {
+  width: 100%;
+  background: #fff;
+  border-top: 1px solid #eee;
+  border-bottom: 1px solid #eee;
+  padding: 2rem 0;
+}
+
+.brand-section-inner {
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 0 0;
+}
+
+.brand-section-header {
+  margin-bottom: 1.2rem;
+  padding: 0 1rem;
+}
+
+.brand-section-title {
+  font-family: 'Inter', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #111;
+  margin: 0;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.brand-grid {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  gap: 10px;
+  padding: 0 1rem;
+}
+
+.brand-tile {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 1 / 1;
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
+  padding: 1rem;
+  box-sizing: border-box;
+  }
+
+.brand-tile:hover {
+  background: #f5f5f5;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.10);
+  transform: translateY(-2px);  
+}
+
+.brand-tile-logo {
+  max-width: 70%;
+  max-height: 50%;
+  object-fit: contain;
+  filter: grayscale(100%) contrast(0.7);
+  transition: filter 0.18s ease, transform 0.18s ease;
+}
+
+.brand-tile:hover .brand-tile-logo {
+  filter: grayscale(0%) contrast(1);
+  transform: scale(1.08);
+}
+
+.brand-tile-text {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 1.3rem;
+  font-weight: 900;
+  color: #222;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+  line-height: 1;
+  transition: color 0.18s ease, transform 0.18s ease;
+}
+
+.brand-tile:hover .brand-tile-text {
+  color: #000;
+  transform: scale(1.05);
+}
+
+@media (max-width: 900px) {
+  .brand-grid {
+    grid-template-columns: repeat(5, 1fr);
+    gap:8px;
+  }
+}
+
+@media (max-width: 500px) {
+  .brand-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap:6px;
+  }
+  .brand-tile {
+    padding: .6rem;
+  }
+}
+
+
+/* ══════════════════════════════════════════════
+   INFO PAGE OVERLAYS (Chi Siamo, Recensioni, ecc.)
+══════════════════════════════════════════════ */
+.info-page-overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--bg, #0a0f1e);
+  z-index: 3000;
+  overflow-y: auto;
+  transform: translateY(100%);
+  transition: transform 0.38s cubic-bezier(.4,0,.2,1);
+  will-change: transform;
+}
+
+.info-page-overlay.open {
+  transform: translateY(0);
+}
+
+.info-page-topbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: .85rem 2rem;
+  background: rgba(10,15,30,.97);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255,255,255,.08);
+}
+
+.info-page-close-btn {
+  display: flex;
+  align-items: center;
+  gap: .45rem;
+  background: none;
+  border: none;
+  color: #fff;
+  font-family: 'Inter', sans-serif;
+  font-size: .9rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: .4rem .8rem;
+  border-radius: 8px;
+  transition: background .2s;
+}
+
+.info-page-close-btn:hover {
+  background: rgba(255,255,255,.1);
+}
+
+.info-page-close-btn svg {
+  flex-shrink: 0;
+}
+
+.info-page-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: rgba(255,255,255,.6);
+  text-transform: uppercase;
+  letter-spacing: .06em;
+}
+
+.info-page-inner {
+  min-height: calc(100vh - 60px);
+  background: var(--bg, #0a0f1e);
+}
+
+/* ── Sconto Editorial ── */
+.sconto-editorial {
+  width: 100%;
+  background-color: #00285e; /* Blu PSG */
+  height:180px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 0 5%;
+  box-sizing: border-box;
+  margin-top: 20px;
+}
+
+.sconto-editorial .sconto-content {
+  color: #fff;
+}
+
+.sconto-editorial .sconto-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 1.8rem;
+  font-weight: 800;
+  margin: 0 0 5px 0;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.sconto-editorial .sconto-sub {
+  font-family: 'Inter', sans-serif;
+  font-size: 1rem;
+  font-weight: 400;
+  margin: 0;
+}
+
+@media (max-width: 600px) {
+  .sconto-editorial {
+    height: auto;
+    padding: 20px 5%;
+  }
+  .sconto-editorial .sconto-title {
+    font-size: 1.3rem;
+  }
+  .sconto-editorial .sconto-sub {
+    font-size: 0.85rem;
+  }
+}
 /* ── SEARCH BAR ── */
 .search-wrap {
   position: relative;
@@ -5009,6 +5185,120 @@ img {
 }
 
 /* ══════════════════════════════════
+   ACQUISTA PER BRAND
+══════════════════════════════════ */
+.brands-section {
+  padding: 2.5rem 0 1.5rem;
+  background: var(--bg);
+}
+
+.brands-label {
+  font-size: .78rem;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin: 0 0 1.25rem;
+}
+
+.brands-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+}
+
+.brand-card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.25rem 1rem;
+  background: var(--surface, #fff);
+  border: 1.5px solid var(--border);
+  border-radius: 14px;
+  cursor: pointer;
+  transition: border-color .25s, box-shadow .25s, transform .2s, background .2s;
+  color: #111;
+  position: relative;
+  overflow: hidden;
+}
+
+.brand-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(108,99,255,.06), rgba(139,92,246,.04));
+  opacity: 0;
+  transition: opacity .25s;
+  border-radius: inherit;
+}
+
+.brand-card:hover {
+  border-color: rgba(108, 99, 255, 0.55);
+  box-shadow: 0 6px 28px rgba(108, 99, 255, 0.18);
+  transform: translateY(-3px);
+  background: #fff;
+}
+
+.brand-card:hover::before {
+  opacity: 1;
+}
+
+.brand-card:active {
+  transform: translateY(-1px);
+}
+
+.brand-logo {
+  width: 100%;
+  max-width: 160px;
+  height: 54px;
+  display: block;
+  transition: opacity .2s;
+}
+
+.brand-card:hover .brand-logo {
+  opacity: .85;
+}
+
+/* Responsive: 4 colonne fino a 900px, poi 2 */
+@media (max-width: 900px) {
+  .brands-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: .75rem;
+  }
+  .brand-card {
+    padding: 1rem .75rem;
+  }
+}
+
+/* Responsive: 2 colonne su tablet stretto */
+@media (max-width: 640px) {
+  .brands-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: .65rem;
+  }
+  .brand-card {
+    padding: .9rem .6rem;
+  }
+}
+
+/* Responsive: 2 colonne su mobile */
+@media (max-width: 480px) {
+  .brands-section {
+    padding: 1.5rem 0 1rem;
+  }
+  .brands-grid {
+    gap: .5rem;
+  }
+  .brand-logo {
+    height: 40px;
+  }
+  .brand-card {
+    padding: .75rem .5rem;
+    border-radius: 10px;
+  }
+}
+
+/* ══════════════════════════════════
    RICHIESTA PERSONALIZZATA
 ══════════════════════════════════ */
 .custom-order-section {
@@ -5742,13 +6032,15 @@ img {
    CATEGORY PAGE OVERLAY — Adidas-style full-screen view
    ══════════════════════════════════════════════════════ */
 
-/* Overlay che copre tutto lo schermo sotto la header fissa */
+/* Overlay che parte sotto la header fissa */
 .cat-page-overlay {
   position: fixed;
-  inset: 0;
-  top: 0;
+  top: calc(30px + 70px); /* top-bar + navbar height */
+  left: 0;
+  right: 0;
+  bottom: 0;
   background: #fff;
-  z-index: 500;
+  z-index: 999; /* sotto la nav (z-index:1000) */
   overflow-y: auto;
   overflow-x: hidden;
   transform: translateX(100%);
@@ -5760,81 +6052,80 @@ img {
   transform: translateX(0);
 }
 
-/* ── TOP BAR con breadcrumb (sticky) ── */
+/* ── TOP BAR con breadcrumb (sticky nella sua scroll area) ── */
 .cat-page-topbar {
   position: sticky;
   top: 0;
   left: 0;
   right: 0;
   z-index: 10;
-  background: #fff;
-  border-bottom: 1px solid rgba(0,0,0,.09);
-  padding: .65rem 2rem;
-  /* spazio per top bar nera + navbar */
-  padding-top: calc(30px + 70px + .65rem);
+  background: #0d1117;
+  border-bottom: 1px solid rgba(255,255,255,.08);
+  padding: .55rem 2rem;
 }
 
 .cat-page-breadcrumb {
   display: flex;
   align-items: center;
-  gap: .55rem;
-  font-size: .82rem;
-  color: #767676;
+  gap: .45rem;
+  font-size: .78rem;
+  color: rgba(255,255,255,.55);
 }
 
 .cat-page-back-btn {
   display: inline-flex;
   align-items: center;
-  gap: .3rem;
+  gap: .25rem;
   background: none;
   border: none;
   cursor: pointer;
   font-family: inherit;
-  font-size: .82rem;
-  font-weight: 500;
-  color: #111;
+  font-size: .78rem;
+  font-weight: 600;
+  color: rgba(255,255,255,.85);
   padding: 0;
-  transition: opacity .15s;
+  transition: color .15s;
 }
-.cat-page-back-btn:hover { opacity: .65; }
+.cat-page-back-btn:hover { color: #fff; }
+.cat-page-back-btn svg { opacity: .7; }
 
-.cat-page-sep { color: #ccc; font-size: .75rem; }
-.cat-page-bc-home { color: #767676; }
-.cat-page-bc-label { color: #111; font-weight: 600; }
+.cat-page-sep { color: rgba(255,255,255,.3); font-size: .72rem; line-height: 1; }
+.cat-page-bc-label { color: rgba(255,255,255,.55); font-weight: 600; font-size: .78rem; text-transform: uppercase; letter-spacing: .04em; }
 
 /* ── Contenuto interno ── */
 .cat-page-inner {
-  max-width: 1600px;
+  max-width: 1560px;
   margin: 0 auto;
   padding: 0 2rem 4rem;
 }
 
-/* ── Hero banner categoria ── */
+/* ── Hero titolo categoria (stile Adidas) ── */
 .cat-page-hero {
-  padding: 2rem 0 1.5rem;
-  border-bottom: 1px solid rgba(0,0,0,.08);
+  padding: 1.8rem 0 1.4rem;
+  border-bottom: 1px solid rgba(0,0,0,.09);
   margin-bottom: 0;
   display: flex;
   align-items: baseline;
-  gap: 1rem;
+  gap: .75rem;
   flex-wrap: wrap;
 }
 
 .cat-page-title {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: clamp(1.8rem, 4vw, 2.6rem);
-  font-weight: 800;
+  font-family: 'Barlow Condensed', 'Arial Black', sans-serif;
+  font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+  font-weight: 900;
   text-transform: uppercase;
-  letter-spacing: .02em;
+  letter-spacing: .01em;
   color: #111;
   line-height: 1;
   margin: 0;
 }
 
 .cat-page-count {
-  font-size: .88rem;
-  color: #767676;
+  font-size: .82rem;
+  color: #999;
   font-weight: 400;
+  letter-spacing: 0;
 }
 
 /* ── Tabs sottocategoria (tipo Adidas: LIFESTYLE / SCARPE / …) ── */
@@ -5951,33 +6242,105 @@ img {
 .cat-sort-item:hover { background: #f5f5f5; }
 .cat-sort-item.active { font-weight: 700; background: #f0f0f0; }
 
-/* ── Griglia prodotti della category page ── */
+/* ── Griglia prodotti della category page (Adidas-style) ── */
 .cat-page-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 1.5rem 1.2rem;
+  gap: .4rem;
 }
 
 @media (max-width: 1200px) {
   .cat-page-grid { grid-template-columns: repeat(3, 1fr); }
 }
 @media (max-width: 800px) {
-  .cat-page-grid { grid-template-columns: repeat(2, 1fr); gap: 1rem .7rem; }
-  .cat-page-topbar { padding: calc(30px + 60px + .65rem) 1rem .65rem; }
-  .cat-page-inner { padding: 0 1rem 3rem; }
-  .cat-page-sort-bar { padding: .8rem 0; }
+  .cat-page-overlay { top: calc(30px + 60px); } /* navbar più bassa su mobile */
+  .cat-page-grid { grid-template-columns: repeat(2, 1fr); gap: .3rem; }
+  .cat-page-topbar { padding: .55rem 1rem; }
+  .cat-page-inner { padding: 0 .75rem 3rem; }
+  .cat-page-sort-bar { padding: .7rem 0; }
 }
 @media (max-width: 480px) {
-  .cat-page-grid { grid-template-columns: repeat(2, 1fr); gap: .8rem .5rem; }
+  .cat-page-grid { grid-template-columns: repeat(2, 1fr); gap: .25rem; }
 }
 
-/* Card prodotto dentro cat-page (riusa .product-card dal sito) */
+/* ── Card prodotto stile Adidas: solo immagine, nessun testo sotto ── */
 .cat-page-grid .product-card {
-  animation: catCardIn .35s ease both;
+  animation: catCardIn .3s ease both;
+  background: #f5f5f5;
+  border-radius: 0;
+  overflow: hidden;
+  position: relative;
+  cursor: pointer;
+  border: none;
+  box-shadow: none;
+  padding: 0;
+}
+
+/* Wrap immagine: rapporto 3/4 fisso come Adidas */
+.cat-page-grid .product-card .card-img-wrap {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  width: 100%;
+  background: #f5f5f5;
+  overflow: hidden;
+}
+
+.cat-page-grid .product-card .card-img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  display: block;
+  transition: transform .45s ease;
+}
+
+.cat-page-grid .product-card:hover .card-img-wrap img {
+  transform: scale(1.04);
+}
+
+/* Icona cuore — solo sovrapposta all'immagine, angolo in alto a destra */
+.cat-page-grid .product-card .card-fav-btn {
+  position: absolute;
+  top: .65rem;
+  right: .65rem;
+  background: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 5;
+  box-shadow: 0 1px 6px rgba(0,0,0,.15);
+  padding: 0;
+  transition: transform .2s;
+}
+.cat-page-grid .product-card .card-fav-btn:hover { transform: scale(1.12); }
+.cat-page-grid .product-card .card-fav-btn svg { width: 15px; height: 15px; }
+
+/* Badge (new / offerta) — angolo in alto a sinistra */
+.cat-page-grid .product-card .card-badge {
+  position: absolute;
+  top: .65rem;
+  left: .65rem;
+  font-size: .68rem;
+  font-weight: 700;
+  padding: .25rem .55rem;
+  border-radius: 3px;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  z-index: 5;
+}
+
+/* Info testuali NASCOSTE (stile Adidas puro — solo immagine) */
+.cat-page-grid .product-card .card-info {
+  display: none;
 }
 
 @keyframes catCardIn {
-  from { opacity: 0; transform: translateY(18px); }
+  from { opacity: 0; transform: translateY(14px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
@@ -6218,36 +6581,10 @@ img {
      EDITORIAL HERO — Mobile full-screen
   ══════════════════════════ */
   .editorial-hero {
-    grid-template-columns: 1fr;
-    grid-template-rows: auto auto auto;
     margin-top: calc(var(--mob-topbar) + var(--mob-header));
-    height: auto;
-    min-height: 0;
+    height: 110vw;
+    min-height: 300px;
     max-height: none;
-    gap: 0;
-  }
-
-  .ed-panel--main {
-    grid-column: 1;
-    grid-row: 1;
-    min-height: 90vw;
-    max-height: 110vw;
-  }
-
-  .ed-panel--detail {
-    grid-column: 1;
-    grid-row: 2;
-    border-left: none;
-    min-height: 65vw;
-    max-height: 75vw;
-  }
-
-  .ed-panel--brand {
-    grid-column: 1;
-    grid-row: 3;
-    border-left: none;
-    min-height: 65vw;
-    max-height: 75vw;
   }
 
   .ed-panel-content {
@@ -6785,26 +7122,46 @@ img {
      CATEGORY PAGE OVERLAY
   ══════════════════════════ */
   .cat-page-topbar {
-    padding-top: calc(var(--mob-topbar) + var(--mob-header) + .65rem);
-    padding-left: 1rem;
-    padding-right: 1rem;
+    padding-top: calc(var(--mob-topbar) + var(--mob-header) + .55rem);
+    padding-left: .75rem;
+    padding-right: .75rem;
   }
 
+  /* Inner senza padding laterale: griglia va edge-to-edge */
   .cat-page-inner {
-    padding: 0 .75rem calc(var(--mob-safe) + 2rem);
+    padding: 0 0 calc(var(--mob-safe) + 2rem);
+  }
+
+  /* Titolo e sort bar con padding orizzontale proprio */
+  .cat-page-hero {
+    padding-left: .75rem;
+    padding-right: .75rem;
+  }
+
+  .cat-page-tabs-bar {
+    padding-left: 0;
+    padding-right: 0;
   }
 
   .cat-page-title {
-    font-size: 1.6rem;
+    font-size: 1.5rem;
   }
 
   .cat-page-sort-bar {
-    padding: .65rem 0;
+    padding: .6rem .75rem;
   }
 
   .cat-page-grid {
     grid-template-columns: repeat(2, 1fr);
-    gap: .7rem .5rem;
+    gap: .2rem;
+  }
+
+  /* Card cuore più toccabile su mobile */
+  .cat-page-grid .product-card .card-fav-btn {
+    width: 30px;
+    height: 30px;
+    top: .45rem;
+    right: .45rem;
   }
 
   /* Tabs categoria: touch-friendly */
@@ -7065,4 +7422,98 @@ img {
   .ed-panel:active .ed-panel-img {
     transform: none;
   }
-}
+}
+
+/* ═══════════════════ CONDIVIDI I TUOI ACQUISTI ═══════════════════ */
+.share-purchases-section {
+  padding: 4rem 0;
+  background-color: #fff;
+  text-align: center;
+}
+.share-purchases-section .section-header {
+  margin-bottom: 2rem;
+}
+.share-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 4px;
+  margin-bottom: 3rem;
+}
+.share-item {
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  background: #f0f0f0;
+}
+.share-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.4s ease;
+}
+.share-item:hover img {
+  transform: scale(1.05);
+}
+.share-actions {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+.share-action-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  color: #111;
+  background: #f9f9f9;
+  padding: 1.5rem 1rem;
+  border-radius: 12px;
+  transition: background 0.3s, transform 0.2s;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+.share-action-btn:hover {
+  background: #f0f0f0;
+  transform: translateY(-2px);
+}
+.share-icon {
+  width: 32px;
+  height: 32px;
+  margin-bottom: 0.75rem;
+  color: #111;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.share-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+@media (max-width: 992px) {
+  .share-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+@media (max-width: 640px) {
+  .share-purchases-section {
+    padding: 3rem 0;
+  }
+  .share-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    margin-bottom: 2rem;
+  }
+  .share-actions {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+    padding: 0 1rem;
+  }
+  .share-action-btn {
+    padding: 1.25rem 0.5rem;
+    font-size: 0.85rem;
+  }
+}

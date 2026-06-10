@@ -1,0 +1,2754 @@
+﻿/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   GoalKit â€” app.js
+   Carrello + Ordini + EmailJS
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+
+// â”€â”€ CONFIG EMAIL (salvata in localStorage) â”€â”€
+// Le credenziali sono configurate UNA VOLTA dal venditore via "âš™ï¸ Setup Email"
+// e poi funzionano automaticamente per tutti gli ordini di tutti i clienti.
+const DEFAULT_EMAIL_CONFIG = {
+  publicKey: "z3BLJtLhUWt266yFW",
+  serviceId: "service_0onnes3",
+  templateId: "template_i8e9odd",
+  customerTemplateId: "template_oo5ig0c",
+  ownerEmail: "worldofkits04@gmail.com"
+};
+let EMAIL_CONFIG = Object.assign({}, DEFAULT_EMAIL_CONFIG, JSON.parse(localStorage.getItem('gk_email_config') || '{}'));
+
+// â”€â”€ STATO â”€â”€
+let cart = JSON.parse(localStorage.getItem('gk_cart') || '[]').map(function (item) {
+  if (!item._uid) item._uid = Date.now() + '-' + Math.random().toString(36).slice(2);
+  return item;
+});
+let currentFilter = 'new';
+let currentTeam = null;
+let currentSearch = '';
+let currentBrand = null;
+let currentSort = 'default';
+let quickViewProduct = null;
+let currentCustomization = null; // { name, number, shortsNumber, sockSize }
+let favorites = JSON.parse(localStorage.getItem('gk_favorites') || '[]'); // array di product id
+
+// â”€â”€ SQUADRE PER CATEGORIA â”€â”€
+const TEAMS = {
+  Champions: [
+    'Real Madrid', 'Manchester City', 'Bayern Monaco', 'PSG', 'Inter', 'Juventus',
+    'Atletico Madrid', 'Borussia Dortmund', 'Arsenal', 'Barcellona', 'Napoli', 'Porto',
+    'Ajax', 'Chelsea', 'Liverpool', 'Milan', 'Tottenham', 'Benfica', 'Leverkusen',
+    'RB Leipzig', 'Atalanta',
+  ],
+  Premier: [
+    'Arsenal FC', 'Aston Villa', 'Brighton', 'Chelsea', 'Crystal Palace', 'Liverpool FC',
+    'Manchester City', 'Manchester United', 'Newcastle', 'Tottenham', 'West Ham',
+  ],
+  SerieA: [
+    'Atalanta', 'Bologna', 'Cagliari', 'Como', 'Cremonese', 'Fiorentina', 'Genoa', 'Inter', 'Juventus', 'Lazio',
+    'Lecce', 'Milan', 'Napoli', 'Parma', 'Pisa', 'Roma', 'Sassuolo', 'Torino', 'Udinese', 'Verona'
+  ],
+  Bundesliga: [
+    'Bayern Monaco', 'Borussia Dortmund', 'Bayer Leverkusen', 'RB Leipzig',
+    'Eintracht Francoforte', 'Wolfsburg', 'Stoccarda', 'Friburgo'
+  ],
+  SaudiLeague: [
+    'Al Nassr', 'Al Hilal', 'Al Ittihad', 'Al Ahli',
+    'Al Qadsiah', 'Al Shabab', 'Al Ettifaq', 'Al Fayha'
+  ],
+  LaLiga: [
+    'Real Madrid', 'Barcellona', 'Atletico Madrid', 'Siviglia', 'Villarreal',
+    'Real Betis', 'Athletic Bilbao', 'Real Sociedad', 'Osasuna', 'Valencia'
+  ],
+  Nazionali: [
+    'Italia', 'Francia', 'Spagna', 'Germania', 'Brasile', 'Argentina',
+    'Portogallo', 'Inghilterra', 'Belgio', 'Olanda', 'Marocco', 'Giappone'
+  ],
+  Mondiale2026: [
+    'Italia', 'Francia', 'Spagna', 'Germania', 'Brasile', 'Argentina',
+    'Portogallo', 'Inghilterra', 'USA', 'Messico', 'Canada', 'Marocco',
+    'Giappone', 'Corea del Sud', 'Australia', 'Olanda', 'Belgio', 'Svizzera',
+    'Colombia', 'Uraguay', 'Senegal', 'Croazia'
+  ],
+};
+
+// â”€â”€ INIT â”€â”€
+document.addEventListener('DOMContentLoaded', () => {
+  initEmailJS();
+  renderProducts(currentFilter);
+  updateCartUI();
+  setupParticles();
+  setupNav();
+  setupNavMegaMenu();
+  setupNavSearch();
+  setupFeatured();
+  setupMondiali();
+  setupCartSidebar();
+  setupOrderModal();
+  setupQuickView();
+  setupContactForm();
+  setupSetupModal();
+  setupAdminBtn();
+  setupScrollSpy();
+  setupFilters();
+  setupSearch();
+  setupVendorPanel();
+  setupReviews();
+  setupCustomOrder();
+  setupHeroCarousel();
+  setupReviewMiniCarousels();
+  setupFavorites();
+  setupCustomizeModal();
+  setupVintage();
+  setupMustHave();
+  setupBrands();
+});
+
+// â”€â”€ EMAILJS INIT â”€â”€
+function initEmailJS() {
+  if (EMAIL_CONFIG.publicKey) {
+    emailjs.init({ publicKey: EMAIL_CONFIG.publicKey });
+  }
+}
+
+// â”€â”€ PARTICELLE HERO â”€â”€
+function setupParticles() {
+  const container = document.getElementById('heroParticles');
+  if (!container) return;
+  for (let i = 0; i < 20; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    p.style.cssText = `
+      left: ${Math.random() * 100}%;
+      top: ${Math.random() * 100}%;
+      animation-delay: ${Math.random() * 4}s;
+      animation-duration: ${4 + Math.random() * 4}s;
+      width: ${2 + Math.random() * 3}px;
+      height: ${2 + Math.random() * 3}px;
+      opacity: ${0.2 + Math.random() * 0.3};
+    `;
+    container.appendChild(p);
+  }
+}
+
+// â”€â”€ NAVBAR â”€â”€
+function setupNav() {
+  const hamburger = document.getElementById('hamburger');
+  const navLinks = document.getElementById('navLinks');
+  hamburger?.addEventListener('click', () => navLinks?.classList.toggle('open'));
+
+  // Chiudi menu su click link
+  document.querySelectorAll('.nav-link').forEach(link => {
+    link.addEventListener('click', () => navLinks?.classList.remove('open'));
+  });
+
+  // Logo click â†’ top
+  document.querySelector('.nav-logo')?.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  // â”€â”€ MEGA MENU: apri/chiudi con timeout per evitare chiusura sul gap â”€â”€
+  const megaItems = document.querySelectorAll('.nav-mega-item');
+  let closeTimer = null;
+
+  function openMega(item) {
+    // Cancella eventuale timer di chiusura in corso
+    if (closeTimer) { clearTimeout(closeTimer); closeTimer = null; }
+    // Chiudi tutti gli altri panel
+    megaItems.forEach(other => { if (other !== item) other.classList.remove('active'); });
+    item.classList.add('active');
+  }
+
+  function closeMega(item) {
+    // Aspetta 120ms prima di chiudere: se il cursore entra nel panel il timer viene annullato
+    closeTimer = setTimeout(() => {
+      item.classList.remove('active');
+      closeTimer = null;
+    }, 120);
+  }
+
+  function closeAllMega() {
+    if (closeTimer) { clearTimeout(closeTimer); closeTimer = null; }
+    megaItems.forEach(item => item.classList.remove('active'));
+  }
+
+  megaItems.forEach(item => {
+    // Apri quando il cursore entra sul nav-mega-item (trigger + panel sono dentro)
+    item.addEventListener('mouseenter', () => openMega(item));
+    // Avvia timer chiusura quando il cursore esce dall'intero nav-mega-item
+    item.addEventListener('mouseleave', () => closeMega(item));
+  });
+
+  // Chiudi anche se si clicca fuori dalla navbar
+  document.addEventListener('click', e => {
+    if (!e.target.closest('.nav-mega-item')) closeAllMega();
+  });
+
+  // Chiudi se si preme ESC
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeAllMega();
+  });
+}
+
+// â”€â”€ SCROLL SPY â”€â”€
+function setupScrollSpy() {
+  const sections = ['home', 'products', 'about', 'contact'];
+  const navLinks = document.querySelectorAll('.nav-link');
+  window.addEventListener('scroll', () => {
+    let current = 'home';
+    sections.forEach(id => {
+      const el = document.getElementById(id);
+      if (el && window.scrollY >= el.offsetTop - 120) current = id;
+    });
+    navLinks.forEach(link => {
+      link.classList.toggle('active', link.getAttribute('href') === '#' + current);
+    });
+  });
+}
+
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// PRODOTTI
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+
+// Controlla se un prodotto appartiene a una categoria (supporta stringa e array)
+function productMatchesCategory(p, filter) {
+  if (filter === 'all') return true;
+  if (filter === 'new') return p.badge === 'new';
+  if (filter === 'vintage') {
+    return p.badge === 'vintage';
+  }
+  const cats = Array.isArray(p.category) ? p.category : [p.category];
+  return cats.includes(filter);
+}
+
+// Controlla se un prodotto appartiene a una squadra specifica
+function productMatchesTeam(p, team) {
+  if (!team) return true;
+  return p.name.toLowerCase().includes(team.toLowerCase());
+}
+
+// Controlla se un prodotto corrisponde al testo di ricerca
+function productMatchesSearch(p, query) {
+  if (!query) return true;
+  const q = query.toLowerCase();
+  const name = p.name.toLowerCase();
+  const label = Array.isArray(p.categoryLabel)
+    ? p.categoryLabel.join(' ').toLowerCase()
+    : (p.categoryLabel || '').toLowerCase();
+  const brand = (p.brand || '').toLowerCase();
+  return name.includes(q) || label.includes(q) || brand.includes(q);
+}
+
+// Controlla se un prodotto appartiene a un brand specifico
+function productMatchesBrand(p, brand) {
+  if (!brand) return true;
+  const b = brand.toLowerCase();
+  return (p.brand || '').toLowerCase() === b ||
+         p.name.toLowerCase().includes(b);
+}
+
+function renderProducts(filter, team = null) {
+  const grid = document.getElementById('productsGrid');
+  if (!grid) return;
+
+  let filtered = PRODUCTS.filter(p =>
+    productMatchesCategory(p, filter) &&
+    productMatchesTeam(p, team) &&
+    productMatchesSearch(p, currentSearch) &&
+    productMatchesBrand(p, currentBrand)
+  );
+
+  // Sort
+  if (currentSort === 'price-asc') filtered = [...filtered].sort((a, b) => a.price - b.price);
+  if (currentSort === 'price-desc') filtered = [...filtered].sort((a, b) => b.price - a.price);
+
+  // Aggiorna contatore
+  const countEl = document.getElementById('shopCount');
+  if (countEl) countEl.textContent = `(${filtered.length})`;
+
+  grid.innerHTML = '';
+
+  if (filtered.length === 0) {
+    grid.innerHTML = `
+      <div style="grid-column:1/-1;text-align:center;padding:4rem 1rem;color:var(--text-muted);">
+        <div style="font-size:3rem;margin-bottom:1rem;">ðŸ”</div>
+        <p style="font-size:1.1rem;">Nessun prodotto trovato per questa selezione.</p>
+      </div>`;
+    return;
+  }
+
+  filtered.forEach((p, i) => {
+    const card = document.createElement('div');
+    card.className = 'product-card';
+    card.style.animationDelay = `${i * 0.06}s`;
+    const catLabel = Array.isArray(p.categoryLabel)
+      ? p.categoryLabel[0]
+      : p.categoryLabel;
+    const fav = isFavorite(p.id);
+    card.innerHTML = `
+      <div class="card-img-wrap">
+        <img src="${p.image}" alt="${p.name}" loading="lazy" onclick="openQuickView(${p.id})"
+             onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22360%22><rect fill=%22%230f1525%22 width=%22300%22 height=%22360%22/><text x=%2250%25%22 y=%2250%25%22 fill=%22%236c63ff%22 text-anchor=%22middle%22 dominant-baseline=%22middle%22 font-size=%2260%22>&#x26BD;</text></svg>'" style="cursor:pointer;width:100%;height:100%;object-fit:cover;display:block;">
+        ${p.badge ? `<span class="card-badge ${p.badge}">${p.badgeLabel}</span>` : ''}
+        <button class="card-fav-btn${fav ? ' active' : ''}" data-pid="${p.id}" onclick="event.stopPropagation();toggleFavorite(${p.id},this)" title="${fav ? 'Rimuovi dai preferiti' : 'Aggiungi ai preferiti'}" aria-label="Preferiti">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="${fav ? '#e44545' : 'none'}" stroke="${fav ? '#e44545' : '#999'}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        </button>
+      </div>
+      <div class="card-info" onclick="openQuickView(${p.id})" style="cursor:pointer;">
+        <div class="card-category">${catLabel}</div>
+        <div class="card-name">${p.name}</div>
+        <div class="card-price-row">
+          <span class="card-price">&#x20AC;${p.price.toFixed(2)}</span>
+          ${p.oldPrice ? `<span class="card-price-old">&#x20AC;${p.oldPrice.toFixed(2)}</span>` : ''}
+        </div>
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+
+}
+
+// â”€â”€ SETUP FILTRI SIDEBAR 3-LEVEL â”€â”€
+function setupFilters() {
+
+  // â”€â”€ NovitÃ  / Vintage â”€â”€
+  document.getElementById('filterNew')?.addEventListener('click', () => setActiveFilter('new', null));
+  document.getElementById('filterVintage')?.addEventListener('click', () => setActiveFilter('vintage', null));
+
+  // â”€â”€ CALCIO: toggle apre/chiude l'intera sezione campionati â”€â”€
+  const calcioBtn = document.getElementById('calcioToggleBtn');
+  const calcioList = document.getElementById('calcioSubList');
+  if (calcioBtn && calcioList) {
+    calcioBtn.addEventListener('click', () => {
+      const isOpen = calcioList.classList.contains('open');
+      // Chiudi Accessori se aperto
+      document.getElementById('accessoriSubList')?.classList.remove('open');
+      document.getElementById('accessoriToggleBtn')?.classList.remove('active');
+      if (isOpen) {
+        calcioList.classList.remove('open');
+        calcioBtn.classList.remove('active');
+      } else {
+        calcioList.classList.add('open');
+        calcioBtn.classList.add('active');
+      }
+    });
+  }
+
+  // â”€â”€ League buttons (livello 2 dentro Calcio) â”€â”€
+  const leagueDefs = [
+    { btnId: 'filterChampions', listId: 'menuChampions', filter: 'Champions' },
+    { btnId: 'megaBtnSerieA', listId: 'megaListSerieA', filter: 'SerieA' },
+    { btnId: 'megaBtnLaLiga', listId: 'megaListLaLiga', filter: 'LaLiga' },
+    { btnId: 'megaBtnPremier', listId: 'megaListPremier', filter: 'Premier' },
+    { btnId: 'megaBtnBundesliga', listId: 'megaListBundesliga', filter: 'Bundesliga' },
+    { btnId: 'megaBtnSaudi', listId: 'megaListSaudi', filter: 'SaudiLeague' },
+    { btnId: 'megaBtnNazionali', listId: 'megaListNazionali', filter: 'Nazionali' },
+  ];
+
+  // â”€â”€ MONDIALE 2026: pulsante flat diretto â”€â”€
+  const mondialBtn = document.getElementById('megaBtnMondiale2026');
+  if (mondialBtn) {
+    mondialBtn.addEventListener('click', () => {
+      setActiveFilter('Mondiale2026', null);
+    });
+  }
+
+  leagueDefs.forEach(({ btnId, listId, filter }) => {
+    const btn = document.getElementById(btnId);
+    const list = document.getElementById(listId);
+    if (!btn || !list) return;
+
+    // Popola lista squadre (livello 3)
+    list.innerHTML = (TEAMS[filter] || []).map(t =>
+      `<li><button data-team="${t}" data-filter="${filter}">${t}</button></li>`
+    ).join('');
+
+    // Click campionato: filtra lega + toggle squadre, non chiude Calcio
+    btn.addEventListener('click', () => {
+      const isOpen = list.classList.contains('open');
+      // Chiudi tutte le altre sub-list di livello 3 dentro calcio (non calcioSubList)
+      if (calcioList) {
+        calcioList.querySelectorAll('.sidebar-sub-list.open').forEach(sl => {
+          if (sl !== list) sl.classList.remove('open');
+        });
+        calcioList.querySelectorAll('.sidebar-nested-btn').forEach(b => {
+          if (b !== btn) b.classList.remove('active');
+        });
+      }
+      if (!isOpen) {
+        list.classList.add('open');
+        btn.classList.add('active');
+      } else {
+        list.classList.remove('open');
+        btn.classList.remove('active');
+      }
+      setActiveFilter(filter, null);
+    });
+
+    // Click team (livello 3)
+    list.addEventListener('click', (e) => {
+      const item = e.target.closest('button[data-team]');
+      if (!item) return;
+      list.querySelectorAll('button').forEach(b => b.classList.remove('dd-item-active'));
+      item.classList.add('dd-item-active');
+      setActiveFilter(filter, item.dataset.team || null);
+      // Su mobile la sidebar Ã¨ sopra la griglia â†’ scroll alla griglia prodotti
+      setTimeout(() => {
+        const gridEl = document.getElementById('productsGrid');
+        if (gridEl) {
+          const navbarH = (document.querySelector('.header')?.offsetHeight || 60) + 16;
+          const top = gridEl.getBoundingClientRect().top + window.pageYOffset - navbarH;
+          window.scrollTo({ top, behavior: 'smooth' });
+        }
+      }, 120);
+    });
+  });
+
+  // â”€â”€ ACCESSORI: toggle apre/chiude la sezione â”€â”€
+  const accessoriBtn = document.getElementById('accessoriToggleBtn');
+  const accessoriList = document.getElementById('accessoriSubList');
+  if (accessoriBtn && accessoriList) {
+    accessoriBtn.addEventListener('click', () => {
+      const isOpen = accessoriList.classList.contains('open');
+      // Chiudi Calcio se aperto
+      calcioList?.classList.remove('open');
+      calcioBtn?.classList.remove('active');
+      if (isOpen) {
+        accessoriList.classList.remove('open');
+        accessoriBtn.classList.remove('active');
+      } else {
+        accessoriList.classList.add('open');
+        accessoriBtn.classList.add('active');
+      }
+    });
+
+    // Sub-item Accessori
+    accessoriList.querySelectorAll('.sidebar-nested-btn[data-filter]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        accessoriList.querySelectorAll('.sidebar-nested-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        setActiveFilter(btn.dataset.filter, null);
+      });
+    });
+  }
+
+  // â”€â”€ Toggle sidebar ("Nascondi filtri" / "Mostra filtri") â”€â”€
+  const toggleBtn = document.getElementById('sidebarToggleBtn');
+  const layout = document.getElementById('shopLayout');
+  if (toggleBtn && layout) {
+    toggleBtn.addEventListener('click', () => {
+      const hidden = layout.classList.toggle('sidebar-hidden');
+      toggleBtn.innerHTML = hidden
+        ? `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/></svg> Mostra filtri`
+        : `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/></svg> Nascondi filtri`;
+    });
+  }
+
+  // â”€â”€ Sort menu â”€â”€
+  const sortWrap = document.querySelector('.shop-sort-wrap');
+  const sortBtn = document.getElementById('shopSortBtn');
+  if (sortBtn && sortWrap) {
+    sortBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      sortWrap.classList.toggle('open');
+    });
+    document.addEventListener('click', () => sortWrap.classList.remove('open'));
+    document.querySelectorAll('.shop-sort-item').forEach(item => {
+      item.addEventListener('click', () => {
+        document.querySelectorAll('.shop-sort-item').forEach(i => i.classList.remove('active'));
+        item.classList.add('active');
+        currentSort = item.dataset.sort || 'default';
+        sortWrap.classList.remove('open');
+        renderProducts(currentFilter, currentTeam);
+      });
+    });
+  }
+}
+
+// â”€â”€ BRAND SECTION â”€â”€
+function setupBrands() {
+  document.querySelectorAll('.brand-card[data-brand]').forEach(card => {
+    card.addEventListener('click', () => {
+      const brand = card.dataset.brand; // es. "EA7", "Nike", "Adidas"...
+      const brandUpper = brand.toUpperCase();
+      // Apre lo stesso overlay catPage usato da "Acquista prodotti Vintage"
+      openCatPage(
+        'all',           // mostra tutti i prodotti del brand (non filtrare per categoria)
+        brandUpper,      // titolo overlay (es. "EA7")
+        brand,           // breadcrumb
+        [],              // nessun sub-tab
+        null,            // nessuna squadra specifica
+        brand            // <-- filtro brand
+      );
+    });
+  });
+}
+
+function closeAllDropdowns() {
+  // (kept for compatibility)
+}
+
+function setActiveFilter(filter, team, updateActiveBtn = true) {
+  currentFilter = filter;
+  currentTeam = team || null;
+  if (updateActiveBtn) {
+    // Resetta tutti i flat-btn e nested-btn
+    document.querySelectorAll('.sidebar-flat-btn, .sidebar-nested-btn').forEach(b => {
+      if (b.id !== 'calcioToggleBtn' && b.id !== 'accessoriToggleBtn') {
+        b.classList.remove('active');
+      }
+    });
+    if (filter === 'new') document.getElementById('filterNew')?.classList.add('active');
+    else if (filter === 'vintage') document.getElementById('filterVintage')?.classList.add('active');
+    else if (filter === 'Champions') document.getElementById('filterChampions')?.classList.add('active');
+    else if (filter === 'SerieA') document.getElementById('megaBtnSerieA')?.classList.add('active');
+    else if (filter === 'LaLiga') document.getElementById('megaBtnLaLiga')?.classList.add('active');
+    else if (filter === 'Premier') document.getElementById('megaBtnPremier')?.classList.add('active');
+    else if (filter === 'Bundesliga') document.getElementById('megaBtnBundesliga')?.classList.add('active');
+    else if (filter === 'SaudiLeague') document.getElementById('megaBtnSaudi')?.classList.add('active');
+    else if (filter === 'Nazionali') document.getElementById('megaBtnNazionali')?.classList.add('active');
+    else if (filter === 'Mondiale2026') document.getElementById('megaBtnMondiale2026')?.classList.add('active');
+    // Accessori sub-items sono giÃ  gestiti direttamente
+  }
+  renderProducts(currentFilter, currentTeam);
+}
+
+// â”€â”€ SEARCH BAR â”€â”€
+function setupSearch() {
+  const input = document.getElementById('searchInput');
+  const clearBtn = document.getElementById('searchClear');
+  if (!input) return;
+
+  let debounceTimer;
+
+  input.addEventListener('input', () => {
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(() => {
+      currentSearch = input.value.trim();
+      // Se c'Ã¨ testo di ricerca, resetta filtro categoria per cercare ovunque
+      if (currentSearch) {
+        currentFilter = 'all';
+        currentTeam = null;
+        currentBrand = null; // reset filtro brand
+        document.querySelectorAll('.brand-card').forEach(c => c.classList.remove('active'));
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById('filterAll')?.classList.add('active');
+        closeAllDropdowns();
+      }
+      clearBtn?.classList.toggle('visible', currentSearch.length > 0);
+      renderProducts(currentFilter, currentTeam);
+    }, 200);
+  });
+
+  clearBtn?.addEventListener('click', () => {
+    input.value = '';
+    currentSearch = '';
+    currentBrand = null; // reset filtro brand
+    document.querySelectorAll('.brand-card').forEach(c => c.classList.remove('active'));
+    clearBtn.classList.remove('visible');
+    renderProducts(currentFilter, currentTeam);
+    input.focus();
+  });
+
+  // Chiudi dropdown quando si digita nella search
+  input.addEventListener('focus', () => closeAllDropdowns());
+}
+
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// QUICK VIEW
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+function setupQuickView() {
+  document.getElementById('quickViewClose')?.addEventListener('click', closeQuickView);
+  document.getElementById('quickViewOverlay')?.addEventListener('click', e => {
+    if (e.target.id === 'quickViewOverlay') closeQuickView();
+  });
+}
+
+function openQuickView(id) {
+  const p = PRODUCTS.find(x => x.id === id);
+  if (!p) return;
+  quickViewProduct = p;
+  currentCustomization = null;
+  const content = document.getElementById('quickViewContent');
+  const catLabel = Array.isArray(p.categoryLabel) ? p.categoryLabel[0] : p.categoryLabel;
+  const kitType = p.kitType || 'solo';
+  const isSoloAllowed = kitType !== 'unico';
+  const isFav = isFavorite(p.id);
+  content.innerHTML = `
+    <div class="qv-grid">
+      <div class="qv-img-wrap">
+        <img src="${p.image}" alt="${p.name}" class="qv-img"
+             onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22480%22><rect fill=%22%230f1525%22 width=%22400%22 height=%22480%22/><text x=%2250%25%22 y=%2250%25%22 fill=%22%236c63ff%22 text-anchor=%22middle%22 dominant-baseline=%22middle%22 font-size=%2270%22>&#x26BD;</text></svg>'">
+        ${p.badge ? `<span class="card-badge ${p.badge} qv-badge">${p.badgeLabel}</span>` : ''}
+      </div>
+      <div class="qv-details">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:.5rem;margin-bottom:.2rem;">
+          <div class="qv-category">${catLabel}</div>
+          <button class="card-fav-btn${isFav ? ' active' : ''}" id="qvFavBtn" onclick="toggleFavoriteFromQV(${p.id})" title="${isFav ? 'Rimuovi dai preferiti' : 'Aggiungi ai preferiti'}" style="position:static;box-shadow:none;background:transparent;border:1.5px solid rgba(0,0,0,.12);width:34px;height:34px;flex-shrink:0;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="${isFav ? '#e44545' : 'none'}" stroke="${isFav ? '#e44545' : '#aaa'}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          </button>
+        </div>
+        <div class="qv-name">${p.name}</div>
+        <div class="qv-desc">${p.description}</div>
+
+        <div class="qv-price-wrap">
+          <span class="qv-price" id="qvPriceDisplay" data-base="${p.price}">&#x20AC;${p.price.toFixed(2)}</span>
+          ${p.oldPrice ? `<span class="qv-price-old">&#x20AC;${p.oldPrice.toFixed(2)}</span>` : ''}
+        </div>
+
+        <!-- Taglia -->
+        <div class="qv-section-label">Taglia</div>
+        <div class="qv-sizes">
+          ${p.sizes.map((s, i) => `<button class="qv-size-btn${i === 0 ? ' active' : ''}" onclick="selectQvSize(this)">${s}</button>`).join('')}
+        </div>
+
+        <!-- Tipo Maglia -->
+        <div class="qv-section-label">Tipo Maglia</div>
+        <div class="qv-fabric-row">
+          <button class="qv-option-btn active" data-extra="0" onclick="selectQvFabric(this)">
+            <span class="qv-opt-icon">&#x1F455;</span>
+            <span class="qv-opt-text"><strong>Standard</strong><small>Tifoso</small></span>
+          </button>
+          <button class="qv-option-btn" data-extra="4" onclick="selectQvFabric(this)">
+            <span class="qv-opt-icon">&#x26A1;</span>
+            <span class="qv-opt-text"><strong>Player</strong><small>+&#x20AC;3,00</small></span>
+          </button>
+        </div>
+
+        <!-- Composizione -->
+        <div class="qv-section-label">Composizione</div>
+        <div class="qv-kit-row">
+          ${isSoloAllowed ? `<button class="qv-option-btn active" data-kit="solo" data-extra="0" onclick="selectQvKit(this)">
+            <span class="qv-opt-icon">&#x1F455;</span>
+            <span class="qv-opt-text"><strong>Solo Maglia</strong><small>Inclusa nel prezzo</small></span>
+          </button>` : ''}
+          <button class="qv-option-btn${!isSoloAllowed ? ' active' : ''}" data-kit="shorts" data-extra="6" onclick="selectQvKit(this)">
+            <span class="qv-opt-icon">&#x26BD;</span>
+            <span class="qv-opt-text"><strong>Maglia + Pantaloncino</strong><small>+&#x20AC;6,00</small></span>
+          </button>
+          <button class="qv-option-btn" data-kit="full" data-extra="10" onclick="selectQvKit(this)">
+            <span class="qv-opt-icon">&#x1F3C6;</span>
+            <span class="qv-opt-text"><strong>Kit Completo</strong><small>Maglia+Pant+Calzettoni +&#x20AC;10,00</small></span>
+          </button>
+        </div>
+
+        <!-- Badge personalizzazione applicata -->
+        <div id="qvCustomizeBadge" style="display:none;margin-top:.5rem;">
+          <span class="customize-applied-badge">&#x270F;&#xFE0F; Personalizzazione applicata</span>
+        </div>
+
+        <button class="btn btn-primary btn-full qv-add-btn" onclick="addToCartFromQV(${p.id}); closeQuickView();">
+          &#x1F6D2; Aggiungi al Carrello
+        </button>
+
+        <!-- Pulsante Personalizza (sempre visibile) -->
+        <button class="qv-customize-btn" id="qvCustomizeBtn" onclick="openCustomizeModal(${p.id})" style="display:flex;">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          &#x270F;&#xFE0F; Personalizza (Nome &amp; Numero)
+        </button>
+      </div>
+    </div>
+  `;
+  openOverlay('quickViewOverlay');
+}
+
+function selectQvSize(btn) {
+  btn.closest('.qv-sizes').querySelectorAll('.qv-size-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+function selectQvFabric(btn) {
+  btn.closest('.qv-fabric-row').querySelectorAll('.qv-option-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  updateQvPrice();
+}
+
+function selectQvKit(btn) {
+  btn.closest('.qv-kit-row').querySelectorAll('.qv-option-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  updateQvPrice();
+  // Il pulsante Personalizza Ã¨ sempre visibile per qualsiasi kit
+  const kit = btn.dataset.kit || 'solo';
+  const customizeBtn = document.getElementById('qvCustomizeBtn');
+  if (customizeBtn) customizeBtn.style.display = 'flex';
+  // Se si cambia kit, resetta la personalizzazione precedente per non creare confusione
+  currentCustomization = null;
+  const badge = document.getElementById('qvCustomizeBadge');
+  if (badge) badge.style.display = 'none';
+  // Placeholder: mantiene compatibilitÃ  con il resto del codice
+  if (false) {
+  }
+}
+
+function updateQvPrice() {
+  const priceEl = document.getElementById('qvPriceDisplay');
+  if (!priceEl) return;
+  const base = parseFloat(priceEl.dataset.base || 0);
+  const fabricBtn = document.querySelector('.qv-fabric-row .qv-option-btn.active');
+  const kitBtn = document.querySelector('.qv-kit-row .qv-option-btn.active');
+  const fabricExtra = fabricBtn ? parseFloat(fabricBtn.dataset.extra || 0) : 0;
+  const kitExtra = kitBtn ? parseFloat(kitBtn.dataset.extra || 0) : 0;
+  priceEl.textContent = `â‚¬${(base + fabricExtra + kitExtra).toFixed(2)}`;
+}
+
+function addToCartFromQV(productId) {
+  const p = PRODUCTS.find(x => x.id === productId);
+  if (!p) return;
+
+  const activeSize = document.querySelector('.qv-sizes .qv-size-btn.active');
+  const activeFabric = document.querySelector('.qv-fabric-row .qv-option-btn.active');
+  const activeKit = document.querySelector('.qv-kit-row .qv-option-btn.active');
+
+  const selectedSize = activeSize ? activeSize.textContent.trim() : (p.sizes[0] || 'M');
+  const fabricText = activeFabric ? activeFabric.querySelector('strong').textContent.trim() : 'Standard';
+  const fabricLabel = '\uD83D\uDC55 ' + fabricText;
+  const fabricExtra = activeFabric ? parseFloat(activeFabric.dataset.extra || 0) : 0;
+  const kitMode = activeKit ? activeKit.dataset.kit : 'solo';
+  const isWithShorts = kitMode === 'shorts' || kitMode === 'full';
+  const isFullKit = kitMode === 'full';
+  const finalPrice = p.price + fabricExtra;
+
+  // Testo personalizzazione maglia
+  let custNote = '';
+  if (currentCustomization && (currentCustomization.name || currentCustomization.number)) {
+    const parts = [];
+    if (currentCustomization.name) parts.push('Nome: ' + currentCustomization.name);
+    if (currentCustomization.number) parts.push('N.' + currentCustomization.number);
+    custNote = parts.join(' | ');
+  }
+
+  // Aggiungi maglia
+  const existing = cart.find(item =>
+    item.id === productId && item.size === selectedSize && item.fabric === fabricLabel && item.custNote === custNote
+  );
+  if (existing) {
+    existing.qty += 1;
+  } else {
+    cart.push({ id: p.id, name: p.name, price: finalPrice, image: p.image, qty: 1, size: selectedSize, fabric: fabricLabel, custNote: custNote, _uid: Date.now() + '-' + Math.random().toString(36).slice(2) });
+  }
+
+  // Aggiungi pantaloncino (Maglia+Pantaloncino oppure Kit Completo)
+  if (isWithShorts) {
+    // Se la maglia ha un prodotto pantaloncino reale collegato, usa nome e immagine da quel prodotto
+    // ma il PREZZO Ã¨ sempre quello del kit (6â‚¬), non il prezzo standalone del prodotto
+    const shortsProduct = p.shortsProductId ? PRODUCTS.find(x => x.id === p.shortsProductId) : null;
+    const shortsName = shortsProduct
+      ? shortsProduct.name
+      : 'Pantaloncini \u2013 ' + p.name.replace(/Maglia\s*/i, '').trim();
+    const shortsKitPrice = 6; // prezzo scontato in kit (standalone = 10, in kit = 6)
+    const shortsPrice = shortsKitPrice + fabricExtra;
+    const shortsImage = shortsProduct ? shortsProduct.image : (p.shortsImage || p.image);
+    const shortsWithNumber = currentCustomization && currentCustomization.shortsNumber;
+    const shortsCustNote = (shortsWithNumber && currentCustomization.number)
+      ? 'N.' + currentCustomization.number + ' sul pantaloncino'
+      : '';
+    cart.push({ id: 'shorts-' + p.id, name: shortsName, price: shortsPrice, image: shortsImage, qty: 1, size: selectedSize, fabric: fabricLabel, custNote: shortsCustNote, _uid: Date.now() + '-s-' + Math.random().toString(36).slice(2) });
+  }
+
+  // Aggiungi calzettoni (solo Kit Completo)
+  if (isFullKit) {
+    const sockSize = (currentCustomization && currentCustomization.sockSize) || '';
+    // Se la maglia ha un prodotto calzettoni reale collegato, usalo
+    const socksProduct = p.socksProductId ? PRODUCTS.find(x => x.id === p.socksProductId) : null;
+    const socksName = socksProduct
+      ? socksProduct.name
+      : 'Calzettoni \u2013 ' + p.name.replace(/Maglia\s*/i, '').trim();
+    const socksPrice = socksProduct ? socksProduct.price : 4; // kit completo: 6 (pant) + 4 (calzettoni) = 10 extra
+    const socksImage = socksProduct ? socksProduct.image : (p.socksImage || p.shortsImage || p.image);
+    const socksCustNote = sockSize ? 'Taglia scarpa: ' + sockSize : '';
+    cart.push({ id: 'socks-' + p.id, name: socksName, price: socksPrice, image: socksImage, qty: 1, size: sockSize || selectedSize, fabric: fabricLabel, custNote: socksCustNote, _uid: Date.now() + '-k-' + Math.random().toString(36).slice(2) });
+  }
+
+  saveCart();
+  updateCartUI();
+  const custSuffix = custNote ? ' + personalizzazione' : '';
+  const msg = isFullKit
+    ? 'Kit Completo (' + selectedSize + ' \u00B7 ' + fabricText + ')' + custSuffix + ' aggiunto!'
+    : isWithShorts
+      ? 'Maglia + Pantaloncino (' + selectedSize + ' \u00B7 ' + fabricText + ')' + custSuffix + ' aggiunto!'
+      : '"' + p.name + '" (' + selectedSize + ' \u00B7 ' + fabricText + ')' + custSuffix + ' aggiunto!';
+  showToast('\u2705', msg);
+  openCart();
+  currentCustomization = null;
+}
+
+
+function closeQuickView() {
+  closeOverlay('quickViewOverlay');
+}
+
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// CARRELLO
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+function addToCart(productId) {
+  const p = PRODUCTS.find(x => x.id === productId);
+  if (!p) return;
+
+  // Taglia attiva
+  const sizeContainer = document.querySelector('.card-sizes[data-product-id="' + productId + '"]');
+  const activeSize = sizeContainer ? sizeContainer.querySelector('.size-tag.active') : null;
+  const selectedSize = activeSize ? activeSize.textContent.trim() : (p.sizes[0] || 'M');
+
+  // Tessuto attivo (Tifoso / Player)
+  const fabricContainer = document.querySelector('.card-fabric[data-product-id="' + productId + '"]');
+  const activeFabric = fabricContainer ? fabricContainer.querySelector('.fabric-btn.active') : null;
+  const fabricLabel = activeFabric ? activeFabric.textContent.replace('+â‚¬4', '').trim() : 'ðŸ‘• Tifoso';
+  const fabricExtra = activeFabric ? parseFloat(activeFabric.dataset.extra || 0) : 0;
+  const finalPrice = p.price + fabricExtra;
+
+  // Distingui per id + taglia + tessuto
+  const existing = cart.find(item =>
+    item.id === productId && item.size === selectedSize && item.fabric === fabricLabel
+  );
+  if (existing) {
+    existing.qty += 1;
+  } else {
+    cart.push({
+      id: p.id,
+      name: p.name,
+      price: finalPrice,
+      image: p.image,
+      qty: 1,
+      size: selectedSize,
+      fabric: fabricLabel,
+      _uid: Date.now() + '-' + Math.random().toString(36).slice(2)
+    });
+  }
+  saveCart();
+  updateCartUI();
+  showToast('âœ…', '"' + p.name + '" (' + selectedSize + ' Â· ' + fabricLabel + ') aggiunto!');
+  openCart();
+}
+
+function selectCardSize(btn) {
+  const container = btn.closest('.card-sizes');
+  if (!container) return;
+  container.querySelectorAll('.size-tag').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+function selectCardFabric(btn) {
+  const container = btn.closest('.card-fabric');
+  if (!container) return;
+  container.querySelectorAll('.fabric-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+
+  // Aggiorna il prezzo mostrato nella card
+  const productId = container.dataset.productId;
+  const priceEl = document.querySelector('.card-price[data-product-id="' + productId + '"]');
+  if (priceEl) {
+    const base = parseFloat(priceEl.dataset.base || 0);
+    const extra = parseFloat(btn.dataset.extra || 0);
+    priceEl.textContent = '\u20ac' + (base + extra).toFixed(2);
+  }
+}
+
+function removeFromCart(uid) {
+  cart = cart.filter(item => item._uid !== uid && item.id != uid);
+  saveCart();
+  updateCartUI();
+  renderCartItems();
+}
+
+function changeQty(uid, delta) {
+  const item = cart.find(x => x._uid === uid || x.id == uid);
+  if (!item) return;
+  item.qty = Math.max(1, item.qty + delta);
+  saveCart();
+  updateCartUI();
+  renderCartItems();
+}
+
+function saveCart() {
+  localStorage.setItem('gk_cart', JSON.stringify(cart));
+}
+
+function getCartTotal() {
+  return cart.reduce((sum, item) => sum + item.price * item.qty, 0);
+}
+
+function getCartCount() {
+  return cart.reduce((sum, item) => sum + item.qty, 0);
+}
+
+function updateCartUI() {
+  const badge = document.getElementById('cartBadge');
+  const count = getCartCount();
+  if (badge) badge.textContent = count;
+}
+
+function renderCartItems() {
+  const container = document.getElementById('cartItems');
+  const footer = document.getElementById('cartFooter');
+  const empty = document.getElementById('cartEmpty');
+  if (!container) return;
+
+  if (cart.length === 0) {
+    if (empty) empty.style.display = 'flex';
+    if (footer) footer.style.display = 'none';
+    container.innerHTML = '';
+    container.appendChild(empty);
+    return;
+  }
+  if (empty) empty.style.display = 'none';
+  if (footer) footer.style.display = 'block';
+
+  const total = getCartTotal();
+  const shipping = total >= 50 ? 'Gratuita' : 'â‚¬3.00';
+
+  let html = '';
+  cart.forEach(function (item) {
+    const isCustom = !!item.custom;
+    const uid = item._uid || item.id;
+    const uidRef = "'" + uid + "'";
+    const imgSrc = item.image || '';
+    const safeName = String(item.name).replace(/"/g, '&quot;');
+
+    const imgHtml = isCustom
+      ? '<div class="cart-item-img" style="display:flex;align-items:center;justify-content:center;font-size:1.8rem;background:rgba(108,99,255,.1);border-radius:8px;">ðŸ”</div>'
+      : '<img class="cart-item-img" src="' + imgSrc + '" alt="' + safeName + '" onerror="this.style.display=\'none\'">';
+
+    const priceLabel = '&euro;' + (item.price * item.qty).toFixed(2);
+
+    html += '<div class="cart-item">'
+      + imgHtml
+      + '<div class="cart-item-info">'
+      + '<div class="cart-item-name">' + item.name + '</div>'
+      + '<div class="cart-item-meta">Taglia: ' + item.size + (item.fabric ? ' &nbsp;&middot;&nbsp; ' + item.fabric : '') + (item.custNote ? '<br><span style="color:#2e7d32;font-size:.72rem;">\u270F\uFE0F ' + item.custNote + '</span>' : '') + '</div>'
+      + '<div class="cart-item-price">' + priceLabel + '</div>'
+      + '<div class="cart-item-qty">'
+      + '<button class="qty-btn" onclick="changeQty(' + uidRef + ', -1)">&minus;</button>'
+      + '<span class="qty-val">' + item.qty + '</span>'
+      + '<button class="qty-btn" onclick="changeQty(' + uidRef + ', +1)">+</button>'
+      + '</div>'
+      + '</div>'
+      + '<button class="cart-item-remove" onclick="removeFromCart(' + uidRef + ')" title="Rimuovi">&#128465;&#65039;</button>'
+      + '</div>';
+  });
+  container.innerHTML = html;
+
+  const subtotalEl = document.getElementById('cartSubtotal');
+  const shippingEl = document.getElementById('cartShipping');
+  const totalEl = document.getElementById('cartTotal');
+  if (subtotalEl) subtotalEl.textContent = `â‚¬${total.toFixed(2)}`;
+  if (shippingEl) shippingEl.textContent = shipping;
+  const finalTotal = shipping === 'Gratuita' ? total : total + 3.00;
+  if (totalEl) totalEl.textContent = `â‚¬${finalTotal.toFixed(2)}`;
+}
+
+// â”€â”€ SIDEBAR CART â”€â”€
+function setupCartSidebar() {
+  const cartBtn = document.getElementById('cartBtn');
+  const cartClose = document.getElementById('cartClose');
+  const overlay = document.getElementById('cartOverlay');
+  const goShop = document.getElementById('goShopBtn');
+  const checkoutBtn = document.getElementById('checkoutBtn');
+
+  cartBtn?.addEventListener('click', openCart);
+  cartClose?.addEventListener('click', closeCart);
+  overlay?.addEventListener('click', closeCart);
+  goShop?.addEventListener('click', () => { closeCart(); document.getElementById('products')?.scrollIntoView({ behavior: 'smooth' }); });
+  checkoutBtn?.addEventListener('click', () => { closeCart(); openOrderModal(); });
+}
+
+function openCart() {
+  renderCartItems();
+  document.getElementById('cartSidebar')?.classList.add('open');
+  document.getElementById('cartOverlay')?.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeCart() {
+  document.getElementById('cartSidebar')?.classList.remove('open');
+  document.getElementById('cartOverlay')?.classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ORDINE MODAL
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+function setupOrderModal() {
+  document.getElementById('orderClose')?.addEventListener('click', closeOrderModal);
+  document.getElementById('orderOverlay')?.addEventListener('click', e => {
+    if (e.target.id === 'orderOverlay') closeOrderModal();
+  });
+  document.getElementById('orderForm')?.addEventListener('submit', submitOrder);
+}
+
+function openOrderModal() {
+  if (cart.length === 0) { showToast('âš ï¸', 'Il carrello Ã¨ vuoto!'); return; }
+  renderOrderSummary();
+  openOverlay('orderOverlay');
+}
+
+function closeOrderModal() {
+  closeOverlay('orderOverlay');
+}
+
+function renderOrderSummary() {
+  const box = document.getElementById('orderSummaryBox');
+  if (!box) return;
+  const total = getCartTotal();
+  const shipping = total >= 50 ? 0 : 3.00;
+  const finalTotal = total + shipping;
+  box.innerHTML = `
+    <h4>ðŸ“‹ Riepilogo Ordine</h4>
+    ${cart.map(item => `
+      <div class="order-summary-row">
+        <span>${item.name} Ã— ${item.qty} (${item.size})</span>
+        <span>â‚¬${(item.price * item.qty).toFixed(2)}</span>
+      </div>
+    `).join('')}
+    <div class="order-summary-row">
+      <span>Spedizione</span>
+      <span>${shipping === 0 ? 'Gratuita ðŸŽ‰' : 'â‚¬3.00'}</span>
+    </div>
+    <div class="order-summary-total">
+      <span>TOTALE</span>
+      <span>â‚¬${finalTotal.toFixed(2)}</span>
+    </div>
+  `;
+}
+
+async function submitOrder(e) {
+  e.preventDefault();
+  const btn = document.getElementById('orderSubmitBtn');
+  const btnText = document.getElementById('orderBtnText');
+
+  // Controlla configurazione EmailJS (usa la variabile globale)
+  if (!EMAIL_CONFIG.publicKey || !EMAIL_CONFIG.serviceId || !EMAIL_CONFIG.templateId || !EMAIL_CONFIG.ownerEmail) {
+    showToast('âš ï¸', 'Sistema email non configurato. Clicca su "âš™ï¸ Setup Email" per configurarlo.');
+    return;
+  }
+
+  const name = document.getElementById('orderName').value.trim();
+  const surname = document.getElementById('orderSurname').value.trim();
+  const email = document.getElementById('orderEmail').value.trim();
+  const phone = document.getElementById('orderPhone').value.trim();
+  const address = document.getElementById('orderAddress').value.trim();
+  const city = document.getElementById('orderCity').value.trim();
+  const zip = document.getElementById('orderZip').value.trim();
+  const notes = document.getElementById('orderNotes').value.trim();
+
+  const total = getCartTotal();
+  const shipping = total >= 60 ? 0 : 3.00;
+  const finalTotal = total + shipping;
+  const orderNum = 'WOK-' + Date.now().toString().slice(-6);
+
+  const orderDetails = cart.map(item => {
+    const priceStr = item.custom ? 'âš ï¸ Prezzo da definire' : `â‚¬${(item.price * item.qty).toFixed(2)}`;
+    return `â€¢ ${item.name} | Taglia: ${item.size} | QtÃ : ${item.qty} | ${priceStr}`;
+  }).join('\n');
+
+
+  // Loading state
+  btn.disabled = true;
+  btnText.textContent = 'â³ Invio in corso...';
+
+  try {
+    // Invia email SOLO al venditore tramite EmailJS
+    const emailData = {
+      to_email: EMAIL_CONFIG.ownerEmail,
+      customer_name: `${name} ${surname}`,
+      customer_email: email,
+      customer_phone: phone || 'Non fornito',
+      customer_address: address,
+      customer_city: city,
+      customer_zip: zip,
+      order_number: orderNum,
+      order_details: orderDetails,
+      order_subtotal: `â‚¬${total.toFixed(2)}`,
+      order_shipping: shipping === 0 ? 'Gratuita' : 'â‚¬3.00',
+      order_total: `â‚¬${finalTotal.toFixed(2)}`,
+      order_notes: notes || 'Nessuna nota',
+      reply_to: email
+    };
+
+    console.log("DATI INVIATI A EMAILJS:", emailData);
+
+    await emailjs.send(
+      EMAIL_CONFIG.serviceId,
+      EMAIL_CONFIG.templateId,
+      emailData
+    );
+
+    // Invia conferma automatica AL CLIENTE
+    const customerTemplateId = EMAIL_CONFIG.customerTemplateId || EMAIL_CONFIG.templateId;
+    const customerConfirmData = {
+      to_email: email,                              // â† va al cliente
+      customer_name: `${name} ${surname}`,
+      customer_email: email,
+      customer_phone: phone || 'Non fornito',
+      customer_address: `${address}, ${zip} ${city}`,
+      order_number: orderNum,
+      order_details: orderDetails,
+      order_subtotal: `â‚¬${total.toFixed(2)}`,
+      order_shipping: shipping === 0 ? 'Gratuita ðŸŽ‰' : 'â‚¬3.00',
+      order_total: `â‚¬${finalTotal.toFixed(2)}`,
+      order_notes: notes || 'Nessuna nota',
+      reply_to: EMAIL_CONFIG.ownerEmail            // cliente puÃ² rispondere al venditore
+    };
+    try {
+      await emailjs.send(EMAIL_CONFIG.serviceId, customerTemplateId, customerConfirmData);
+    } catch (customerErr) {
+      console.warn('Email conferma cliente non inviata:', customerErr);
+    }
+
+    // Svuota carrello e mostra conferma al cliente
+    const savedOrder = { orderNum, name, surname, finalTotal, shipping, cart: [...cart] };
+    cart = [];
+    saveCart();
+    updateCartUI();
+    closeOrderModal();
+    document.getElementById('orderForm')?.reset();
+    showOrderConfirmation(savedOrder);
+
+  } catch (err) {
+    console.error('Errore invio ordine:', err);
+    showToast('âŒ', 'Errore nellâ€™invio. Controlla la configurazione email e riprova.');
+  } finally {
+    btn.disabled = false;
+    btnText.textContent = 'âœ… Conferma Ordine';
+  }
+}
+
+// â”€â”€ MODAL CONFERMA ORDINE (per il cliente) â”€â”€
+function showOrderConfirmation({ orderNum, name, surname, finalTotal, shipping, cart: items }) {
+  // Crea overlay dinamico
+  let overlay = document.getElementById('confirmOverlay');
+  if (!overlay) {
+    overlay = document.createElement('div');
+    overlay.id = 'confirmOverlay';
+    overlay.className = 'modal-overlay';
+    overlay.innerHTML = `
+      <div class="modal glass" style="max-width:500px;text-align:center;">
+        <div style="font-size:4rem;margin-bottom:1rem;">ðŸŽ‰</div>
+        <h2 style="font-size:1.6rem;font-weight:800;margin-bottom:.5rem;">Ordine Ricevuto!</h2>
+        <p style="color:var(--text-muted);margin-bottom:1.5rem;">Grazie <strong id="confName"></strong>, il tuo ordine Ã¨ stato inviato con successo.</p>
+        <div class="glass" style="border-radius:12px;padding:1rem;margin-bottom:1.5rem;text-align:left;">
+          <div style="display:flex;justify-content:space-between;margin-bottom:.5rem;">
+            <span style="color:var(--text-muted);font-size:.85rem;">Numero ordine</span>
+            <strong id="confNum" style="color:var(--accent);"></strong>
+          </div>
+          <div style="display:flex;justify-content:space-between;">
+            <span style="color:var(--text-muted);font-size:.85rem;">Totale pagato</span>
+            <strong id="confTotal"></strong>
+          </div>
+        </div>
+        <p style="font-size:.85rem;color:var(--text-muted);margin-bottom:2rem;">Verrai contattato via email o telefono per la conferma della spedizione. Il pagamento avviene alla consegna.</p>
+        <button class="btn btn-primary btn-full" id="confClose">âœ… Perfetto, grazie!</button>
+      </div>
+    `;
+    document.body.appendChild(overlay);
+    document.getElementById('confClose').addEventListener('click', () => {
+      overlay.classList.remove('open');
+      setTimeout(() => {
+        overlay.style.display = 'none';
+        document.body.style.overflow = ''; // â† ripristina lo scroll
+      }, 300);
+    });
+  }
+
+  document.getElementById('confName').textContent = `${name} ${surname}`;
+  document.getElementById('confNum').textContent = orderNum;
+  document.getElementById('confTotal').textContent = `â‚¬${finalTotal.toFixed(2)}`;
+
+  overlay.style.display = 'flex';
+  requestAnimationFrame(() => overlay.classList.add('open'));
+  // NON blocchiamo overflow qui â€” closeOrderModal lo ha giÃ  rilasciato
+}
+
+
+
+// â”€â”€ CONTACT FORM â”€â”€
+function setupContactForm() {
+  document.getElementById('contactForm')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const name = document.getElementById('contactName').value;
+    const email = document.getElementById('contactEmail').value;
+    const msg = document.getElementById('contactMsg').value;
+    const btn = document.getElementById('contactSubmit');
+    btn.disabled = true;
+
+    try {
+      if (EMAIL_CONFIG.publicKey && EMAIL_CONFIG.serviceId && EMAIL_CONFIG.templateId) {
+        // ðŸ“© EMAIL AL VENDITORE
+        await emailjs.send(
+          EMAIL_CONFIG.serviceId,
+          EMAIL_CONFIG.templateId,
+          emailData
+        );
+
+        // ðŸ“© EMAIL AL CLIENTE
+        await emailjs.send(
+          EMAIL_CONFIG.serviceId,
+          "order_customer", // ðŸ‘ˆ nome template cliente
+          {
+            ...emailData,
+            to_email: email // ðŸ‘ˆ invia al cliente
+          }
+        );
+      } else {
+        const sub = encodeURIComponent(`[WorldOfKits] Messaggio da ${name}`);
+        const body = encodeURIComponent(`Da: ${name} <${email}>\n\n${msg}`);
+        window.open(`mailto:${EMAIL_CONFIG.ownerEmail || ''}?subject=${sub}&body=${body}`);
+      }
+      showToast('âœ…', 'Messaggio inviato! Ti risponderemo presto.');
+      document.getElementById('contactForm').reset();
+    } catch {
+      showToast('âŒ', 'Errore invio. Riprova.');
+    } finally {
+      btn.disabled = false;
+    }
+  });
+}
+
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// SETUP EMAIL MODAL
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+function setupSetupModal() {
+  document.getElementById('setupClose')?.addEventListener('click', closeSetupModal);
+  document.getElementById('setupOverlay')?.addEventListener('click', e => {
+    if (e.target.id === 'setupOverlay') closeSetupModal();
+  });
+  document.getElementById('setupForm')?.addEventListener('submit', saveEmailConfig);
+
+  // Pre-fill se giÃ  configurato
+  if (EMAIL_CONFIG.publicKey) {
+    document.getElementById('ejsPublicKey').value = EMAIL_CONFIG.publicKey || '';
+    document.getElementById('ejsServiceId').value = EMAIL_CONFIG.serviceId || '';
+    document.getElementById('ejsTemplateId').value = EMAIL_CONFIG.templateId || '';
+    document.getElementById('ejsOwnerEmail').value = EMAIL_CONFIG.ownerEmail || '';
+    const ctEl = document.getElementById('ejsCustomerTemplateId');
+    if (ctEl) ctEl.value = EMAIL_CONFIG.customerTemplateId || '';
+  }
+}
+
+function openSetupModal() {
+  document.getElementById('setupOverlay').style.display = 'flex';
+  setTimeout(() => document.getElementById('setupOverlay').classList.add('open'), 10);
+}
+
+function closeSetupModal() {
+  document.getElementById('setupOverlay').classList.remove('open');
+  setTimeout(() => document.getElementById('setupOverlay').style.display = 'none', 300);
+}
+
+function saveEmailConfig(e) {
+  e.preventDefault();
+  EMAIL_CONFIG = {
+    publicKey: document.getElementById('ejsPublicKey').value.trim(),
+    serviceId: document.getElementById('ejsServiceId').value.trim(),
+    templateId: document.getElementById('ejsTemplateId').value.trim(),
+    ownerEmail: document.getElementById('ejsOwnerEmail').value.trim(),
+    customerTemplateId: (document.getElementById('ejsCustomerTemplateId')?.value || '').trim()
+  };
+  localStorage.setItem('gk_email_config', JSON.stringify(EMAIL_CONFIG));
+  emailjs.init({ publicKey: EMAIL_CONFIG.publicKey });
+  closeSetupModal();
+  showToast('âœ…', 'Configurazione email salvata!');
+  updateAdminBtnVisibility();
+  updateVendorBtnVisibility();
+}
+
+// â”€â”€ ADMIN BTN â”€â”€
+function setupAdminBtn() {
+  const btn = document.getElementById('adminBtn');
+  if (!btn) return;
+
+  // Nascondi il bottone se la configurazione Ã¨ giÃ  salvata
+  updateAdminBtnVisibility();
+
+  btn.addEventListener('click', openSetupModal);
+}
+
+function updateAdminBtnVisibility() {
+  const btn = document.getElementById('adminBtn');
+  if (!btn) return;
+  const isConfigured = EMAIL_CONFIG.publicKey && EMAIL_CONFIG.serviceId &&
+    EMAIL_CONFIG.templateId && EMAIL_CONFIG.ownerEmail;
+  btn.style.display = isConfigured ? 'none' : 'flex';
+}
+
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// UTILITY
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+function openOverlay(id) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.style.display = 'flex';
+  requestAnimationFrame(() => el.classList.add('open'));
+  document.body.style.overflow = 'hidden';
+}
+
+function closeOverlay(id) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.classList.remove('open');
+  setTimeout(() => { el.style.display = 'none'; }, 300);
+  document.body.style.overflow = '';
+}
+
+let toastTimeout;
+function showToast(icon, msg) {
+  const toast = document.getElementById('toast');
+  const toastIcon = document.getElementById('toastIcon');
+  const toastMsg = document.getElementById('toastMsg');
+  if (!toast) return;
+  if (toastIcon) toastIcon.textContent = icon;
+  if (toastMsg) toastMsg.textContent = msg;
+  toast.classList.add('show');
+  clearTimeout(toastTimeout);
+  toastTimeout = setTimeout(() => toast.classList.remove('show'), 3500);
+}
+
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// PANNELLO VENDITORE â€” Rispondi al Cliente
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+
+const REPLY_TEMPLATES = {
+  confirm: (name, orderNum) =>
+    `Ciao ${name || '[Nome Cliente]'},
+
+grazie mille per il tuo ordine su WorldOfKits! ðŸŽ‰
+
+ðŸ“¦ Numero Ordine: ${orderNum || '[WOK-XXXXXX]'}
+
+Il tuo ordine Ã¨ stato ricevuto ed Ã¨ attualmente in fase di lavorazione.
+Ti contatteremo non appena Ã¨ pronto per la spedizione.
+
+Per qualsiasi domanda, rispondi pure a questa email.
+
+A presto,
+Il Team WorldOfKits âš½`,
+
+  shipped: (name, orderNum) =>
+    `Ciao ${name || '[Nome Cliente]'},
+
+ottime notizie! Il tuo ordine Ã¨ in viaggio! ðŸšš
+
+ðŸ“¦ Numero Ordine: ${orderNum || '[WOK-XXXXXX]'}
+
+Il pacco Ã¨ stato spedito e dovrebbe arrivare entro 24â€“72 ore lavorative.
+Ti avviseremo con i dettagli di tracciamento non appena disponibili.
+
+Grazie per aver scelto WorldOfKits!
+
+Il Team WorldOfKits âš½`,
+
+  info: (name, orderNum) =>
+    `Ciao ${name || '[Nome Cliente]'},
+
+ti scriviamo riguardo al tuo ordine ${orderNum || '[WOK-XXXXXX]'}.
+
+Per poter procedere, avremmo bisogno di alcune informazioni aggiuntive:
+
+ðŸ‘‰ [Scrivi qui cosa ti serve â€” es: conferma taglia, indirizzo, ecc.]
+
+Puoi rispondere direttamente a questa email.
+
+Grazie per la collaborazione,
+Il Team WorldOfKits âš½`,
+
+  custom: () =>
+    `Ciao [Nome Cliente],
+
+[Scrivi qui il tuo messaggio personalizzato]
+
+Il Team WorldOfKits âš½`
+};
+
+function setupVendorPanel() {
+  const vendorBtn = document.getElementById('vendorReplyBtn');
+  const overlay = document.getElementById('vendorOverlay');
+  const closeBtn = document.getElementById('vendorClose');
+  const copyBtn = document.getElementById('replyCopyBtn');
+  const mailtoBtn = document.getElementById('replyMailtoBtn');
+  const ejsBtn = document.getElementById('replyEjsBtn');
+  const msgArea = document.getElementById('replyMessage');
+  const nameInput = document.getElementById('replyCustomerName');
+  const numInput = document.getElementById('replyOrderNum');
+  const tplBtns = document.querySelectorAll('.reply-tpl-btn');
+
+  if (!vendorBtn || !overlay) return;
+
+  // Mostra bottone solo se EmailJS Ã¨ configurato
+  updateVendorBtnVisibility();
+
+  vendorBtn.addEventListener('click', () => {
+    overlay.style.display = 'flex';
+    requestAnimationFrame(() => overlay.classList.add('open'));
+    document.body.style.overflow = 'hidden';
+    refreshMessage();
+  });
+
+  closeBtn?.addEventListener('click', closeVendorPanel);
+  overlay.addEventListener('click', e => { if (e.target === overlay) closeVendorPanel(); });
+
+  // Aggiorna messaggio al cambio template
+  tplBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      tplBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      refreshMessage();
+    });
+  });
+
+  // Aggiorna messaggio al cambio nome/numero ordine
+  nameInput?.addEventListener('input', refreshMessage);
+  numInput?.addEventListener('input', refreshMessage);
+
+  // Copia testo
+  copyBtn?.addEventListener('click', () => {
+    if (!msgArea) return;
+    navigator.clipboard.writeText(msgArea.value).then(() => {
+      showToast('ðŸ“‹', 'Messaggio copiato negli appunti!');
+    });
+  });
+
+  // Apri client email (mailto)
+  mailtoBtn?.addEventListener('click', () => {
+    const toEmail = document.getElementById('replyEmail')?.value.trim();
+    if (!toEmail) { showToast('âš ï¸', 'Inserisci l\'email del cliente!'); return; }
+    const orderNum = numInput?.value.trim() || '';
+    const subject = encodeURIComponent(`Re: Ordine WorldOfKits${orderNum ? ' â€” ' + orderNum : ''}`);
+    const body = encodeURIComponent(msgArea?.value || '');
+    window.open(`mailto:${toEmail}?subject=${subject}&body=${body}`);
+  });
+
+  // Invia via EmailJS (richiede secondo template)
+  ejsBtn?.addEventListener('click', async () => {
+    const toEmail = document.getElementById('replyEmail')?.value.trim();
+    const customerName = nameInput?.value.trim() || 'Cliente';
+    if (!toEmail) { showToast('âš ï¸', 'Inserisci l\'email del cliente!'); return; }
+    if (!EMAIL_CONFIG.publicKey || !EMAIL_CONFIG.serviceId) {
+      showToast('âš ï¸', 'EmailJS non configurato. Usa "Apri Email" come alternativa.');
+      return;
+    }
+    try {
+      ejsBtn.disabled = true;
+      ejsBtn.textContent = 'â³ Invio...';
+      await emailjs.send(EMAIL_CONFIG.serviceId, EMAIL_CONFIG.templateId, {
+        to_email: toEmail,
+        customer_name: customerName,
+        customer_email: toEmail,
+        order_number: numInput?.value.trim() || 'N/A',
+        order_details: msgArea?.value || '',
+        order_total: 'â€”',
+        order_notes: 'â€”',
+        reply_to: EMAIL_CONFIG.ownerEmail
+      });
+      showToast('âœ…', `Email inviata a ${toEmail}!`);
+      closeVendorPanel();
+    } catch (err) {
+      console.error(err);
+      showToast('âŒ', 'Errore invio. Usa "Apri Email" come alternativa.');
+    } finally {
+      ejsBtn.disabled = false;
+      ejsBtn.textContent = 'âš¡ Invia via EmailJS';
+    }
+  });
+
+  function refreshMessage() {
+    const activeTpl = document.querySelector('.reply-tpl-btn.active')?.dataset.tpl || 'confirm';
+    const name = nameInput?.value.trim();
+    const num = numInput?.value.trim();
+    if (msgArea) msgArea.value = REPLY_TEMPLATES[activeTpl](name, num);
+  }
+
+  function closeVendorPanel() {
+    overlay.classList.remove('open');
+    setTimeout(() => { overlay.style.display = 'none'; }, 300);
+    document.body.style.overflow = '';
+  }
+}
+
+function updateVendorBtnVisibility() {
+  const btn = document.getElementById('vendorReplyBtn');
+  if (!btn) return;
+  const isConfigured = EMAIL_CONFIG.publicKey && EMAIL_CONFIG.serviceId &&
+    EMAIL_CONFIG.templateId && EMAIL_CONFIG.ownerEmail;
+  btn.style.display = isConfigured ? 'flex' : 'none';
+}
+
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// CAROSELLO RECENSIONI
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+function setupReviews() {
+  const track = document.getElementById('reviewsTrack');
+  const prevBtn = document.getElementById('reviewsPrev');
+  const nextBtn = document.getElementById('reviewsNext');
+  const dotsEl = document.getElementById('reviewsDots');
+  if (!track || !prevBtn || !nextBtn) return;
+
+  const cards = track.querySelectorAll('.review-card');
+  const total = cards.length;
+  let current = 0;
+  let autoInterval = null;
+
+  // Calcola la larghezza di uno step (card + gap)
+  function cardWidth() {
+    const card = cards[0];
+    const gap = parseFloat(getComputedStyle(track).gap) || 20;
+    return card.offsetWidth + gap;
+  }
+
+  // Crea i dots
+  cards.forEach((_, i) => {
+    const dot = document.createElement('button');
+    dot.className = 'reviews-dot' + (i === 0 ? ' active' : '');
+    dot.setAttribute('aria-label', `Recensione ${i + 1}`);
+    dot.addEventListener('click', () => goTo(i));
+    dotsEl.appendChild(dot);
+  });
+
+  function goTo(index) {
+    current = (index + total) % total;
+    track.style.transform = `translateX(-${current * cardWidth()}px)`;
+    dotsEl.querySelectorAll('.reviews-dot').forEach((d, i) => {
+      d.classList.toggle('active', i === current);
+    });
+  }
+
+  prevBtn.addEventListener('click', () => { goTo(current - 1); resetAuto(); });
+  nextBtn.addEventListener('click', () => { goTo(current + 1); resetAuto(); });
+
+  // Auto-play ogni 4s
+  function startAuto() {
+    autoInterval = setInterval(() => goTo(current + 1), 4000);
+  }
+  function resetAuto() {
+    clearInterval(autoInterval);
+    startAuto();
+  }
+  startAuto();
+
+  // Pausa al hover
+  const wrap = track.closest('.reviews-carousel-wrap');
+  wrap?.addEventListener('mouseenter', () => clearInterval(autoInterval));
+  wrap?.addEventListener('mouseleave', startAuto);
+
+  // Swipe su mobile
+  let startX = 0;
+  track.addEventListener('touchstart', e => { startX = e.touches[0].clientX; }, { passive: true });
+  track.addEventListener('touchend', e => {
+    const diff = startX - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 50) { diff > 0 ? goTo(current + 1) : goTo(current - 1); resetAuto(); }
+  });
+
+  // Ricalcola posizione al resize
+  window.addEventListener('resize', () => goTo(current));
+}
+
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// RICHIESTA PRODOTTO PERSONALIZZATA
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+function setupCustomOrder() {
+  const form = document.getElementById('customOrderForm');
+  if (!form) return;
+
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+
+    const name = document.getElementById('customProductName')?.value.trim();
+    const size = document.getElementById('customProductSize')?.value || 'M';
+    const qty = parseInt(document.getElementById('customProductQty')?.value) || 1;
+
+    if (!name) return;
+
+    const customItem = {
+      id: 'custom-' + Date.now(),
+      name: 'ðŸ” ' + name,
+      size,
+      qty,
+      price: 28,
+      custom: true
+    };
+
+    const existing = cart.find(i => i.name === customItem.name && i.size === size);
+    if (existing) {
+      existing.qty += qty;
+    } else {
+      cart.push(customItem);
+    }
+
+    saveCart();
+    updateCartUI();
+    openCart();
+
+    showToast('âœ…', `"${name}" aggiunto! Il prezzo ti verrÃ  comunicato via email.`);
+    form.reset();
+    document.getElementById('customProductSize').value = 'M';
+    document.getElementById('customProductQty').value = '1';
+  });
+}
+
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// MINI-CAROSELLO RECENSIONI
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+function setupReviewMiniCarousels() {
+  document.querySelectorAll('[data-rmc]').forEach(function (rmc) {
+    const imgs = rmc.querySelectorAll('.rmc-img');
+    const dots = rmc.querySelectorAll('.rmc-dot');
+    if (imgs.length <= 1) return;
+
+    let idx = 0;
+
+    function goTo(n) {
+      imgs[idx].classList.remove('active');
+      dots[idx].classList.remove('active');
+      idx = (n + imgs.length) % imgs.length;
+      imgs[idx].classList.add('active');
+      dots[idx].classList.add('active');
+    }
+
+    dots.forEach(function (dot, i) {
+      dot.addEventListener('click', function () { goTo(i); clearInterval(timer); timer = setInterval(function () { goTo(idx + 1); }, 3000); });
+    });
+
+    var timer = setInterval(function () { goTo(idx + 1); }, 3000);
+  });
+}
+
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// HERO CAROUSEL (immagini modelli)
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+function setupHeroCarousel() {
+  const imgs = document.querySelectorAll('.hero-carousel-img');
+  const dotsEl = document.getElementById('heroCarouselDots');
+  if (!imgs.length || !dotsEl) return;
+
+  let current = 0;
+  let interval = null;
+
+  // Crea dots
+  imgs.forEach(function (_, i) {
+    const dot = document.createElement('button');
+    dot.className = 'hero-carousel-dot' + (i === 0 ? ' active' : '');
+    dot.setAttribute('aria-label', 'Foto ' + (i + 1));
+    dot.addEventListener('click', function () { goTo(i); resetAuto(); });
+    dotsEl.appendChild(dot);
+  });
+
+  function goTo(index) {
+    imgs[current].classList.remove('active');
+    dotsEl.querySelectorAll('.hero-carousel-dot')[current].classList.remove('active');
+    current = (index + imgs.length) % imgs.length;
+    imgs[current].classList.add('active');
+    dotsEl.querySelectorAll('.hero-carousel-dot')[current].classList.add('active');
+  }
+
+  function startAuto() {
+    interval = setInterval(function () { goTo(current + 1); }, 2000);
+  }
+  function resetAuto() { clearInterval(interval); startAuto(); }
+  startAuto();
+}
+
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// NAVBAR MEGA MENU (hover) â€” collega filtri ai link
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+function setupNavMegaMenu() {
+  // Delegazione click su tutti i bottoni con data-league nel mega menu
+  document.querySelectorAll('.nav-mega-link[data-league]').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      const league = btn.dataset.league;
+      setActiveFilter(league, null);
+      document.getElementById('products')?.scrollIntoView({ behavior: 'smooth' });
+    });
+  });
+
+  // Bottoni con data-filter (Tute, Felpe, ecc.)
+  document.querySelectorAll('.nav-mega-link[data-filter]').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      const filter = btn.dataset.filter;
+      setActiveFilter('all', filter);
+      document.getElementById('products')?.scrollIntoView({ behavior: 'smooth' });
+    });
+  });
+
+  // Bottoni tipo (new/vintage)
+  document.querySelectorAll('.nav-mega-link[data-filter-type]').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      const type = btn.dataset.filterType;
+      setActiveFilter(type, null);
+      document.getElementById('products')?.scrollIntoView({ behavior: 'smooth' });
+    });
+  });
+}
+
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// BARRA DI RICERCA NAVBAR â†’ Dropdown sotto navbar
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+
+// Mappa categorie: nome display â†’ filtro da passare a setActiveFilter
+const SEARCH_CATEGORIES = [
+  { label: 'Serie A', icon: 'ðŸ‡®ðŸ‡¹', filter: 'SerieA' },
+  { label: 'Champions League', icon: 'â­', filter: 'Champions' },
+  { label: 'Premier League', icon: 'ðŸ´ó §ó ¢ó ¥ó ®ó §ó ¿', filter: 'Premier' },
+  { label: 'La Liga', icon: 'ðŸ‡ªðŸ‡¸', filter: 'LaLiga' },
+  { label: 'Bundesliga', icon: 'ðŸ‡©ðŸ‡ª', filter: 'Bundesliga' },
+  { label: 'Nazionali', icon: 'ðŸŒ', filter: 'Nazionali' },
+  { label: 'Mondiale 2026', icon: 'ðŸ†', filter: 'Mondiale2026' },
+  { label: 'Saudi Pro League', icon: 'ðŸ‡¸ðŸ‡¦', filter: 'SaudiLeague' },
+];
+
+function setupNavSearch() {
+  const navInput = document.getElementById('navSearchInput');
+  const navBtn = document.getElementById('navSearchBtn');
+  const dropdown = document.getElementById('searchDropdown');
+  const backdrop = document.getElementById('searchDropdownBackdrop');
+  if (!navInput || !dropdown) return;
+
+  // â”€â”€ Aggiorna dropdown ad ogni input â”€â”€
+  navInput.addEventListener('input', () => {
+    clearTimeout(navInput._sdDebounce);
+    navInput._sdDebounce = setTimeout(() => {
+      const q = navInput.value.trim();
+      if (!q) { closeSearchDropdown(); return; }
+      openSearchDropdown(q);
+    }, 180);
+  });
+
+  // Invio o click icona
+  navBtn?.addEventListener('click', () => {
+    const q = navInput.value.trim();
+    if (q) openSearchDropdown(q);
+  });
+  navInput.addEventListener('keydown', e => {
+    if (e.key === 'Enter') {
+      const q = navInput.value.trim();
+      if (q) openSearchDropdown(q);
+    }
+    if (e.key === 'Escape') closeSearchDropdown();
+  });
+
+  // Chiudi cliccando sul backdrop
+  backdrop?.addEventListener('click', () => {
+    closeSearchDropdown();
+    navInput.value = '';
+  });
+
+  // Chiudi con ESC globale
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeSearchDropdown();
+  });
+}
+
+function openSearchDropdown(query) {
+  const dropdown = document.getElementById('searchDropdown');
+  const backdrop = document.getElementById('searchDropdownBackdrop');
+  if (!dropdown) return;
+  renderSearchDropdown(query);
+  dropdown.classList.add('open');
+  backdrop?.classList.add('open');
+}
+
+function closeSearchDropdown() {
+  const dropdown = document.getElementById('searchDropdown');
+  const backdrop = document.getElementById('searchDropdownBackdrop');
+  dropdown?.classList.remove('open');
+  backdrop?.classList.remove('open');
+}
+
+function renderSearchDropdown(query) {
+  const catList = document.getElementById('sdCatList');
+  const prodGrid = document.getElementById('sdProductsGrid');
+  if (!catList || !prodGrid) return;
+
+  const q = query.toLowerCase();
+
+  // â”€â”€ 1. CATEGORIE: le 5 piÃ¹ rilevanti in base alla query â”€â”€
+  // Una categoria Ã¨ rilevante se contiene prodotti che matchano la query
+  // oppure se il suo nome matcha la query
+  const relevantCats = [];
+  for (const cat of SEARCH_CATEGORIES) {
+    if (relevantCats.length >= 5) break;
+    const catMatches = cat.label.toLowerCase().includes(q);
+    const hasProducts = PRODUCTS.some(p => {
+      const cats = Array.isArray(p.category) ? p.category : [p.category];
+      if (!cats.includes(cat.filter)) return false;
+      const name = p.name.toLowerCase();
+      const label = Array.isArray(p.categoryLabel) ? p.categoryLabel.join(' ').toLowerCase() : (p.categoryLabel || '').toLowerCase();
+      return name.includes(q) || label.includes(q) || catMatches;
+    });
+    if (hasProducts || catMatches) relevantCats.push(cat);
+  }
+
+  // Se non ci sono categorie rilevanti, mostra tutte (max 5)
+  const catsToShow = relevantCats.length > 0 ? relevantCats : SEARCH_CATEGORIES.slice(0, 5);
+
+  catList.innerHTML = catsToShow.map(cat => `
+    <li class="sd-cat-item">
+      <button class="sd-cat-btn" onclick="closeSearchDropdown(); setActiveFilter('${cat.filter}', null); document.getElementById('products').scrollIntoView({behavior:'smooth'});">
+        <span class="sd-cat-icon">${cat.icon}</span>
+        <span class="sd-cat-label">${cat.label}</span>
+      </button>
+    </li>
+  `).join('');
+
+  // â”€â”€ 2. PRODOTTI: max 5 che matchano la query â”€â”€
+  const results = PRODUCTS.filter(p => {
+    const name = p.name.toLowerCase();
+    const label = Array.isArray(p.categoryLabel) ? p.categoryLabel.join(' ').toLowerCase() : (p.categoryLabel || '').toLowerCase();
+    const cats = Array.isArray(p.category) ? p.category.join(' ').toLowerCase() : (p.category || '').toLowerCase();
+    return name.includes(q) || label.includes(q) || cats.includes(q);
+  }).slice(0, 5);
+
+  if (results.length === 0) {
+    prodGrid.innerHTML = `<div class="sd-empty">Nessun prodotto trovato per "<strong>${query}</strong>"</div>`;
+    return;
+  }
+
+  prodGrid.innerHTML = '';
+  results.forEach(p => {
+    const card = document.createElement('div');
+    card.className = 'sd-card';
+    card.onclick = () => {
+      closeSearchDropdown();
+      openQuickView(p.id);
+    };
+    card.innerHTML = `
+      <div class="sd-card-img-wrap">
+        <img class="sd-card-img" src="${p.image}" alt="${p.name}" loading="lazy"
+             onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22267%22><rect fill=%22%23f5f5f5%22 width=%22200%22 height=%22267%22/><text x=%2250%25%22 y=%2250%25%22 fill=%22%23ccc%22 text-anchor=%22middle%22 dominant-baseline=%22middle%22 font-size=%2240%22>âš½</text></svg>'">
+      </div>
+      <div class="sd-card-name">${p.name}</div>
+      <div class="sd-card-price">â‚¬${p.price.toFixed(2)}</div>
+    `;
+    prodGrid.appendChild(card);
+  });
+}
+
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// SEZIONE VINTAGE â€” Maglie con badge "vintage"
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+function setupVintage() {
+  const grid     = document.getElementById('vintageGrid');
+  const viewport = document.getElementById('vintageViewport');
+  const track    = document.getElementById('vintageTrack');
+  const thumb    = document.getElementById('vintageThumb');
+  const seeAll   = document.getElementById('vintageSeeAll');
+
+  if (grid) {
+    // Filtra per badge === 'vintage' (campo badge nei prodotti)
+    const products = PRODUCTS.filter(p => p.badge === 'vintage').slice(0, 12);
+
+    if (products.length === 0) {
+      grid.innerHTML = '<div class="vintage-empty">Nessuna maglia vintage disponibile al momento.</div>';
+    } else {
+      grid.innerHTML = '';
+      products.forEach(p => {
+        const catLabel = Array.isArray(p.categoryLabel) ? p.categoryLabel[0] : (p.categoryLabel || '');
+        const card = document.createElement('div');
+        card.className = 'vintage-card';
+        card.onclick = () => openQuickView(p.id);
+        card.innerHTML = `
+          <div class="vintage-card-img-wrap">
+            <img class="vintage-card-img" src="${p.image}" alt="${p.name}" loading="lazy"
+                 onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22400%22><rect fill=%22%23f5f5f5%22 width=%22300%22 height=%22400%22/><text x=%2250%25%22 y=%2250%25%22 fill=%22%23ccc%22 text-anchor=%22middle%22 dominant-baseline=%22middle%22 font-size=%2260%22>âš½</text></svg>'">
+          </div>
+          ${p.badgeLabel ? `<div class="vintage-card-tag">${p.badgeLabel}</div>` : ''}
+          <div class="vintage-card-name">${p.name}</div>
+          <div class="vintage-card-cat">${catLabel}</div>
+          <div class="vintage-card-price">â‚¬${p.price.toFixed(2)}${p.oldPrice ? ` <span style="font-size:.82em;color:#aaa;font-weight:400;text-decoration:line-through;">â‚¬${p.oldPrice.toFixed(2)}</span>` : ''}</div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+  }
+
+  // "Acquista prodotti Vintage" â†’ gestito da setupCatPage (openCatPage)
+  // (listener rimosso per evitare duplicazioni)
+
+  if (!viewport || !track || !thumb) return;
+  function updateThumb() {
+    const scrollRatio = viewport.scrollLeft / (viewport.scrollWidth - viewport.clientWidth || 1);
+    const thumbW = (viewport.clientWidth / viewport.scrollWidth) * 100;
+    thumb.style.width = Math.max(thumbW, 10) + '%';
+    thumb.style.left = scrollRatio * (100 - parseFloat(thumb.style.width)) + '%';
+  }
+  viewport.addEventListener('scroll', updateThumb, { passive: true });
+  window.addEventListener('load', updateThumb);
+  setTimeout(updateThumb, 400);
+  track.addEventListener('click', e => {
+    if (e.target === thumb) return;
+    const rect = track.getBoundingClientRect();
+    viewport.scrollLeft = ((e.clientX - rect.left) / rect.width) * (viewport.scrollWidth - viewport.clientWidth);
+  });
+  let dragging = false, dragStartX = 0, dragStartScroll = 0;
+  thumb.addEventListener('pointerdown', e => {
+    dragging = true; dragStartX = e.clientX; dragStartScroll = viewport.scrollLeft;
+    thumb.setPointerCapture(e.pointerId); e.preventDefault();
+  });
+  thumb.addEventListener('pointermove', e => {
+    if (!dragging) return;
+    viewport.scrollLeft = dragStartScroll + ((e.clientX - dragStartX) / track.clientWidth) * (viewport.scrollWidth - viewport.clientWidth);
+  });
+  thumb.addEventListener('pointerup', () => { dragging = false; });
+  thumb.addEventListener('pointercancel', () => { dragging = false; });
+}
+
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// SEZIONE MUST HAVE â€” Articoli piÃ¹ venduti / bestseller
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+function setupMustHave() {
+  const grid     = document.getElementById('mustHaveGrid');
+  const viewport = document.getElementById('mustHaveViewport');
+  const track    = document.getElementById('mustHaveTrack');
+  const thumb    = document.getElementById('mustHaveThumb');
+  const seeAll   = document.getElementById('mustHaveSeeAll');
+
+  if (grid) {
+    // PrioritÃ : badge "bestseller" o "hot", poi badge "sale", poi badge "new", poi per prezzo desc
+    const scored = PRODUCTS.map(p => {
+      let score = 0;
+      if (p.badge === 'bestseller' || p.badge === 'hot') score += 100;
+      else if (p.badge === 'sale') score += 50;
+      else if (p.badge === 'new') score += 30;
+      if (p.oldPrice) score += 20; // in offerta â†’ piÃ¹ rilevante
+      return { p, score };
+    });
+    scored.sort((a, b) => b.score - a.score);
+    const products = scored.slice(0, 12).map(x => x.p);
+
+    if (products.length === 0) {
+      grid.innerHTML = '<div class="mustHave-empty">Nessun prodotto disponibile al momento.</div>';
+    } else {
+      grid.innerHTML = '';
+      products.forEach((p, i) => {
+        const catLabel = Array.isArray(p.categoryLabel) ? p.categoryLabel[0] : (p.categoryLabel || '');
+        const card = document.createElement('div');
+        card.className = 'mustHave-card';
+        card.onclick = () => openQuickView(p.id);
+        const badgeHtml = i < 3 ? '<span class="mustHave-badge">ðŸ”¥ Bestseller</span>' : '';
+        card.innerHTML = `
+          ${badgeHtml}
+          <div class="mustHave-card-img-wrap">
+            <img class="mustHave-card-img" src="${p.image}" alt="${p.name}" loading="lazy"
+                 onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22400%22><rect fill=%22%23f5f5f5%22 width=%22300%22 height=%22400%22/><text x=%2250%25%22 y=%2250%25%22 fill=%22%23ccc%22 text-anchor=%22middle%22 dominant-baseline=%22middle%22 font-size=%2260%22>âš½</text></svg>'">
+          </div>
+          ${p.badgeLabel ? `<div class="mustHave-card-tag">${p.badgeLabel}</div>` : ''}
+          <div class="mustHave-card-name">${p.name}</div>
+          <div class="mustHave-card-cat">${catLabel}</div>
+          <div class="mustHave-card-price">â‚¬${p.price.toFixed(2)}${p.oldPrice ? ` <span style="font-size:.82em;color:#aaa;font-weight:400;text-decoration:line-through;">â‚¬${p.oldPrice.toFixed(2)}</span>` : ''}</div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+  }
+
+  // "Vedi tutti i bestseller" â†’ gestito da setupCatPage (openCatPage)
+
+  if (!viewport || !track || !thumb) return;
+  function updateThumb() {
+    const scrollRatio = viewport.scrollLeft / (viewport.scrollWidth - viewport.clientWidth || 1);
+    const thumbW = (viewport.clientWidth / viewport.scrollWidth) * 100;
+    thumb.style.width = Math.max(thumbW, 10) + '%';
+    thumb.style.left = scrollRatio * (100 - parseFloat(thumb.style.width)) + '%';
+  }
+  viewport.addEventListener('scroll', updateThumb, { passive: true });
+  window.addEventListener('load', updateThumb);
+  setTimeout(updateThumb, 400);
+  track.addEventListener('click', e => {
+    if (e.target === thumb) return;
+    const rect = track.getBoundingClientRect();
+    viewport.scrollLeft = ((e.clientX - rect.left) / rect.width) * (viewport.scrollWidth - viewport.clientWidth);
+  });
+  let dragging = false, dragStartX = 0, dragStartScroll = 0;
+  thumb.addEventListener('pointerdown', e => {
+    dragging = true; dragStartX = e.clientX; dragStartScroll = viewport.scrollLeft;
+    thumb.setPointerCapture(e.pointerId); e.preventDefault();
+  });
+  thumb.addEventListener('pointermove', e => {
+    if (!dragging) return;
+    viewport.scrollLeft = dragStartScroll + ((e.clientX - dragStartX) / track.clientWidth) * (viewport.scrollWidth - viewport.clientWidth);
+  });
+  thumb.addEventListener('pointerup', () => { dragging = false; });
+  thumb.addEventListener('pointercancel', () => { dragging = false; });
+}
+
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// SEZIONE MONDIALI â€” Maglie Mondiale 2026
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+function setupMondiali() {
+  const grid = document.getElementById('mondialiGrid');
+  const viewport = document.getElementById('mondialiViewport');
+  const track = document.getElementById('mondialiTrack');
+  const thumb = document.getElementById('mondialiThumb');
+  const seeAll = document.getElementById('mondialiSeeAll');
+
+  // â”€â”€ 1. Popola la griglia (max 8 prodotti) â”€â”€
+  if (grid) {
+    const products = PRODUCTS.filter(p => {
+      const cats = Array.isArray(p.category) ? p.category : [p.category];
+      return cats.includes('Mondiale2026') || cats.includes('Nazionali');
+    }).slice(0, 12);
+
+    if (products.length === 0) {
+      grid.innerHTML = '<div class="mondiali-empty">Nessuna maglia del mondiale disponibile al momento.</div>';
+    } else {
+      grid.innerHTML = '';
+      products.forEach(p => {
+        const catLabel = Array.isArray(p.categoryLabel) ? p.categoryLabel[0] : (p.categoryLabel || '');
+        const card = document.createElement('div');
+        card.className = 'mondiali-card';
+        card.onclick = () => openQuickView(p.id);
+        card.innerHTML = `
+          <div class="mondiali-card-img-wrap">
+            <img class="mondiali-card-img" src="${p.image}" alt="${p.name}" loading="lazy"
+                 onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22400%22><rect fill=%22%23f5f5f5%22 width=%22300%22 height=%22400%22/><text x=%2250%25%22 y=%2250%25%22 fill=%22%23ccc%22 text-anchor=%22middle%22 dominant-baseline=%22middle%22 font-size=%2260%22>âš½</text></svg>'">
+          </div>
+          ${p.badgeLabel ? `<div class="mondiali-card-tag">${p.badgeLabel}</div>` : ''}
+          <div class="mondiali-card-name">${p.name}</div>
+          <div class="mondiali-card-cat">${catLabel}</div>
+          <div class="mondiali-card-price">â‚¬${p.price.toFixed(2)}${p.oldPrice ? ` <span style="font-size:.82em;color:#aaa;font-weight:400;text-decoration:line-through;">â‚¬${p.oldPrice.toFixed(2)}</span>` : ''}</div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+  }
+
+  // â”€â”€ 2. "Acquista prodotti Mondiali" â†’ gestito da setupCatPage (openCatPage) â”€â”€
+
+  // â”€â”€ 3. Scrollbar custom â”€â”€
+  if (!viewport || !track || !thumb) return;
+
+  // Aggiorna posizione e larghezza thumb in base allo scroll corrente
+  function updateThumb() {
+    const scrollRatio = viewport.scrollLeft / (viewport.scrollWidth - viewport.clientWidth || 1);
+    const thumbW = (viewport.clientWidth / viewport.scrollWidth) * 100;
+    thumb.style.width = Math.max(thumbW, 10) + '%';
+    thumb.style.left = scrollRatio * (100 - parseFloat(thumb.style.width)) + '%';
+  }
+
+  // Sync thumb â†” scroll
+  viewport.addEventListener('scroll', updateThumb, { passive: true });
+  // Ricalcola dopo che le immagini sono caricate
+  window.addEventListener('load', updateThumb);
+  setTimeout(updateThumb, 400);
+
+  // Click sul track â†’ salto diretto
+  track.addEventListener('click', e => {
+    if (e.target === thumb) return; // gestito sotto
+    const rect = track.getBoundingClientRect();
+    const ratio = (e.clientX - rect.left) / rect.width;
+    viewport.scrollLeft = ratio * (viewport.scrollWidth - viewport.clientWidth);
+  });
+
+  // Drag del thumb
+  let dragging = false;
+  let dragStartX = 0;
+  let dragStartScroll = 0;
+
+  thumb.addEventListener('pointerdown', e => {
+    dragging = true;
+    dragStartX = e.clientX;
+    dragStartScroll = viewport.scrollLeft;
+    thumb.setPointerCapture(e.pointerId);
+    e.preventDefault();
+  });
+
+  thumb.addEventListener('pointermove', e => {
+    if (!dragging) return;
+    const dx = e.clientX - dragStartX;
+    const trackW = track.clientWidth;
+    const scrollRange = viewport.scrollWidth - viewport.clientWidth;
+    viewport.scrollLeft = dragStartScroll + (dx / trackW) * scrollRange;
+  });
+
+  thumb.addEventListener('pointerup', () => { dragging = false; });
+  thumb.addEventListener('pointercancel', () => { dragging = false; });
+}
+
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// FEATURED HOME â€” Category cards + Prodotti in evidenza
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+function setupFeatured() {
+  // â”€â”€ 1. Category cards: click â†’ filtra e scrolla â”€â”€
+  document.querySelectorAll('.feat-league-card').forEach(card => {
+    card.addEventListener('click', () => {
+      const league = card.dataset.league;
+      setActiveFilter(league, null);
+      document.getElementById('products')?.scrollIntoView({ behavior: 'smooth' });
+    });
+  });
+
+  // â”€â”€ 2. Ultimi Arrivi: prodotti con badge "new" (max 4) â”€â”€
+  const newRow = document.getElementById('featNewRow');
+  if (newRow) {
+    const newProducts = PRODUCTS.filter(p => p.badge === 'new').slice(0, 4);
+    newRow.innerHTML = newProducts.length
+      ? newProducts.map(p => featProductCardHTML(p)).join('')
+      : '<p style="color:var(--text-muted);grid-column:1/-1">Nessuna novitÃ  al momento.</p>';
+  }
+
+  // â”€â”€ 3. PiÃ¹ Richiesti: prime 4 maglie Serie A + La Liga con prezzi bassi â”€â”€
+  const topRow = document.getElementById('featTopRow');
+  if (topRow) {
+    // Seleziona 4 prodotti: i primi disponibili da categorie principali
+    const topCats = ['SerieA', 'LaLiga', 'Bundesliga', 'Premier'];
+    const topProducts = [];
+    topCats.forEach(cat => {
+      const found = PRODUCTS.find(p => {
+        const cats = Array.isArray(p.category) ? p.category : [p.category];
+        return cats.includes(cat) && !topProducts.includes(p);
+      });
+      if (found) topProducts.push(found);
+    });
+    topRow.innerHTML = topProducts.length
+      ? topProducts.map(p => featProductCardHTML(p)).join('')
+      : '<p style="color:var(--text-muted);grid-column:1/-1">Nessun prodotto disponibile.</p>';
+  }
+
+  // â”€â”€ 4. Pulsanti "Vedi tutti" â”€â”€
+  document.getElementById('featSeeAllNew')?.addEventListener('click', () => {
+    setActiveFilter('all', null);
+    document.getElementById('products')?.scrollIntoView({ behavior: 'smooth' });
+  });
+  document.getElementById('featSeeAllTop')?.addEventListener('click', () => {
+    setActiveFilter('all', null);
+    document.getElementById('products')?.scrollIntoView({ behavior: 'smooth' });
+  });
+}
+
+// HTML di una mini product card per le featured rows
+function featProductCardHTML(p) {
+  const label = Array.isArray(p.categoryLabel)
+    ? p.categoryLabel[0]
+    : (p.categoryLabel || '');
+  const badgeHTML = p.badge
+    ? `<span class="feat-product-badge ${p.badge}">${p.badgeLabel}</span>`
+    : '';
+  return `
+    <div class="feat-product-card" onclick="openQuickView(${p.id})" title="${p.name}">
+      ${badgeHTML}
+      <img class="feat-product-img"
+           src="${p.image}" alt="${p.name}" loading="lazy"
+           onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22180%22><rect fill=%22%230f1525%22 width=%22300%22 height=%22180%22/><text x=%2250%25%22 y=%2250%25%22 fill=%22%236c63ff%22 text-anchor=%22middle%22 dominant-baseline=%22middle%22 font-size=%2240%22>âš½</text></svg>'">
+      <div class="feat-product-body">
+        <div class="feat-product-league">${label}</div>
+        <div class="feat-product-name">${p.name}</div>
+        <div class="feat-product-price">â‚¬${p.price.toFixed(2)}</div>
+      </div>
+    </div>`;
+}
+
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// PREFERITI â€” Sidebar laterale + badge navbar
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+
+function saveFavorites() {
+  localStorage.setItem('gk_favorites', JSON.stringify(favorites));
+}
+
+function isFavorite(productId) {
+  return favorites.includes(productId);
+}
+
+function updateFavBadge() {
+  const badge = document.getElementById('favBadge');
+  const btn = document.getElementById('favBtn');
+  const count = favorites.length;
+  if (badge) {
+    badge.textContent = count;
+    badge.classList.toggle('show', count > 0);
+  }
+  if (btn) {
+    btn.classList.toggle('has-items', count > 0);
+  }
+}
+
+function openFavSidebar() {
+  document.getElementById('favOverlay')?.classList.add('open');
+  document.getElementById('favSidebar')?.classList.add('open');
+  document.body.style.overflow = 'hidden';
+  renderFavoritesSidebar();
+}
+
+function closeFavSidebar() {
+  document.getElementById('favOverlay')?.classList.remove('open');
+  document.getElementById('favSidebar')?.classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function toggleFavorite(productId, btnEl) {
+  const idx = favorites.indexOf(productId);
+  if (idx === -1) {
+    favorites.push(productId);
+    showToast('â¤ï¸', 'Aggiunto ai preferiti!');
+  } else {
+    favorites.splice(idx, 1);
+    showToast('ðŸ¤', 'Rimosso dai preferiti.');
+  }
+  saveFavorites();
+  updateFavBadge();
+  // Aggiorna icona cuore sulla card cliccata
+  if (btnEl) {
+    const isFav = isFavorite(productId);
+    btnEl.classList.toggle('active', isFav);
+    const svg = btnEl.querySelector('svg');
+    if (svg) {
+      svg.setAttribute('fill', isFav ? '#e44545' : 'none');
+      svg.setAttribute('stroke', isFav ? '#e44545' : '#999');
+    }
+  }
+  // Se la sidebar Ã¨ aperta, aggiorna anche quella
+  if (document.getElementById('favSidebar')?.classList.contains('open')) {
+    renderFavoritesSidebar();
+  }
+}
+
+function toggleFavoriteFromQV(productId) {
+  const idx = favorites.indexOf(productId);
+  if (idx === -1) {
+    favorites.push(productId);
+    showToast('â¤ï¸', 'Aggiunto ai preferiti!');
+  } else {
+    favorites.splice(idx, 1);
+    showToast('ðŸ¤', 'Rimosso dai preferiti.');
+  }
+  saveFavorites();
+  updateFavBadge();
+  // Aggiorna il bottone nel quick view
+  const btn = document.getElementById('qvFavBtn');
+  if (btn) {
+    const isFav = isFavorite(productId);
+    btn.classList.toggle('active', isFav);
+    btn.title = isFav ? 'Rimuovi dai preferiti' : 'Aggiungi ai preferiti';
+    const svg = btn.querySelector('svg');
+    if (svg) {
+      svg.setAttribute('fill', isFav ? '#e44545' : 'none');
+      svg.setAttribute('stroke', isFav ? '#e44545' : '#aaa');
+    }
+  }
+  // Aggiorna anche le card nella griglia prodotti
+  document.querySelectorAll('[data-pid="' + productId + '"]').forEach(cardBtn => {
+    const isFav = isFavorite(productId);
+    cardBtn.classList.toggle('active', isFav);
+    const svg = cardBtn.querySelector('svg');
+    if (svg) {
+      svg.setAttribute('fill', isFav ? '#e44545' : 'none');
+      svg.setAttribute('stroke', isFav ? '#e44545' : '#999');
+    }
+  });
+}
+
+function renderFavoritesSidebar() {
+  const container = document.getElementById('favItems');
+  const footer = document.getElementById('favFooter');
+  const empty = document.getElementById('favEmpty');
+  if (!container) return;
+
+  const favProducts = favorites.map(id => PRODUCTS.find(p => p.id === id)).filter(Boolean);
+
+  if (favProducts.length === 0) {
+    if (empty) empty.style.display = 'flex';
+    if (footer) footer.style.display = 'none';
+    // Rimuovi vecchi item
+    container.querySelectorAll('.fav-item').forEach(el => el.remove());
+    return;
+  }
+
+  if (empty) empty.style.display = 'none';
+  if (footer) footer.style.display = 'block';
+
+  // Ricostruisci lista
+  container.querySelectorAll('.fav-item').forEach(el => el.remove());
+
+  favProducts.forEach(p => {
+    const div = document.createElement('div');
+    div.className = 'fav-item';
+    div.innerHTML =
+      '<img class="fav-item-img" src="' + p.image + '" alt="' + p.name + '" onclick="closeFavSidebar();openQuickView(' + p.id + ')" ' +
+      'onerror="this.style.display=\'none\'">' +
+      '<div class="fav-item-info">' +
+      '<div class="fav-item-name" onclick="closeFavSidebar();openQuickView(' + p.id + ')">' + p.name + '</div>' +
+      '<div class="fav-item-price">&#x20AC;' + p.price.toFixed(2) + '</div>' +
+      '<div class="fav-item-actions">' +
+      '<button class="fav-item-add" onclick="closeFavSidebar();openQuickView(' + p.id + ')">Vedi prodotto</button>' +
+      '<button class="fav-item-remove" onclick="removeFavoriteFromSidebar(' + p.id + ')" title="Rimuovi dai preferiti">&#x2665;</button>' +
+      '</div>' +
+      '</div>';
+    container.insertBefore(div, empty ? empty.nextSibling : null);
+    container.appendChild(div);
+  });
+}
+
+function removeFavoriteFromSidebar(productId) {
+  const idx = favorites.indexOf(productId);
+  if (idx !== -1) favorites.splice(idx, 1);
+  saveFavorites();
+  updateFavBadge();
+  // Aggiorna cuore sulla card prodotto
+  document.querySelectorAll('[data-pid="' + productId + '"]').forEach(btn => {
+    btn.classList.remove('active');
+    const svg = btn.querySelector('svg');
+    if (svg) { svg.setAttribute('fill', 'none'); svg.setAttribute('stroke', '#999'); }
+  });
+  renderFavoritesSidebar();
+}
+
+function setupFavorites() {
+  // Badge iniziale
+  updateFavBadge();
+
+  // Apri sidebar al click sul cuore navbar
+  document.getElementById('favBtn')?.addEventListener('click', openFavSidebar);
+
+  // Chiudi sidebar
+  document.getElementById('favClose')?.addEventListener('click', closeFavSidebar);
+  document.getElementById('favOverlay')?.addEventListener('click', closeFavSidebar);
+
+  // Vai ai prodotti
+  document.getElementById('goShopFromFavBtn')?.addEventListener('click', closeFavSidebar);
+
+  // Svuota preferiti
+  document.getElementById('favClearBtn')?.addEventListener('click', () => {
+    favorites = [];
+    saveFavorites();
+    updateFavBadge();
+    // Aggiorna tutti i cuori nelle card
+    document.querySelectorAll('.card-fav-btn').forEach(btn => {
+      btn.classList.remove('active');
+      const svg = btn.querySelector('svg');
+      if (svg) { svg.setAttribute('fill', 'none'); svg.setAttribute('stroke', '#999'); }
+    });
+    renderFavoritesSidebar();
+    showToast('ðŸ¤', 'Preferiti svuotati.');
+  });
+
+  // Aggiungi tutti al carrello
+  document.getElementById('favAddAllBtn')?.addEventListener('click', () => {
+    const favProducts = favorites.map(id => PRODUCTS.find(p => p.id === id)).filter(Boolean);
+    favProducts.forEach(p => {
+      const existing = cart.find(i => i.id === p.id && !i.custNote);
+      if (existing) {
+        existing.qty += 1;
+      } else {
+        cart.push({ id: p.id, name: p.name, price: p.price, image: p.image, qty: 1, size: p.sizes[0] || 'M', fabric: '\uD83D\uDC55 Standard', custNote: '', _uid: Date.now() + '-' + Math.random().toString(36).slice(2) });
+      }
+    });
+    saveCart();
+    updateCartUI();
+    closeFavSidebar();
+    showToast('âœ…', favProducts.length + ' prodotti aggiunti al carrello!');
+    openCart();
+  });
+}
+
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// MODALE PERSONALIZZAZIONE MAGLIA
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+
+let _customizeProductId = null;
+let _customizeKitType = 'shorts'; // kit attivo quando si apre il modal
+
+function openCustomizeModal(productId) {
+  _customizeProductId = productId;
+
+  // Determina il tipo di kit selezionato nel quick view
+  const activeKitBtn = document.querySelector('.qv-kit-row .qv-option-btn.active');
+  _customizeKitType = activeKitBtn ? (activeKitBtn.dataset.kit || 'solo') : 'solo';
+
+  const overlay = document.getElementById('customizeOverlay');
+  if (!overlay) return;
+
+  // Mostra/nascondi sezioni in base al tipo di kit
+  // Solo Maglia â†’ solo nome/numero, niente shorts checkbox nÃ© calzettoni
+  // Maglia+Pantaloncino â†’ nome/numero + checkbox pantaloncino
+  // Kit Completo â†’ tutto
+  const shortsGroup = document.getElementById('custShortsNumberGroup');
+  const sockGroup = document.getElementById('custSockGroup');
+  if (shortsGroup) shortsGroup.style.display = (_customizeKitType === 'shorts' || _customizeKitType === 'full') ? 'block' : 'none';
+  if (sockGroup) sockGroup.style.display = _customizeKitType === 'full' ? 'block' : 'none';
+
+  // Precompila con personalizzazione esistente
+  const custName = document.getElementById('custName');
+  const custNumber = document.getElementById('custNumber');
+  const custShortsNumber = document.getElementById('custShortsNumber');
+  const custSockSize = document.getElementById('custSockSize');
+  if (currentCustomization) {
+    if (custName) custName.value = currentCustomization.name || '';
+    if (custNumber) custNumber.value = currentCustomization.number || '';
+    if (custShortsNumber) custShortsNumber.checked = !!currentCustomization.shortsNumber;
+    if (custSockSize) custSockSize.value = currentCustomization.sockSize || '';
+  } else {
+    if (custName) custName.value = '';
+    if (custNumber) custNumber.value = '';
+    if (custShortsNumber) custShortsNumber.checked = false;
+    if (custSockSize) custSockSize.value = '';
+  }
+  updateCustomizePreview();
+
+  overlay.style.display = 'flex';
+  requestAnimationFrame(() => overlay.classList.add('open'));
+  document.body.style.overflow = 'hidden';
+}
+
+function closeCustomizeModal() {
+  const overlay = document.getElementById('customizeOverlay');
+  if (!overlay) return;
+  overlay.classList.remove('open');
+  setTimeout(() => {
+    overlay.style.display = 'none';
+    document.body.style.overflow = '';
+  }, 320);
+}
+
+function updateCustomizePreview() {
+  const name = (document.getElementById('custName')?.value || '').trim().toUpperCase() || 'IL TUO NOME';
+  const number = (document.getElementById('custNumber')?.value || '').trim() || '10';
+  const prevName = document.getElementById('prevName');
+  const prevNumber = document.getElementById('prevNumber');
+  if (prevName) prevName.textContent = name;
+  if (prevNumber) prevNumber.textContent = number;
+}
+
+function setupCustomizeModal() {
+  const overlay = document.getElementById('customizeOverlay');
+  const closeBtn = document.getElementById('customizeClose');
+  const confirmBtn = document.getElementById('customizeConfirmBtn');
+  const custName = document.getElementById('custName');
+  const custNumber = document.getElementById('custNumber');
+
+  if (!overlay) return;
+
+  overlay.addEventListener('click', e => {
+    if (e.target === overlay) closeCustomizeModal();
+  });
+  closeBtn?.addEventListener('click', closeCustomizeModal);
+  custName?.addEventListener('input', updateCustomizePreview);
+  custNumber?.addEventListener('input', updateCustomizePreview);
+
+  confirmBtn?.addEventListener('click', () => {
+    const name = (custName?.value || '').trim();
+    const number = (custNumber?.value || '').trim();
+    const shortsNumber = document.getElementById('custShortsNumber')?.checked || false;
+    const sockSize = document.getElementById('custSockSize')?.value || '';
+
+    if (!name && !number) {
+      showToast('\u26A0\uFE0F', 'Inserisci almeno il nome o il numero!');
+      return;
+    }
+    if (number && (parseInt(number) < 1 || parseInt(number) > 99)) {
+      showToast('\u26A0\uFE0F', 'Il numero deve essere tra 1 e 99.');
+      return;
+    }
+    if (_customizeKitType === 'full' && !sockSize) {
+      showToast('\u26A0\uFE0F', 'Seleziona la taglia dei calzettoni!');
+      return;
+    }
+
+    currentCustomization = { name, number, shortsNumber, sockSize };
+
+    const badge = document.getElementById('qvCustomizeBadge');
+    if (badge) badge.style.display = 'block';
+
+    const parts = [];
+    if (name) parts.push(name);
+    if (number) parts.push('#' + number);
+    if (shortsNumber) parts.push('N. pantaloncino');
+    if (sockSize) parts.push('Calzettoni ' + sockSize);
+    showToast('\u270F\uFE0F', 'Personalizzazione: ' + parts.join(' | '));
+    closeCustomizeModal();
+  });
+}
+
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+//  CATEGORY PAGE â€” Adidas-style full-screen shop view
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+
+let _catFilter  = 'all';
+let _catTeam    = null;
+let _catSort    = 'default';
+let _catTabs    = [];  // [{label, filter}]
+let _catBrand   = null; // filtro brand per la catPage
+
+/**
+ * Apre la pagina categoria.
+ * @param {string}   filter    â€” filtro categoria principale (es. 'Mondiale2026', 'vintage', 'SerieA')
+ * @param {string}   title     â€” titolo della pagina (es. "MAGLIE DEL MONDIALE")
+ * @param {string}   bcLabel   â€” label breadcrumb (es. "Mondiale 2026")
+ * @param {Array}    tabs      â€” array di {label, filter} per i sub-tab, o [] per nessun tab
+ * @param {string}   [team]    â€” squadra opzionale da pre-selezionare
+ */
+function openCatPage(filter, title, bcLabel, tabs, team, brand) {
+  _catFilter = filter;
+  _catTeam   = team || null;
+  _catSort   = 'default';
+  _catTabs   = tabs || [];
+  _catBrand  = brand || null;
+
+  // Titolo e breadcrumb
+  document.getElementById('catPageTitle').textContent  = title;
+  document.getElementById('catPageBcLabel').textContent = bcLabel;
+
+  // Sub-tabs
+  const tabsBar = document.getElementById('catPageTabsBar');
+  const tabsEl  = document.getElementById('catPageTabs');
+  if (_catTabs.length > 0) {
+    tabsEl.innerHTML = _catTabs.map((t, i) =>
+      `<button class="cat-page-tab${i === 0 ? ' active' : ''}" data-filter="${t.filter}" data-label="${t.label}">${t.label}</button>`
+    ).join('');
+    tabsBar.style.display = '';
+    tabsEl.querySelectorAll('.cat-page-tab').forEach(btn => {
+      btn.addEventListener('click', () => {
+        tabsEl.querySelectorAll('.cat-page-tab').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        _catFilter = btn.dataset.filter;
+        _catTeam   = null;
+        _catBrand  = null; // i tab resettano il filtro brand
+        renderCatPage();
+      });
+    });
+  } else {
+    tabsBar.style.display = 'none';
+    tabsEl.innerHTML = '';
+  }
+
+  // Reset sort
+  _catSort = 'default';
+  document.querySelectorAll('.cat-sort-item').forEach(i => {
+    i.classList.toggle('active', i.dataset.sort === 'default');
+  });
+
+  renderCatPage();
+
+  const overlay = document.getElementById('catPageOverlay');
+  overlay.removeAttribute('aria-hidden');
+  overlay.classList.add('open');
+  // Scroll interno all'inizio
+  overlay.scrollTop = 0;
+  // Blocca scroll della pagina sottostante
+  document.body.style.overflow = 'hidden';
+}
+
+function closeCatPage() {
+  const overlay = document.getElementById('catPageOverlay');
+  overlay.classList.remove('open');
+  overlay.setAttribute('aria-hidden', 'true');
+  document.body.style.overflow = '';
+  _catBrand = null; // reset brand filter alla chiusura
+}
+
+function renderCatPage() {
+  const grid = document.getElementById('catPageGrid');
+  if (!grid) return;
+
+  // Filtra prodotti
+  let filtered = PRODUCTS.filter(p =>
+    productMatchesCategory(p, _catFilter) &&
+    productMatchesTeam(p, _catTeam) &&
+    productMatchesBrand(p, _catBrand)
+  );
+
+  // Ordina
+  if (_catSort === 'price-asc')  filtered = [...filtered].sort((a, b) => a.price - b.price);
+  if (_catSort === 'price-desc') filtered = [...filtered].sort((a, b) => b.price - a.price);
+
+  // Aggiorna contatori
+  const countEl   = document.getElementById('catPageCount');
+  const resultsEl = document.getElementById('catPageResults');
+  const label     = `(${filtered.length})`;
+  if (countEl)   countEl.textContent   = label;
+  if (resultsEl) resultsEl.textContent = `${filtered.length} prodotti`;
+
+  grid.innerHTML = '';
+
+  if (filtered.length === 0) {
+    grid.innerHTML = `
+      <div class="cat-page-empty">
+        <span class="cat-page-empty-icon">ðŸ”</span>
+        <p>Nessun prodotto trovato per questa selezione.</p>
+      </div>`;
+    return;
+  }
+
+  filtered.forEach((p, i) => {
+    const card = document.createElement('div');
+    card.className = 'product-card';
+    card.style.animationDelay = `${i * 0.04}s`;
+    const catLabel = Array.isArray(p.categoryLabel) ? p.categoryLabel[0] : p.categoryLabel;
+    const fav = isFavorite(p.id);
+    card.innerHTML = `
+      <div class="card-img-wrap">
+        <img src="${p.image}" alt="${p.name}" loading="lazy" onclick="openQuickView(${p.id})"
+             onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22360%22><rect fill=%22%230f1525%22 width=%22300%22 height=%22360%22/><text x=%2250%25%22 y=%2250%25%22 fill=%22%236c63ff%22 text-anchor=%22middle%22 dominant-baseline=%22middle%22 font-size=%2260%22>&#x26BD;</text></svg>'"
+             style="cursor:pointer;width:100%;height:100%;object-fit:cover;display:block;">
+        ${p.badge ? `<span class="card-badge ${p.badge}">${p.badgeLabel}</span>` : ''}
+        <button class="card-fav-btn${fav ? ' active' : ''}" data-pid="${p.id}"
+                onclick="event.stopPropagation();toggleFavorite(${p.id},this)"
+                title="${fav ? 'Rimuovi dai preferiti' : 'Aggiungi ai preferiti'}" aria-label="Preferiti">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="${fav ? '#e44545' : 'none'}"
+               stroke="${fav ? '#e44545' : '#999'}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+          </svg>
+        </button>
+      </div>
+      <div class="card-info" onclick="openQuickView(${p.id})" style="cursor:pointer;">
+        <div class="card-category">${catLabel}</div>
+        <div class="card-name">${p.name}</div>
+        <div class="card-price-row">
+          <span class="card-price">&#x20AC;${p.price.toFixed(2)}</span>
+          ${p.oldPrice ? `<span class="card-price-old">&#x20AC;${p.oldPrice.toFixed(2)}</span>` : ''}
+        </div>
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+// â”€â”€ Setup category page (chiamato in DOMContentLoaded) â”€â”€
+function setupCatPage() {
+  // Pulsante Indietro
+  document.getElementById('catPageBackBtn')?.addEventListener('click', closeCatPage);
+
+  // Chiudi con ESC
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeCatPage();
+  });
+
+  // Sort dropdown
+  const sortWrap = document.getElementById('catSortWrap');
+  const sortBtn  = document.getElementById('catSortBtn');
+  sortBtn?.addEventListener('click', e => {
+    e.stopPropagation();
+    sortWrap.classList.toggle('open');
+  });
+  document.addEventListener('click', () => sortWrap?.classList.remove('open'));
+  document.querySelectorAll('.cat-sort-item').forEach(item => {
+    item.addEventListener('click', () => {
+      document.querySelectorAll('.cat-sort-item').forEach(i => i.classList.remove('active'));
+      item.classList.add('active');
+      _catSort = item.dataset.sort || 'default';
+      sortWrap.classList.remove('open');
+      renderCatPage();
+    });
+  });
+
+  // â”€â”€ SEZIONE MONDIALI â”€â”€
+  document.getElementById('mondialiSeeAll')?.addEventListener('click', () => {
+    openCatPage(
+      'Mondiale2026',
+      'MAGLIE DEL MONDIALE',
+      'Mondiale 2026',
+      [
+        { label: 'Tutte le nazionali', filter: 'Mondiale2026' },
+        { label: 'Nazionali',          filter: 'Nazionali'    },
+      ]
+    );
+  });
+
+  // â”€â”€ SEZIONE VINTAGE â”€â”€
+  document.getElementById('vintageSeeAll')?.addEventListener('click', () => {
+    openCatPage(
+      'vintage',
+      'MAGLIE VINTAGE',
+      'Vintage',
+      []
+    );
+  });
+
+  // â”€â”€ SEZIONE MUST HAVE â”€â”€
+  document.getElementById('mustHaveSeeAll')?.addEventListener('click', () => {
+    openCatPage(
+      'new',
+      'MUST HAVE â€” BESTSELLER',
+      'Must Have',
+      [
+        { label: 'NovitÃ ',    filter: 'new'    },
+        { label: 'In offerta', filter: 'all'   },
+      ]
+    );
+  });
+
+  // â”€â”€ NAV MEGA MENU â€” bottoni lega nel pannello CALCIO â”€â”€
+  const navLeagueMap = {
+    navLeagueSerieA:    { filter: 'SerieA',      title: 'SERIE A',          bc: 'Serie A',        tabs: [] },
+    navLeagueLaLiga:    { filter: 'LaLiga',       title: 'LA LIGA',          bc: 'La Liga',        tabs: [] },
+    navLeagueBundesliga:{ filter: 'Bundesliga',   title: 'BUNDESLIGA',       bc: 'Bundesliga',     tabs: [] },
+    navLeaguePremier:   { filter: 'Premier',      title: 'PREMIER LEAGUE',   bc: 'Premier League', tabs: [] },
+    navLeagueChampions: { filter: 'Champions',    title: 'CHAMPIONS LEAGUE', bc: 'Champions League', tabs: [] },
+    navLeagueSaudi:     { filter: 'SaudiLeague',  title: 'SAUDI PRO LEAGUE', bc: 'Saudi League',   tabs: [] },
+    navLeagueMondiale2026: {
+      filter: 'Mondiale2026',
+      title: 'MONDIALE 2026',
+      bc: 'Mondiale 2026',
+      tabs: [
+        { label: 'Tutte le nazionali', filter: 'Mondiale2026' },
+        { label: 'Nazionali',          filter: 'Nazionali'    },
+      ]
+    },
+    navLeagueNazionali: { filter: 'Nazionali',    title: 'NAZIONALI',        bc: 'Nazionali',      tabs: [] },
+  };
+
+  Object.entries(navLeagueMap).forEach(([id, cfg]) => {
+    // Cerca TUTTI i bottoni con quell'id (ci possono essere duplicati nel mega menu)
+    document.querySelectorAll(`[id="${id}"], [data-league="${cfg.filter}"]`).forEach(btn => {
+      btn.addEventListener('click', e => {
+        e.preventDefault();
+        openCatPage(cfg.filter, cfg.title, cfg.bc, cfg.tabs);
+      });
+    });
+  });
+
+  // â”€â”€ NAV tipo-maglia: NovitÃ  / Vintage â”€â”€
+  document.querySelectorAll('[data-filter-type]').forEach(btn => {
+    btn.addEventListener('click', e => {
+      e.preventDefault();
+      const t = btn.dataset.filterType;
+      if (t === 'new') {
+        openCatPage('new', 'NOVITÃ€', 'NovitÃ ', []);
+      } else if (t === 'vintage') {
+        openCatPage('vintage', 'VINTAGE', 'Vintage', []);
+      }
+    });
+  });
+}
+
+// â”€â”€ Aggiunge setupCatPage al DOMContentLoaded â”€â”€
+document.addEventListener('DOMContentLoaded', setupCatPage);
+
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+//  INFO PAGES â€” Chi Siamo / Recensioni / Contatti / Custom
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+
+const _infoPageMap = {
+  about:   'infoPageAbout',
+  reviews: 'infoPageReviews',
+  contact: 'infoPageContact',
+  custom:  'infoPageCustom',
+};
+
+function openInfoPage(key) {
+  const id = _infoPageMap[key];
+  if (!id) return;
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.removeAttribute('aria-hidden');
+  el.scrollTop = 0;
+  // Force reflow before adding class so transition fires
+  requestAnimationFrame(() => {
+    el.classList.add('open');
+  });
+  document.body.style.overflow = 'hidden';
+}
+
+function closeInfoPage(key) {
+  const id = _infoPageMap[key];
+  if (!id) return;
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.classList.remove('open');
+  el.setAttribute('aria-hidden', 'true');
+  document.body.style.overflow = '';
+}
+
+// Close info pages on ESC
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    Object.keys(_infoPageMap).forEach(key => closeInfoPage(key));
+  }
+});
+

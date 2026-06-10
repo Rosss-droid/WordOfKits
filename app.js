@@ -1,10 +1,10 @@
-/* ═══════════════════════════════════════════════
+﻿/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    GoalKit — app.js
    Carrello + Ordini + EmailJS
-═══════════════════════════════════════════════ */
+â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 
-// ── CONFIG EMAIL (salvata in localStorage) ──
-// Le credenziali sono configurate UNA VOLTA dal venditore via "⚙️ Setup Email"
+// â”€â”€ CONFIG EMAIL (salvata in localStorage) â”€â”€
+// Le credenziali sono configurate UNA VOLTA dal venditore via "âš™ï¸ Setup Email"
 // e poi funzionano automaticamente per tutti gli ordini di tutti i clienti.
 const DEFAULT_EMAIL_CONFIG = {
   publicKey: "z3BLJtLhUWt266yFW",
@@ -15,7 +15,7 @@ const DEFAULT_EMAIL_CONFIG = {
 };
 let EMAIL_CONFIG = Object.assign({}, DEFAULT_EMAIL_CONFIG, JSON.parse(localStorage.getItem('gk_email_config') || '{}'));
 
-// ── STATO ──
+// â”€â”€ STATO â”€â”€
 let cart = JSON.parse(localStorage.getItem('gk_cart') || '[]').map(function (item) {
   if (!item._uid) item._uid = Date.now() + '-' + Math.random().toString(36).slice(2);
   return item;
@@ -23,12 +23,13 @@ let cart = JSON.parse(localStorage.getItem('gk_cart') || '[]').map(function (ite
 let currentFilter = 'new';
 let currentTeam = null;
 let currentSearch = '';
+let currentBrand = null;
 let currentSort = 'default';
 let quickViewProduct = null;
 let currentCustomization = null; // { name, number, shortsNumber, sockSize }
 let favorites = JSON.parse(localStorage.getItem('gk_favorites') || '[]'); // array di product id
 
-// ── SQUADRE PER CATEGORIA ──
+// â”€â”€ SQUADRE PER CATEGORIA â”€â”€
 const TEAMS = {
   Champions: [
     'Real Madrid', 'Manchester City', 'Bayern Monaco', 'PSG', 'Inter', 'Juventus',
@@ -68,7 +69,7 @@ const TEAMS = {
   ],
 };
 
-// ── INIT ──
+// â”€â”€ INIT â”€â”€
 document.addEventListener('DOMContentLoaded', () => {
   initEmailJS();
   renderProducts(currentFilter);
@@ -97,16 +98,17 @@ document.addEventListener('DOMContentLoaded', () => {
   setupCustomizeModal();
   setupVintage();
   setupMustHave();
+  setupBrands();
 });
 
-// ── EMAILJS INIT ──
+// â”€â”€ EMAILJS INIT â”€â”€
 function initEmailJS() {
   if (EMAIL_CONFIG.publicKey) {
     emailjs.init({ publicKey: EMAIL_CONFIG.publicKey });
   }
 }
 
-// ── PARTICELLE HERO ──
+// â”€â”€ PARTICELLE HERO â”€â”€
 function setupParticles() {
   const container = document.getElementById('heroParticles');
   if (!container) return;
@@ -126,7 +128,7 @@ function setupParticles() {
   }
 }
 
-// ── NAVBAR ──
+// â”€â”€ NAVBAR â”€â”€
 function setupNav() {
   const hamburger = document.getElementById('hamburger');
   const navLinks = document.getElementById('navLinks');
@@ -142,7 +144,7 @@ function setupNav() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   });
 
-  // ── MEGA MENU: apri/chiudi con timeout per evitare chiusura sul gap ──
+  // â”€â”€ MEGA MENU: apri/chiudi con timeout per evitare chiusura sul gap â”€â”€
   const megaItems = document.querySelectorAll('.nav-mega-item');
   let closeTimer = null;
 
@@ -185,7 +187,7 @@ function setupNav() {
   });
 }
 
-// ── SCROLL SPY ──
+// â”€â”€ SCROLL SPY â”€â”€
 function setupScrollSpy() {
   const sections = ['home', 'products', 'about', 'contact'];
   const navLinks = document.querySelectorAll('.nav-link');
@@ -201,9 +203,9 @@ function setupScrollSpy() {
   });
 }
 
-// ═══════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 // PRODOTTI
-// ═══════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
 // Controlla se un prodotto appartiene a una categoria (supporta stringa e array)
 function productMatchesCategory(p, filter) {
@@ -230,7 +232,16 @@ function productMatchesSearch(p, query) {
   const label = Array.isArray(p.categoryLabel)
     ? p.categoryLabel.join(' ').toLowerCase()
     : (p.categoryLabel || '').toLowerCase();
-  return name.includes(q) || label.includes(q);
+  const brand = (p.brand || '').toLowerCase();
+  return name.includes(q) || label.includes(q) || brand.includes(q);
+}
+
+// Controlla se un prodotto appartiene a un brand specifico
+function productMatchesBrand(p, brand) {
+  if (!brand) return true;
+  const b = brand.toLowerCase();
+  return (p.brand || '').toLowerCase() === b ||
+         p.name.toLowerCase().includes(b);
 }
 
 function renderProducts(filter, team = null) {
@@ -240,7 +251,8 @@ function renderProducts(filter, team = null) {
   let filtered = PRODUCTS.filter(p =>
     productMatchesCategory(p, filter) &&
     productMatchesTeam(p, team) &&
-    productMatchesSearch(p, currentSearch)
+    productMatchesSearch(p, currentSearch) &&
+    productMatchesBrand(p, currentBrand)
   );
 
   // Sort
@@ -293,14 +305,14 @@ function renderProducts(filter, team = null) {
 
 }
 
-// ── SETUP FILTRI SIDEBAR 3-LEVEL ──
+// â”€â”€ SETUP FILTRI SIDEBAR 3-LEVEL â”€â”€
 function setupFilters() {
 
-  // ── Novità / Vintage ──
+  // â”€â”€ Novità / Vintage â”€â”€
   document.getElementById('filterNew')?.addEventListener('click', () => setActiveFilter('new', null));
   document.getElementById('filterVintage')?.addEventListener('click', () => setActiveFilter('vintage', null));
 
-  // ── CALCIO: toggle apre/chiude l'intera sezione campionati ──
+  // â”€â”€ CALCIO: toggle apre/chiude l'intera sezione campionati â”€â”€
   const calcioBtn = document.getElementById('calcioToggleBtn');
   const calcioList = document.getElementById('calcioSubList');
   if (calcioBtn && calcioList) {
@@ -319,7 +331,7 @@ function setupFilters() {
     });
   }
 
-  // ── League buttons (livello 2 dentro Calcio) ──
+  // â”€â”€ League buttons (livello 2 dentro Calcio) â”€â”€
   const leagueDefs = [
     { btnId: 'filterChampions', listId: 'menuChampions', filter: 'Champions' },
     { btnId: 'megaBtnSerieA', listId: 'megaListSerieA', filter: 'SerieA' },
@@ -330,7 +342,7 @@ function setupFilters() {
     { btnId: 'megaBtnNazionali', listId: 'megaListNazionali', filter: 'Nazionali' },
   ];
 
-  // ── MONDIALE 2026: pulsante flat diretto ──
+  // â”€â”€ MONDIALE 2026: pulsante flat diretto â”€â”€
   const mondialBtn = document.getElementById('megaBtnMondiale2026');
   if (mondialBtn) {
     mondialBtn.addEventListener('click', () => {
@@ -389,7 +401,7 @@ function setupFilters() {
     });
   });
 
-  // ── ACCESSORI: toggle apre/chiude la sezione ──
+  // â”€â”€ ACCESSORI: toggle apre/chiude la sezione â”€â”€
   const accessoriBtn = document.getElementById('accessoriToggleBtn');
   const accessoriList = document.getElementById('accessoriSubList');
   if (accessoriBtn && accessoriList) {
@@ -417,7 +429,7 @@ function setupFilters() {
     });
   }
 
-  // ── Toggle sidebar ("Nascondi filtri" / "Mostra filtri") ──
+  // â”€â”€ Toggle sidebar ("Nascondi filtri" / "Mostra filtri") â”€â”€
   const toggleBtn = document.getElementById('sidebarToggleBtn');
   const layout = document.getElementById('shopLayout');
   if (toggleBtn && layout) {
@@ -429,7 +441,7 @@ function setupFilters() {
     });
   }
 
-  // ── Sort menu ──
+  // â”€â”€ Sort menu â”€â”€
   const sortWrap = document.querySelector('.shop-sort-wrap');
   const sortBtn = document.getElementById('shopSortBtn');
   if (sortBtn && sortWrap) {
@@ -448,6 +460,25 @@ function setupFilters() {
       });
     });
   }
+}
+
+// â”€â”€ BRAND SECTION â”€â”€
+function setupBrands() {
+  document.querySelectorAll('.brand-card[data-brand]').forEach(card => {
+    card.addEventListener('click', () => {
+      const brand = card.dataset.brand; // es. "EA7", "Nike", "Adidas"...
+      const brandUpper = brand.toUpperCase();
+      // Apre lo stesso overlay catPage usato da "Acquista prodotti Vintage"
+      openCatPage(
+        'all',           // mostra tutti i prodotti del brand (non filtrare per categoria)
+        brandUpper,      // titolo overlay (es. "EA7")
+        brand,           // breadcrumb
+        [],              // nessun sub-tab
+        null,            // nessuna squadra specifica
+        brand            // <-- filtro brand
+      );
+    });
+  });
 }
 
 function closeAllDropdowns() {
@@ -479,7 +510,7 @@ function setActiveFilter(filter, team, updateActiveBtn = true) {
   renderProducts(currentFilter, currentTeam);
 }
 
-// ── SEARCH BAR ──
+// â”€â”€ SEARCH BAR â”€â”€
 function setupSearch() {
   const input = document.getElementById('searchInput');
   const clearBtn = document.getElementById('searchClear');
@@ -495,6 +526,8 @@ function setupSearch() {
       if (currentSearch) {
         currentFilter = 'all';
         currentTeam = null;
+        currentBrand = null; // reset filtro brand
+        document.querySelectorAll('.brand-card').forEach(c => c.classList.remove('active'));
         document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
         document.getElementById('filterAll')?.classList.add('active');
         closeAllDropdowns();
@@ -507,6 +540,8 @@ function setupSearch() {
   clearBtn?.addEventListener('click', () => {
     input.value = '';
     currentSearch = '';
+    currentBrand = null; // reset filtro brand
+    document.querySelectorAll('.brand-card').forEach(c => c.classList.remove('active'));
     clearBtn.classList.remove('visible');
     renderProducts(currentFilter, currentTeam);
     input.focus();
@@ -516,9 +551,9 @@ function setupSearch() {
   input.addEventListener('focus', () => closeAllDropdowns());
 }
 
-// ═══════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 // QUICK VIEW
-// ═══════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 function setupQuickView() {
   document.getElementById('quickViewClose')?.addEventListener('click', closeQuickView);
   document.getElementById('quickViewOverlay')?.addEventListener('click', e => {
@@ -739,9 +774,9 @@ function closeQuickView() {
   closeOverlay('quickViewOverlay');
 }
 
-// ═══════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 // CARRELLO
-// ═══════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 function addToCart(productId) {
   const p = PRODUCTS.find(x => x.id === productId);
   if (!p) return;
@@ -898,7 +933,7 @@ function renderCartItems() {
   if (totalEl) totalEl.textContent = `€${finalTotal.toFixed(2)}`;
 }
 
-// ── SIDEBAR CART ──
+// â”€â”€ SIDEBAR CART â”€â”€
 function setupCartSidebar() {
   const cartBtn = document.getElementById('cartBtn');
   const cartClose = document.getElementById('cartClose');
@@ -926,9 +961,9 @@ function closeCart() {
   document.body.style.overflow = '';
 }
 
-// ═══════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 // ORDINE MODAL
-// ═══════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 function setupOrderModal() {
   document.getElementById('orderClose')?.addEventListener('click', closeOrderModal);
   document.getElementById('orderOverlay')?.addEventListener('click', e => {
@@ -938,7 +973,7 @@ function setupOrderModal() {
 }
 
 function openOrderModal() {
-  if (cart.length === 0) { showToast('⚠️', 'Il carrello è vuoto!'); return; }
+  if (cart.length === 0) { showToast('âš ï¸', 'Il carrello è vuoto!'); return; }
   renderOrderSummary();
   openOverlay('orderOverlay');
 }
@@ -963,7 +998,7 @@ function renderOrderSummary() {
     `).join('')}
     <div class="order-summary-row">
       <span>Spedizione</span>
-      <span>${shipping === 0 ? 'Gratuita 🎉' : '€3.00'}</span>
+      <span>${shipping === 0 ? 'Gratuita ðŸŽ‰' : '€3.00'}</span>
     </div>
     <div class="order-summary-total">
       <span>TOTALE</span>
@@ -979,7 +1014,7 @@ async function submitOrder(e) {
 
   // Controlla configurazione EmailJS (usa la variabile globale)
   if (!EMAIL_CONFIG.publicKey || !EMAIL_CONFIG.serviceId || !EMAIL_CONFIG.templateId || !EMAIL_CONFIG.ownerEmail) {
-    showToast('⚠️', 'Sistema email non configurato. Clicca su "⚙️ Setup Email" per configurarlo.');
+    showToast('âš ï¸', 'Sistema email non configurato. Clicca su "âš™ï¸ Setup Email" per configurarlo.');
     return;
   }
 
@@ -998,14 +1033,14 @@ async function submitOrder(e) {
   const orderNum = 'WOK-' + Date.now().toString().slice(-6);
 
   const orderDetails = cart.map(item => {
-    const priceStr = item.custom ? '⚠️ Prezzo da definire' : `€${(item.price * item.qty).toFixed(2)}`;
+    const priceStr = item.custom ? 'âš ï¸ Prezzo da definire' : `€${(item.price * item.qty).toFixed(2)}`;
     return `• ${item.name} | Taglia: ${item.size} | Qtà: ${item.qty} | ${priceStr}`;
   }).join('\n');
 
 
   // Loading state
   btn.disabled = true;
-  btnText.textContent = '⏳ Invio in corso...';
+  btnText.textContent = 'â³ Invio in corso...';
 
   try {
     // Invia email SOLO al venditore tramite EmailJS
@@ -1037,7 +1072,7 @@ async function submitOrder(e) {
     // Invia conferma automatica AL CLIENTE
     const customerTemplateId = EMAIL_CONFIG.customerTemplateId || EMAIL_CONFIG.templateId;
     const customerConfirmData = {
-      to_email: email,                              // ← va al cliente
+      to_email: email,                              // â† va al cliente
       customer_name: `${name} ${surname}`,
       customer_email: email,
       customer_phone: phone || 'Non fornito',
@@ -1045,7 +1080,7 @@ async function submitOrder(e) {
       order_number: orderNum,
       order_details: orderDetails,
       order_subtotal: `€${total.toFixed(2)}`,
-      order_shipping: shipping === 0 ? 'Gratuita 🎉' : '€3.00',
+      order_shipping: shipping === 0 ? 'Gratuita ðŸŽ‰' : '€3.00',
       order_total: `€${finalTotal.toFixed(2)}`,
       order_notes: notes || 'Nessuna nota',
       reply_to: EMAIL_CONFIG.ownerEmail            // cliente può rispondere al venditore
@@ -1067,14 +1102,14 @@ async function submitOrder(e) {
 
   } catch (err) {
     console.error('Errore invio ordine:', err);
-    showToast('❌', 'Errore nell’invio. Controlla la configurazione email e riprova.');
+    showToast('âŒ', 'Errore nell’invio. Controlla la configurazione email e riprova.');
   } finally {
     btn.disabled = false;
     btnText.textContent = '✅ Conferma Ordine';
   }
 }
 
-// ── MODAL CONFERMA ORDINE (per il cliente) ──
+// â”€â”€ MODAL CONFERMA ORDINE (per il cliente) â”€â”€
 function showOrderConfirmation({ orderNum, name, surname, finalTotal, shipping, cart: items }) {
   // Crea overlay dinamico
   let overlay = document.getElementById('confirmOverlay');
@@ -1084,7 +1119,7 @@ function showOrderConfirmation({ orderNum, name, surname, finalTotal, shipping, 
     overlay.className = 'modal-overlay';
     overlay.innerHTML = `
       <div class="modal glass" style="max-width:500px;text-align:center;">
-        <div style="font-size:4rem;margin-bottom:1rem;">🎉</div>
+        <div style="font-size:4rem;margin-bottom:1rem;">ðŸŽ‰</div>
         <h2 style="font-size:1.6rem;font-weight:800;margin-bottom:.5rem;">Ordine Ricevuto!</h2>
         <p style="color:var(--text-muted);margin-bottom:1.5rem;">Grazie <strong id="confName"></strong>, il tuo ordine è stato inviato con successo.</p>
         <div class="glass" style="border-radius:12px;padding:1rem;margin-bottom:1.5rem;text-align:left;">
@@ -1106,7 +1141,7 @@ function showOrderConfirmation({ orderNum, name, surname, finalTotal, shipping, 
       overlay.classList.remove('open');
       setTimeout(() => {
         overlay.style.display = 'none';
-        document.body.style.overflow = ''; // ← ripristina lo scroll
+        document.body.style.overflow = ''; // â† ripristina lo scroll
       }, 300);
     });
   }
@@ -1122,7 +1157,7 @@ function showOrderConfirmation({ orderNum, name, surname, finalTotal, shipping, 
 
 
 
-// ── CONTACT FORM ──
+// â”€â”€ CONTACT FORM â”€â”€
 function setupContactForm() {
   document.getElementById('contactForm')?.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -1144,10 +1179,10 @@ function setupContactForm() {
         // 📩 EMAIL AL CLIENTE
         await emailjs.send(
           EMAIL_CONFIG.serviceId,
-          "order_customer", // 👈 nome template cliente
+          "order_customer", // ðŸ‘ˆ nome template cliente
           {
             ...emailData,
-            to_email: email // 👈 invia al cliente
+            to_email: email // ðŸ‘ˆ invia al cliente
           }
         );
       } else {
@@ -1158,16 +1193,16 @@ function setupContactForm() {
       showToast('✅', 'Messaggio inviato! Ti risponderemo presto.');
       document.getElementById('contactForm').reset();
     } catch {
-      showToast('❌', 'Errore invio. Riprova.');
+      showToast('âŒ', 'Errore invio. Riprova.');
     } finally {
       btn.disabled = false;
     }
   });
 }
 
-// ═══════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 // SETUP EMAIL MODAL
-// ═══════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 function setupSetupModal() {
   document.getElementById('setupClose')?.addEventListener('click', closeSetupModal);
   document.getElementById('setupOverlay')?.addEventListener('click', e => {
@@ -1213,7 +1248,7 @@ function saveEmailConfig(e) {
   updateVendorBtnVisibility();
 }
 
-// ── ADMIN BTN ──
+// â”€â”€ ADMIN BTN â”€â”€
 function setupAdminBtn() {
   const btn = document.getElementById('adminBtn');
   if (!btn) return;
@@ -1232,9 +1267,9 @@ function updateAdminBtnVisibility() {
   btn.style.display = isConfigured ? 'none' : 'flex';
 }
 
-// ═══════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 // UTILITY
-// ═══════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 function openOverlay(id) {
   const el = document.getElementById(id);
   if (!el) return;
@@ -1264,15 +1299,15 @@ function showToast(icon, msg) {
   toastTimeout = setTimeout(() => toast.classList.remove('show'), 3500);
 }
 
-// ═══════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 // PANNELLO VENDITORE — Rispondi al Cliente
-// ═══════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
 const REPLY_TEMPLATES = {
   confirm: (name, orderNum) =>
     `Ciao ${name || '[Nome Cliente]'},
 
-grazie mille per il tuo ordine su WorldOfKits! 🎉
+grazie mille per il tuo ordine su WorldOfKits! ðŸŽ‰
 
 📦 Numero Ordine: ${orderNum || '[WOK-XXXXXX]'}
 
@@ -1287,7 +1322,7 @@ Il Team WorldOfKits ⚽`,
   shipped: (name, orderNum) =>
     `Ciao ${name || '[Nome Cliente]'},
 
-ottime notizie! Il tuo ordine è in viaggio! 🚚
+ottime notizie! Il tuo ordine è in viaggio! ðŸšš
 
 📦 Numero Ordine: ${orderNum || '[WOK-XXXXXX]'}
 
@@ -1305,7 +1340,7 @@ ti scriviamo riguardo al tuo ordine ${orderNum || '[WOK-XXXXXX]'}.
 
 Per poter procedere, avremmo bisogno di alcune informazioni aggiuntive:
 
-👉 [Scrivi qui cosa ti serve — es: conferma taglia, indirizzo, ecc.]
+ðŸ‘‰ [Scrivi qui cosa ti serve — es: conferma taglia, indirizzo, ecc.]
 
 Puoi rispondere direttamente a questa email.
 
@@ -1371,7 +1406,7 @@ function setupVendorPanel() {
   // Apri client email (mailto)
   mailtoBtn?.addEventListener('click', () => {
     const toEmail = document.getElementById('replyEmail')?.value.trim();
-    if (!toEmail) { showToast('⚠️', 'Inserisci l\'email del cliente!'); return; }
+    if (!toEmail) { showToast('âš ï¸', 'Inserisci l\'email del cliente!'); return; }
     const orderNum = numInput?.value.trim() || '';
     const subject = encodeURIComponent(`Re: Ordine WorldOfKits${orderNum ? ' — ' + orderNum : ''}`);
     const body = encodeURIComponent(msgArea?.value || '');
@@ -1382,14 +1417,14 @@ function setupVendorPanel() {
   ejsBtn?.addEventListener('click', async () => {
     const toEmail = document.getElementById('replyEmail')?.value.trim();
     const customerName = nameInput?.value.trim() || 'Cliente';
-    if (!toEmail) { showToast('⚠️', 'Inserisci l\'email del cliente!'); return; }
+    if (!toEmail) { showToast('âš ï¸', 'Inserisci l\'email del cliente!'); return; }
     if (!EMAIL_CONFIG.publicKey || !EMAIL_CONFIG.serviceId) {
-      showToast('⚠️', 'EmailJS non configurato. Usa "Apri Email" come alternativa.');
+      showToast('âš ï¸', 'EmailJS non configurato. Usa "Apri Email" come alternativa.');
       return;
     }
     try {
       ejsBtn.disabled = true;
-      ejsBtn.textContent = '⏳ Invio...';
+      ejsBtn.textContent = 'â³ Invio...';
       await emailjs.send(EMAIL_CONFIG.serviceId, EMAIL_CONFIG.templateId, {
         to_email: toEmail,
         customer_name: customerName,
@@ -1404,7 +1439,7 @@ function setupVendorPanel() {
       closeVendorPanel();
     } catch (err) {
       console.error(err);
-      showToast('❌', 'Errore invio. Usa "Apri Email" come alternativa.');
+      showToast('âŒ', 'Errore invio. Usa "Apri Email" come alternativa.');
     } finally {
       ejsBtn.disabled = false;
       ejsBtn.textContent = '⚡ Invia via EmailJS';
@@ -1433,9 +1468,9 @@ function updateVendorBtnVisibility() {
   btn.style.display = isConfigured ? 'flex' : 'none';
 }
 
-// ══════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 // CAROSELLO RECENSIONI
-// ══════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 function setupReviews() {
   const track = document.getElementById('reviewsTrack');
   const prevBtn = document.getElementById('reviewsPrev');
@@ -1502,9 +1537,9 @@ function setupReviews() {
   window.addEventListener('resize', () => goTo(current));
 }
 
-// ══════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 // RICHIESTA PRODOTTO PERSONALIZZATA
-// ══════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 function setupCustomOrder() {
   const form = document.getElementById('customOrderForm');
   if (!form) return;
@@ -1545,9 +1580,9 @@ function setupCustomOrder() {
   });
 }
 
-// ══════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 // MINI-CAROSELLO RECENSIONI
-// ══════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 function setupReviewMiniCarousels() {
   document.querySelectorAll('[data-rmc]').forEach(function (rmc) {
     const imgs = rmc.querySelectorAll('.rmc-img');
@@ -1572,9 +1607,9 @@ function setupReviewMiniCarousels() {
   });
 }
 
-// ══════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 // HERO CAROUSEL (immagini modelli)
-// ══════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 function setupHeroCarousel() {
   const imgs = document.querySelectorAll('.hero-carousel-img');
   const dotsEl = document.getElementById('heroCarouselDots');
@@ -1607,9 +1642,9 @@ function setupHeroCarousel() {
   startAuto();
 }
 
-// ═══════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 // NAVBAR MEGA MENU (hover) — collega filtri ai link
-// ═══════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 function setupNavMegaMenu() {
   // Delegazione click su tutti i bottoni con data-league nel mega menu
   document.querySelectorAll('.nav-mega-link[data-league]').forEach(btn => {
@@ -1642,15 +1677,15 @@ function setupNavMegaMenu() {
   });
 }
 
-// ═══════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 // BARRA DI RICERCA NAVBAR → Dropdown sotto navbar
-// ═══════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
 // Mappa categorie: nome display → filtro da passare a setActiveFilter
 const SEARCH_CATEGORIES = [
   { label: 'Serie A', icon: '🇮🇹', filter: 'SerieA' },
-  { label: 'Champions League', icon: '⭐', filter: 'Champions' },
-  { label: 'Premier League', icon: '🏴󠁧󠁢󠁥󠁮󠁧󠁿', filter: 'Premier' },
+  { label: 'Champions League', icon: 'â­', filter: 'Champions' },
+  { label: 'Premier League', icon: '🏴ó §ó ¢ó ¥ó ®ó §ó ¿', filter: 'Premier' },
   { label: 'La Liga', icon: '🇪🇸', filter: 'LaLiga' },
   { label: 'Bundesliga', icon: '🇩🇪', filter: 'Bundesliga' },
   { label: 'Nazionali', icon: '🌍', filter: 'Nazionali' },
@@ -1665,7 +1700,7 @@ function setupNavSearch() {
   const backdrop = document.getElementById('searchDropdownBackdrop');
   if (!navInput || !dropdown) return;
 
-  // ── Aggiorna dropdown ad ogni input ──
+  // â”€â”€ Aggiorna dropdown ad ogni input â”€â”€
   navInput.addEventListener('input', () => {
     clearTimeout(navInput._sdDebounce);
     navInput._sdDebounce = setTimeout(() => {
@@ -1723,7 +1758,7 @@ function renderSearchDropdown(query) {
 
   const q = query.toLowerCase();
 
-  // ── 1. CATEGORIE: le 5 più rilevanti in base alla query ──
+  // â”€â”€ 1. CATEGORIE: le 5 più rilevanti in base alla query â”€â”€
   // Una categoria è rilevante se contiene prodotti che matchano la query
   // oppure se il suo nome matcha la query
   const relevantCats = [];
@@ -1752,7 +1787,7 @@ function renderSearchDropdown(query) {
     </li>
   `).join('');
 
-  // ── 2. PRODOTTI: max 5 che matchano la query ──
+  // â”€â”€ 2. PRODOTTI: max 5 che matchano la query â”€â”€
   const results = PRODUCTS.filter(p => {
     const name = p.name.toLowerCase();
     const label = Array.isArray(p.categoryLabel) ? p.categoryLabel.join(' ').toLowerCase() : (p.categoryLabel || '').toLowerCase();
@@ -1785,9 +1820,9 @@ function renderSearchDropdown(query) {
   });
 }
 
-// ═══════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 // SEZIONE VINTAGE — Maglie con badge "vintage"
-// ═══════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 function setupVintage() {
   const grid     = document.getElementById('vintageGrid');
   const viewport = document.getElementById('vintageViewport');
@@ -1854,9 +1889,9 @@ function setupVintage() {
   thumb.addEventListener('pointercancel', () => { dragging = false; });
 }
 
-// ═══════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 // SEZIONE MUST HAVE — Articoli più venduti / bestseller
-// ═══════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 function setupMustHave() {
   const grid     = document.getElementById('mustHaveGrid');
   const viewport = document.getElementById('mustHaveViewport');
@@ -1933,9 +1968,9 @@ function setupMustHave() {
   thumb.addEventListener('pointercancel', () => { dragging = false; });
 }
 
-// ═══════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 // SEZIONE MONDIALI — Maglie Mondiale 2026
-// ═══════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 function setupMondiali() {
   const grid = document.getElementById('mondialiGrid');
   const viewport = document.getElementById('mondialiViewport');
@@ -1943,7 +1978,7 @@ function setupMondiali() {
   const thumb = document.getElementById('mondialiThumb');
   const seeAll = document.getElementById('mondialiSeeAll');
 
-  // ── 1. Popola la griglia (max 8 prodotti) ──
+  // â”€â”€ 1. Popola la griglia (max 8 prodotti) â”€â”€
   if (grid) {
     const products = PRODUCTS.filter(p => {
       const cats = Array.isArray(p.category) ? p.category : [p.category];
@@ -1974,9 +2009,9 @@ function setupMondiali() {
     }
   }
 
-  // ── 2. "Acquista prodotti Mondiali" → gestito da setupCatPage (openCatPage) ──
+  // â”€â”€ 2. "Acquista prodotti Mondiali" → gestito da setupCatPage (openCatPage) â”€â”€
 
-  // ── 3. Scrollbar custom ──
+  // â”€â”€ 3. Scrollbar custom â”€â”€
   if (!viewport || !track || !thumb) return;
 
   // Aggiorna posizione e larghezza thumb in base allo scroll corrente
@@ -1987,7 +2022,7 @@ function setupMondiali() {
     thumb.style.left = scrollRatio * (100 - parseFloat(thumb.style.width)) + '%';
   }
 
-  // Sync thumb ↔ scroll
+  // Sync thumb ↓ scroll
   viewport.addEventListener('scroll', updateThumb, { passive: true });
   // Ricalcola dopo che le immagini sono caricate
   window.addEventListener('load', updateThumb);
@@ -2026,11 +2061,11 @@ function setupMondiali() {
   thumb.addEventListener('pointercancel', () => { dragging = false; });
 }
 
-// ═══════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 // FEATURED HOME — Category cards + Prodotti in evidenza
-// ═══════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 function setupFeatured() {
-  // ── 1. Category cards: click → filtra e scrolla ──
+  // â”€â”€ 1. Category cards: click → filtra e scrolla â”€â”€
   document.querySelectorAll('.feat-league-card').forEach(card => {
     card.addEventListener('click', () => {
       const league = card.dataset.league;
@@ -2039,7 +2074,7 @@ function setupFeatured() {
     });
   });
 
-  // ── 2. Ultimi Arrivi: prodotti con badge "new" (max 4) ──
+  // â”€â”€ 2. Ultimi Arrivi: prodotti con badge "new" (max 4) â”€â”€
   const newRow = document.getElementById('featNewRow');
   if (newRow) {
     const newProducts = PRODUCTS.filter(p => p.badge === 'new').slice(0, 4);
@@ -2048,7 +2083,7 @@ function setupFeatured() {
       : '<p style="color:var(--text-muted);grid-column:1/-1">Nessuna novità al momento.</p>';
   }
 
-  // ── 3. Più Richiesti: prime 4 maglie Serie A + La Liga con prezzi bassi ──
+  // â”€â”€ 3. Più Richiesti: prime 4 maglie Serie A + La Liga con prezzi bassi â”€â”€
   const topRow = document.getElementById('featTopRow');
   if (topRow) {
     // Seleziona 4 prodotti: i primi disponibili da categorie principali
@@ -2066,7 +2101,7 @@ function setupFeatured() {
       : '<p style="color:var(--text-muted);grid-column:1/-1">Nessun prodotto disponibile.</p>';
   }
 
-  // ── 4. Pulsanti "Vedi tutti" ──
+  // â”€â”€ 4. Pulsanti "Vedi tutti" â”€â”€
   document.getElementById('featSeeAllNew')?.addEventListener('click', () => {
     setActiveFilter('all', null);
     document.getElementById('products')?.scrollIntoView({ behavior: 'smooth' });
@@ -2099,9 +2134,9 @@ function featProductCardHTML(p) {
     </div>`;
 }
 
-// ═══════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 // PREFERITI — Sidebar laterale + badge navbar
-// ═══════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
 function saveFavorites() {
   localStorage.setItem('gk_favorites', JSON.stringify(favorites));
@@ -2141,7 +2176,7 @@ function toggleFavorite(productId, btnEl) {
   const idx = favorites.indexOf(productId);
   if (idx === -1) {
     favorites.push(productId);
-    showToast('❤️', 'Aggiunto ai preferiti!');
+    showToast('â¤ï¸', 'Aggiunto ai preferiti!');
   } else {
     favorites.splice(idx, 1);
     showToast('🤍', 'Rimosso dai preferiti.');
@@ -2168,7 +2203,7 @@ function toggleFavoriteFromQV(productId) {
   const idx = favorites.indexOf(productId);
   if (idx === -1) {
     favorites.push(productId);
-    showToast('❤️', 'Aggiunto ai preferiti!');
+    showToast('â¤ï¸', 'Aggiunto ai preferiti!');
   } else {
     favorites.splice(idx, 1);
     showToast('🤍', 'Rimosso dai preferiti.');
@@ -2302,9 +2337,9 @@ function setupFavorites() {
   });
 }
 
-// ═══════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 // MODALE PERSONALIZZAZIONE MAGLIA
-// ═══════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
 let _customizeProductId = null;
 let _customizeKitType = 'shorts'; // kit attivo quando si apre il modal
@@ -2420,14 +2455,15 @@ function setupCustomizeModal() {
   });
 }
 
-// ══════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 //  CATEGORY PAGE — Adidas-style full-screen shop view
-// ══════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
 let _catFilter  = 'all';
 let _catTeam    = null;
 let _catSort    = 'default';
 let _catTabs    = [];  // [{label, filter}]
+let _catBrand   = null; // filtro brand per la catPage
 
 /**
  * Apre la pagina categoria.
@@ -2437,11 +2473,12 @@ let _catTabs    = [];  // [{label, filter}]
  * @param {Array}    tabs      — array di {label, filter} per i sub-tab, o [] per nessun tab
  * @param {string}   [team]    — squadra opzionale da pre-selezionare
  */
-function openCatPage(filter, title, bcLabel, tabs, team) {
+function openCatPage(filter, title, bcLabel, tabs, team, brand) {
   _catFilter = filter;
   _catTeam   = team || null;
   _catSort   = 'default';
   _catTabs   = tabs || [];
+  _catBrand  = brand || null;
 
   // Titolo e breadcrumb
   document.getElementById('catPageTitle').textContent  = title;
@@ -2461,6 +2498,7 @@ function openCatPage(filter, title, bcLabel, tabs, team) {
         btn.classList.add('active');
         _catFilter = btn.dataset.filter;
         _catTeam   = null;
+        _catBrand  = null; // i tab resettano il filtro brand
         renderCatPage();
       });
     });
@@ -2491,6 +2529,7 @@ function closeCatPage() {
   overlay.classList.remove('open');
   overlay.setAttribute('aria-hidden', 'true');
   document.body.style.overflow = '';
+  _catBrand = null; // reset brand filter alla chiusura
 }
 
 function renderCatPage() {
@@ -2500,7 +2539,8 @@ function renderCatPage() {
   // Filtra prodotti
   let filtered = PRODUCTS.filter(p =>
     productMatchesCategory(p, _catFilter) &&
-    productMatchesTeam(p, _catTeam)
+    productMatchesTeam(p, _catTeam) &&
+    productMatchesBrand(p, _catBrand)
   );
 
   // Ordina
@@ -2559,7 +2599,7 @@ function renderCatPage() {
   });
 }
 
-// ── Setup category page (chiamato in DOMContentLoaded) ──
+// â”€â”€ Setup category page (chiamato in DOMContentLoaded) â”€â”€
 function setupCatPage() {
   // Pulsante Indietro
   document.getElementById('catPageBackBtn')?.addEventListener('click', closeCatPage);
@@ -2587,7 +2627,7 @@ function setupCatPage() {
     });
   });
 
-  // ── SEZIONE MONDIALI ──
+  // â”€â”€ SEZIONE MONDIALI â”€â”€
   document.getElementById('mondialiSeeAll')?.addEventListener('click', () => {
     openCatPage(
       'Mondiale2026',
@@ -2600,7 +2640,7 @@ function setupCatPage() {
     );
   });
 
-  // ── SEZIONE VINTAGE ──
+  // â”€â”€ SEZIONE VINTAGE â”€â”€
   document.getElementById('vintageSeeAll')?.addEventListener('click', () => {
     openCatPage(
       'vintage',
@@ -2610,7 +2650,7 @@ function setupCatPage() {
     );
   });
 
-  // ── SEZIONE MUST HAVE ──
+  // â”€â”€ SEZIONE MUST HAVE â”€â”€
   document.getElementById('mustHaveSeeAll')?.addEventListener('click', () => {
     openCatPage(
       'new',
@@ -2623,7 +2663,7 @@ function setupCatPage() {
     );
   });
 
-  // ── NAV MEGA MENU — bottoni lega nel pannello CALCIO ──
+  // â”€â”€ NAV MEGA MENU — bottoni lega nel pannello CALCIO â”€â”€
   const navLeagueMap = {
     navLeagueSerieA:    { filter: 'SerieA',      title: 'SERIE A',          bc: 'Serie A',        tabs: [] },
     navLeagueLaLiga:    { filter: 'LaLiga',       title: 'LA LIGA',          bc: 'La Liga',        tabs: [] },
@@ -2653,7 +2693,7 @@ function setupCatPage() {
     });
   });
 
-  // ── NAV tipo-maglia: Novità / Vintage ──
+  // â”€â”€ NAV tipo-maglia: Novità / Vintage â”€â”€
   document.querySelectorAll('[data-filter-type]').forEach(btn => {
     btn.addEventListener('click', e => {
       e.preventDefault();
@@ -2667,6 +2707,48 @@ function setupCatPage() {
   });
 }
 
-// ── Aggiunge setupCatPage al DOMContentLoaded ──
+// â”€â”€ Aggiunge setupCatPage al DOMContentLoaded â”€â”€
 document.addEventListener('DOMContentLoaded', setupCatPage);
+
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+//  INFO PAGES — Chi Siamo / Recensioni / Contatti / Custom
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+
+const _infoPageMap = {
+  about:   'infoPageAbout',
+  reviews: 'infoPageReviews',
+  contact: 'infoPageContact',
+  custom:  'infoPageCustom',
+};
+
+function openInfoPage(key) {
+  const id = _infoPageMap[key];
+  if (!id) return;
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.removeAttribute('aria-hidden');
+  el.scrollTop = 0;
+  // Force reflow before adding class so transition fires
+  requestAnimationFrame(() => {
+    el.classList.add('open');
+  });
+  document.body.style.overflow = 'hidden';
+}
+
+function closeInfoPage(key) {
+  const id = _infoPageMap[key];
+  if (!id) return;
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.classList.remove('open');
+  el.setAttribute('aria-hidden', 'true');
+  document.body.style.overflow = '';
+}
+
+// Close info pages on ESC
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    Object.keys(_infoPageMap).forEach(key => closeInfoPage(key));
+  }
+});
 
