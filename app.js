@@ -1,4 +1,4 @@
-﻿/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    GoalKit — app.js
    Carrello + Ordini + EmailJS
 â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
@@ -97,9 +97,32 @@ document.addEventListener('DOMContentLoaded', () => {
   setupFavorites();
   setupCustomizeModal();
   setupVintage();
+  setupScarpeSection();
+  setupAccessoriSection();
+  setupTuteSection();
   setupMustHave();
   setupBrands();
+  setupSquadra();
 });
+
+// ══════════════════════════════════════════════
+// SCEGLI LA TUA SQUADRA — freccia scroll
+// ══════════════════════════════════════════════
+function setupSquadra() {
+  const btn = document.getElementById('squadraScrollRight');
+  const viewport = document.getElementById('squadraViewport');
+  if (!btn || !viewport) return;
+  btn.addEventListener('click', () => {
+    viewport.scrollBy({ left: 170 * 2, behavior: 'smooth' });
+  });
+  // Quando si arriva alla fine, ricomincia dall'inizio
+  viewport.addEventListener('scroll', () => {
+    const maxScroll = viewport.scrollWidth - viewport.clientWidth;
+    if (viewport.scrollLeft >= maxScroll - 2) {
+      setTimeout(() => viewport.scrollTo({ left: 0, behavior: 'smooth' }), 400);
+    }
+  }, { passive: true });
+}
 
 // â”€â”€ EMAILJS INIT â”€â”€
 function initEmailJS() {
@@ -1787,7 +1810,7 @@ function renderSearchDropdown(query) {
     </li>
   `).join('');
 
-  // â”€â”€ 2. PRODOTTI: max 5 che matchano la query â”€â”€
+  // ── 2. PRODOTTI: max 5 che matchano la query ──
   const results = PRODUCTS.filter(p => {
     const name = p.name.toLowerCase();
     const label = Array.isArray(p.categoryLabel) ? p.categoryLabel.join(' ').toLowerCase() : (p.categoryLabel || '').toLowerCase();
@@ -2752,3 +2775,211 @@ document.addEventListener('keydown', e => {
   }
 });
 
+// ══════════════════════════════════════════════════════════
+// SEZIONE SCARPE — Prodotti con category 'Scarpe'
+// ══════════════════════════════════════════════════════════
+function setupScarpeSection() {
+  const grid     = document.getElementById('scarpeSecGrid');
+  const viewport = document.getElementById('scarpeSecViewport');
+  const track    = document.getElementById('scarpeSecTrack');
+  const thumb    = document.getElementById('scarpeSecThumb');
+  const seeAll   = document.getElementById('scarpeSectionSeeAll');
+
+  if (grid) {
+    const products = PRODUCTS.filter(function(p) {
+      var cats = Array.isArray(p.category) ? p.category : [p.category];
+      return cats.some(function(c) {
+        return (c || '').toLowerCase().includes('scarpe') || (c || '').toLowerCase().includes('shoe');
+      });
+    }).slice(0, 12);
+
+    if (products.length === 0) {
+      grid.innerHTML = '<div class="vintage-empty">Nessuna scarpa disponibile al momento.</div>';
+    } else {
+      grid.innerHTML = '';
+      products.forEach(function(p) {
+        var catLabel = Array.isArray(p.categoryLabel) ? p.categoryLabel[0] : (p.categoryLabel || '');
+        var card = document.createElement('div');
+        card.className = 'vintage-card';
+        card.onclick = function() { openQuickView(p.id); };
+        var oldPriceHtml = p.oldPrice ? ' <span style="font-size:.82em;color:#aaa;font-weight:400;text-decoration:line-through;">&#8364;' + p.oldPrice.toFixed(2) + '</span>' : '';
+        var badgeHtml = p.badgeLabel ? '<div class="vintage-card-tag">' + p.badgeLabel + '</div>' : '';
+        card.innerHTML =
+          '<div class="vintage-card-img-wrap">' +
+            '<img class="vintage-card-img" src="' + p.image + '" alt="' + p.name + '" loading="lazy">' +
+          '</div>' +
+          badgeHtml +
+          '<div class="vintage-card-name">' + p.name + '</div>' +
+          '<div class="vintage-card-cat">' + catLabel + '</div>' +
+          '<div class="vintage-card-price">&#8364;' + p.price.toFixed(2) + oldPriceHtml + '</div>';
+        grid.appendChild(card);
+      });
+    }
+  }
+
+  if (seeAll) {
+    seeAll.addEventListener('click', function() {
+      openCatPage('Scarpe', 'SCARPE', 'Scarpe', []);
+    });
+  }
+
+  if (!viewport || !track || !thumb) return;
+
+  function updateThumb() {
+    var scrollRatio = viewport.scrollLeft / (viewport.scrollWidth - viewport.clientWidth || 1);
+    var thumbW = (viewport.clientWidth / viewport.scrollWidth) * 100;
+    thumb.style.width = Math.max(thumbW, 10) + '%';
+    thumb.style.left = scrollRatio * (100 - parseFloat(thumb.style.width)) + '%';
+  }
+  viewport.addEventListener('scroll', updateThumb, { passive: true });
+  window.addEventListener('load', updateThumb);
+  setTimeout(updateThumb, 400);
+
+  track.addEventListener('click', function(e) {
+    if (e.target === thumb) return;
+    var rect = track.getBoundingClientRect();
+    viewport.scrollLeft = ((e.clientX - rect.left) / rect.width) * (viewport.scrollWidth - viewport.clientWidth);
+  });
+
+  var dragging = false, dragStartX = 0, dragStartScroll = 0;
+  thumb.addEventListener('pointerdown', function(e) {
+    dragging = true; dragStartX = e.clientX; dragStartScroll = viewport.scrollLeft;
+    thumb.setPointerCapture(e.pointerId); e.preventDefault();
+  });
+  thumb.addEventListener('pointermove', function(e) {
+    if (!dragging) return;
+    viewport.scrollLeft = dragStartScroll + ((e.clientX - dragStartX) / track.clientWidth) * (viewport.scrollWidth - viewport.clientWidth);
+  });
+  thumb.addEventListener('pointerup', function() { dragging = false; });
+  thumb.addEventListener('pointercancel', function() { dragging = false; });
+}
+
+// ══════════════════════════════════════════════════════════
+// SEZIONE ACCESSORI
+// ══════════════════════════════════════════════════════════
+function setupAccessoriSection() {
+  var grid     = document.getElementById('accessoriSecGrid');
+  var viewport = document.getElementById('accessoriSecViewport');
+  var track    = document.getElementById('accessoriSecTrack');
+  var thumb    = document.getElementById('accessoriSecThumb');
+  var seeAll   = document.getElementById('accessoriSectionSeeAll');
+
+  if (grid) {
+    var products = PRODUCTS.filter(function(p) {
+      var cats = Array.isArray(p.category) ? p.category : [p.category];
+      return cats.some(function(c) { return (c || '').toLowerCase().includes('accessori'); });
+    }).slice(0, 12);
+
+    if (products.length === 0) {
+      grid.innerHTML = '<div class="vintage-empty">Nessun accessorio disponibile al momento.</div>';
+    } else {
+      grid.innerHTML = '';
+      products.forEach(function(p) {
+        var catLabel = Array.isArray(p.categoryLabel) ? p.categoryLabel[0] : (p.categoryLabel || '');
+        var card = document.createElement('div');
+        card.className = 'vintage-card';
+        card.onclick = function() { openQuickView(p.id); };
+        var oldPriceHtml = p.oldPrice ? ' <span style="font-size:.82em;color:#aaa;font-weight:400;text-decoration:line-through;">&#8364;' + p.oldPrice.toFixed(2) + '</span>' : '';
+        var badgeHtml = p.badgeLabel ? '<div class="vintage-card-tag">' + p.badgeLabel + '</div>' : '';
+        card.innerHTML =
+          '<div class="vintage-card-img-wrap">' +
+            '<img class="vintage-card-img" src="' + p.image + '" alt="' + p.name + '" loading="lazy">' +
+          '</div>' +
+          badgeHtml +
+          '<div class="vintage-card-name">' + p.name + '</div>' +
+          '<div class="vintage-card-cat">' + catLabel + '</div>' +
+          '<div class="vintage-card-price">&#8364;' + p.price.toFixed(2) + oldPriceHtml + '</div>';
+        grid.appendChild(card);
+      });
+    }
+  }
+
+  if (seeAll) {
+    seeAll.addEventListener('click', function() { openCatPage('Accessori', 'ACCESSORI', 'Accessori', []); });
+  }
+
+  if (!viewport || !track || !thumb) return;
+  function updateThumbA() {
+    var r = viewport.scrollLeft / (viewport.scrollWidth - viewport.clientWidth || 1);
+    var w = (viewport.clientWidth / viewport.scrollWidth) * 100;
+    thumb.style.width = Math.max(w, 10) + '%';
+    thumb.style.left  = r * (100 - parseFloat(thumb.style.width)) + '%';
+  }
+  viewport.addEventListener('scroll', updateThumbA, { passive: true });
+  window.addEventListener('load', updateThumbA);
+  setTimeout(updateThumbA, 400);
+  track.addEventListener('click', function(e) {
+    if (e.target === thumb) return;
+    viewport.scrollLeft = ((e.clientX - track.getBoundingClientRect().left) / track.clientWidth) * (viewport.scrollWidth - viewport.clientWidth);
+  });
+  var draggingA = false, dStartXA = 0, dStartScrollA = 0;
+  thumb.addEventListener('pointerdown', function(e) { draggingA = true; dStartXA = e.clientX; dStartScrollA = viewport.scrollLeft; thumb.setPointerCapture(e.pointerId); e.preventDefault(); });
+  thumb.addEventListener('pointermove', function(e) { if (!draggingA) return; viewport.scrollLeft = dStartScrollA + ((e.clientX - dStartXA) / track.clientWidth) * (viewport.scrollWidth - viewport.clientWidth); });
+  thumb.addEventListener('pointerup', function() { draggingA = false; });
+  thumb.addEventListener('pointercancel', function() { draggingA = false; });
+}
+
+// ══════════════════════════════════════════════════════════
+// SEZIONE TUTE
+// ══════════════════════════════════════════════════════════
+function setupTuteSection() {
+  var grid     = document.getElementById('tuteSecGrid');
+  var viewport = document.getElementById('tuteSecViewport');
+  var track    = document.getElementById('tuteSecTrack');
+  var thumb    = document.getElementById('tuteSecThumb');
+  var seeAll   = document.getElementById('tuteSectionSeeAll');
+
+  if (grid) {
+    var products = PRODUCTS.filter(function(p) {
+      var cats = Array.isArray(p.category) ? p.category : [p.category];
+      return cats.some(function(c) { return (c || '').toLowerCase().includes('tute') || (c || '').toLowerCase().includes('tuta'); });
+    }).slice(0, 12);
+
+    if (products.length === 0) {
+      grid.innerHTML = '<div class="vintage-empty">Nessuna tuta disponibile al momento.</div>';
+    } else {
+      grid.innerHTML = '';
+      products.forEach(function(p) {
+        var catLabel = Array.isArray(p.categoryLabel) ? p.categoryLabel[0] : (p.categoryLabel || '');
+        var card = document.createElement('div');
+        card.className = 'vintage-card';
+        card.onclick = function() { openQuickView(p.id); };
+        var oldPriceHtml = p.oldPrice ? ' <span style="font-size:.82em;color:#aaa;font-weight:400;text-decoration:line-through;">&#8364;' + p.oldPrice.toFixed(2) + '</span>' : '';
+        var badgeHtml = p.badgeLabel ? '<div class="vintage-card-tag">' + p.badgeLabel + '</div>' : '';
+        card.innerHTML =
+          '<div class="vintage-card-img-wrap">' +
+            '<img class="vintage-card-img" src="' + p.image + '" alt="' + p.name + '" loading="lazy">' +
+          '</div>' +
+          badgeHtml +
+          '<div class="vintage-card-name">' + p.name + '</div>' +
+          '<div class="vintage-card-cat">' + catLabel + '</div>' +
+          '<div class="vintage-card-price">&#8364;' + p.price.toFixed(2) + oldPriceHtml + '</div>';
+        grid.appendChild(card);
+      });
+    }
+  }
+
+  if (seeAll) {
+    seeAll.addEventListener('click', function() { openCatPage('Tute', 'TUTE', 'Tute', []); });
+  }
+
+  if (!viewport || !track || !thumb) return;
+  function updateThumbT() {
+    var r = viewport.scrollLeft / (viewport.scrollWidth - viewport.clientWidth || 1);
+    var w = (viewport.clientWidth / viewport.scrollWidth) * 100;
+    thumb.style.width = Math.max(w, 10) + '%';
+    thumb.style.left  = r * (100 - parseFloat(thumb.style.width)) + '%';
+  }
+  viewport.addEventListener('scroll', updateThumbT, { passive: true });
+  window.addEventListener('load', updateThumbT);
+  setTimeout(updateThumbT, 400);
+  track.addEventListener('click', function(e) {
+    if (e.target === thumb) return;
+    viewport.scrollLeft = ((e.clientX - track.getBoundingClientRect().left) / track.clientWidth) * (viewport.scrollWidth - viewport.clientWidth);
+  });
+  var draggingT = false, dStartXT = 0, dStartScrollT = 0;
+  thumb.addEventListener('pointerdown', function(e) { draggingT = true; dStartXT = e.clientX; dStartScrollT = viewport.scrollLeft; thumb.setPointerCapture(e.pointerId); e.preventDefault(); });
+  thumb.addEventListener('pointermove', function(e) { if (!draggingT) return; viewport.scrollLeft = dStartScrollT + ((e.clientX - dStartXT) / track.clientWidth) * (viewport.scrollWidth - viewport.clientWidth); });
+  thumb.addEventListener('pointerup', function() { draggingT = false; });
+  thumb.addEventListener('pointercancel', function() { draggingT = false; });
+}

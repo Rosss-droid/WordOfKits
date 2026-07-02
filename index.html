@@ -316,43 +316,73 @@
       <div class="mustHave-scrollbar-thumb" id="mustHaveThumb"></div>
     </div>
   </section>
+ 
 
-  <!-- ═══════════════════ Vintage Editorial (1 pannello foto) ═══════════════════ -->
-  <div class="vintage-editorial">
-    <div class="ed-panel ed-panel--main" id="edPanelVintage">
-      <img src="images/models/Immagine 2026-05-03 111700.png" alt="Kit WorldOfKits" class="ed-panel-img" />
-      <div class="ed-panel-overlay"></div>
-      <div class="ed-panel-content">
-        <p class="ed-panel-eyebrow">Nuova collezione</p>
-        <h2 class="ed-panel-title">Kit Home<br>2025/26</h2>
-        <p class="ed-panel-sub">Un tributo all'iconico calcio europeo</p>
-      </div>
+   <!-- ═══════════════════ Sconto editorial ═══════════════════ -->
+  <div class="sconto-editorial">
+    <div class="sconto-content">
+      <h2 class="sconto-title">+10% SCONTO SUL PRIMO ORDINE CON IL CODICE: WOK10</h2>
+      <p class="sconto-sub">Acquista anche un solo prodotto e ricevi lo sconto del 10% direttamente nel carrello</p>
     </div>
   </div>
   
-
-  <!-- ═══════════════════ SEZIONE Maglie Vintage ═══════════════════ -->
-  <section class="vintage" id="maglieVintage">
-    <div class="vintage-header">
-      <div class="vintage-header-left">
-        <h2 class="vintage-title">MAGLIE VINTAGE</h2>
+  <!-- ═══════════════════ ACQUISTA PER SQUADRA DEL MONDIALE ═══════════════════ -->
+  <section class="brand-section" id="brandSection">
+    <div class="brand-section-inner">
+      <div class="brand-section-header">
+        <h2 class="brand-section-title">Scegli la tua squadra</h2>
       </div>
-      <button class="vintage-see-all" id="vintageSeeAll">
-        Acquista prodotti Vintage <span class="vintage-arrow">→</span>
-      </button>
-    </div>
-    <!-- Viewport scroll orizzontale -->
-    <div class="vintage-scroll-viewport" id="vintageViewport">
-      <div class="vintage-grid" id="vintageGrid"></div>
+      <div class="brand-grid">
+        <!-- Argentina -->
+        <button class="brand-tile" id="TeamArgentina" onclick="openCatPage('all','ARGENTINA','Argentina',[],null,'Argentina')" aria-label="Argentina">
+          <img src="loghi/Argentina.svg" alt="Argentina" class="brand-tile-logo">
+        </button>
+        <!-- Francia -->
+        <button class="brand-tile" id="TeamFrancia" onclick="openCatPage('all','FRANCIA','Francia',[],null,'Francia')" aria-label="Francia">
+          <img src="loghi/Francia.svg" alt="Francia" class="brand-tile-logo">
+        </button>
+        <!-- Spagna -->
+        <button class="brand-tile" id="TeamSpagna" onclick="openCatPage('all','SPAGNA','Spagna',[],null,'Spagna')" aria-label="Spagna">
+          <img src="loghi/Spagna.svg" alt="Spagna" class="brand-tile-logo">
+        </button>
+        <!-- Germania -->
+        <button class="brand-tile" id="TeamGermania" onclick="openCatPage('all','GERMANIA','Germania',[],null,'Germania')" aria-label="Germania">
+          <img src="loghi/Germania.svg" alt="Germania" class="brand-tile-logo">
+        </button>
+        <!-- Brasile -->
+        <button class="brand-tile" id="TeamBrasile" onclick="openCatPage('all','BRASILE','Brasile',[],null,'Brasile')" aria-label="Brasile">
+          <img src="loghi/Brasile.svg" alt="Brasile" class="brand-tile-logo">
+        </button>
+        <!-- Italia -->
+        <button class="brand-tile" id="TeamItalia" onclick="openCatPage('all','ITALIA','Italia',[],null,'Italia')" aria-label="Italia">
+          <img src="loghi/Italia.svg" alt="Italia" class="brand-tile-logo">
+        </button>
+        <!-- Inghilterra -->
+        <button class="brand-tile" id="TeamInghilterra" onclick="openCatPage('all','INGHLTERRA','Inghilterra',[],null,'Inghilterra')" aria-label="Inghilterra">
+          <img src="loghi/Inghilterra.svg" alt="Inghilterra" class="brand-tile-logo">
+        </button>
+        <!-- Stati Uniti -->
+        <button class="brand-tile" id="TeamStatiUniti" onclick="openCatPage('all','STATIUNITI','Stati Uniti',[],null,'Stati Uniti')" aria-label="Stati Uniti">
+          <img src="loghi/Stati Uniti.svg" alt="Stati Uniti" class="brand-tile-logo">
+        </button>
+        <!-- Norvegia  -->
+        <button class="brand-tile" id="TeamNorvegia" onclick="openCatPage('all','NORVEGIA','Norvegia',[],null,'Norvegia')" aria-label="Norvegia">
+          <img src="loghi/Norvegia.svg" alt="Norvegia" class="brand-tile-logo">
+        </button>
+        <!-- Croazia -->
+        <button class="brand-tile" id="TeamCroazia" onclick="openCatPage('all','CROAZIA','Croazia',[],null,'Croazia')" aria-label="Croazia">
+          <img src="loghi/Croazia.svg" alt="Croazia" class="brand-tile-logo">
+        </button>
+      </div>
+      <!-- Viewport scroll orizzontale -->
+    <div class="scelta-scroll-viewport" id="sceltaViewport">
+      <div class="scelta-grid" id="sceltaGrid"></div>
     </div>
     <!-- Scrollbar nera custom -->
-    <div class="vintage-scrollbar-track" id="vintageTrack">
-      <div class="vintage-scrollbar-thumb" id="vintageThumb"></div>
+    <div class="scelta-scrollbar-track" id="sceltaTrack">
+      <div class="scelta-scrollbar-thumb" id="sceltaThumb"></div>
     </div>
   </section>
-
-  
-  
 
   <!-- ═══════════════════ SEZIONE MONDIALI ═══════════════════ -->
   <section class="mondiali-section" id="mondialiSection">
@@ -374,14 +404,29 @@
     </div>
   </section>
 
-  
-  <!-- ═══════════════════ Sconto editorial ═══════════════════ -->
-  <div class="sconto-editorial">
-    <div class="sconto-content">
-      <h2 class="sconto-title">+10% SCONTO SUL PRIMO ORDINE CON IL CODICE: WOK10</h2>
-      <p class="sconto-sub">Acquista anche un solo prodotto e ricevi lo sconto del 10% direttamente nel carrello</p>
+
+
+  <!-- ═══════════════════ SEZIONE Maglie Vintage ═══════════════════ -->
+  <section class="vintage" id="maglieVintage">
+    <div class="vintage-header">
+      <div class="vintage-header-left">
+        <h2 class="vintage-title">MAGLIE VINTAGE</h2>
+      </div>
+      <button class="vintage-see-all" id="vintageSeeAll">
+        Acquista prodotti Vintage <span class="vintage-arrow">→</span>
+      </button>
     </div>
-  </div>
+    <!-- Viewport scroll orizzontale -->
+    <div class="vintage-scroll-viewport" id="vintageViewport">
+      <div class="vintage-grid" id="vintageGrid"></div>
+    </div>
+    <!-- Scrollbar nera custom -->
+    <div class="vintage-scrollbar-track" id="vintageTrack">
+      <div class="vintage-scrollbar-thumb" id="vintageThumb"></div>
+    </div>
+  </section>
+  
+ 
 
   <!-- ═══════════════════ ACQUISTA PER BRAND ═══════════════════ -->
   <section class="brand-section" id="brandSection">
@@ -433,6 +478,9 @@
       </div>
     </div>
   </section>
+
+
+
 
 <!-- ═══════════════════ INFO PAGE OVERLAYS ═══════════════════ -->
  <!-- Overlay: Chi Siamo -->
@@ -703,6 +751,79 @@
     </div>
   </div>
 
+  <!-- ═══════════════════ EDITORIAL HERO BOTTOM ═══════════════════ -->
+  <section class="editorial-hero editorial-hero--bottom" id="editorialHeroBottom">
+    <div class="ed-panel" id="edBotPanel1">
+      <img src="images/models/Immagine 2026-05-03 111700.png" alt="WorldOfKits Nuova Stagione" class="ed-panel-img" />
+      <div class="ed-panel-overlay"></div>
+      <div class="ed-panel-content">
+        <p class="ed-panel-eyebrow">Scopri tutto</p>
+        <h2 class="ed-panel-title">Nuova<br>Stagione</h2>
+        <p class="ed-panel-sub">Le ultime collezioni per ogni campo</p>
+        <button class="ed-panel-btn" id="edBotBtn1"
+          onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">
+          Acquista <span class="ed-btn-arrow">→</span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════ SEZIONE SCARPE ═══════════════════ -->
+  <section class="vintage" id="scarpeSection">
+    <div class="vintage-header">
+      <div class="vintage-header-left">
+        <h2 class="vintage-title">SCARPE</h2>
+      </div>
+      <button class="vintage-see-all" id="scarpeSectionSeeAll">
+        Acquista prodotti Scarpe <span class="vintage-arrow">→</span>
+      </button>
+    </div>
+    <!-- Viewport scroll orizzontale -->
+    <div class="vintage-scroll-viewport" id="scarpeSecViewport">
+      <div class="vintage-grid" id="scarpeSecGrid"></div>
+    </div>
+    <!-- Scrollbar nera custom -->
+    <div class="vintage-scrollbar-track" id="scarpeSecTrack">
+      <div class="vintage-scrollbar-thumb" id="scarpeSecThumb"></div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ SEZIONE ACCESSORI ═══════════════════ -->
+  <section class="vintage" id="accessoriSection">
+    <div class="vintage-header">
+      <div class="vintage-header-left">
+        <h2 class="vintage-title">ACCESSORI</h2>
+      </div>
+      <button class="vintage-see-all" id="accessoriSectionSeeAll">
+        Acquista Accessori <span class="vintage-arrow">→</span>
+      </button>
+    </div>
+    <div class="vintage-scroll-viewport" id="accessoriSecViewport">
+      <div class="vintage-grid" id="accessoriSecGrid"></div>
+    </div>
+    <div class="vintage-scrollbar-track" id="accessoriSecTrack">
+      <div class="vintage-scrollbar-thumb" id="accessoriSecThumb"></div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ SEZIONE TUTE ═══════════════════ -->
+  <section class="vintage" id="tuteSection">
+    <div class="vintage-header">
+      <div class="vintage-header-left">
+        <h2 class="vintage-title">TUTE</h2>
+      </div>
+      <button class="vintage-see-all" id="tuteSectionSeeAll">
+        Acquista Tute <span class="vintage-arrow">→</span>
+      </button>
+    </div>
+    <div class="vintage-scroll-viewport" id="tuteSecViewport">
+      <div class="vintage-grid" id="tuteSecGrid"></div>
+    </div>
+    <div class="vintage-scrollbar-track" id="tuteSecTrack">
+      <div class="vintage-scrollbar-thumb" id="tuteSecThumb"></div>
+    </div>
+  </section>
 
   <!-- ═══════════════════ FOOTER ═══════════════════ -->
   <footer class="footer">
