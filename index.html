@@ -253,7 +253,7 @@
   <section class="editorial-hero" id="editorialHero">
     <!-- Pannello 1 — grande, maglia con testo e bottone -->
     <div class="ed-panel ed-panel--main" id="edPanel1">
-      <img src="images/models/Immagine 2026-05-03 111700.png" alt="Kit WorldOfKits" class="ed-panel-img" />
+      <img src="images/3d/editorial-hero.jpg" alt="Kit WorldOfKits" class="ed-panel-img" />
       <div class="ed-panel-overlay"></div>
       <div class="ed-panel-content">
         <p class="ed-panel-eyebrow">Nuova collezione</p>
@@ -754,7 +754,7 @@
   <!-- ═══════════════════ EDITORIAL HERO BOTTOM ═══════════════════ -->
   <section class="editorial-hero editorial-hero--bottom" id="editorialHeroBottom">
     <div class="ed-panel" id="edBotPanel1">
-      <img src="images/models/Immagine 2026-05-03 111700.png" alt="WorldOfKits Nuova Stagione" class="ed-panel-img" />
+      <img src="images/3d/vintageheader.jpg" alt="WorldOfKits Nuova Stagione" class="ed-panel-img" />
       <div class="ed-panel-overlay"></div>
       <div class="ed-panel-content">
         <p class="ed-panel-eyebrow">Scopri tutto</p>
@@ -903,9 +903,22 @@
         <span>Spedizione</span>
         <span id="cartShipping">Gratuita</span>
       </div>
+      <!-- Riga sconto applicato -->
+      <div class="cart-discount-line" id="cartDiscountLine" style="display:none;">
+        <span id="cartDiscountLabel">Sconto</span>
+        <span id="cartDiscountValue" style="color:#2e7d32;font-weight:700;">-€0.00</span>
+      </div>
       <div class="cart-total">
         <span>Totale</span>
         <span id="cartTotal">€0.00</span>
+      </div>
+      <!-- Campo codice sconto -->
+      <div class="cart-discount-wrap" id="cartDiscountWrap">
+        <div class="cart-discount-input-row">
+          <input type="text" id="discountCodeInput" placeholder="Codice sconto..." autocomplete="off" />
+          <button id="applyDiscountBtn">Applica</button>
+        </div>
+        <div class="cart-discount-msg" id="cartDiscountMsg"></div>
       </div>
       <button class="btn btn-primary btn-full" id="checkoutBtn">
         Procedi all'Ordine →

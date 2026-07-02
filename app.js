@@ -29,6 +29,9 @@ let quickViewProduct = null;
 let currentCustomization = null; // { name, number, shortsNumber, sockSize }
 let favorites = JSON.parse(localStorage.getItem('gk_favorites') || '[]'); // array di product id
 
+// ── STATO SCONTO ──
+let appliedDiscount = null; // { code, type, description, amount }
+
 // â”€â”€ SQUADRE PER CATEGORIA â”€â”€
 const TEAMS = {
   Champions: [
@@ -103,6 +106,7 @@ document.addEventListener('DOMContentLoaded', () => {
   setupMustHave();
   setupBrands();
   setupSquadra();
+  setupDiscountCode();
 });
 
 // ══════════════════════════════════════════════
@@ -919,6 +923,7 @@ function renderCartItems() {
   let html = '';
   cart.forEach(function (item) {
     const isCustom = !!item.custom;
+    const isGift = !!item._gift;
     const uid = item._uid || item.id;
     const uidRef = "'" + uid + "'";
     const imgSrc = item.image || '';
@@ -928,21 +933,31 @@ function renderCartItems() {
       ? '<div class="cart-item-img" style="display:flex;align-items:center;justify-content:center;font-size:1.8rem;background:rgba(108,99,255,.1);border-radius:8px;">🔍</div>'
       : '<img class="cart-item-img" src="' + imgSrc + '" alt="' + safeName + '" onerror="this.style.display=\'none\'">';
 
-    const priceLabel = '&euro;' + (item.price * item.qty).toFixed(2);
+    const priceLabel = isGift
+      ? '<span style="color:#2e7d32;font-weight:700;">🎁 Gratis</span>'
+      : '&euro;' + (item.price * item.qty).toFixed(2);
 
-    html += '<div class="cart-item">'
+    const qtyControls = isGift
+      ? '<span style="font-size:.75rem;color:#2e7d32;font-weight:600;">Omaggio</span>'
+      : '<button class="qty-btn" onclick="changeQty(' + uidRef + ', -1)">&minus;</button>'
+        + '<span class="qty-val">' + item.qty + '</span>'
+        + '<button class="qty-btn" onclick="changeQty(' + uidRef + ', +1)">+</button>';
+
+    const removeBtn = isGift
+      ? '' // gli articoli omaggio non si possono rimuovere manualmente
+      : '<button class="cart-item-remove" onclick="removeFromCart(' + uidRef + ')" title="Rimuovi">&#128465;&#65039;</button>';
+
+    html += '<div class="cart-item' + (isGift ? ' cart-item--gift' : '') + '">'
       + imgHtml
       + '<div class="cart-item-info">'
       + '<div class="cart-item-name">' + item.name + '</div>'
-      + '<div class="cart-item-meta">Taglia: ' + item.size + (item.fabric ? ' &nbsp;&middot;&nbsp; ' + item.fabric : '') + (item.custNote ? '<br><span style="color:#2e7d32;font-size:.72rem;">\u270F\uFE0F ' + item.custNote + '</span>' : '') + '</div>'
+      + '<div class="cart-item-meta">Taglia: ' + item.size + (item.fabric ? ' &nbsp;&middot;&nbsp; ' + item.fabric : '') + (item.custNote ? '<br><span style="color:#2e7d32;font-size:.72rem;">' + item.custNote + '</span>' : '') + '</div>'
       + '<div class="cart-item-price">' + priceLabel + '</div>'
       + '<div class="cart-item-qty">'
-      + '<button class="qty-btn" onclick="changeQty(' + uidRef + ', -1)">&minus;</button>'
-      + '<span class="qty-val">' + item.qty + '</span>'
-      + '<button class="qty-btn" onclick="changeQty(' + uidRef + ', +1)">+</button>'
+      + qtyControls
       + '</div>'
       + '</div>'
-      + '<button class="cart-item-remove" onclick="removeFromCart(' + uidRef + ')" title="Rimuovi">&#128465;&#65039;</button>'
+      + removeBtn
       + '</div>';
   });
   container.innerHTML = html;
@@ -950,13 +965,271 @@ function renderCartItems() {
   const subtotalEl = document.getElementById('cartSubtotal');
   const shippingEl = document.getElementById('cartShipping');
   const totalEl = document.getElementById('cartTotal');
+  const discountLine = document.getElementById('cartDiscountLine');
+  const discountLabel = document.getElementById('cartDiscountLabel');
+  const discountValue = document.getElementById('cartDiscountValue');
+
   if (subtotalEl) subtotalEl.textContent = `€${total.toFixed(2)}`;
   if (shippingEl) shippingEl.textContent = shipping;
-  const finalTotal = shipping === 'Gratuita' ? total : total + 3.00;
+
+  const discountAmount = getDiscountAmount();
+  if (discountLine) {
+    if (appliedDiscount && discountAmount > 0) {
+      discountLine.style.display = 'flex';
+      if (discountLabel) discountLabel.textContent = `Sconto (${appliedDiscount.code})`;
+      if (discountValue) discountValue.textContent = `-€${discountAmount.toFixed(2)}`;
+    } else {
+      discountLine.style.display = 'none';
+    }
+  }
+
+  const rawTotal = shipping === 'Gratuita' ? total : total + 3.00;
+  const finalTotal = Math.max(0, rawTotal - discountAmount);
   if (totalEl) totalEl.textContent = `€${finalTotal.toFixed(2)}`;
 }
 
-// â”€â”€ SIDEBAR CART â”€â”€
+// ══════════════════════════════════════════════════════════
+// SISTEMA CODICI SCONTO
+// ══════════════════════════════════════════════════════════
+
+/**
+ * Verifica se un item nel carrello è una maglia nazionale
+ * (categoria Nazionali o Mondiale2026)
+ */
+function isNazionaleCartItem(item) {
+  // I prodotti nazionali hanno id che si trovano in PRODUCTS con categoria Nazionali/Mondiale2026
+  const p = PRODUCTS.find(x => x.id === item.id);
+  if (!p) return false;
+  const cats = Array.isArray(p.category) ? p.category : [p.category];
+  return cats.includes('Nazionali') || cats.includes('Mondiale2026');
+}
+
+/**
+ * Verifica se un item nel carrello è una maglia vintage
+ * (badge === 'vintage')
+ */
+function isVintageCartItem(item) {
+  const p = PRODUCTS.find(x => x.id === item.id);
+  if (!p) return false;
+  return p.badge === 'vintage';
+}
+
+/**
+ * Valida un codice sconto rispetto al carrello corrente.
+ * Restituisce { valid, code, type, description, amount, error } 
+ */
+function validateDiscountCode(code) {
+  const upperCode = (code || '').trim().toUpperCase();
+
+  // ── Codice MONDIALE3X2 ──
+  if (upperCode === 'MONDIALE3X2') {
+    // Cerca le maglie nazionali nel carrello (escludi pantaloncini/calzettoni aggiunti da kit)
+    const nazionaliItems = cart.filter(item => {
+      // Ignora gli item aggiunti come articolo regalo (prezzo 0 e _gift)
+      if (item._gift) return false;
+      // Deve avere un id numerico (non 'shorts-...' o 'socks-...') e essere nazionale
+      if (typeof item.id !== 'number') return false;
+      return isNazionaleCartItem(item);
+    });
+
+    if (nazionaliItems.length < 2) {
+      return {
+        valid: false,
+        error: '⚠️ Serve almeno 2 maglie nazionali nel carrello per usare questo codice.'
+      };
+    }
+
+    // Trova la maglia nazionale meno costosa
+    const cheapest = nazionaliItems.reduce((min, item) =>
+      item.price < min.price ? item : min
+    , nazionaliItems[0]);
+
+    const discountAmount = cheapest.price * cheapest.qty;
+
+    return {
+      valid: true,
+      code: 'MONDIALE3X2',
+      type: 'mondiale3x2',
+      description: `🏆 3x2 Nazionali — "${cheapest.name}" gratis`,
+      amount: discountAmount,
+      targetUid: cheapest._uid
+    };
+  }
+
+  // ── Codice MONDIALETOT ──
+  if (upperCode === 'MONDIALETOT') {
+    const hasVintage = cart.some(item => !item._gift && typeof item.id === 'number' && isVintageCartItem(item));
+    const nazionaliItems = cart.filter(item => !item._gift && typeof item.id === 'number' && isNazionaleCartItem(item));
+
+    if (!hasVintage) {
+      return {
+        valid: false,
+        error: '⚠️ Devi avere almeno 1 maglia vintage nel carrello per usare questo codice.'
+      };
+    }
+    if (nazionaliItems.length === 0) {
+      return {
+        valid: false,
+        error: '⚠️ Devi avere almeno 1 maglia nazionale nel carrello per usare questo codice.'
+      };
+    }
+
+    // Prende la prima maglia nazionale nel carrello
+    const nazItem = nazionaliItems[0];
+    const nazProduct = PRODUCTS.find(x => x.id === nazItem.id);
+
+    return {
+      valid: true,
+      code: 'MONDIALETOT',
+      type: 'mondialetot',
+      description: `🎁 Kit regalo Mondiale — Pantaloncino + Calzettoni della ${nazItem.name} gratis`,
+      amount: 0, // I regali vengono aggiunti al carrello a €0
+      nazProduct: nazProduct,
+      nazItem: nazItem
+    };
+  }
+
+  return {
+    valid: false,
+    error: '❌ Codice sconto non valido.'
+  };
+}
+
+/**
+ * Rimuove eventuali articoli regalo aggiunti da codici sconto precedenti
+ */
+function removeGiftItems() {
+  cart = cart.filter(item => !item._gift);
+}
+
+/**
+ * Applica lo sconto al carrello.
+ * Per MONDIALE3X2: salva il discount object (verrà sottratto dal totale).
+ * Per MONDIALETOT: aggiunge pantaloncino + calzettoni gratis al carrello.
+ */
+function applyDiscountCode(discountObj) {
+  // Prima rimuovi eventuali articoli regalo precedenti
+  removeGiftItems();
+
+  if (discountObj.type === 'mondiale3x2') {
+    appliedDiscount = discountObj;
+  }
+
+  if (discountObj.type === 'mondialetot') {
+    appliedDiscount = discountObj;
+    const naz = discountObj.nazProduct;
+    const nazItem = discountObj.nazItem;
+
+    // Pantaloncino gratis
+    const shortsProduct = naz && naz.shortsProductId ? PRODUCTS.find(x => x.id === naz.shortsProductId) : null;
+    const shortsName = shortsProduct
+      ? shortsProduct.name
+      : 'Pantaloncino regalo — ' + (nazItem ? nazItem.name.replace(/Maglia\s*/i, '').trim() : 'Nazionale');
+    const shortsImage = shortsProduct ? shortsProduct.image : (naz ? naz.image : '');
+    cart.push({
+      id: 'gift-shorts-mondialetot',
+      name: shortsName,
+      price: 0,
+      image: shortsImage,
+      qty: 1,
+      size: nazItem ? nazItem.size : 'M',
+      fabric: '',
+      custNote: '🎁 OMAGGIO con codice MondialeTot',
+      _uid: 'gift-shorts-' + Date.now(),
+      _gift: true
+    });
+
+    // Calzettoni gratis
+    const socksProduct = naz && naz.socksProductId ? PRODUCTS.find(x => x.id === naz.socksProductId) : null;
+    const socksName = socksProduct
+      ? socksProduct.name
+      : 'Calzettoni regalo — ' + (nazItem ? nazItem.name.replace(/Maglia\s*/i, '').trim() : 'Nazionale');
+    const socksImage = socksProduct ? socksProduct.image : (naz ? naz.image : '');
+    cart.push({
+      id: 'gift-socks-mondialetot',
+      name: socksName,
+      price: 0,
+      image: socksImage,
+      qty: 1,
+      size: nazItem ? nazItem.size : 'M',
+      fabric: '',
+      custNote: '🎁 OMAGGIO con codice MondialeTot',
+      _uid: 'gift-socks-' + Date.now() + 1,
+      _gift: true
+    });
+  }
+
+  saveCart();
+}
+
+/**
+ * Rimuove lo sconto applicato e gli articoli regalo
+ */
+function removeDiscount() {
+  appliedDiscount = null;
+  removeGiftItems();
+  saveCart();
+  // Reset UI
+  const input = document.getElementById('discountCodeInput');
+  const msg = document.getElementById('cartDiscountMsg');
+  if (input) input.value = '';
+  if (msg) { msg.textContent = ''; msg.className = 'cart-discount-msg'; }
+}
+
+/**
+ * Calcola lo sconto monetario da sottrarre al totale (per MONDIALE3X2)
+ */
+function getDiscountAmount() {
+  if (!appliedDiscount) return 0;
+  if (appliedDiscount.type === 'mondiale3x2') {
+    // Ricalcola dinamicamente: trova ancora la maglia nazionale meno costosa
+    const nazionaliItems = cart.filter(item => !item._gift && typeof item.id === 'number' && isNazionaleCartItem(item));
+    if (nazionaliItems.length < 2) return 0;
+    const cheapest = nazionaliItems.reduce((min, item) => item.price < min.price ? item : min, nazionaliItems[0]);
+    return cheapest.price * cheapest.qty;
+  }
+  return 0; // per mondialetot lo sconto è negli item gratis
+}
+
+/**
+ * Setup del campo codice sconto nel carrello
+ */
+function setupDiscountCode() {
+  document.getElementById('applyDiscountBtn')?.addEventListener('click', () => {
+    const input = document.getElementById('discountCodeInput');
+    const msg = document.getElementById('cartDiscountMsg');
+    if (!input || !msg) return;
+
+    const code = input.value.trim();
+    if (!code) {
+      msg.textContent = '⚠️ Inserisci un codice sconto.';
+      msg.className = 'cart-discount-msg error';
+      return;
+    }
+
+    // Se c'è già uno sconto applicato, rimuovilo prima
+    if (appliedDiscount) removeDiscount();
+
+    const result = validateDiscountCode(code);
+    if (!result.valid) {
+      msg.textContent = result.error;
+      msg.className = 'cart-discount-msg error';
+      return;
+    }
+
+    applyDiscountCode(result);
+    msg.textContent = `✅ ${result.description}`;
+    msg.className = 'cart-discount-msg success';
+    renderCartItems();
+  });
+
+  // Invio con tasto Enter
+  document.getElementById('discountCodeInput')?.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') document.getElementById('applyDiscountBtn')?.click();
+  });
+}
+
+// ── SIDEBAR CART ──
 function setupCartSidebar() {
   const cartBtn = document.getElementById('cartBtn');
   const cartClose = document.getElementById('cartClose');
@@ -1037,7 +1310,7 @@ async function submitOrder(e) {
 
   // Controlla configurazione EmailJS (usa la variabile globale)
   if (!EMAIL_CONFIG.publicKey || !EMAIL_CONFIG.serviceId || !EMAIL_CONFIG.templateId || !EMAIL_CONFIG.ownerEmail) {
-    showToast('âš ï¸', 'Sistema email non configurato. Clicca su "âš™ï¸ Setup Email" per configurarlo.');
+    showToast('⚠️', 'Sistema email non configurato. Clicca su "⚙️ Setup Email" per configurarlo.');
     return;
   }
 
@@ -1052,8 +1325,13 @@ async function submitOrder(e) {
 
   const total = getCartTotal();
   const shipping = total >= 60 ? 0 : 3.00;
-  const finalTotal = total + shipping;
+  const discountAmount = getDiscountAmount();
+  const finalTotal = Math.max(0, total + shipping - discountAmount);
   const orderNum = 'WOK-' + Date.now().toString().slice(-6);
+
+  const discountLine = appliedDiscount
+    ? `\nCodice Sconto: ${appliedDiscount.code} (-€${discountAmount.toFixed(2)})`
+    : '';
 
   const orderDetails = cart.map(item => {
     const priceStr = item.custom ? 'âš ï¸ Prezzo da definire' : `€${(item.price * item.qty).toFixed(2)}`;
@@ -1076,7 +1354,7 @@ async function submitOrder(e) {
       customer_city: city,
       customer_zip: zip,
       order_number: orderNum,
-      order_details: orderDetails,
+      order_details: orderDetails + discountLine,
       order_subtotal: `€${total.toFixed(2)}`,
       order_shipping: shipping === 0 ? 'Gratuita' : '€3.00',
       order_total: `€${finalTotal.toFixed(2)}`,
@@ -1114,13 +1392,19 @@ async function submitOrder(e) {
       console.warn('Email conferma cliente non inviata:', customerErr);
     }
 
-    // Svuota carrello e mostra conferma al cliente
+    // Svuota carrello, reset sconto e mostra conferma al cliente
     const savedOrder = { orderNum, name, surname, finalTotal, shipping, cart: [...cart] };
     cart = [];
+    appliedDiscount = null;
     saveCart();
     updateCartUI();
     closeOrderModal();
     document.getElementById('orderForm')?.reset();
+    // Reset UI campo sconto
+    const discInput = document.getElementById('discountCodeInput');
+    const discMsg = document.getElementById('cartDiscountMsg');
+    if (discInput) discInput.value = '';
+    if (discMsg) { discMsg.textContent = ''; discMsg.className = 'cart-discount-msg'; }
     showOrderConfirmation(savedOrder);
 
   } catch (err) {
