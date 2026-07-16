@@ -1,4 +1,4 @@
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+﻿/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    GoalKit — app.js
    Carrello + Ordini + EmailJS
 â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
@@ -2208,7 +2208,7 @@ function setupMustHave() {
 
   if (grid) {
     // Priorità: badge "bestseller" o "hot", poi badge "sale", poi badge "new", poi per prezzo desc
-    const scored = PRODUCTS.map(p => {
+    const scored = PRODUCTS.filter(p => !p.nascondiMustHave).map(p => {
       let score = 0;
       if (p.badge === 'bestseller' || p.badge === 'hot') score += 100;
       else if (p.badge === 'sale') score += 50;
@@ -2941,8 +2941,7 @@ function setupCatPage() {
       'MAGLIE DEL MONDIALE',
       'Mondiale 2026',
       [
-        { label: 'Tutte le nazionali', filter: 'Mondiale2026' },
-        { label: 'Nazionali',          filter: 'Nazionali'    },
+       { label: 'Tutte le nazionali', filter: 'Mondiale2026' },
       ]
     );
   });
@@ -2960,12 +2959,11 @@ function setupCatPage() {
   // â”€â”€ SEZIONE MUST HAVE â”€â”€
   document.getElementById('mustHaveSeeAll')?.addEventListener('click', () => {
     openCatPage(
-      'new',
-      'MUST HAVE — BESTSELLER',
+      'must',
+      'MUST HAVE',
       'Must Have',
       [
-        { label: 'Novità',    filter: 'new'    },
-        { label: 'In offerta', filter: 'all'   },
+        { label: 'Popolari', filter: 'Must'   },
       ]
     );
   });
