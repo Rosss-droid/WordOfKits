@@ -1,4 +1,4 @@
-﻿/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    GoalKit — app.js
    Carrello + Ordini + EmailJS
 â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
@@ -304,6 +304,7 @@ function renderProducts(filter, team = null) {
   filtered.forEach((p, i) => {
     const card = document.createElement('div');
     card.className = 'product-card';
+    card.dataset.id = p.id;
     card.style.animationDelay = `${i * 0.06}s`;
     const catLabel = Array.isArray(p.categoryLabel)
       ? p.categoryLabel[0]
@@ -312,7 +313,7 @@ function renderProducts(filter, team = null) {
     card.innerHTML = `
       <div class="card-img-wrap">
         <img src="${p.image}" alt="${p.name}" loading="lazy" onclick="openQuickView(${p.id})"
-             onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22360%22><rect fill=%22%230f1525%22 width=%22300%22 height=%22360%22/><text x=%2250%25%22 y=%2250%25%22 fill=%22%236c63ff%22 text-anchor=%22middle%22 dominant-baseline=%22middle%22 font-size=%2260%22>&#x26BD;</text></svg>'" style="cursor:pointer;width:100%;height:100%;object-fit:cover;display:block;">
+             onerror="this.onerror=null;this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 3 4%22%3E%3Crect fill=%22%23f0f0f0%22 width=%223%22 height=%224%22/%3E%3Ctext x=%221.5%22 y=%222.2%22 fill=%22%23ccc%22 text-anchor=%22middle%22 dominant-baseline=%22middle%22 font-size=%221%22%3E%E2%9A%BD%3C/text%3E%3C/svg%3E'" style="cursor:pointer;width:100%;height:100%;object-fit:cover;display:block;">
         ${p.badge ? `<span class="card-badge ${p.badge}">${p.badgeLabel}</span>` : ''}
         <button class="card-fav-btn${fav ? ' active' : ''}" data-pid="${p.id}" onclick="event.stopPropagation();toggleFavorite(${p.id},this)" title="${fav ? 'Rimuovi dai preferiti' : 'Aggiungi ai preferiti'}" aria-label="Preferiti">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="${fav ? '#e44545' : 'none'}" stroke="${fav ? '#e44545' : '#999'}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
@@ -332,14 +333,14 @@ function renderProducts(filter, team = null) {
 
 }
 
-// â”€â”€ SETUP FILTRI SIDEBAR 3-LEVEL â”€â”€
+// ── SETUP FILTRI SIDEBAR 3-LEVEL ──
 function setupFilters() {
 
-  // â”€â”€ Novità / Vintage â”€â”€
+  // ── Novità / Vintage ──
   document.getElementById('filterNew')?.addEventListener('click', () => setActiveFilter('new', null));
   document.getElementById('filterVintage')?.addEventListener('click', () => setActiveFilter('vintage', null));
 
-  // â”€â”€ CALCIO: toggle apre/chiude l'intera sezione campionati â”€â”€
+  // ── CALCIO: toggle apre/chiude l'intera sezione campionati ──
   const calcioBtn = document.getElementById('calcioToggleBtn');
   const calcioList = document.getElementById('calcioSubList');
   if (calcioBtn && calcioList) {
@@ -358,7 +359,7 @@ function setupFilters() {
     });
   }
 
-  // â”€â”€ League buttons (livello 2 dentro Calcio) â”€â”€
+  // ── League buttons (livello 2 dentro Calcio) ──
   const leagueDefs = [
     { btnId: 'filterChampions', listId: 'menuChampions', filter: 'Champions' },
     { btnId: 'megaBtnSerieA', listId: 'megaListSerieA', filter: 'SerieA' },
@@ -369,7 +370,7 @@ function setupFilters() {
     { btnId: 'megaBtnNazionali', listId: 'megaListNazionali', filter: 'Nazionali' },
   ];
 
-  // â”€â”€ MONDIALE 2026: pulsante flat diretto â”€â”€
+  // ── MONDIALE 2026: pulsante flat diretto ──
   const mondialBtn = document.getElementById('megaBtnMondiale2026');
   if (mondialBtn) {
     mondialBtn.addEventListener('click', () => {
@@ -428,7 +429,7 @@ function setupFilters() {
     });
   });
 
-  // â”€â”€ ACCESSORI: toggle apre/chiude la sezione â”€â”€
+  // ── ACCESSORI: toggle apre/chiude la sezione ──
   const accessoriBtn = document.getElementById('accessoriToggleBtn');
   const accessoriList = document.getElementById('accessoriSubList');
   if (accessoriBtn && accessoriList) {
@@ -456,7 +457,7 @@ function setupFilters() {
     });
   }
 
-  // â”€â”€ Toggle sidebar ("Nascondi filtri" / "Mostra filtri") â”€â”€
+  // ── Toggle sidebar ("Nascondi filtri" / "Mostra filtri") ──
   const toggleBtn = document.getElementById('sidebarToggleBtn');
   const layout = document.getElementById('shopLayout');
   if (toggleBtn && layout) {
@@ -468,7 +469,7 @@ function setupFilters() {
     });
   }
 
-  // â”€â”€ Sort menu â”€â”€
+  // ── Sort menu ──
   const sortWrap = document.querySelector('.shop-sort-wrap');
   const sortBtn = document.getElementById('shopSortBtn');
   if (sortBtn && sortWrap) {
@@ -489,7 +490,7 @@ function setupFilters() {
   }
 }
 
-// â”€â”€ BRAND SECTION â”€â”€
+// ── BRAND SECTION ──
 function setupBrands() {
   document.querySelectorAll('.brand-card[data-brand]').forEach(card => {
     card.addEventListener('click', () => {
@@ -537,7 +538,7 @@ function setActiveFilter(filter, team, updateActiveBtn = true) {
   renderProducts(currentFilter, currentTeam);
 }
 
-// â”€â”€ SEARCH BAR â”€â”€
+// ── SEARCH BAR ──
 function setupSearch() {
   const input = document.getElementById('searchInput');
   const clearBtn = document.getElementById('searchClear');
@@ -578,9 +579,9 @@ function setupSearch() {
   input.addEventListener('focus', () => closeAllDropdowns());
 }
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ══════════════════════════════════════════════
 // QUICK VIEW
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ══════════════════════════════════════════════
 function setupQuickView() {
   document.getElementById('quickViewClose')?.addEventListener('click', closeQuickView);
   document.getElementById('quickViewOverlay')?.addEventListener('click', e => {
@@ -2876,12 +2877,13 @@ function renderCatPage() {
     const card = document.createElement('div');
     card.className = 'product-card';
     card.style.animationDelay = `${i * 0.04}s`;
+    card.dataset.id = p.id;
     const catLabel = Array.isArray(p.categoryLabel) ? p.categoryLabel[0] : p.categoryLabel;
     const fav = isFavorite(p.id);
     card.innerHTML = `
       <div class="card-img-wrap">
         <img src="${p.image}" alt="${p.name}" loading="lazy" onclick="openQuickView(${p.id})"
-             onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22360%22><rect fill=%22%230f1525%22 width=%22300%22 height=%22360%22/><text x=%2250%25%22 y=%2250%25%22 fill=%22%236c63ff%22 text-anchor=%22middle%22 dominant-baseline=%22middle%22 font-size=%2260%22>&#x26BD;</text></svg>'"
+             onerror="this.onerror=null;this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 3 4%22%3E%3Crect fill=%22%23f0f0f0%22 width=%223%22 height=%224%22/%3E%3Ctext x=%221.5%22 y=%222.2%22 fill=%22%23ccc%22 text-anchor=%22middle%22 dominant-baseline=%22middle%22 font-size=%221%22%3E%E2%9A%BD%3C/text%3E%3C/svg%3E'"
              style="cursor:pointer;width:100%;height:100%;object-fit:cover;display:block;">
         ${p.badge ? `<span class="card-badge ${p.badge}">${p.badgeLabel}</span>` : ''}
         <button class="card-fav-btn${fav ? ' active' : ''}" data-pid="${p.id}"
@@ -3265,3 +3267,47 @@ function setupTuteSection() {
   thumb.addEventListener('pointerup', function() { draggingT = false; });
   thumb.addEventListener('pointercancel', function() { draggingT = false; });
 }
+
+// ── TAP MOBILE PRECISO — Distingue scroll dal click sulle schede prodotto ──
+(function initMobileCardClicks() {
+  let isSwiping = false;
+  let startX = 0;
+  let startY = 0;
+
+  document.addEventListener('touchstart', (e) => {
+    const touch = e.touches[0];
+    startX = touch.clientX;
+    startY = touch.clientY;
+    isSwiping = false;
+  }, { passive: true });
+
+  document.addEventListener('touchmove', (e) => {
+    const touch = e.touches[0];
+    // Se il dito si sposta di più di 8px è uno scorrimento, non un tap
+    if (Math.abs(touch.clientX - startX) > 8 || Math.abs(touch.clientY - startY) > 8) {
+      isSwiping = true;
+    }
+  }, { passive: true });
+
+  document.addEventListener('touchend', (e) => {
+    if (isSwiping) return; // Ignora se l'utente stava scorrendo la griglia
+
+    // Ignora se è stato toccato un pulsante (preferiti, carrello, ecc.)
+    if (e.target.closest('button, .btn-fav, .btn-cart, .fav-icon, .card-fav-btn')) return;
+
+    const card = e.target.closest('.product-card, .vintage-card, .musthave-card, .mondiali-card, [onclick*="openQuickView"]');
+    if (!card) return;
+
+    const onclickAttr = card.getAttribute('onclick');
+    const dataId = card.dataset.id || card.getAttribute('data-id');
+
+    if (dataId && typeof openQuickView === 'function') {
+      e.preventDefault();
+      openQuickView(Number(dataId));
+    } else if (onclickAttr && onclickAttr.includes('openQuickView')) {
+      e.preventDefault();
+      // eslint-disable-next-line no-new-func
+      new Function(onclickAttr)();
+    }
+  });
+})();
