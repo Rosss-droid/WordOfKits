@@ -1848,23 +1848,32 @@ img {
 
 /* ── Immagine full-cover ── */
 .ed-panel-img {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
   object-position: center top;
   display: block;
-  transition: transform 0.55s cubic-bezier(0.4, 0, 0.2, 1);
-  will-change: transform;
+  transition: transform 0.55s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.6s ease;
 }
 
 .ed-panel:hover .ed-panel-img {
   transform: scale(1.04);
 }
 
+/* Contenuto e overlay sopra l'immagine (ora assoluta) */
+.ed-panel-content,
+.ed-panel-overlay {
+  position: relative;
+  z-index: 2;
+}
+
 /* ── Overlay sfumato dal basso ── */
 .ed-panel-overlay {
   position: absolute;
   inset: 0;
+  z-index: 1;
   background: linear-gradient(to top,
       rgba(0, 0, 0, 0.72) 0%,
       rgba(0, 0, 0, 0.18) 50%,
@@ -8584,8 +8593,10 @@ img {
   #vintage-container,
   #musthave-container,
   #shoes-container,
+  #mustHaveGrid,
   .vintage-grid,
   .musthave-grid,
+  .mustHave-grid,
   .shoes-grid {
     display: flex !important;
     flex-wrap: nowrap !important;
@@ -8601,8 +8612,10 @@ img {
   #vintage-container::-webkit-scrollbar,
   #musthave-container::-webkit-scrollbar,
   #shoes-container::-webkit-scrollbar,
+  #mustHaveGrid::-webkit-scrollbar,
   .vintage-grid::-webkit-scrollbar,
   .musthave-grid::-webkit-scrollbar,
+  .mustHave-grid::-webkit-scrollbar,
   .shoes-grid::-webkit-scrollbar {
     display: none;
   }
@@ -8611,8 +8624,10 @@ img {
   #vintage-container > *,
   #musthave-container > *,
   #shoes-container > *,
+  #mustHaveGrid > *,
   .vintage-grid > *,
   .musthave-grid > *,
+  .mustHave-grid > *,
   .shoes-grid > * {
     flex: 0 0 44% !important;
     min-width: 140px !important;
@@ -8860,12 +8875,14 @@ img {
   flex-direction: column;
   transform: translateX(100%);
   transition: transform 0.38s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.38s;
-  will-change: transform;
   pointer-events: none;
   visibility: hidden;
 }
 .qv-page-overlay.open {
-  transform: translateX(0);
+  /* Niente transform a scheda aperta: su iOS un contenitore con transform/will-change
+     "ruba" il tocco ai contenuti interni e rende lo scroll faticoso. L'animazione di
+     entrata/uscita resta (transition verso transform:none, interpolabile). */
+  transform: none;
   pointer-events: auto;
   visibility: visible;
 }
@@ -8924,7 +8941,9 @@ img {
   flex: 1;
   min-height: 0;
   overflow-y: auto;
-  overscroll-behavior: contain;
+  overflow-x: hidden; /* niente scrollbar orizzontale che ruba i gesti verticali */
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-y; /* scroll verticale fluido e immediato su mobile */
   background: #f4f5f7;
 }
 
@@ -9167,4 +9186,105 @@ img {
 
   .qv-name { font-size: 1.35rem; }
   .qv-price { font-size: 1.6rem; }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   NON TROVI IL TUO PRODOTTO? — CTA centrata + scheda richiesta
+═══════════════════════════════════════════════════════════ */
+.custom-request-section {
+  padding: 4rem 1.5rem;
+  background: #fff;
+  border-top: 1px solid rgba(0, 0, 0, .07);
+  border-bottom: 1px solid rgba(0, 0, 0, .07);
+  text-align: center;
+}
+.custom-request-inner {
+  max-width: 640px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .6rem;
+}
+.custom-request-title {
+  font-family: 'Barlow Condensed', 'Arial Black', sans-serif;
+  font-size: clamp(1.6rem, 4vw, 2.4rem);
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: .01em;
+  color: #111;
+  line-height: 1.05;
+  margin: 0;
+}
+.custom-request-sub {
+  font-size: .9rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+  max-width: 500px;
+  margin: 0 0 .75rem;
+}
+.custom-request-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  background: #111;
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  padding: .85rem 1.8rem;
+  font-family: inherit;
+  font-size: .92rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background .2s, transform .15s;
+}
+.custom-request-btn:hover { background: #2a2a2a; transform: translateY(-1px); }
+.custom-request-btn:active { transform: scale(.97); }
+.custom-request-arrow { transition: transform .2s; }
+.custom-request-btn:hover .custom-request-arrow { transform: translateX(3px); }
+
+/* ── Scheda richiesta prodotto (stile scheda prodotto) ── */
+.crq-inner {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 2rem 1.25rem 3rem;
+}
+.crq-form-card {
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, .09);
+  border-radius: 18px;
+  padding: 1.8rem 1.6rem;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, .05);
+}
+.crq-intro {
+  font-size: .9rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+  margin: 0 0 1.4rem;
+  text-align: center;
+}
+.crq-name-input {
+  font-size: 1.05rem !important;
+  padding: .9rem 1rem !important;
+  border-radius: 12px !important;
+}
+.crq-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: .75rem;
+}
+.crq-submit {
+  margin-top: .5rem;
+  padding: .95rem 1.2rem !important;
+  border-radius: 12px !important;
+  font-size: .95rem !important;
+}
+.crq-disclaimer {
+  font-size: .72rem;
+  color: var(--text-muted);
+  text-align: center;
+  margin: .9rem 0 0;
+}
+@media (max-width: 480px) {
+  .crq-row { grid-template-columns: 1fr; }
 }

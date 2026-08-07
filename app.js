@@ -26,6 +26,7 @@ let currentSearch = '';
 let currentBrand = null;
 let currentSort = 'default';
 let quickViewProduct = null;
+let qvEditUid = null; // uid della riga carrello in modifica (edit dalla scheda prodotto)
 let currentCustomization = null; // { name, number, shortsNumber, sockSize }
 let favorites = JSON.parse(localStorage.getItem('gk_favorites') || '[]'); // array di product id
 
@@ -106,7 +107,9 @@ document.addEventListener('DOMContentLoaded', () => {
   setupVendorPanel();
   setupReviews();
   setupCustomOrder();
+  setupCustomRequest();
   setupHeroCarousel();
+  setupHeroSlideshow();
   setupReviewMiniCarousels();
   setupFavorites();
   setupCustomizeModal();
@@ -598,11 +601,14 @@ function setupQuickView() {
   // pulsante "← Indietro" (onclick inline) o col tasto indietro del browser.
 }
 
-function openQuickView(id) {
+function openQuickView(id, editItem) {
   const p = PRODUCTS.find(x => x.id === id);
   if (!p) return;
   quickViewProduct = p;
   currentCustomization = null;
+  if (!editItem) qvEditUid = null; // apertura normale: nessuna riga in modifica
+  const addLabel = editItem ? 'Aggiorna Carrello' : 'Aggiungi al Carrello';
+  const stickyLabel = editItem ? 'Aggiorna' : 'Aggiungi';
   const content = document.getElementById('quickViewContent');
   const catLabel = Array.isArray(p.categoryLabel) ? p.categoryLabel[0] : p.categoryLabel;
   const kitType = p.kitType || 'solo';
@@ -616,7 +622,7 @@ function openQuickView(id) {
   content.innerHTML = `
     <div class="qv-grid">
       <div class="qv-img-wrap">
-        <img src="${p.image}" alt="${p.name}" class="qv-img"
+        <img src="${getProductImage(p)}" alt="${p.name}" class="qv-img"
              onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22480%22><rect fill=%22%230f1525%22 width=%22400%22 height=%22480%22/><text x=%2250%25%22 y=%2250%25%22 fill=%22%236c63ff%22 text-anchor=%22middle%22 dominant-baseline=%22middle%22 font-size=%2270%22>&#x26BD;</text></svg>'">
         ${p.badge ? `<span class="card-badge ${p.badge} qv-badge">${p.badgeLabel}</span>` : ''}
         <button class="card-fav-btn${isFav ? ' active' : ''}" id="qvFavBtn" onclick="toggleFavoriteFromQV(${p.id})" title="${isFav ? 'Rimuovi dai preferiti' : 'Aggiungi ai preferiti'}">
@@ -670,7 +676,7 @@ function openQuickView(id) {
         </div>
 
         <button class="btn btn-primary btn-full qv-add-btn" onclick="addToCartFromQV(${p.id}); closeQuickView();">
-          Aggiungi al Carrello
+          ${addLabel}
         </button>
 
         <!-- Pulsante Personalizza (sempre visibile) -->
@@ -690,9 +696,45 @@ function openQuickView(id) {
         <span class="qv-price" id="qvMobilePrice">&#x20AC;${p.price.toFixed(2)}</span>
       </div>
       <button class="btn btn-primary qv-sticky-add" onclick="addToCartFromQV(${p.id}); closeQuickView();">
-        Aggiungi
+        ${stickyLabel}
       </button>
     `;
+  }
+
+  // Modifica dal carrello: preseleziona taglia/tessuto/kit della riga esistente
+  if (editItem) {
+    const normFabric = String(editItem.fabric || '').replace(/\uD83D\uDC55/g, '').trim();
+
+    let sizeMatched = false;
+    content.querySelectorAll('.qv-size-btn').forEach(b => {
+      const m = b.textContent.trim() === editItem.size;
+      b.classList.toggle('active', m);
+      if (m) sizeMatched = true;
+    });
+    if (!sizeMatched && content.querySelector('.qv-size-btn')) content.querySelector('.qv-size-btn').classList.add('active');
+
+    let fabricMatched = false;
+    content.querySelectorAll('.qv-fabric-row .qv-option-btn').forEach(b => {
+      const m = (b.querySelector('strong') ? b.querySelector('strong').textContent.trim() : '') === normFabric;
+      b.classList.toggle('active', m);
+      if (m) fabricMatched = true;
+    });
+    if (!fabricMatched && content.querySelector('.qv-fabric-row .qv-option-btn')) content.querySelector('.qv-fabric-row .qv-option-btn').classList.add('active');
+
+    let kitMatched = false;
+    content.querySelectorAll('.qv-kit-row .qv-option-btn').forEach(b => {
+      const m = b.dataset.kit === (editItem.kitMode || 'solo');
+      b.classList.toggle('active', m);
+      if (m) kitMatched = true;
+    });
+    if (!kitMatched && content.querySelector('.qv-kit-row .qv-option-btn')) content.querySelector('.qv-kit-row .qv-option-btn').classList.add('active');
+
+    // Badge personalizzazione se la riga nel carrello ne ha una
+    if (editItem.custNote) {
+      const badge = document.getElementById('qvCustomizeBadge');
+      if (badge) badge.style.display = 'block';
+    }
+    updateQvPrice();
   }
 
   content.scrollTop = 0;
@@ -766,58 +808,123 @@ function addToCartFromQV(productId) {
     if (currentCustomization.name) parts.push('Nome: ' + currentCustomization.name);
     if (currentCustomization.number) parts.push('N.' + currentCustomization.number);
     custNote = parts.join(' | ');
+  } else if (qvEditUid) {
+    // In modifica senza nuova personalizzazione: mantieni quella esistente della riga
+    const editRow = cart.find(x => (x._uid || x.id) === qvEditUid);
+    if (editRow) custNote = editRow.custNote || '';
   }
 
-  // Aggiungi maglia
-  const existing = cart.find(item =>
-    item.id === productId && item.size === selectedSize && item.fabric === fabricLabel && item.custNote === custNote
-  );
-  if (existing) {
-    existing.qty += 1;
+  const isEdit = !!qvEditUid;
+
+  if (isEdit) {
+    // ── MODO MODIFICA: aggiorna la riga esistente invece di aggiungerne una nuova ──
+    const editUid = qvEditUid;
+    qvEditUid = null;
+
+    // Conserva i vecchi componenti kit (per non perdere taglie/personalizzazioni)
+    let oldShorts = null, oldSocks = null;
+    cart.forEach(x => {
+      if (x.id === 'shorts-' + p.id) oldShorts = x;
+      if (x.id === 'socks-' + p.id) oldSocks = x;
+    });
+    // Rimuovi le vecchie righe componenti kit della maglia
+    cart = cart.filter(x => x.id !== 'shorts-' + p.id && x.id !== 'socks-' + p.id);
+
+    const idx = cart.findIndex(x => (x._uid || x.id) === editUid);
+    if (idx === -1) {
+      // Riga non più presente: aggiungi come nuova
+      cart.push({ id: p.id, name: p.name, price: finalPrice, image: getProductImage(p), qty: 1, size: selectedSize, fabric: fabricLabel, custNote: custNote, kitMode: kitMode, _uid: Date.now() + '-' + Math.random().toString(36).slice(2) });
+    } else {
+      // Se esiste già un'altra riga identica alla nuova configurazione, unifica lì
+      const dupIdx = cart.findIndex((x, i) => i !== idx && x.id === p.id && x.size === selectedSize && x.fabric === fabricLabel && x.custNote === custNote);
+      if (dupIdx !== -1) {
+        cart[dupIdx].qty += cart[idx].qty;
+        cart.splice(idx, 1);
+      } else {
+        cart[idx].size = selectedSize;
+        cart[idx].fabric = fabricLabel;
+        cart[idx].custNote = custNote;
+        cart[idx].price = finalPrice;
+        cart[idx].kitMode = kitMode;
+      }
+    }
+
+    // Ri-aggiungi pantaloncino secondo il kitMode scelto
+    if (isWithShorts) {
+      const shortsProduct = p.shortsProductId ? PRODUCTS.find(x => x.id === p.shortsProductId) : null;
+      const shortsName = shortsProduct
+        ? shortsProduct.name
+        : 'Pantaloncini \u2013 ' + p.name.replace(/Maglia\s*/i, '').trim();
+      const shortsPrice = 6 + fabricExtra;
+      const shortsImage = shortsProduct ? getProductImage(shortsProduct) : (p.shortsImage || getProductImage(p));
+      const hasNewShortsCust = !!(currentCustomization && currentCustomization.shortsNumber && currentCustomization.number);
+      const shortsCustNote = hasNewShortsCust
+        ? 'N.' + currentCustomization.number + ' sul pantaloncino'
+        : (oldShorts ? oldShorts.custNote : '');
+      cart.push({ id: 'shorts-' + p.id, name: shortsName, price: shortsPrice, image: shortsImage, qty: 1, size: selectedSize, fabric: fabricLabel, custNote: shortsCustNote, _uid: Date.now() + '-s-' + Math.random().toString(36).slice(2) });
+    }
+
+    // Ri-aggiungi calzettoni (solo Kit Completo)
+    if (isFullKit) {
+      const sockSize = (currentCustomization && currentCustomization.sockSize) || (oldSocks ? oldSocks.size : '');
+      const socksProduct = p.socksProductId ? PRODUCTS.find(x => x.id === p.socksProductId) : null;
+      const socksName = socksProduct
+        ? socksProduct.name
+        : 'Calzettoni \u2013 ' + p.name.replace(/Maglia\s*/i, '').trim();
+      const socksPrice = socksProduct ? socksProduct.price : 4;
+      const socksImage = socksProduct ? getProductImage(socksProduct) : (p.socksImage || p.shortsImage || getProductImage(p));
+      const socksCustNote = sockSize ? 'Taglia scarpa: ' + sockSize : (oldSocks ? oldSocks.custNote : '');
+      cart.push({ id: 'socks-' + p.id, name: socksName, price: socksPrice, image: socksImage, qty: 1, size: sockSize || selectedSize, fabric: fabricLabel, custNote: socksCustNote, _uid: Date.now() + '-k-' + Math.random().toString(36).slice(2) });
+    }
   } else {
-    cart.push({ id: p.id, name: p.name, price: finalPrice, image: p.image, qty: 1, size: selectedSize, fabric: fabricLabel, custNote: custNote, _uid: Date.now() + '-' + Math.random().toString(36).slice(2) });
-  }
+    // ── AGGIUNTA NORMALE ──
+    const existing = cart.find(item =>
+      item.id === productId && item.size === selectedSize && item.fabric === fabricLabel && item.custNote === custNote
+    );
+    if (existing) {
+      existing.qty += 1;
+    } else {
+      cart.push({ id: p.id, name: p.name, price: finalPrice, image: getProductImage(p), qty: 1, size: selectedSize, fabric: fabricLabel, custNote: custNote, kitMode: kitMode, _uid: Date.now() + '-' + Math.random().toString(36).slice(2) });
+    }
 
-  // Aggiungi pantaloncino (Maglia+Pantaloncino oppure Kit Completo)
-  if (isWithShorts) {
-    // Se la maglia ha un prodotto pantaloncino reale collegato, usa nome e immagine da quel prodotto
-    // ma il PREZZO è sempre quello del kit (6€), non il prezzo standalone del prodotto
-    const shortsProduct = p.shortsProductId ? PRODUCTS.find(x => x.id === p.shortsProductId) : null;
-    const shortsName = shortsProduct
-      ? shortsProduct.name
-      : 'Pantaloncini \u2013 ' + p.name.replace(/Maglia\s*/i, '').trim();
-    const shortsKitPrice = 6; // prezzo scontato in kit (standalone = 10, in kit = 6)
-    const shortsPrice = shortsKitPrice + fabricExtra;
-    const shortsImage = shortsProduct ? shortsProduct.image : (p.shortsImage || p.image);
-    const shortsWithNumber = currentCustomization && currentCustomization.shortsNumber;
-    const shortsCustNote = (shortsWithNumber && currentCustomization.number)
-      ? 'N.' + currentCustomization.number + ' sul pantaloncino'
-      : '';
-    cart.push({ id: 'shorts-' + p.id, name: shortsName, price: shortsPrice, image: shortsImage, qty: 1, size: selectedSize, fabric: fabricLabel, custNote: shortsCustNote, _uid: Date.now() + '-s-' + Math.random().toString(36).slice(2) });
-  }
+    // Aggiungi pantaloncino (Maglia+Pantaloncino oppure Kit Completo)
+    if (isWithShorts) {
+      const shortsProduct = p.shortsProductId ? PRODUCTS.find(x => x.id === p.shortsProductId) : null;
+      const shortsName = shortsProduct
+        ? shortsProduct.name
+        : 'Pantaloncini \u2013 ' + p.name.replace(/Maglia\s*/i, '').trim();
+      const shortsPrice = 6 + fabricExtra;
+      const shortsImage = shortsProduct ? getProductImage(shortsProduct) : (p.shortsImage || getProductImage(p));
+      const shortsWithNumber = currentCustomization && currentCustomization.shortsNumber;
+      const shortsCustNote = (shortsWithNumber && currentCustomization.number)
+        ? 'N.' + currentCustomization.number + ' sul pantaloncino'
+        : '';
+      cart.push({ id: 'shorts-' + p.id, name: shortsName, price: shortsPrice, image: shortsImage, qty: 1, size: selectedSize, fabric: fabricLabel, custNote: shortsCustNote, _uid: Date.now() + '-s-' + Math.random().toString(36).slice(2) });
+    }
 
-  // Aggiungi calzettoni (solo Kit Completo)
-  if (isFullKit) {
-    const sockSize = (currentCustomization && currentCustomization.sockSize) || '';
-    // Se la maglia ha un prodotto calzettoni reale collegato, usalo
-    const socksProduct = p.socksProductId ? PRODUCTS.find(x => x.id === p.socksProductId) : null;
-    const socksName = socksProduct
-      ? socksProduct.name
-      : 'Calzettoni \u2013 ' + p.name.replace(/Maglia\s*/i, '').trim();
-    const socksPrice = socksProduct ? socksProduct.price : 4; // kit completo: 6 (pant) + 4 (calzettoni) = 10 extra
-    const socksImage = socksProduct ? socksProduct.image : (p.socksImage || p.shortsImage || p.image);
-    const socksCustNote = sockSize ? 'Taglia scarpa: ' + sockSize : '';
-    cart.push({ id: 'socks-' + p.id, name: socksName, price: socksPrice, image: socksImage, qty: 1, size: sockSize || selectedSize, fabric: fabricLabel, custNote: socksCustNote, _uid: Date.now() + '-k-' + Math.random().toString(36).slice(2) });
+    // Aggiungi calzettoni (solo Kit Completo)
+    if (isFullKit) {
+      const sockSize = (currentCustomization && currentCustomization.sockSize) || '';
+      const socksProduct = p.socksProductId ? PRODUCTS.find(x => x.id === p.socksProductId) : null;
+      const socksName = socksProduct
+        ? socksProduct.name
+        : 'Calzettoni \u2013 ' + p.name.replace(/Maglia\s*/i, '').trim();
+      const socksPrice = socksProduct ? socksProduct.price : 4;
+      const socksImage = socksProduct ? socksProduct.image : (p.socksImage || p.shortsImage || p.image);
+      const socksCustNote = sockSize ? 'Taglia scarpa: ' + sockSize : '';
+      cart.push({ id: 'socks-' + p.id, name: socksName, price: socksPrice, image: socksImage, qty: 1, size: sockSize || selectedSize, fabric: fabricLabel, custNote: socksCustNote, _uid: Date.now() + '-k-' + Math.random().toString(36).slice(2) });
+    }
   }
 
   saveCart();
   updateCartUI();
   const custSuffix = custNote ? ' + personalizzazione' : '';
+  const verb = isEdit ? 'aggiornato!' : 'aggiunto!';
   const msg = isFullKit
-    ? 'Kit Completo (' + selectedSize + ' \u00B7 ' + fabricText + ')' + custSuffix + ' aggiunto!'
+    ? 'Kit Completo (' + selectedSize + ' \u00B7 ' + fabricText + ')' + custSuffix + ' ' + verb
     : isWithShorts
-      ? 'Maglia + Pantaloncino (' + selectedSize + ' \u00B7 ' + fabricText + ')' + custSuffix + ' aggiunto!'
-      : '"' + p.name + '" (' + selectedSize + ' \u00B7 ' + fabricText + ')' + custSuffix + ' aggiunto!';
+      ? 'Maglia + Pantaloncino (' + selectedSize + ' \u00B7 ' + fabricText + ')' + custSuffix + ' ' + verb
+      : '"' + p.name + '" (' + selectedSize + ' \u00B7 ' + fabricText + ')' + custSuffix + ' ' + verb;
   showToast('\u2705', msg);
   openCart();
   currentCustomization = null;
@@ -825,6 +932,7 @@ function addToCartFromQV(productId) {
 
 
 function closeQuickView() {
+  qvEditUid = null;
   closeOverlay('quickViewOverlay');
 }
 
@@ -858,7 +966,7 @@ function addToCart(productId) {
       id: p.id,
       name: p.name,
       price: finalPrice,
-      image: p.image,
+      image: getProductImage(p),
       qty: 1,
       size: selectedSize,
       fabric: fabricLabel,
@@ -1284,7 +1392,8 @@ function openCartItemProduct(uid) {
   if (!item) return;
   const p = PRODUCTS.find(x => x.id === item.id);
   if (!p) return; // componenti kit (pantaloncino/calzettoni) senza scheda dedicata
-  openQuickView(p.id);
+  qvEditUid = uid; // modalità modifica: la scheda preseleziona e salva sulla riga esistente
+  openQuickView(p.id, item);
 }
 
 // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
@@ -1620,6 +1729,7 @@ function navPush() {
 function getTopmostOpenOverlay() {
   if (document.getElementById('orderOverlay')?.classList.contains('open')) return 'order';
   if (document.getElementById('quickViewOverlay')?.classList.contains('open')) return 'quickview';
+  if (document.getElementById('customRequestOverlay')?.classList.contains('open')) return 'customreq';
   for (const key of Object.keys(_infoPageMap)) {
     if (document.getElementById(_infoPageMap[key])?.classList.contains('open')) return 'info';
   }
@@ -1634,6 +1744,7 @@ function navPop() {
   const top = getTopmostOpenOverlay();
   if (top === 'cat') closeCatPage();
   else if (top === 'quickview') closeQuickView();
+  else if (top === 'customreq') closeCustomRequest();
   else if (top === 'info') Object.keys(_infoPageMap).forEach(key => closeInfoPage(key));
   else if (top === 'cart') closeCart();
   else if (top === 'fav') closeFavSidebar();
@@ -1916,6 +2027,26 @@ function setupReviews() {
 // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 // RICHIESTA PRODOTTO PERSONALIZZATA
 // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// Aggiunge al carrello una richiesta prodotto personalizzata (usata da entrambi i form)
+function pushCustomRequestItem(name, size, qty) {
+  const customItem = {
+    id: 'custom-' + Date.now(),
+    name: name,
+    size: size,
+    qty: qty,
+    price: 28,
+    custom: true
+  };
+  const existing = cart.find(i => i.name === customItem.name && i.size === size);
+  if (existing) {
+    existing.qty += qty;
+  } else {
+    cart.push(customItem);
+  }
+  saveCart();
+  updateCartUI();
+}
+
 function setupCustomOrder() {
   const form = document.getElementById('customOrderForm');
   if (!form) return;
@@ -1929,24 +2060,7 @@ function setupCustomOrder() {
 
     if (!name) return;
 
-    const customItem = {
-      id: 'custom-' + Date.now(),
-      name: '🔍 ' + name,
-      size,
-      qty,
-      price: 28,
-      custom: true
-    };
-
-    const existing = cart.find(i => i.name === customItem.name && i.size === size);
-    if (existing) {
-      existing.qty += qty;
-    } else {
-      cart.push(customItem);
-    }
-
-    saveCart();
-    updateCartUI();
+    pushCustomRequestItem(name, size, qty);
     openCart();
 
     showToast('✅', `"${name}" aggiunto! Il prezzo ti verrà comunicato via email.`);
@@ -1954,6 +2068,42 @@ function setupCustomOrder() {
     document.getElementById('customProductSize').value = 'M';
     document.getElementById('customProductQty').value = '1';
   });
+}
+
+// Scheda "Non trovi il tuo prodotto?": form stile prodotto che aggiunge la richiesta al carrello
+function setupCustomRequest() {
+  const form = document.getElementById('customRequestForm');
+  if (!form) return;
+
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+
+    const name = document.getElementById('crqName')?.value.trim();
+    const size = document.getElementById('crqSize')?.value || 'M';
+    const qty = parseInt(document.getElementById('crqQty')?.value) || 1;
+    if (!name) return;
+
+    pushCustomRequestItem(name, size, qty);
+    closeCustomRequest();
+    openCart();
+
+    showToast('✅', `"${name}" aggiunto! Il prezzo ti verrà comunicato via email.`);
+    form.reset();
+    const sz = document.getElementById('crqSize'); if (sz) sz.value = 'M';
+    const qt = document.getElementById('crqQty'); if (qt) qt.value = '1';
+    const note = document.getElementById('crqNote'); if (note) note.value = '';
+  });
+}
+
+function openCustomRequest() {
+  const el = document.getElementById('customRequestOverlay');
+  if (!el) return;
+  openOverlay('customRequestOverlay');
+  navPush();
+}
+
+function closeCustomRequest() {
+  closeOverlay('customRequestOverlay');
 }
 
 // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
@@ -1986,6 +2136,40 @@ function setupReviewMiniCarousels() {
 // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 // HERO CAROUSEL (immagini modelli)
 // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ── HERO NUOVA COLLEZIONE: carosello automatico di foto (dalla cartella models) ──
+function setupHeroSlideshow() {
+  const img = document.getElementById('edHeroImg');
+  if (!img) return;
+
+  const slides = [
+    'images/3d/editorial-hero.jpg',
+    'images/models/Immagine 2026-05-03 111519.png',
+    'images/models/Immagine 2026-05-03 111700.png',
+    'images/models/Immagine 2026-05-03 112008.png',
+    'images/models/Immagine 2026-05-03 112108.png',
+    'images/models/Immagine 2026-05-03 112241.png'
+  ];
+
+  // Preload di tutte le foto per uno switch immediato
+  slides.forEach(s => {
+    const pre = new Image();
+    pre.src = s;
+  });
+
+  let i = 0;
+  const INTERVAL = 4000; // cambia ogni 4 secondi
+
+  setInterval(() => {
+    i = (i + 1) % slides.length;
+    // fade out → switch → fade in
+    img.style.opacity = '0';
+    setTimeout(() => {
+      img.src = slides[i];
+      img.style.opacity = '1';
+    }, 300);
+  }, INTERVAL);
+}
+
 function setupHeroCarousel() {
   const imgs = document.querySelectorAll('.hero-carousel-img');
   const dotsEl = document.getElementById('heroCarouselDots');
@@ -2317,6 +2501,28 @@ function setupVintage() {
 // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 // SEZIONE MUST HAVE — Articoli più venduti / bestseller
 // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// Foto prodotto reali presenti nella cartella images (fallback per le card Must Have)
+// Foto di riserva per i prodotti la cui immagine non esiste, abbinate alla squadra giusta
+const MUST_HAVE_IMAGE_OVERRIDES = {
+  103: 'images/3d/HomeArsenal0304.png',                 // Arsenal Away
+  105: 'images/3d/Premier League/Liverpool Third 2526.png', // Liverpool Away
+  109: 'images/3d/Premier League/Ronaldo2009.png',      // Man Utd Away (Ronaldo 2009)
+  118: 'images/3d/HomeBayern0708.png'                   // Bayern Away
+};
+
+// Un prodotto è valido per la sezione se ha una foto locale esistente (o un override)
+function mustHaveHasImage(p) {
+  if (MUST_HAVE_IMAGE_OVERRIDES[p.id]) return true;
+  return !!p.image && !p.image.startsWith('http') && !p.image.includes('images/teams/');
+}
+
+// Foto effettiva del prodotto: usa l'override se l'immagine di catalogo è mancante/remota
+function getProductImage(p) {
+  if (!p) return '';
+  if (MUST_HAVE_IMAGE_OVERRIDES[p.id]) return MUST_HAVE_IMAGE_OVERRIDES[p.id];
+  return p.image || '';
+}
+
 function setupMustHave() {
   const grid     = document.getElementById('mustHaveGrid');
   const viewport = document.getElementById('mustHaveViewport');
@@ -2326,7 +2532,7 @@ function setupMustHave() {
 
   if (grid) {
     // Priorità: badge "bestseller" o "hot", poi badge "sale", poi badge "new", poi per prezzo desc
-    const scored = PRODUCTS.filter(p => !p.nascondiMustHave).map(p => {
+    const scored = PRODUCTS.filter(p => !p.nascondiMustHave && mustHaveHasImage(p)).map(p => {
       let score = 0;
       if (p.badge === 'bestseller' || p.badge === 'hot') score += 100;
       else if (p.badge === 'sale') score += 50;
@@ -2347,11 +2553,12 @@ function setupMustHave() {
         card.className = 'mustHave-card';
         card.onclick = () => openQuickView(p.id);
         const badgeHtml = i < 3 ? '<span class="mustHave-badge">🔥 Bestseller</span>' : '';
+        const imgSrc = MUST_HAVE_IMAGE_OVERRIDES[p.id] || p.image || '';
         card.innerHTML = `
           ${badgeHtml}
           <div class="mustHave-card-img-wrap">
-            <img class="mustHave-card-img" src="${p.image}" alt="${p.name}" loading="lazy"
-                 onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22400%22><rect fill=%22%23f5f5f5%22 width=%22300%22 height=%22400%22/><text x=%2250%25%22 y=%2250%25%22 fill=%22%23ccc%22 text-anchor=%22middle%22 dominant-baseline=%22middle%22 font-size=%2260%22>⚽</text></svg>'">
+            <img class="mustHave-card-img" src="${imgSrc}" alt="${p.name}" loading="lazy"
+                 onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22400%22><rect fill=%22%23f5f5f5%22 width=%22300%22 height=%22400%22/></svg>'">
           </div>
           ${p.badgeLabel ? `<div class="mustHave-card-tag">${p.badgeLabel}</div>` : ''}
           <div class="mustHave-card-name">${p.name}</div>
@@ -2754,7 +2961,7 @@ function setupFavorites() {
       if (existing) {
         existing.qty += 1;
       } else {
-        cart.push({ id: p.id, name: p.name, price: p.price, image: p.image, qty: 1, size: p.sizes[0] || 'M', fabric: 'Standard', custNote: '', _uid: Date.now() + '-' + Math.random().toString(36).slice(2) });
+        cart.push({ id: p.id, name: p.name, price: p.price, image: getProductImage(p), qty: 1, size: p.sizes[0] || 'M', fabric: 'Standard', custNote: '', _uid: Date.now() + '-' + Math.random().toString(36).slice(2) });
       }
     });
     saveCart();

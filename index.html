@@ -14,7 +14,7 @@
   <link
     href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700;800;900&display=swap"
     rel="stylesheet" />
-  <link rel="stylesheet" href="style.css?v=20260807t" />
+  <link rel="stylesheet" href="style.css?v=20260808b" />
   <!-- EmailJS SDK -->
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 </head>
@@ -266,14 +266,13 @@
   <section class="editorial-hero" id="editorialHero">
     <!-- Pannello 1 — grande, maglia con testo e bottone -->
     <div class="ed-panel ed-panel--main" id="edPanel1">
-      <img src="images/3d/editorial-hero.jpg" alt="Kit WorldOfKits" class="ed-panel-img" />
+      <img src="images/3d/editorial-hero.jpg" alt="Kit WorldOfKits" class="ed-panel-img" id="edHeroImg" />
       <div class="ed-panel-overlay"></div>
       <div class="ed-panel-content">
         <p class="ed-panel-eyebrow">Nuova collezione</p>
-        <h2 class="ed-panel-title">Kit Home<br>2025/26</h2>
-        <p class="ed-panel-sub">Un tributo all'iconico calcio europeo</p>
+        <h2 class="ed-panel-title">Kit Home<br>2026/27</h2>
         <button class="ed-panel-btn" id="edBtn1"
-          onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">
+          onclick="openCatPage('new', 'NOVITÀ', 'Novità', [])">
           Acquista <span class="ed-btn-arrow">→</span>
         </button>
       </div>
@@ -286,8 +285,8 @@
       <div class="ed-panel-content ed-panel-content--center">
         <p class="ed-panel-eyebrow">Qualità Premium</p>
         <h2 class="ed-panel-title ed-panel-title--sm">Tessuto<br>Originale</h2>
-        <button class="ed-panel-btn" id="edBtn1"
-          onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">
+        <button class="ed-panel-btn" id="edBtn2"
+          onclick="openCatPage('all', 'TUTTI I PRODOTTI', 'Prodotti', [])">
           Acquista <span class="ed-btn-arrow">→</span>
         </button>
       </div>
@@ -302,7 +301,7 @@
         <h2 class="ed-panel-title ed-title--brand">STORE<br>UFFICIALE</h2>
         <p class="ed-panel-sub ed-sub--light">Maglie da calcio premium<br>per ogni tifoso</p>
         <button class="ed-panel-btn ed-btn--outline" id="edBtn3"
-          onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">
+          onclick="openCatPage('all', 'TUTTI I PRODOTTI', 'Prodotti', [])">
           Scopri tutto <span class="ed-btn-arrow">→</span>
         </button>
       </div>
@@ -339,61 +338,14 @@
     </div>
   </div>
   
-  <!-- ═══════════════════ ACQUISTA PER SQUADRA DEL MONDIALE ═══════════════════ -->
-  <section class="brand-section" id="brandSection">
-    <div class="brand-section-inner">
-      <div class="brand-section-header">
-        <h2 class="brand-section-title">Scegli la tua squadra</h2>
-      </div>
-      <div class="brand-grid">
-        <!-- Argentina -->
-        <button class="brand-tile" id="TeamArgentina" onclick="openCatPage('all','ARGENTINA','Argentina',[],null,'Argentina')" aria-label="Argentina">
-          <img src="loghi/Argentina.svg" alt="Argentina" class="brand-tile-logo">
-        </button>
-        <!-- Francia -->
-        <button class="brand-tile" id="TeamFrancia" onclick="openCatPage('all','FRANCIA','Francia',[],null,'Francia')" aria-label="Francia">
-          <img src="loghi/Francia.svg" alt="Francia" class="brand-tile-logo">
-        </button>
-        <!-- Spagna -->
-        <button class="brand-tile" id="TeamSpagna" onclick="openCatPage('all','SPAGNA','Spagna',[],null,'Spagna')" aria-label="Spagna">
-          <img src="loghi/Spagna.svg" alt="Spagna" class="brand-tile-logo">
-        </button>
-        <!-- Germania -->
-        <button class="brand-tile" id="TeamGermania" onclick="openCatPage('all','GERMANIA','Germania',[],null,'Germania')" aria-label="Germania">
-          <img src="loghi/Germania.svg" alt="Germania" class="brand-tile-logo">
-        </button>
-        <!-- Brasile -->
-        <button class="brand-tile" id="TeamBrasile" onclick="openCatPage('all','BRASILE','Brasile',[],null,'Brasile')" aria-label="Brasile">
-          <img src="loghi/Brasile.svg" alt="Brasile" class="brand-tile-logo">
-        </button>
-        <!-- Italia -->
-        <button class="brand-tile" id="TeamItalia" onclick="openCatPage('all','ITALIA','Italia',[],null,'Italia')" aria-label="Italia">
-          <img src="loghi/Italia.svg" alt="Italia" class="brand-tile-logo">
-        </button>
-        <!-- Inghilterra -->
-        <button class="brand-tile" id="TeamInghilterra" onclick="openCatPage('all','INGHLTERRA','Inghilterra',[],null,'Inghilterra')" aria-label="Inghilterra">
-          <img src="loghi/Inghilterra.svg" alt="Inghilterra" class="brand-tile-logo">
-        </button>
-        <!-- Stati Uniti -->
-        <button class="brand-tile" id="TeamStatiUniti" onclick="openCatPage('all','STATIUNITI','Stati Uniti',[],null,'Stati Uniti')" aria-label="Stati Uniti">
-          <img src="loghi/Stati Uniti.svg" alt="Stati Uniti" class="brand-tile-logo">
-        </button>
-        <!-- Norvegia  -->
-        <button class="brand-tile" id="TeamNorvegia" onclick="openCatPage('all','NORVEGIA','Norvegia',[],null,'Norvegia')" aria-label="Norvegia">
-          <img src="loghi/Norvegia.svg" alt="Norvegia" class="brand-tile-logo">
-        </button>
-        <!-- Croazia -->
-        <button class="brand-tile" id="TeamCroazia" onclick="openCatPage('all','CROAZIA','Croazia',[],null,'Croazia')" aria-label="Croazia">
-          <img src="loghi/Croazia.svg" alt="Croazia" class="brand-tile-logo">
-        </button>
-      </div>
-      <!-- Viewport scroll orizzontale -->
-    <div class="scelta-scroll-viewport" id="sceltaViewport">
-      <div class="scelta-grid" id="sceltaGrid"></div>
-    </div>
-    <!-- Scrollbar nera custom -->
-    <div class="scelta-scrollbar-track" id="sceltaTrack">
-      <div class="scelta-scrollbar-thumb" id="sceltaThumb"></div>
+  <!-- ═══════════════════ NON TROVI IL TUO PRODOTTO? ═══════════════════ -->
+  <section class="custom-request-section">
+    <div class="custom-request-inner">
+      <h2 class="custom-request-title">Non trovi il tuo prodotto?</h2>
+      <p class="custom-request-sub">Inserisci i dettagli qui: scrivici l'articolo che cerchi e faremo del nostro meglio per trovarlo</p>
+      <button class="custom-request-btn" onclick="openCustomRequest()">
+        Inserisci i dettagli <span class="custom-request-arrow">&rarr;</span>
+      </button>
     </div>
   </section>
 
@@ -1098,6 +1050,59 @@
     <span id="toastMsg">Operazione completata!</span>
   </div>
 
+  <!-- ═══════════════════ RICHIESTA PRODOTTO (scheda stile prodotto) ═══════════════════ -->
+  <div class="qv-page-overlay" id="customRequestOverlay" aria-hidden="true">
+    <div class="qv-page-topbar">
+      <button class="qv-page-back" id="customRequestBack" aria-label="Torna indietro" onclick="closeCustomRequest()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+        Indietro
+      </button>
+      <span class="qv-page-title">Non trovi il tuo prodotto?</span>
+    </div>
+    <div class="qv-page-scroll">
+      <div class="crq-inner">
+        <div class="crq-form-card">
+          <p class="crq-intro">Scrivi il nome dell'articolo che cerchi: ti ricontatteremo con prezzo e disponibilit&agrave;.</p>
+          <form id="customRequestForm" autocomplete="off">
+            <div class="form-group">
+              <label for="crqName">Nome dell'articolo *</label>
+              <input type="text" id="crqName" class="crq-name-input" placeholder="Es: Maglia Barcellona Away 2026/27..." required />
+            </div>
+            <div class="crq-row">
+              <div class="form-group">
+                <label for="crqSize">Taglia</label>
+                <select id="crqSize">
+                  <option value="XS">XS</option>
+                  <option value="S">S</option>
+                  <option value="M" selected>M</option>
+                  <option value="L">L</option>
+                  <option value="XL">XL</option>
+                  <option value="XXL">XXL</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="crqQty">Quantit&agrave;</label>
+                <select id="crqQty">
+                  <option value="1" selected>1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="5">5</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="crqNote">Dettagli aggiuntivi</label>
+              <textarea id="crqNote" rows="3" placeholder="Es: versione casa/trasferta, nome stampato, anno, squadra..."></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary btn-full crq-submit">Invia richiesta</button>
+            <p class="crq-disclaimer">Il prezzo verr&agrave; comunicato via email prima della conferma.</p>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- ═══════════════════ SCHEDA PRODOTTO (pagina a schermo intero) ═══════════════════ -->
   <div class="qv-page-overlay" id="quickViewOverlay" aria-hidden="true">
     <div class="qv-page-topbar">
@@ -1278,7 +1283,7 @@
   </nav>
 
   <script src="products.js"></script>
-  <script src="app.js?v=20260807p"></script>
+  <script src="app.js?v=20260808b"></script>
 
   <!-- ═══════════════════ MOBILE JS — Bottom nav sync + UX ═══════════════════ -->
   <script>
