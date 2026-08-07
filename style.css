@@ -23,8 +23,18 @@
 }
 
 html {
-  scroll-behavior: smooth;
+  /* IMPORTANTE iOS: scroll-behavior:smooth su html rende il trascinamento del dito
+     duro e poco fluido su Safari mobile. Le chiamate programmatiche (window.scrollTo
+     con behavior:'smooth') restano fluide anche senza questa regola. */
+  scroll-behavior: auto;
   overflow-x: hidden;
+}
+
+/* Desktop: smooth attivo solo dove non ci sono gesti touch */
+@media (min-width: 1024px) {
+  html {
+    scroll-behavior: smooth;
+  }
 }
 
 body {
@@ -2630,7 +2640,6 @@ img {
   overflow-y: auto;
   transform: translateY(100%);
   transition: transform 0.38s cubic-bezier(.4,0,.2,1), visibility 0.38s;
-  will-change: transform;
 }
 
 .info-page-overlay.open {
@@ -5675,7 +5684,6 @@ img {
   display: flex;
   gap: 1.25rem;
   transition: transform 0.45s cubic-bezier(.4, 0, .2, 1);
-  will-change: transform;
 }
 
 /* ── SINGOLA CARD ── */
@@ -6260,7 +6268,6 @@ img {
   overflow-x: hidden;
   transform: translateX(100%);
   transition: transform 0.38s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.38s;
-  will-change: transform;
   pointer-events: none; /* NON intercetta tap quando è chiuso (fuori schermo) */
 }
 
@@ -6961,9 +6968,11 @@ img {
   .vintage-scroll-viewport,
   .mondiali-scroll-viewport {
     padding: 0 1rem .75rem;
-    /* Scroll snap per feel app */
-    scroll-snap-type: x mandatory;
+    /* Snap "proximity" (non mandatory): su iOS mandatory "ruba" il gesto e rende
+       il trascinamento faticoso quando il dito si muove in diagonale o verticale */
+    scroll-snap-type: x proximity;
     -webkit-overflow-scrolling: touch;
+    touch-action: pan-x pan-y;
   }
 
   .mustHave-card,
@@ -7191,8 +7200,9 @@ img {
 
   .reviews-track {
     gap: .75rem;
-    scroll-snap-type: x mandatory;
+    scroll-snap-type: x proximity;
     -webkit-overflow-scrolling: touch;
+    touch-action: pan-x pan-y;
   }
 
   .review-card {
@@ -8601,9 +8611,12 @@ img {
     display: flex !important;
     flex-wrap: nowrap !important;
     overflow-x: auto !important;
-    scroll-snap-type: x mandatory;
+    /* proximity invece di mandatory: su iOS il snap obbligatorio rende il
+       trascinamento del dito faticoso (ruba il gesto in diagonale/verticale) */
+    scroll-snap-type: x proximity;
     scroll-padding: 0 16px;
     -webkit-overflow-scrolling: touch;
+    touch-action: pan-x pan-y;
     gap: 12px !important;
     padding: 0 16px 15px 16px !important;
   }
