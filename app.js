@@ -80,6 +80,17 @@ document.addEventListener('DOMContentLoaded', () => {
   setupParticles();
   setupNav();
   setupNavMegaMenu();
+  // Link residui verso la vecchia sezione #products (rimossa) → pagina prodotti
+  document.addEventListener('click', (e) => {
+    const link = e.target.closest('a[href="#products"]');
+    if (!link) return;
+    // I trigger del mega menu (Calcio, Sport...) aprono il loro dropdown: non interferire
+    if (link.classList.contains('nav-mega-trigger')) return;
+    // I link del mega menu con data-league/data-filter sono già gestiti da setupNavMegaMenu
+    if (link.dataset.league || link.dataset.filter || link.dataset.filterType) return;
+    e.preventDefault();
+    openCatPage('all', 'TUTTI I PRODOTTI', 'Prodotti', []);
+  });
   setupNavSearch();
   setupFeatured();
   setupMondiali();
@@ -583,10 +594,8 @@ function setupSearch() {
 // QUICK VIEW
 // ══════════════════════════════════════════════
 function setupQuickView() {
-  document.getElementById('quickViewClose')?.addEventListener('click', closeQuickView);
-  document.getElementById('quickViewOverlay')?.addEventListener('click', e => {
-    if (e.target.id === 'quickViewOverlay') closeQuickView();
-  });
+  // La scheda prodotto è una pagina a schermo intero: si chiude con il
+  // pulsante "← Indietro" (onclick inline) o col tasto indietro del browser.
 }
 
 function openQuickView(id) {
@@ -599,22 +608,25 @@ function openQuickView(id) {
   const kitType = p.kitType || 'solo';
   const isSoloAllowed = kitType !== 'unico';
   const isFav = isFavorite(p.id);
+
+  // Titolo prodotto nella topbar della scheda
+  const titleEl = document.getElementById('qvPageTitle');
+  if (titleEl) titleEl.textContent = p.name;
+
   content.innerHTML = `
     <div class="qv-grid">
       <div class="qv-img-wrap">
         <img src="${p.image}" alt="${p.name}" class="qv-img"
              onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22480%22><rect fill=%22%230f1525%22 width=%22400%22 height=%22480%22/><text x=%2250%25%22 y=%2250%25%22 fill=%22%236c63ff%22 text-anchor=%22middle%22 dominant-baseline=%22middle%22 font-size=%2270%22>&#x26BD;</text></svg>'">
         ${p.badge ? `<span class="card-badge ${p.badge} qv-badge">${p.badgeLabel}</span>` : ''}
+        <button class="card-fav-btn${isFav ? ' active' : ''}" id="qvFavBtn" onclick="toggleFavoriteFromQV(${p.id})" title="${isFav ? 'Rimuovi dai preferiti' : 'Aggiungi ai preferiti'}">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="${isFav ? '#e44545' : 'none'}" stroke="${isFav ? '#e44545' : '#888'}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        </button>
       </div>
       <div class="qv-details">
-        <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:.5rem;margin-bottom:.2rem;">
-          <div class="qv-category">${catLabel}</div>
-          <button class="card-fav-btn${isFav ? ' active' : ''}" id="qvFavBtn" onclick="toggleFavoriteFromQV(${p.id})" title="${isFav ? 'Rimuovi dai preferiti' : 'Aggiungi ai preferiti'}" style="position:static;box-shadow:none;background:transparent;border:1.5px solid rgba(0,0,0,.12);width:34px;height:34px;flex-shrink:0;">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="${isFav ? '#e44545' : 'none'}" stroke="${isFav ? '#e44545' : '#aaa'}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-          </button>
-        </div>
-        <div class="qv-name">${p.name}</div>
-        <div class="qv-desc">${p.description}</div>
+        <div class="qv-category">${catLabel}</div>
+        <h1 class="qv-name">${p.name}</h1>
+        <p class="qv-desc">${p.description}</p>
 
         <div class="qv-price-wrap">
           <span class="qv-price" id="qvPriceDisplay" data-base="${p.price}">&#x20AC;${p.price.toFixed(2)}</span>
@@ -631,11 +643,9 @@ function openQuickView(id) {
         <div class="qv-section-label">Tipo Maglia</div>
         <div class="qv-fabric-row">
           <button class="qv-option-btn active" data-extra="0" onclick="selectQvFabric(this)">
-            <span class="qv-opt-icon">&#x1F455;</span>
             <span class="qv-opt-text"><strong>Standard</strong><small>Tifoso</small></span>
           </button>
           <button class="qv-option-btn" data-extra="4" onclick="selectQvFabric(this)">
-            <span class="qv-opt-icon">&#x26A1;</span>
             <span class="qv-opt-text"><strong>Player</strong><small>+&#x20AC;3,00</small></span>
           </button>
         </div>
@@ -644,37 +654,50 @@ function openQuickView(id) {
         <div class="qv-section-label">Composizione</div>
         <div class="qv-kit-row">
           ${isSoloAllowed ? `<button class="qv-option-btn active" data-kit="solo" data-extra="0" onclick="selectQvKit(this)">
-            <span class="qv-opt-icon">&#x1F455;</span>
             <span class="qv-opt-text"><strong>Solo Maglia</strong><small>Inclusa nel prezzo</small></span>
           </button>` : ''}
           <button class="qv-option-btn${!isSoloAllowed ? ' active' : ''}" data-kit="shorts" data-extra="6" onclick="selectQvKit(this)">
-            <span class="qv-opt-icon">&#x26BD;</span>
             <span class="qv-opt-text"><strong>Maglia + Pantaloncino</strong><small>+&#x20AC;6,00</small></span>
           </button>
           <button class="qv-option-btn" data-kit="full" data-extra="10" onclick="selectQvKit(this)">
-            <span class="qv-opt-icon">&#x1F3C6;</span>
             <span class="qv-opt-text"><strong>Kit Completo</strong><small>Maglia+Pant+Calzettoni +&#x20AC;10,00</small></span>
           </button>
         </div>
 
         <!-- Badge personalizzazione applicata -->
         <div id="qvCustomizeBadge" style="display:none;margin-top:.5rem;">
-          <span class="customize-applied-badge">&#x270F;&#xFE0F; Personalizzazione applicata</span>
+          <span class="customize-applied-badge">Personalizzazione applicata</span>
         </div>
 
         <button class="btn btn-primary btn-full qv-add-btn" onclick="addToCartFromQV(${p.id}); closeQuickView();">
-          &#x1F6D2; Aggiungi al Carrello
+          Aggiungi al Carrello
         </button>
 
         <!-- Pulsante Personalizza (sempre visibile) -->
         <button class="qv-customize-btn" id="qvCustomizeBtn" onclick="openCustomizeModal(${p.id})" style="display:flex;">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-          &#x270F;&#xFE0F; Personalizza (Nome &amp; Numero)
+          Personalizza (Nome &amp; Numero)
         </button>
       </div>
     </div>
   `;
+
+  // Barra sticky mobile: prezzo + aggiungi al carrello sempre visibili
+  const sticky = document.getElementById('qvStickyBar');
+  if (sticky) {
+    sticky.innerHTML = `
+      <div class="qv-sticky-info">
+        <span class="qv-price" id="qvMobilePrice">&#x20AC;${p.price.toFixed(2)}</span>
+      </div>
+      <button class="btn btn-primary qv-sticky-add" onclick="addToCartFromQV(${p.id}); closeQuickView();">
+        Aggiungi
+      </button>
+    `;
+  }
+
+  content.scrollTop = 0;
   openOverlay('quickViewOverlay');
+  navPush();
 }
 
 function selectQvSize(btn) {
@@ -713,7 +736,10 @@ function updateQvPrice() {
   const kitBtn = document.querySelector('.qv-kit-row .qv-option-btn.active');
   const fabricExtra = fabricBtn ? parseFloat(fabricBtn.dataset.extra || 0) : 0;
   const kitExtra = kitBtn ? parseFloat(kitBtn.dataset.extra || 0) : 0;
-  priceEl.textContent = `€${(base + fabricExtra + kitExtra).toFixed(2)}`;
+  const total = base + fabricExtra + kitExtra;
+  priceEl.textContent = `€${total.toFixed(2)}`;
+  const mobEl = document.getElementById('qvMobilePrice');
+  if (mobEl) mobEl.textContent = `€${total.toFixed(2)}`;
 }
 
 function addToCartFromQV(productId) {
@@ -726,7 +752,7 @@ function addToCartFromQV(productId) {
 
   const selectedSize = activeSize ? activeSize.textContent.trim() : (p.sizes[0] || 'M');
   const fabricText = activeFabric ? activeFabric.querySelector('strong').textContent.trim() : 'Standard';
-  const fabricLabel = '\uD83D\uDC55 ' + fabricText;
+  const fabricLabel = fabricText;
   const fabricExtra = activeFabric ? parseFloat(activeFabric.dataset.extra || 0) : 0;
   const kitMode = activeKit ? activeKit.dataset.kit : 'solo';
   const isWithShorts = kitMode === 'shorts' || kitMode === 'full';
@@ -817,7 +843,7 @@ function addToCart(productId) {
   // Tessuto attivo (Tifoso / Player)
   const fabricContainer = document.querySelector('.card-fabric[data-product-id="' + productId + '"]');
   const activeFabric = fabricContainer ? fabricContainer.querySelector('.fabric-btn.active') : null;
-  const fabricLabel = activeFabric ? activeFabric.textContent.replace('+€4', '').trim() : '👕 Tifoso';
+  const fabricLabel = activeFabric ? activeFabric.textContent.replace('+€4', '').trim() : 'Tifoso';
   const fabricExtra = activeFabric ? parseFloat(activeFabric.dataset.extra || 0) : 0;
   const finalPrice = p.price + fabricExtra;
 
@@ -923,16 +949,9 @@ function renderCartItems() {
 
   let html = '';
   cart.forEach(function (item) {
-    const isCustom = !!item.custom;
     const isGift = !!item._gift;
     const uid = item._uid || item.id;
     const uidRef = "'" + uid + "'";
-    const imgSrc = item.image || '';
-    const safeName = String(item.name).replace(/"/g, '&quot;');
-
-    const imgHtml = isCustom
-      ? '<div class="cart-item-img" style="display:flex;align-items:center;justify-content:center;font-size:1.8rem;background:rgba(108,99,255,.1);border-radius:8px;">🔍</div>'
-      : '<img class="cart-item-img" src="' + imgSrc + '" alt="' + safeName + '" onerror="this.style.display=\'none\'">';
 
     const priceLabel = isGift
       ? '<span style="color:#2e7d32;font-weight:700;">🎁 Gratis</span>'
@@ -940,22 +959,21 @@ function renderCartItems() {
 
     const qtyControls = isGift
       ? '<span style="font-size:.75rem;color:#2e7d32;font-weight:600;">Omaggio</span>'
-      : '<button class="qty-btn" onclick="changeQty(' + uidRef + ', -1)">&minus;</button>'
+      : '<button class="qty-btn" onclick="event.stopPropagation();changeQty(' + uidRef + ', -1)">&minus;</button>'
         + '<span class="qty-val">' + item.qty + '</span>'
-        + '<button class="qty-btn" onclick="changeQty(' + uidRef + ', +1)">+</button>';
+        + '<button class="qty-btn" onclick="event.stopPropagation();changeQty(' + uidRef + ', +1)">+</button>';
 
     const removeBtn = isGift
       ? '' // gli articoli omaggio non si possono rimuovere manualmente
-      : '<button class="cart-item-remove" onclick="removeFromCart(' + uidRef + ')" title="Rimuovi">&#128465;&#65039;</button>';
+      : '<button class="cart-item-remove" onclick="event.stopPropagation();removeFromCart(' + uidRef + ')" title="Rimuovi">&#x2715;</button>';
 
-    html += '<div class="cart-item' + (isGift ? ' cart-item--gift' : '') + '">'
-      + imgHtml
+    html += '<div class="cart-item' + (isGift ? ' cart-item--gift' : '') + '" onclick="openCartItemProduct(' + uidRef + ')" title="Vedi prodotto">'
       + '<div class="cart-item-info">'
       + '<div class="cart-item-name">' + item.name + '</div>'
-      + '<div class="cart-item-meta">Taglia: ' + item.size + (item.fabric ? ' &nbsp;&middot;&nbsp; ' + item.fabric : '') + (item.custNote ? '<br><span style="color:#2e7d32;font-size:.72rem;">' + item.custNote + '</span>' : '') + '</div>'
+      + '<div class="cart-item-meta">Taglia: ' + item.size + (item.fabric ? ' &nbsp;&middot;&nbsp; ' + String(item.fabric).replace('\uD83D\uDC55', '').trim() : '') + (item.custNote ? '<br><span style="color:#2e7d32;font-size:.72rem;">' + item.custNote + '</span>' : '') + '</div>'
+      + '<div class="cart-item-row">'
       + '<div class="cart-item-price">' + priceLabel + '</div>'
-      + '<div class="cart-item-qty">'
-      + qtyControls
+      + '<div class="cart-item-qty">' + qtyControls + '</div>'
       + '</div>'
       + '</div>'
       + removeBtn
@@ -1241,7 +1259,7 @@ function setupCartSidebar() {
   cartBtn?.addEventListener('click', openCart);
   cartClose?.addEventListener('click', closeCart);
   overlay?.addEventListener('click', closeCart);
-  goShop?.addEventListener('click', () => { closeCart(); document.getElementById('products')?.scrollIntoView({ behavior: 'smooth' }); });
+  goShop?.addEventListener('click', (e) => { e.preventDefault(); closeCart(); openCatPage('all', 'TUTTI I PRODOTTI', 'Prodotti', []); });
   checkoutBtn?.addEventListener('click', () => { closeCart(); openOrderModal(); });
 }
 
@@ -1250,12 +1268,23 @@ function openCart() {
   document.getElementById('cartSidebar')?.classList.add('open');
   document.getElementById('cartOverlay')?.classList.add('open');
   document.body.style.overflow = 'hidden';
+  navPush();
 }
 
 function closeCart() {
   document.getElementById('cartSidebar')?.classList.remove('open');
   document.getElementById('cartOverlay')?.classList.remove('open');
   document.body.style.overflow = '';
+}
+
+// Clic su un prodotto del carrello → apre la sua scheda prodotto.
+// Il carrello resta aperto sotto la scheda: tornando indietro si ritorna nel carrello.
+function openCartItemProduct(uid) {
+  const item = cart.find(x => (x._uid || x.id) === uid);
+  if (!item) return;
+  const p = PRODUCTS.find(x => x.id === item.id);
+  if (!p) return; // componenti kit (pantaloncino/calzettoni) senza scheda dedicata
+  openQuickView(p.id);
 }
 
 // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
@@ -1273,6 +1302,7 @@ function openOrderModal() {
   if (cart.length === 0) { showToast('âš ï¸', 'Il carrello è vuoto!'); return; }
   renderOrderSummary();
   openOverlay('orderOverlay');
+  navPush();
 }
 
 function closeOrderModal() {
@@ -1578,9 +1608,45 @@ function updateAdminBtnVisibility() {
 // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 // UTILITY
 // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ── TASTO INDIETRO (browser / Android) ──
+// Ogni overlay aperto aggiunge una voce alla cronologia: il tasto indietro
+// del telefono/browser chiude l'overlay aperto invece di uscire dal sito.
+// Lo stato reale è letto dal DOM (sorgente di verità), così anche le voci
+// "stale" (overlay chiusi col pulsante) vengono consumate senza errori.
+function navPush() {
+  try { history.pushState({ gkNav: true }, ''); } catch (e) { /* file:// ecc. */ }
+}
+
+function getTopmostOpenOverlay() {
+  if (document.getElementById('orderOverlay')?.classList.contains('open')) return 'order';
+  if (document.getElementById('quickViewOverlay')?.classList.contains('open')) return 'quickview';
+  for (const key of Object.keys(_infoPageMap)) {
+    if (document.getElementById(_infoPageMap[key])?.classList.contains('open')) return 'info';
+  }
+  if (document.getElementById('catPageOverlay')?.classList.contains('open')) return 'cat';
+  if (document.getElementById('favSidebar')?.classList.contains('open')) return 'fav';
+  if (document.getElementById('cartSidebar')?.classList.contains('open')) return 'cart';
+  if (document.getElementById('mobSearchPanel')?.classList.contains('open')) return 'search';
+  return null;
+}
+
+function navPop() {
+  const top = getTopmostOpenOverlay();
+  if (top === 'cat') closeCatPage();
+  else if (top === 'quickview') closeQuickView();
+  else if (top === 'info') Object.keys(_infoPageMap).forEach(key => closeInfoPage(key));
+  else if (top === 'cart') closeCart();
+  else if (top === 'fav') closeFavSidebar();
+  else if (top === 'order') closeOrderModal();
+  else if (top === 'search') closeMobSearch();
+}
+
+window.addEventListener('popstate', navPop);
+
 function openOverlay(id) {
   const el = document.getElementById(id);
   if (!el) return;
+  clearTimeout(el._closeTimer); // annulla eventuale chiusura pendente (race close→reopen)
   el.style.display = 'flex';
   requestAnimationFrame(() => el.classList.add('open'));
   document.body.style.overflow = 'hidden';
@@ -1590,8 +1656,10 @@ function closeOverlay(id) {
   const el = document.getElementById(id);
   if (!el) return;
   el.classList.remove('open');
-  setTimeout(() => { el.style.display = 'none'; }, 300);
-  document.body.style.overflow = '';
+  clearTimeout(el._closeTimer);
+  el._closeTimer = setTimeout(() => { el.style.display = 'none'; }, 300);
+  // Riabilita lo scroll solo se non è rimasto aperto nessun altro overlay
+  if (!getTopmostOpenOverlay()) document.body.style.overflow = '';
 }
 
 let toastTimeout;
@@ -1959,8 +2027,8 @@ function setupNavMegaMenu() {
     btn.addEventListener('click', (e) => {
       e.preventDefault();
       const league = btn.dataset.league;
-      setActiveFilter(league, null);
-      document.getElementById('products')?.scrollIntoView({ behavior: 'smooth' });
+      const label = btn.textContent.split('\n')[0].trim();
+      openCatPage(league, label.toUpperCase(), label, []);
     });
   });
 
@@ -1969,8 +2037,8 @@ function setupNavMegaMenu() {
     btn.addEventListener('click', (e) => {
       e.preventDefault();
       const filter = btn.dataset.filter;
-      setActiveFilter('all', filter);
-      document.getElementById('products')?.scrollIntoView({ behavior: 'smooth' });
+      const label = btn.textContent.split('\n')[0].trim();
+      openCatPage(filter, label.toUpperCase(), label, []);
     });
   });
 
@@ -1979,8 +2047,8 @@ function setupNavMegaMenu() {
     btn.addEventListener('click', (e) => {
       e.preventDefault();
       const type = btn.dataset.filterType;
-      setActiveFilter(type, null);
-      document.getElementById('products')?.scrollIntoView({ behavior: 'smooth' });
+      const label = btn.textContent.split('\n')[0].trim();
+      openCatPage(type, label.toUpperCase(), label, []);
     });
   });
 }
@@ -2031,16 +2099,65 @@ function setupNavSearch() {
     if (e.key === 'Escape') closeSearchDropdown();
   });
 
-  // Chiudi cliccando sul backdrop
+  // Chiudi cliccando sul backdrop (chiude anche la barra mobile)
   backdrop?.addEventListener('click', () => {
-    closeSearchDropdown();
+    closeMobSearch();
     navInput.value = '';
   });
 
   // Chiudi con ESC globale
   document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') closeSearchDropdown();
+    if (e.key === 'Escape') closeMobSearch();
   });
+
+  // ── SEARCH BAR MOBILE (tasto Cerca della bottom nav) ──
+  const mobPanel   = document.getElementById('mobSearchPanel');
+  const mobInput   = document.getElementById('mobSearchInput');
+  const mobClose   = document.getElementById('mobSearchClose');
+
+  mobInput?.addEventListener('input', () => {
+    clearTimeout(mobInput._sdDebounce);
+    mobInput._sdDebounce = setTimeout(() => {
+      const q = mobInput.value.trim();
+      if (!q) { closeSearchDropdown(); return; }
+      openSearchDropdown(q);
+    }, 180);
+  });
+
+  mobInput?.addEventListener('keydown', e => {
+    if (e.key === 'Enter') {
+      const q = mobInput.value.trim();
+      if (q) openSearchDropdown(q);
+    }
+    if (e.key === 'Escape') closeMobSearch();
+  });
+
+  mobClose?.addEventListener('click', closeMobSearch);
+}
+
+// Apre la barra di ricerca mobile (bottom nav → Cerca)
+function openMobSearch() {
+  const panel = document.getElementById('mobSearchPanel');
+  const input = document.getElementById('mobSearchInput');
+  if (!panel) return;
+  panel.classList.add('open');
+  panel.setAttribute('aria-hidden', 'false');
+  document.body.classList.add('mob-search-open');
+  setTimeout(() => input?.focus(), 60);
+  navPush();
+}
+
+// Chiude la barra di ricerca mobile e il dropdown
+function closeMobSearch() {
+  const panel = document.getElementById('mobSearchPanel');
+  const input = document.getElementById('mobSearchInput');
+  if (panel) {
+    panel.classList.remove('open');
+    panel.setAttribute('aria-hidden', 'true');
+  }
+  if (input) input.value = '';
+  document.body.classList.remove('mob-search-open');
+  closeSearchDropdown();
 }
 
 function openSearchDropdown(query) {
@@ -2088,7 +2205,7 @@ function renderSearchDropdown(query) {
 
   catList.innerHTML = catsToShow.map(cat => `
     <li class="sd-cat-item">
-      <button class="sd-cat-btn" onclick="closeSearchDropdown(); setActiveFilter('${cat.filter}', null); document.getElementById('products').scrollIntoView({behavior:'smooth'});">
+      <button class="sd-cat-btn" onclick="closeMobSearch(); openCatPage('${cat.filter}', '${cat.label.toUpperCase()}', '${cat.label}', []);">
         <span class="sd-cat-icon">${cat.icon}</span>
         <span class="sd-cat-label">${cat.label}</span>
       </button>
@@ -2113,7 +2230,7 @@ function renderSearchDropdown(query) {
     const card = document.createElement('div');
     card.className = 'sd-card';
     card.onclick = () => {
-      closeSearchDropdown();
+      closeMobSearch();
       openQuickView(p.id);
     };
     card.innerHTML = `
@@ -2377,8 +2494,8 @@ function setupFeatured() {
   document.querySelectorAll('.feat-league-card').forEach(card => {
     card.addEventListener('click', () => {
       const league = card.dataset.league;
-      setActiveFilter(league, null);
-      document.getElementById('products')?.scrollIntoView({ behavior: 'smooth' });
+      const label = (card.textContent || league).trim();
+      openCatPage(league, label.toUpperCase(), label, []);
     });
   });
 
@@ -2411,12 +2528,10 @@ function setupFeatured() {
 
   // â”€â”€ 4. Pulsanti "Vedi tutti" â”€â”€
   document.getElementById('featSeeAllNew')?.addEventListener('click', () => {
-    setActiveFilter('all', null);
-    document.getElementById('products')?.scrollIntoView({ behavior: 'smooth' });
+    openCatPage('all', 'TUTTI I PRODOTTI', 'Prodotti', []);
   });
   document.getElementById('featSeeAllTop')?.addEventListener('click', () => {
-    setActiveFilter('all', null);
-    document.getElementById('products')?.scrollIntoView({ behavior: 'smooth' });
+    openCatPage('all', 'TUTTI I PRODOTTI', 'Prodotti', []);
   });
 }
 
@@ -2472,6 +2587,7 @@ function openFavSidebar() {
   document.getElementById('favSidebar')?.classList.add('open');
   document.body.style.overflow = 'hidden';
   renderFavoritesSidebar();
+  navPush();
 }
 
 function closeFavSidebar() {
@@ -2609,7 +2725,11 @@ function setupFavorites() {
   document.getElementById('favOverlay')?.addEventListener('click', closeFavSidebar);
 
   // Vai ai prodotti
-  document.getElementById('goShopFromFavBtn')?.addEventListener('click', closeFavSidebar);
+  document.getElementById('goShopFromFavBtn')?.addEventListener('click', (e) => {
+    e.preventDefault();
+    closeFavSidebar();
+    openCatPage('all', 'TUTTI I PRODOTTI', 'Prodotti', []);
+  });
 
   // Svuota preferiti
   document.getElementById('favClearBtn')?.addEventListener('click', () => {
@@ -2634,7 +2754,7 @@ function setupFavorites() {
       if (existing) {
         existing.qty += 1;
       } else {
-        cart.push({ id: p.id, name: p.name, price: p.price, image: p.image, qty: 1, size: p.sizes[0] || 'M', fabric: '\uD83D\uDC55 Standard', custNote: '', _uid: Date.now() + '-' + Math.random().toString(36).slice(2) });
+        cart.push({ id: p.id, name: p.name, price: p.price, image: p.image, qty: 1, size: p.sizes[0] || 'M', fabric: 'Standard', custNote: '', _uid: Date.now() + '-' + Math.random().toString(36).slice(2) });
       }
     });
     saveCart();
@@ -2830,6 +2950,7 @@ function openCatPage(filter, title, bcLabel, tabs, team, brand) {
   overlay.scrollTop = 0;
   // Blocca scroll della pagina sottostante
   document.body.style.overflow = 'hidden';
+  navPush();
 }
 
 function closeCatPage() {
@@ -3027,6 +3148,7 @@ const _infoPageMap = {
   contact: 'infoPageContact',
   custom:  'infoPageCustom',
 };
+const _infoPageRafs = {};
 
 function openInfoPage(key) {
   const id = _infoPageMap[key];
@@ -3036,10 +3158,12 @@ function openInfoPage(key) {
   el.removeAttribute('aria-hidden');
   el.scrollTop = 0;
   // Force reflow before adding class so transition fires
-  requestAnimationFrame(() => {
+  _infoPageRafs[key] = requestAnimationFrame(() => {
     el.classList.add('open');
+    delete _infoPageRafs[key];
   });
   document.body.style.overflow = 'hidden';
+  navPush();
 }
 
 function closeInfoPage(key) {
@@ -3047,6 +3171,11 @@ function closeInfoPage(key) {
   if (!id) return;
   const el = document.getElementById(id);
   if (!el) return;
+  // Se l'apertura era ancora in coda (rAF non ancora eseguito), annullala
+  if (_infoPageRafs[key]) {
+    cancelAnimationFrame(_infoPageRafs[key]);
+    delete _infoPageRafs[key];
+  }
   el.classList.remove('open');
   el.setAttribute('aria-hidden', 'true');
   document.body.style.overflow = '';
@@ -3268,46 +3397,30 @@ function setupTuteSection() {
   thumb.addEventListener('pointercancel', function() { draggingT = false; });
 }
 
-// ── TAP MOBILE PRECISO — Distingue scroll dal click sulle schede prodotto ──
-(function initMobileCardClicks() {
-  let isSwiping = false;
-  let startX = 0;
-  let startY = 0;
+// ── CLICK HANDLER MOBILE — Compatibile iOS Safari / Android Chrome ──
+// Puro fallback di event delegation: le card renderizzate hanno già un handler
+// diretto (card.onclick / onclick inline). Qui gestiamo SOLO le card che non
+// hanno un handler proprio (es. .product-card della categoria page, che ha solo
+// data-id), evitando di aprire la quick view due volte.
+const handleProductClick = (e) => {
+  // Ignora pulsanti interni (preferiti, carrello, ecc.)
+  if (e.target.closest('button, .card-fav-btn, .btn-fav, .btn-cart')) return;
 
-  document.addEventListener('touchstart', (e) => {
-    const touch = e.touches[0];
-    startX = touch.clientX;
-    startY = touch.clientY;
-    isSwiping = false;
-  }, { passive: true });
+  const card = e.target.closest(
+    '.product-card, .vintage-card, .mustHave-card, .mondiali-card'
+  );
+  if (!card) return;
 
-  document.addEventListener('touchmove', (e) => {
-    const touch = e.touches[0];
-    // Se il dito si sposta di più di 8px è uno scorrimento, non un tap
-    if (Math.abs(touch.clientX - startX) > 8 || Math.abs(touch.clientY - startY) > 8) {
-      isSwiping = true;
-    }
-  }, { passive: true });
+  // Se il target (o la card) ha già un onclick inline/diretto, non duplicare
+  const inlineTarget = e.target.getAttribute && e.target.getAttribute('onclick');
+  if (inlineTarget || card.onclick || card.getAttribute('onclick')) return;
 
-  document.addEventListener('touchend', (e) => {
-    if (isSwiping) return; // Ignora se l'utente stava scorrendo la griglia
+  const productId = card.dataset.id;
+  if (productId && typeof openQuickView === 'function') {
+    e.preventDefault();
+    openQuickView(parseInt(productId, 10));
+  }
+};
 
-    // Ignora se è stato toccato un pulsante (preferiti, carrello, ecc.)
-    if (e.target.closest('button, .btn-fav, .btn-cart, .fav-icon, .card-fav-btn')) return;
-
-    const card = e.target.closest('.product-card, .vintage-card, .musthave-card, .mondiali-card, [onclick*="openQuickView"]');
-    if (!card) return;
-
-    const onclickAttr = card.getAttribute('onclick');
-    const dataId = card.dataset.id || card.getAttribute('data-id');
-
-    if (dataId && typeof openQuickView === 'function') {
-      e.preventDefault();
-      openQuickView(Number(dataId));
-    } else if (onclickAttr && onclickAttr.includes('openQuickView')) {
-      e.preventDefault();
-      // eslint-disable-next-line no-new-func
-      new Function(onclickAttr)();
-    }
-  });
-})();
+// Fallback: il click arriva qui via event delegation (desktop e mobile)
+document.addEventListener('click', handleProductClick);
