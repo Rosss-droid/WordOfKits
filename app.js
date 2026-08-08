@@ -175,8 +175,9 @@ function setupNav() {
   const navLinks = document.getElementById('navLinks');
   hamburger?.addEventListener('click', () => navLinks?.classList.toggle('open'));
 
-  // Chiudi menu su click link
+  // Chiudi menu su click link (ma NON sui trigger del mega menu: quelli aprono il pannello)
   document.querySelectorAll('.nav-link').forEach(link => {
+    if (link.classList.contains('nav-mega-trigger')) return;
     link.addEventListener('click', () => navLinks?.classList.remove('open'));
   });
 
@@ -215,6 +216,30 @@ function setupNav() {
     item.addEventListener('mouseenter', () => openMega(item));
     // Avvia timer chiusura quando il cursore esce dall'intero nav-mega-item
     item.addEventListener('mouseleave', () => closeMega(item));
+
+    // Click/tap sul trigger: apre il pannello (funziona anche su mobile, dove il
+    // mouseenter non esiste). Evita il conflitto col hover desktop: se l'apertura
+    // è avvenuta col mouse (mouseenter) il click NON chiude subito; chiude solo se
+    // era stato aperto da un click precedente (secondo tap = chiudi).
+    const trigger = item.querySelector('.nav-mega-trigger');
+    if (trigger) {
+      trigger.addEventListener('click', (e) => {
+        e.preventDefault();
+        const openedByClick = item.dataset.clickOpened === '1';
+        if (item.classList.contains('active') && openedByClick) {
+          // Secondo tap: chiudi il pannello
+          item.classList.remove('active');
+          delete item.dataset.clickOpened;
+        } else {
+          // Apri (chiude gli altri e azzera il timer di chiusura pendente)
+          openMega(item);
+          item.dataset.clickOpened = '1';
+        }
+      });
+    }
+    // Un hover reale resetta il flag: il pannello aperto col mouse si chiude
+    // normalmente con mouseleave, e il click dopo l'hover lo mantiene aperto
+    item.addEventListener('mouseenter', () => { delete item.dataset.clickOpened; });
   });
 
   // Chiudi anche se si clicca fuori dalla navbar
@@ -283,6 +308,14 @@ function productMatchesBrand(p, brand) {
   const b = brand.toLowerCase();
   return (p.brand || '').toLowerCase() === b ||
          p.name.toLowerCase().includes(b);
+}
+
+// Controlla se un prodotto ha una categoriaLabel specifica (es. "Scarpe da calcio", "Running")
+function productMatchesLabel(p, label) {
+  if (!label) return true;
+  const l = label.toLowerCase();
+  const labels = Array.isArray(p.categoryLabel) ? p.categoryLabel : [p.categoryLabel || ''];
+  return labels.some(x => String(x).toLowerCase().includes(l));
 }
 
 function renderProducts(filter, team = null) {
@@ -1372,6 +1405,10 @@ function setupCartSidebar() {
 }
 
 function openCart() {
+  // Evita sovrapposizioni: chiudi gli altri pannelli aperti (preferiti, ricerca, pagina prodotti)
+  closeFavSidebar();
+  closeMobSearch();
+  closeCatPage();
   renderCartItems();
   document.getElementById('cartSidebar')?.classList.add('open');
   document.getElementById('cartOverlay')?.classList.add('open');
@@ -2206,12 +2243,19 @@ function setupHeroCarousel() {
 // NAVBAR MEGA MENU (hover) — collega filtri ai link
 // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 function setupNavMegaMenu() {
+  // Chiude il drawer mobile e il pannello dopo la navigazione
+  function closeNavAfterNav() {
+    document.getElementById('navLinks')?.classList.remove('open');
+    document.querySelectorAll('.nav-mega-item').forEach(i => i.classList.remove('active'));
+  }
+
   // Delegazione click su tutti i bottoni con data-league nel mega menu
   document.querySelectorAll('.nav-mega-link[data-league]').forEach(btn => {
     btn.addEventListener('click', (e) => {
       e.preventDefault();
       const league = btn.dataset.league;
       const label = btn.textContent.split('\n')[0].trim();
+      closeNavAfterNav();
       openCatPage(league, label.toUpperCase(), label, []);
     });
   });
@@ -2222,6 +2266,7 @@ function setupNavMegaMenu() {
       e.preventDefault();
       const filter = btn.dataset.filter;
       const label = btn.textContent.split('\n')[0].trim();
+      closeNavAfterNav();
       openCatPage(filter, label.toUpperCase(), label, []);
     });
   });
@@ -2232,7 +2277,31 @@ function setupNavMegaMenu() {
       e.preventDefault();
       const type = btn.dataset.filterType;
       const label = btn.textContent.split('\n')[0].trim();
+      closeNavAfterNav();
       openCatPage(type, label.toUpperCase(), label, []);
+    });
+  });
+
+  // Sotto-elementi Scarpe/Sport ancora collegati a #products: li colleghiamo alle pagine giuste
+  // Brand scarpe → pagina brand (filtra per marchio)
+  document.querySelectorAll('.nav-mega-link[data-brand]').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      const brand = btn.dataset.brand;
+      const label = btn.textContent.split('\n')[0].trim();
+      closeNavAfterNav();
+      openCatPage('all', label.toUpperCase(), label, [], null, brand);
+    });
+  });
+
+  // Tipo scarpe (Da calcio / Running / Lifestyle) → filtra per categoriaLabel
+  document.querySelectorAll('.nav-mega-link[data-label]').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      const lbl = btn.dataset.label;
+      const label = btn.textContent.split('\n')[0].trim();
+      closeNavAfterNav();
+      openCatPage('all', label.toUpperCase(), label, [], null, null, lbl);
     });
   });
 }
@@ -2324,6 +2393,10 @@ function openMobSearch() {
   const panel = document.getElementById('mobSearchPanel');
   const input = document.getElementById('mobSearchInput');
   if (!panel) return;
+  // Evita sovrapposizioni: chiudi gli altri pannelli aperti
+  closeCart();
+  closeFavSidebar();
+  closeCatPage();
   panel.classList.add('open');
   panel.setAttribute('aria-hidden', 'false');
   document.body.classList.add('mob-search-open');
@@ -2790,6 +2863,10 @@ function updateFavBadge() {
 }
 
 function openFavSidebar() {
+  // Evita sovrapposizioni: chiudi gli altri pannelli aperti (carrello, ricerca, pagina prodotti)
+  closeCart();
+  closeMobSearch();
+  closeCatPage();
   document.getElementById('favOverlay')?.classList.add('open');
   document.getElementById('favSidebar')?.classList.add('open');
   document.body.style.overflow = 'hidden';
@@ -3099,6 +3176,7 @@ let _catTeam    = null;
 let _catSort    = 'default';
 let _catTabs    = [];  // [{label, filter}]
 let _catBrand   = null; // filtro brand per la catPage
+let _catLabel   = null; // filtro per tipo (es. "Scarpe da calcio", "Running")
 
 /**
  * Apre la pagina categoria.
@@ -3108,12 +3186,17 @@ let _catBrand   = null; // filtro brand per la catPage
  * @param {Array}    tabs      — array di {label, filter} per i sub-tab, o [] per nessun tab
  * @param {string}   [team]    — squadra opzionale da pre-selezionare
  */
-function openCatPage(filter, title, bcLabel, tabs, team, brand) {
+function openCatPage(filter, title, bcLabel, tabs, team, brand, label) {
+  // Evita sovrapposizioni: chiudi gli altri pannelli aperti (carrello, preferiti, ricerca)
+  closeCart();
+  closeFavSidebar();
+  closeMobSearch();
   _catFilter = filter;
   _catTeam   = team || null;
   _catSort   = 'default';
   _catTabs   = tabs || [];
   _catBrand  = brand || null;
+  _catLabel  = label || null; // filtro per tipo (es. "Scarpe da calcio")
 
   // Titolo e breadcrumb
   document.getElementById('catPageTitle').textContent  = title;
@@ -3134,6 +3217,7 @@ function openCatPage(filter, title, bcLabel, tabs, team, brand) {
         _catFilter = btn.dataset.filter;
         _catTeam   = null;
         _catBrand  = null; // i tab resettano il filtro brand
+        _catLabel  = null; // i tab resettano anche il filtro tipo
         renderCatPage();
       });
     });
@@ -3162,10 +3246,12 @@ function openCatPage(filter, title, bcLabel, tabs, team, brand) {
 
 function closeCatPage() {
   const overlay = document.getElementById('catPageOverlay');
+  if (!overlay) return;
   overlay.classList.remove('open');
   overlay.setAttribute('aria-hidden', 'true');
   document.body.style.overflow = '';
   _catBrand = null; // reset brand filter alla chiusura
+  _catLabel = null; // reset filtro tipo alla chiusura
 }
 
 function renderCatPage() {
@@ -3176,7 +3262,8 @@ function renderCatPage() {
   let filtered = PRODUCTS.filter(p =>
     productMatchesCategory(p, _catFilter) &&
     productMatchesTeam(p, _catTeam) &&
-    productMatchesBrand(p, _catBrand)
+    productMatchesBrand(p, _catBrand) &&
+    productMatchesLabel(p, _catLabel)
   );
 
   // Ordina

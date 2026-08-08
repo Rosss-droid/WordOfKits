@@ -14,7 +14,7 @@
   <link
     href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700;800;900&display=swap"
     rel="stylesheet" />
-  <link rel="stylesheet" href="style.css?v=20260808c" />
+  <link rel="stylesheet" href="style.css?v=20260809a" />
   <!-- EmailJS SDK -->
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 </head>
@@ -66,30 +66,6 @@
                   </li>
                 </ul>
               </div>
-              <div class="nav-mega-col">
-                <div class="nav-mega-col-title">Tipo Maglia</div>
-                <ul>
-                  <li><button class="nav-mega-link" data-filter-type="new" id="navFilterNew">Novità</button></li>
-                  <li><button class="nav-mega-link" data-filter-type="vintage" id="navFilterVintage">Vintage</button>
-                  </li>
-                </ul>
-              </div>
-              <div class="nav-mega-col">
-                <div class="nav-mega-col-title">Tipo Maglia</div>
-                <ul>
-                  <li><button class="nav-mega-link" data-filter-type="new" id="navFilterNew">Novità</button></li>
-                  <li><button class="nav-mega-link" data-filter-type="vintage" id="navFilterVintage">Vintage</button>
-                  </li>
-                </ul>
-              </div>
-              <div class="nav-mega-col">
-                <div class="nav-mega-col-title">Tipo Maglia</div>
-                <ul>
-                  <li><button class="nav-mega-link" data-filter-type="new" id="navFilterNew">Novità</button></li>
-                  <li><button class="nav-mega-link" data-filter-type="vintage" id="navFilterVintage">Vintage</button>
-                  </li>
-                </ul>
-              </div>
              </div>
           </div>
         </li>
@@ -112,9 +88,9 @@
               <div class="nav-mega-col">
                 <div class="nav-mega-col-title">Scarpe</div>
                 <ul>
-                  <li><a class="nav-mega-link" href="#products">Da calcio</a></li>
-                  <li><a class="nav-mega-link" href="#products">Running</a></li>
-                  <li><a class="nav-mega-link" href="#products">Lifestyle</a></li>
+                  <li><button class="nav-mega-link" data-label="Scarpe da calcio">Da calcio</button></li>
+                  <li><button class="nav-mega-link" data-label="Running">Running</button></li>
+                  <li><button class="nav-mega-link" data-label="Lifestyle">Lifestyle</button></li>
                 </ul>
               </div>
             </div>
@@ -148,18 +124,18 @@
               <div class="nav-mega-col">
                 <div class="nav-mega-col-title">Brand</div>
                 <ul>
-                  <li><a class="nav-mega-link" href="#products">Nike</a></li>
-                  <li><a class="nav-mega-link" href="#products">Adidas</a></li>
-                  <li><a class="nav-mega-link" href="#products">Puma</a></li>
-                  <li><a class="nav-mega-link" href="#products">New Balance</a></li>
+                  <li><button class="nav-mega-link" data-brand="Nike">Nike</button></li>
+                  <li><button class="nav-mega-link" data-brand="Adidas">Adidas</button></li>
+                  <li><button class="nav-mega-link" data-brand="Puma">Puma</button></li>
+                  <li><button class="nav-mega-link" data-brand="New Balance">New Balance</button></li>
                 </ul>
               </div>
               <div class="nav-mega-col">
                 <div class="nav-mega-col-title">Tipo</div>
                 <ul>
-                  <li><a class="nav-mega-link" href="#products">Da calcio</a></li>
-                  <li><a class="nav-mega-link" href="#products">Lifestyle</a></li>
-                  <li><a class="nav-mega-link" href="#products">Running</a></li>
+                  <li><button class="nav-mega-link" data-label="Scarpe da calcio">Da calcio</button></li>
+                  <li><button class="nav-mega-link" data-label="Lifestyle">Lifestyle</button></li>
+                  <li><button class="nav-mega-link" data-label="Running">Running</button></li>
                 </ul>
               </div>
             </div>
@@ -1283,7 +1259,7 @@
   </nav>
 
   <script src="products.js"></script>
-  <script src="app.js?v=20260808b"></script>
+  <script src="app.js?v=20260808f"></script>
 
   <!-- ═══════════════════ MOBILE JS — Bottom nav sync + UX ═══════════════════ -->
   <script>

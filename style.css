@@ -5404,7 +5404,12 @@ img {
   }
 
   .nav-mega-panel {
-    display: none !important;
+    display: none;
+  }
+
+  /* Il pannello si apre quando l'item è attivo (click/tap sul trigger) */
+  .nav-mega-item.active .nav-mega-panel {
+    display: block !important;
   }
 }
 
@@ -6255,15 +6260,13 @@ img {
    CATEGORY PAGE OVERLAY — Adidas-style full-screen view
    ══════════════════════════════════════════════════════ */
 
-/* Overlay che parte sotto la header fissa */
+/* Overlay a schermo intero: copre navbar e top-bar, con la barra nera
+   col tasto indietro fissa in cima (come la scheda prodotto) */
 .cat-page-overlay {
   position: fixed;
-  top: calc(30px + 70px); /* top-bar + navbar height */
-  left: 0;
-  right: 0;
-  bottom: 0;
+  inset: 0; /* tutto lo schermo: la barra nera resta piccola e in alto */
   background: #fff;
-  z-index: 999; /* sotto la nav (z-index:1000) */
+  z-index: 1600; /* sopra navbar (1000) e bottom nav (1500), come la scheda prodotto */
   overflow-y: auto;
   overflow-x: hidden;
   transform: translateX(100%);
@@ -6492,7 +6495,6 @@ img {
   .cat-page-grid { grid-template-columns: repeat(3, 1fr); }
 }
 @media (max-width: 800px) {
-  .cat-page-overlay { top: calc(30px + 60px); } /* navbar più bassa su mobile */
   .cat-page-grid { grid-template-columns: repeat(2, 1fr); gap: .3rem; }
   .cat-page-topbar { padding: .55rem 1rem; }
   .cat-page-inner { padding: 0 .75rem 3rem; }
@@ -6867,7 +6869,7 @@ img {
   }
 
   .nav-mega-item.active .nav-mega-panel {
-    display: block;
+    display: block !important;
   }
 
   .nav-mega-grid {
@@ -7450,9 +7452,7 @@ img {
      CATEGORY PAGE OVERLAY
   ══════════════════════════ */
   .cat-page-topbar {
-    padding-top: calc(var(--mob-topbar) + var(--mob-header) + .55rem);
-    padding-left: .75rem;
-    padding-right: .75rem;
+    padding: .55rem .75rem;
   }
 
   /* Inner senza padding laterale: griglia va edge-to-edge */
@@ -9300,4 +9300,17 @@ img {
 }
 @media (max-width: 480px) {
   .crq-row { grid-template-columns: 1fr; }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   FIX SCHEDA PRODOTTO — foto sempre intera e centrata
+   (object-fit: contain evita il taglio in alto/basso quando il
+   contenitore è più largo della foto, es. box 4:3 con foto verticale)
+═══════════════════════════════════════════════════════════ */
+.qv-img-wrap .qv-img,
+.qv-img-wrap img.qv-img {
+  object-fit: contain !important;
+  object-position: center !important;
+  width: 100% !important;
+  height: 100% !important;
 }
