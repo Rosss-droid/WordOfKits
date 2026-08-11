@@ -1,0 +1,416 @@
+::ffff:127.0.0.1 - - [12/Aug/2026 00:10:17] "GET /index.html HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:10:19] "GET /index.html HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:10:19] "GET /index.html HTTP/1.1" 304 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:10:19] "GET /style.css?v=20260811h HTTP/1.1" 304 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:10:19] "GET /products.js?v=20260811c HTTP/1.1" 304 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:10:19] "GET /app.js?v=20260811c HTTP/1.1" 304 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:11:05] "GET /images/3d/Serie%20A/Atalanta/2627/Atalanta%20Home%202627.png HTTP/1.1" 304 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:11:06] "GET /images/3d/Serie%20A/Como/2627/Como%20Home%202627.png HTTP/1.1" 304 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:11:06] "GET /2627/serieA/Inter%20Home.png HTTP/1.1" 304 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:11:06] "GET /images/3d/Serie%20A/Lazio/2627/Lazio%20Home%202627.png HTTP/1.1" 304 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:11:06] "GET /2627/serieA/Juventus%20Home.png HTTP/1.1" 304 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:13:42] "GET /2627/serieA/Milan%20Home.png HTTP/1.1" 304 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:13:42] "GET /2627/serieA/Napoli%20Home.png HTTP/1.1" 304 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:13:42] "GET /images/3d/Serie%20A/Napoli/2324/Napoli%20Prematch%202324.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:13:42] "GET /images/3d/Serie%20A/Napoli/2324/Napoli%20Training%202324.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:13:42] "GET /images/3d/Serie%20A/Pisa/2526/Pisa%20Home%202526.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:13:42] "GET /images/3d/Serie%20A/Parma/2526/Parma%20Home%202526.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:13:42] "GET /images/3d/Serie%20A/Roma/2526/Roma%20Home%202526.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:13:42] "GET /images/3d/Serie%20A/Roma/2526/Roma%20Away%202526.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:13:42] "GET /images/3d/Serie%20A/Roma/2526/Roma%20Third%202526.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:13:42] "GET /images/3d/Serie%20A/Roma/2526/Roma%20PreMatch%202526.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:13:42] "GET /images/3d/Serie%20A/Roma/2425/Roma%20Home%202425.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:13:42] "GET /images/3d/Serie%20A/Roma/2425/Roma%20Away%202425.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:13:43] "GET /images/3d/Serie%20A/Roma/2425/Roma%20Third%202425.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:13:43] "GET /images/3d/Serie%20A/Roma/2324/Roma%20Home%202324.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:13:43] "GET /images/3d/Serie%20A/Roma/2324/Roma%20Away%202324.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:13:43] "GET /images/3d/Serie%20A/Roma/2324/Roma%20Third%202324.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:13:43] "GET /images/3d/Serie%20A/Roma/2324/Roma%20Fourth%202324.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:13:43] "GET /images/3d/Serie%20A/Roma/2223/Roma%20Home%202223.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:13:43] "GET /images/3d/Serie%20A/Roma/2223/Roma%20Away%202223.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:13:43] "GET /images/3d/Serie%20A/Roma/2223/Roma%20Third%202223.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:13:43] "GET /images/3d/Serie%20A/Roma/2526/Pant%20Roma%20Home%202526.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:13:43] "GET /images/3d/Serie%20A/Sassuolo/2526/Sassuolo%20Home%202526.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:13:43] "GET /images/3d/Serie%20A/Torino/2526/Torino%20Home%202526.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:13:43] "GET /images/3d/Serie%20A/Udinese/2526/Udinese%20Home%202526.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:13:43] "GET /images/3d/Serie%20A/Verona/2526/Verona%20Home%202526.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:13:43] "GET /images/3d/La%20Liga/Real%20Madrid/ChatGPT%20Image%2029%20apr%202026,%2012_39_32.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:13:43] "GET /images/3d/La%20Liga/Real%20Madrid/Real%20Third%202324.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:13:44] code 404, message File not found
+::ffff:127.0.0.1 - - [12/Aug/2026 00:13:44] code 404, message File not found
+::ffff:127.0.0.1 - - [12/Aug/2026 00:13:44] "GET /images/teams/mancity_away.png HTTP/1.1" 404 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:13:44] code 404, message File not found
+::ffff:127.0.0.1 - - [12/Aug/2026 00:13:44] "GET /images/teams/atletico_home.png HTTP/1.1" 404 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:13:44] code 404, message File not found
+::ffff:127.0.0.1 - - [12/Aug/2026 00:13:44] "GET /images/teams/porto_home.png HTTP/1.1" 404 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:13:44] "GET /images/3d/Nazionali/Germania1990.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:13:44] code 404, message File not found
+::ffff:127.0.0.1 - - [12/Aug/2026 00:13:44] "GET /images/teams/atletico_away.png HTTP/1.1" 404 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:13:44] "GET /images/teams/mancity_home.png HTTP/1.1" 404 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:13:44] code 404, message File not found
+::ffff:127.0.0.1 - - [12/Aug/2026 00:13:44] code 404, message File not found
+::ffff:127.0.0.1 - - [12/Aug/2026 00:13:44] "GET /images/teams/arsenal_away.png HTTP/1.1" 404 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:13:44] "GET /images/teams/arsenal_home.png HTTP/1.1" 404 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:13:44] code 404, message File not found
+::ffff:127.0.0.1 - - [12/Aug/2026 00:13:44] "GET /images/teams/liverpool_away.png HTTP/1.1" 404 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:13:44] code 404, message File not found
+::ffff:127.0.0.1 - - [12/Aug/2026 00:13:44] "GET /images/teams/liverpool_home.png HTTP/1.1" 404 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:13:44] code 404, message File not found
+::ffff:127.0.0.1 - - [12/Aug/2026 00:13:44] "GET /images/teams/chelsea_home.png HTTP/1.1" 404 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:13:44] code 404, message File not found
+::ffff:127.0.0.1 - - [12/Aug/2026 00:13:44] "GET /images/teams/chelsea_away.png HTTP/1.1" 404 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:13:44] code 404, message File not found
+::ffff:127.0.0.1 - - [12/Aug/2026 00:13:44] "GET /images/teams/manutd_away.png HTTP/1.1" 404 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:13:44] code 404, message File not found
+::ffff:127.0.0.1 - - [12/Aug/2026 00:13:44] "GET /images/teams/manutd_home.png HTTP/1.1" 404 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:13:44] code 404, message File not found
+::ffff:127.0.0.1 - - [12/Aug/2026 00:13:44] code 404, message File not found
+::ffff:127.0.0.1 - - [12/Aug/2026 00:13:44] "GET /images/teams/tottenham_home.png HTTP/1.1" 404 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:13:44] "GET /images/teams/tottenham_away.png HTTP/1.1" 404 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:13:44] code 404, message File not found
+::ffff:127.0.0.1 - - [12/Aug/2026 00:13:44] "GET /images/teams/newcastle_home.png HTTP/1.1" 404 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:13:44] code 404, message File not found
+::ffff:127.0.0.1 - - [12/Aug/2026 00:13:44] "GET /images/teams/newcastle_away.png HTTP/1.1" 404 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:13:44] code 404, message File not found
+::ffff:127.0.0.1 - - [12/Aug/2026 00:13:44] code 404, message File not found
+::ffff:127.0.0.1 - - [12/Aug/2026 00:13:44] "GET /images/3d/terza%20maglia%20nottingham%20forest%202526.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:13:44] code 404, message File not found
+::ffff:127.0.0.1 - - [12/Aug/2026 00:13:44] "GET /images/jersey_germany.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:13:44] "GET /images/teams/bayern_away.png HTTP/1.1" 404 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:13:44] "GET /images/teams/dortmund_away.png HTTP/1.1" 404 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:13:44] code 404, message File not found
+::ffff:127.0.0.1 - - [12/Aug/2026 00:13:44] "GET /images/teams/dortmund_home.png HTTP/1.1" 404 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:13:44] "GET /images/teams/leverkusen_home.png HTTP/1.1" 404 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:13:44] code 404, message File not found
+::ffff:127.0.0.1 - - [12/Aug/2026 00:13:44] "GET /images/teams/leipzig_home.png HTTP/1.1" 404 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:13:44] code 404, message File not found
+::ffff:127.0.0.1 - - [12/Aug/2026 00:13:44] "GET /images/teams/eintracht_home.png HTTP/1.1" 404 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:13:44] code 404, message File not found
+::ffff:127.0.0.1 - - [12/Aug/2026 00:13:44] "GET /images/teams/alnassr_away.png HTTP/1.1" 404 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:13:44] code 404, message File not found
+::ffff:127.0.0.1 - - [12/Aug/2026 00:13:44] code 404, message File not found
+::ffff:127.0.0.1 - - [12/Aug/2026 00:13:44] "GET /images/teams/alnassr_home.png HTTP/1.1" 404 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:13:44] "GET /images/teams/alnassr_cr7.png HTTP/1.1" 404 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:13:44] code 404, message File not found
+::ffff:127.0.0.1 - - [12/Aug/2026 00:13:44] "GET /images/teams/alhilal_home.png HTTP/1.1" 404 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:13:44] code 404, message File not found
+::ffff:127.0.0.1 - - [12/Aug/2026 00:13:44] "GET /images/teams/alhilal_away.png HTTP/1.1" 404 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:13:44] code 404, message File not found
+::ffff:127.0.0.1 - - [12/Aug/2026 00:13:44] "GET /images/teams/alittihad_home.png HTTP/1.1" 404 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:13:44] code 404, message File not found
+::ffff:127.0.0.1 - - [12/Aug/2026 00:13:44] "GET /images/teams/alahli_home.png HTTP/1.1" 404 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:13:44] code 404, message File not found
+::ffff:127.0.0.1 - - [12/Aug/2026 00:13:44] "GET /images/teams/alqadsiah_home.png HTTP/1.1" 404 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:13:45] "GET /images/3d/Nazionali/HomeInghilterra2026.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:13:45] code 404, message File not found
+::ffff:127.0.0.1 - - [12/Aug/2026 00:13:45] "GET /images/3d/Nazionali/AwayInghilterra2026.png HTTP/1.1" 404 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:13:49] code 404, message File not found
+::ffff:127.0.0.1 - - [12/Aug/2026 00:13:49] "GET /images/teams/mancity_home.png HTTP/1.1" 404 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:13:55] code 404, message File not found
+::ffff:127.0.0.1 - - [12/Aug/2026 00:13:55] "GET /images/teams/atletico_home.png HTTP/1.1" 404 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:14:05] "GET /images/3d/Nazionali/HomeBrasile2026.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:14:05] "GET /images/3d/Nazionali/AwayBrasile2026.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:14:05] "GET /images/3d/Nazionali/HomeMarocco2026.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:14:05] "GET /images/3d/Nazionali/AwayMarocco2026.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:14:05] "GET /images/3d/Nazionali/HomePortogallo2026.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:14:05] "GET /images/3d/Nazionali/AwayPortogallo2026.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:14:05] "GET /images/3d/Nazionali/HomeBelgio2026.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:14:05] "GET /images/3d/Nazionali/AwayBelgio2026.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:14:05] code 404, message File not found
+::ffff:127.0.0.1 - - [12/Aug/2026 00:14:05] "GET /images/3d/Nazionali/HomeOlanda2026.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:14:05] "GET /images/3d/Nazionali/AwayOlanda2026.png HTTP/1.1" 404 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:14:06] "GET /images/3d/Nazionali/HomeMessico2026.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:14:06] "GET /images/3d/Nazionali/AwayMessico2026.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:14:06] "GET /images/3d/Nazionali/HomeColombia2026.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:14:06] "GET /images/3d/Nazionali/AwayColombia2026.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:14:07] "GET /images/3d/Nazionali/HomeGermania2026.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:14:07] "GET /images/3d/Nazionali/HomeCroazia2026.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:14:07] "GET /images/3d/Nazionali/AwayCroazia2026.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:14:07] "GET /images/3d/Nazionali/HomeItalia2026.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:14:07] "GET /images/3d/Nazionali/AwayItalia2026.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:14:07] "GET /images/3d/Nazionali/HomeUsa2026.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:14:07] code 404, message File not found
+::ffff:127.0.0.1 - - [12/Aug/2026 00:14:07] "GET /images/3d/Nazionali/AwayUsa2026.png HTTP/1.1" 404 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:14:08] "GET /images/3d/Nazionali/HomeCanada2026.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:14:08] code 404, message File not found
+::ffff:127.0.0.1 - - [12/Aug/2026 00:14:08] "GET /images/3d/Nazionali/AwayCanada2026.png HTTP/1.1" 404 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:14:08] "GET /images/3d/Nazionali/HomeGiappone2026.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:14:08] code 404, message File not found
+::ffff:127.0.0.1 - - [12/Aug/2026 00:14:08] "GET /images/3d/Nazionali/AwayGiappone2026.png HTTP/1.1" 404 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:14:08] "GET /images/3d/Nazionali/PreFrancia2026.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:14:08] "GET /images/3d/Nazionali/SpecialArgentina2026.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:14:08] "GET /images/3d/Cristo%20Del%20Rio%202526%20.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:14:08] "GET /images/3d/pantaloncino%20cristo%20del%20rio.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:14:08] "GET /images/3d/canotta%20brasile%20cristo.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:14:08] "GET /2627/serieA/Bologna%20Home.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:14:08] "GET /2627/serieA/Como%20Quarta%20maglia.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:14:09] "GET /2627/serieA/Inter%20Away%20(manica%20lunga).png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:14:09] "GET /2627/serieA/Inter%20Home%20(manica%20lunga).png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:14:09] "GET /2627/serieA/Inter%20Third.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:14:09] "GET /2627/serieA/Juventus%20concept%20jersey.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:14:20] "GET /2627/serieA/Juventus%20Home%20(manica%20lunga).png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:14:20] "GET /2627/serieA/Milan%20Away.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:14:20] "GET /2627/serieA/Milan%20Special.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:14:20] "GET /2627/serieA/Milan%20Third%20.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:14:20] "GET /2627/serieA/Napoli%20Concept%20Jersey.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:14:20] "GET /2627/Bundesliga/Bayern%20Monaco%20Home.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:14:20] "GET /2627/Bundesliga/Bayern%20Monaco%20Away.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:14:20] "GET /2627/Bundesliga/Borussia%20Dortmund%20Home.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:14:20] "GET /2627/Bundesliga/Borussia%20Dortmund%20Away%20.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:14:20] "GET /2627/LaLiga/Atletico%20Madrid%20Home.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:14:20] "GET /2627/LaLiga/Barcellona%20Away.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:14:20] "GET /2627/LaLiga/Barcellona%20Home.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:14:21] "GET /2627/LaLiga/Real%20Madrid%20Home.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:14:21] "GET /2627/LaLiga/Real%20Madrid%20Third%20Kit%20.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:14:21] "GET /2627/Ligue1/Lyonnais%20Home.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:14:21] "GET /2627/Ligue1/Marseille%20Home.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:14:21] "GET /2627/Ligue1/Psg%20Home.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:14:21] "GET /2627/Ligue1/Psg%20Away%20.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:14:21] "GET /2627/Ligue1/Psg%20Third%20kit.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:14:21] "GET /2627/Ligue1/Psg%20Fourth%20kit.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:14:21] "GET /2627/Premier%20League/Arsenal%20Home%20(manica%20lunga).png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:14:21] "GET /2627/Ligue1/Psg%20Special%20.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:14:21] "GET /2627/Premier%20League/Arsenal%20Third.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:14:21] "GET /2627/Premier%20League/Arsenal%20Away%20(manica%20lunga)%20.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:14:21] "GET /2627/Premier%20League/Aston%20Villa%20Home.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:14:21] "GET /2627/Premier%20League/Chealsea%20Away.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:14:33] "GET /2627/Premier%20League/Liverpool%20Home.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:14:33] "GET /2627/Premier%20League/Liverpool%20Away%20.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:14:33] "GET /2627/Premier%20League/Liverpool%20Home%20(manica%20lunga).png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:14:33] "GET /2627/Premier%20League/Liverpool%20Third.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:14:33] "GET /2627/Premier%20League/Manchester%20City%20Home%20.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:14:33] "GET /2627/Premier%20League/Manchester%20City%20Away.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:14:33] "GET /2627/Premier%20League/Manchester%20City%20Home%20(manica%20lunga)%C3%B9.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:14:33] "GET /2627/Premier%20League/Manchester%20City%20Third%20.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:14:33] "GET /2627/Premier%20League/Manchester%20United%20Home%20(manica%20lunga).png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:14:33] "GET /2627/Premier%20League/Newcastle%20Home.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:15:35] "GET /style.css?v=20260811h HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:16:06] "GET /index.html?v=20260812a HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:16:06] "GET /style.css?v=20260812a HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:16:06] "GET /app.js?v=20260812a HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:19:28] "GET /index.html?v=20260812a HTTP/1.1" 304 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:19:28] "GET /style.css?v=20260812a HTTP/1.1" 304 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:19:28] "GET /app.js?v=20260812a HTTP/1.1" 304 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:26:03] "GET /index.html?v=20260812b HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:26:03] "GET /style.css?v=20260812a HTTP/1.1" 304 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:26:03] "GET /app.js?v=20260812b HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:28:29] "GET /2627/serieA/Inter%20Home.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:28:29] "GET /2627/serieA/Juventus%20Home.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:29:01] code 404, message File not found
+::ffff:127.0.0.1 - - [12/Aug/2026 00:29:01] "GET /images/3d/Nazionali/AwayInghilterra2026.png HTTP/1.1" 404 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:31:40] "GET /index.html?v=20260812c HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:31:40] "GET /style.css?v=20260812c HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:31:40] "GET /app.js?v=20260812b HTTP/1.1" 304 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:31:47] code 404, message File not found
+::ffff:127.0.0.1 - - [12/Aug/2026 00:31:47] "GET /images/teams/mancity_home.png HTTP/1.1" 404 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:31:47] code 404, message File not found
+::ffff:127.0.0.1 - - [12/Aug/2026 00:31:47] "GET /images/teams/arsenal_home.png HTTP/1.1" 404 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:31:47] code 404, message File not found
+::ffff:127.0.0.1 - - [12/Aug/2026 00:31:47] "GET /images/teams/liverpool_home.png HTTP/1.1" 404 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:33:41] "GET /images/3d/Serie%20A/Cagliari/2526/Cagliari%20Away%202526.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:33:41] "GET /images/3d/Serie%20A/Cagliari/2526/Cagliari%20Third%202526.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:33:41] "GET /images/3d/Serie%20A/Como/2526/Como%20Home%202526.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:33:42] "GET /images/3d/Serie%20A/Como/2526/Como%20Away%202526.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:33:42] "GET /images/3d/Serie%20A/Como/2526/Como%20Third%202526.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:33:43] "GET /images/3d/Serie%20A/Como/2425/Como%20Home%202425.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:33:43] "GET /images/3d/Serie%20A/Como/2425/Como%20Third%202425.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:33:43] "GET /images/3d/Serie%20A/Fiorentina/2526/Fiorentina%20Away%202526.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:33:43] "GET /images/3d/Serie%20A/Genoa/2526/Genoa%20Home%202526.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:33:43] "GET /images/3d/Serie%20A/Genoa/speciali/Genoa%20Fourth%202425.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:33:44] "GET /images/3d/Serie%20A/Lazio/2526/Lazio%20Home%202526.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:33:44] "GET /images/3d/Serie%20A/Lazio/2526/Lazio%20Third%202526.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:33:44] "GET /images/3d/Serie%20A/Lazio/2425/Lazio%20Third%202425.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:33:44] "GET /images/3d/Serie%20A/Lecce/2526/Lecce%20Home%202526.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:33:44] "GET /images/3d/Serie%20A/Napoli/2526/Napoli%20Home%202526.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:33:45] "GET /images/3d/Serie%20A/Napoli/2526/Napoli%20Third%202526.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:33:45] "GET /images/3d/Serie%20A/Napoli/2526/Napoli%20Away%20Champions%202526.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:33:45] "GET /images/3d/Serie%20A/Napoli/2324/Napoli%20Home%202324.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:33:48] "GET /images/3d/Serie%20A/Napoli/2324/Napoli%20Prematch%202324.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:33:48] "GET /images/3d/Serie%20A/Parma/2526/Parma%20Home%202526.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:33:48] "GET /images/3d/Serie%20A/Pisa/2526/Pisa%20Home%202526.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:33:48] "GET /images/3d/Serie%20A/Roma/2526/Roma%20Away%202526.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:33:48] "GET /images/3d/Serie%20A/Roma/2526/Roma%20Third%202526.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:33:48] "GET /images/3d/Serie%20A/Roma/2324/Roma%20Home%202324.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:33:49] "GET /images/3d/Serie%20A/Roma/2324/Roma%20Away%202324.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:33:49] "GET /images/3d/Serie%20A/Roma/2324/Roma%20Fourth%202324.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:33:49] "GET /images/3d/Serie%20A/Roma/2223/Roma%20Away%202223.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:33:49] "GET /images/3d/Serie%20A/Roma/Roma.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:33:50] "GET /images/3d/Serie%20A/Roma/2526/Pant%20Roma%20Home%202526.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:33:50] "GET /images/3d/Serie%20A/Torino/2526/Torino%20Home%202526.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:33:50] "GET /images/3d/Serie%20A/Verona/2526/Verona%20Home%202526.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:33:50] "GET /images/3d/La%20Liga/Real%20Madrid/Real%20Third%202324.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:33:50] code 404, message File not found
+::ffff:127.0.0.1 - - [12/Aug/2026 00:33:50] code 404, message File not found
+::ffff:127.0.0.1 - - [12/Aug/2026 00:33:50] "GET /images/teams/atletico_away.png HTTP/1.1" 404 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:33:50] "GET /images/teams/atletico_home.png HTTP/1.1" 404 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:33:51] code 404, message File not found
+::ffff:127.0.0.1 - - [12/Aug/2026 00:33:51] "GET /images/teams/porto_home.png HTTP/1.1" 404 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:33:51] code 404, message File not found
+::ffff:127.0.0.1 - - [12/Aug/2026 00:33:51] "GET /images/teams/mancity_home.png HTTP/1.1" 404 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:33:51] code 404, message File not found
+::ffff:127.0.0.1 - - [12/Aug/2026 00:33:51] "GET /images/teams/mancity_away.png HTTP/1.1" 404 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:33:51] code 404, message File not found
+::ffff:127.0.0.1 - - [12/Aug/2026 00:33:51] "GET /images/teams/arsenal_away.png HTTP/1.1" 404 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:33:51] code 404, message File not found
+::ffff:127.0.0.1 - - [12/Aug/2026 00:33:51] "GET /images/teams/arsenal_home.png HTTP/1.1" 404 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:33:51] code 404, message File not found
+::ffff:127.0.0.1 - - [12/Aug/2026 00:33:51] code 404, message File not found
+::ffff:127.0.0.1 - - [12/Aug/2026 00:33:51] "GET /images/teams/liverpool_away.png HTTP/1.1" 404 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:33:51] "GET /images/teams/liverpool_home.png HTTP/1.1" 404 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:33:51] code 404, message File not found
+::ffff:127.0.0.1 - - [12/Aug/2026 00:33:51] "GET /images/teams/chelsea_home.png HTTP/1.1" 404 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:33:51] code 404, message File not found
+::ffff:127.0.0.1 - - [12/Aug/2026 00:33:51] "GET /images/teams/chelsea_away.png HTTP/1.1" 404 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:33:51] code 404, message File not found
+::ffff:127.0.0.1 - - [12/Aug/2026 00:33:51] code 404, message File not found
+::ffff:127.0.0.1 - - [12/Aug/2026 00:33:51] "GET /images/teams/manutd_home.png HTTP/1.1" 404 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:33:51] "GET /images/teams/manutd_away.png HTTP/1.1" 404 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:33:52] code 404, message File not found
+::ffff:127.0.0.1 - - [12/Aug/2026 00:33:52] "GET /images/teams/tottenham_home.png HTTP/1.1" 404 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:33:52] code 404, message File not found
+::ffff:127.0.0.1 - - [12/Aug/2026 00:33:52] "GET /images/teams/tottenham_away.png HTTP/1.1" 404 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:33:52] code 404, message File not found
+::ffff:127.0.0.1 - - [12/Aug/2026 00:33:52] "GET /images/teams/newcastle_home.png HTTP/1.1" 404 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:33:52] code 404, message File not found
+::ffff:127.0.0.1 - - [12/Aug/2026 00:33:52] "GET /images/teams/newcastle_away.png HTTP/1.1" 404 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:33:52] "GET /images/3d/terza%20maglia%20nottingham%20forest%202526.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:33:52] code 404, message File not found
+::ffff:127.0.0.1 - - [12/Aug/2026 00:33:52] "GET /images/teams/dortmund_home.png HTTP/1.1" 404 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:33:52] code 404, message File not found
+::ffff:127.0.0.1 - - [12/Aug/2026 00:33:52] "GET /images/jersey_germany.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:33:52] "GET /images/teams/dortmund_away.png HTTP/1.1" 404 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:33:57] code 404, message File not found
+::ffff:127.0.0.1 - - [12/Aug/2026 00:33:57] code 404, message File not found
+::ffff:127.0.0.1 - - [12/Aug/2026 00:33:57] "GET /images/teams/bayern_away.png HTTP/1.1" 404 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:33:57] "GET /images/teams/leverkusen_home.png HTTP/1.1" 404 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:33:58] code 404, message File not found
+::ffff:127.0.0.1 - - [12/Aug/2026 00:33:58] "GET /images/teams/leipzig_home.png HTTP/1.1" 404 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:33:58] code 404, message File not found
+::ffff:127.0.0.1 - - [12/Aug/2026 00:33:58] "GET /images/teams/eintracht_home.png HTTP/1.1" 404 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:33:58] code 404, message File not found
+::ffff:127.0.0.1 - - [12/Aug/2026 00:33:58] code 404, message File not found
+::ffff:127.0.0.1 - - [12/Aug/2026 00:33:58] "GET /images/teams/alnassr_home.png HTTP/1.1" 404 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:33:58] "GET /images/teams/alnassr_away.png HTTP/1.1" 404 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:34:00] code 404, message File not found
+::ffff:127.0.0.1 - - [12/Aug/2026 00:34:00] code 404, message File not found
+::ffff:127.0.0.1 - - [12/Aug/2026 00:34:00] "GET /images/teams/alnassr_cr7.png HTTP/1.1" 404 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:34:00] "GET /images/teams/alhilal_home.png HTTP/1.1" 404 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:34:02] code 404, message File not found
+::ffff:127.0.0.1 - - [12/Aug/2026 00:34:02] code 404, message File not found
+::ffff:127.0.0.1 - - [12/Aug/2026 00:34:02] "GET /images/teams/alhilal_away.png HTTP/1.1" 404 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:34:02] "GET /images/teams/alittihad_home.png HTTP/1.1" 404 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:34:04] code 404, message File not found
+::ffff:127.0.0.1 - - [12/Aug/2026 00:34:04] code 404, message File not found
+::ffff:127.0.0.1 - - [12/Aug/2026 00:34:04] "GET /images/teams/alahli_home.png HTTP/1.1" 404 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:34:04] "GET /images/teams/alqadsiah_home.png HTTP/1.1" 404 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:34:14] code 404, message File not found
+::ffff:127.0.0.1 - - [12/Aug/2026 00:34:14] "GET /images/3d/Nazionali/AwayInghilterra2026.png HTTP/1.1" 404 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:34:14] "GET /images/3d/Nazionali/HomePortogallo2026.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:34:14] "GET /images/3d/Nazionali/AwayPortogallo2026.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:34:15] "GET /images/3d/Nazionali/HomeBelgio2026.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:34:15] "GET /images/3d/Nazionali/AwayBelgio2026.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:34:21] "GET /images/3d/Nazionali/HomeOlanda2026.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:34:21] code 404, message File not found
+::ffff:127.0.0.1 - - [12/Aug/2026 00:34:21] "GET /images/3d/Nazionali/AwayOlanda2026.png HTTP/1.1" 404 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:34:24] "GET /images/3d/Nazionali/HomeMessico2026.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:34:24] "GET /images/3d/Nazionali/AwayMessico2026.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:34:24] "GET /images/3d/Nazionali/HomeColombia2026.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:34:24] "GET /images/3d/Nazionali/AwayColombia2026.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:34:28] "GET /images/3d/Nazionali/HomeGermania2026.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:34:28] "GET /images/3d/Nazionali/HomeCroazia2026.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:34:28] "GET /images/3d/Nazionali/AwayCroazia2026.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:34:29] "GET /images/3d/Nazionali/HomeItalia2026.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:34:29] "GET /images/3d/Nazionali/AwayItalia2026.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:34:29] "GET /images/3d/Nazionali/HomeUsa2026.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:34:29] code 404, message File not found
+::ffff:127.0.0.1 - - [12/Aug/2026 00:34:29] "GET /images/3d/Nazionali/AwayUsa2026.png HTTP/1.1" 404 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:34:33] "GET /images/3d/Nazionali/HomeCanada2026.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:34:33] code 404, message File not found
+::ffff:127.0.0.1 - - [12/Aug/2026 00:34:33] "GET /images/3d/Nazionali/AwayCanada2026.png HTTP/1.1" 404 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:34:42] "GET /images/3d/Nazionali/HomeGiappone2026.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:34:42] code 404, message File not found
+::ffff:127.0.0.1 - - [12/Aug/2026 00:34:42] "GET /images/3d/Nazionali/AwayGiappone2026.png HTTP/1.1" 404 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:35:06] "GET /images/3d/Nazionali/PreFrancia2026.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:35:06] "GET /images/3d/Nazionali/SpecialArgentina2026.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:35:06] "GET /images/3d/Cristo%20Del%20Rio%202526%20.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:35:06] "GET /images/3d/pantaloncino%20cristo%20del%20rio.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:35:07] "GET /images/3d/canotta%20brasile%20cristo.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:35:07] "GET /2627/serieA/Bologna%20Home.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:35:07] "GET /2627/serieA/Como%20Quarta%20maglia.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:35:08] "GET /2627/serieA/Inter%20Away%20(manica%20lunga).png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:35:08] "GET /2627/serieA/Inter%20Home%20(manica%20lunga).png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:35:09] "GET /2627/serieA/Inter%20Third.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:35:09] "GET /2627/serieA/Juventus%20concept%20jersey.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:35:11] "GET /2627/serieA/Juventus%20Home%20(manica%20lunga).png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:35:11] "GET /2627/serieA/Milan%20Away.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:35:13] "GET /2627/serieA/Milan%20Special.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:35:13] "GET /2627/serieA/Milan%20Third%20.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:35:14] "GET /2627/serieA/Napoli%20Concept%20Jersey.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:35:14] "GET /2627/Bundesliga/Bayern%20Monaco%20Home.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:35:14] "GET /2627/Bundesliga/Bayern%20Monaco%20Away.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:35:14] "GET /2627/Bundesliga/Borussia%20Dortmund%20Home.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:35:21] "GET /2627/Bundesliga/Borussia%20Dortmund%20Away%20.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:35:21] "GET /2627/LaLiga/Atletico%20Madrid%20Home.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:35:21] "GET /2627/LaLiga/Barcellona%20Home.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:35:21] "GET /2627/LaLiga/Barcellona%20Away.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:35:30] "GET /2627/LaLiga/Real%20Madrid%20Home.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:35:30] "GET /2627/LaLiga/Real%20Madrid%20Third%20Kit%20.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:35:32] "GET /2627/Ligue1/Lyonnais%20Home.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:35:32] "GET /2627/Ligue1/Marseille%20Home.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:35:37] "GET /2627/Ligue1/Psg%20Home.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:35:37] "GET /2627/Ligue1/Psg%20Away%20.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:35:37] "GET /2627/Ligue1/Psg%20Third%20kit.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:35:37] "GET /2627/Ligue1/Psg%20Fourth%20kit.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:35:46] "GET /2627/Ligue1/Psg%20Special%20.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:35:46] "GET /2627/Premier%20League/Arsenal%20Home%20(manica%20lunga).png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:35:54] "GET /2627/Premier%20League/Arsenal%20Away%20(manica%20lunga)%20.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:35:54] "GET /2627/Premier%20League/Arsenal%20Third.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:35:55] "GET /2627/Premier%20League/Aston%20Villa%20Home.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:35:55] "GET /2627/Premier%20League/Chealsea%20Away.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:36:23] "GET /2627/Premier%20League/Liverpool%20Home.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:36:23] "GET /2627/Premier%20League/Liverpool%20Away%20.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:36:24] "GET /2627/Premier%20League/Liverpool%20Home%20(manica%20lunga).png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:36:24] "GET /2627/Premier%20League/Liverpool%20Third.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:36:26] "GET /2627/Premier%20League/Manchester%20City%20Home%20.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:36:26] "GET /2627/Premier%20League/Manchester%20City%20Away.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:36:38] "GET /2627/Premier%20League/Manchester%20City%20Home%20(manica%20lunga)%C3%B9.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:36:38] "GET /2627/Premier%20League/Manchester%20City%20Third%20.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:36:39] "GET /2627/Premier%20League/Manchester%20United%20Home%20(manica%20lunga).png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:36:39] "GET /2627/Premier%20League/Newcastle%20Home.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:38:33] code 404, message File not found
+::ffff:127.0.0.1 - - [12/Aug/2026 00:38:33] "GET /images/3d/Nazionali/AwayGiappone2026.png HTTP/1.1" 404 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:38:41] code 404, message File not found
+::ffff:127.0.0.1 - - [12/Aug/2026 00:38:41] "GET /images/teams/dortmund_away.png HTTP/1.1" 404 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:41:21] code 404, message File not found
+::ffff:127.0.0.1 - - [12/Aug/2026 00:41:21] "GET /images/teams/alnassr_home.png HTTP/1.1" 404 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:41:21] code 404, message File not found
+::ffff:127.0.0.1 - - [12/Aug/2026 00:41:21] "GET /images/teams/alnassr_away.png HTTP/1.1" 404 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:41:21] code 404, message File not found
+::ffff:127.0.0.1 - - [12/Aug/2026 00:41:21] code 404, message File not found
+::ffff:127.0.0.1 - - [12/Aug/2026 00:41:21] code 404, message File not found
+::ffff:127.0.0.1 - - [12/Aug/2026 00:41:21] code 404, message File not found
+::ffff:127.0.0.1 - - [12/Aug/2026 00:41:21] "GET /images/teams/alnassr_cr7.png HTTP/1.1" 404 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:41:21] "GET /images/teams/alhilal_away.png HTTP/1.1" 404 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:41:21] "GET /images/teams/alhilal_home.png HTTP/1.1" 404 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:41:21] "GET /images/teams/alittihad_home.png HTTP/1.1" 404 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:41:21] code 404, message File not found
+::ffff:127.0.0.1 - - [12/Aug/2026 00:41:21] "GET /images/teams/alahli_home.png HTTP/1.1" 404 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:41:21] code 404, message File not found
+::ffff:127.0.0.1 - - [12/Aug/2026 00:41:21] "GET /images/teams/alqadsiah_home.png HTTP/1.1" 404 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:42:11] "GET /index.html?v=20260812d HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:42:11] "GET /style.css?v=20260812d HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:42:11] "GET /app.js?v=20260812d HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:43:07] "GET /index.html?v=20260812d HTTP/1.1" 304 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:43:07] "GET /style.css?v=20260812d HTTP/1.1" 304 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:43:07] "GET /app.js?v=20260812d HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:43:43] "GET /index.html?v=20260812d HTTP/1.1" 304 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:43:43] "GET /app.js?v=20260812d HTTP/1.1" 304 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:48:04] "GET /index.html?v=20260812e HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:48:04] "GET /style.css?v=20260812e HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:48:04] "GET /app.js?v=20260812d HTTP/1.1" 304 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:48:25] "GET /images/foto_cliente9.jpeg HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:49:18] "GET /images/3d/Serie%20A/Cagliari/2526/Cagliari%20Away%202526.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:49:18] "GET /images/3d/Serie%20A/Cagliari/2526/Cagliari%20Third%202526.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:49:18] "GET /images/3d/Serie%20A/Como/2526/Como%20Home%202526.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:49:18] "GET /images/3d/Serie%20A/Como/2526/Como%20Away%202526.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:49:18] "GET /images/3d/Serie%20A/Como/2526/Como%20Third%202526.png HTTP/1.1" 200 -

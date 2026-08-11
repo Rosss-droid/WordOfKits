@@ -14,7 +14,7 @@
   <link
     href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700;800;900&display=swap"
     rel="stylesheet" />
-  <link rel="stylesheet" href="style.css?v=20260811e" />
+  <link rel="stylesheet" href="style.css?v=20260812e" />
   <!-- EmailJS SDK -->
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 </head>
@@ -38,13 +38,19 @@
       <!-- MEGA MENU centrale -->
       <ul class="nav-links" id="navLinks">
 
+        <!-- Riga superiore del drawer: titolo + tasto chiudi -->
+        <li class="drawer-close-row" id="drawerCloseRow">
+          <span class="drawer-title" data-i18n="nav.menu">MENU</span>
+          <button class="drawer-close" id="drawerClose" aria-label="Chiudi menu">✕</button>
+        </li>
+
         <!-- CALCIO -->
         <li class="nav-mega-item" id="megaCalcioItem">
-          <a class="nav-link nav-mega-trigger" href="#products">Calcio</a>
+          <a class="nav-link nav-mega-trigger" href="#products" data-i18n="nav.calcio">Calcio</a>
           <div class="nav-mega-panel" id="megaCalcioPanel">
             <div class="nav-mega-grid">
               <div class="nav-mega-col">
-                <div class="nav-mega-col-title">Campionati</div>
+                <div class="nav-mega-col-title" data-i18n="nav.campionati">Campionati</div>
                 <ul>
                   <li><button class="nav-mega-link" data-league="SerieA" id="navLeagueSerieA">Serie A</button></li>
                   <li><button class="nav-mega-link" data-league="LaLiga" id="navLeagueLaLiga">La Liga</button></li>
@@ -60,10 +66,10 @@
                 </ul>
               </div>
               <div class="nav-mega-col">
-                <div class="nav-mega-col-title">Tipo Maglia</div>
+                <div class="nav-mega-col-title" data-i18n="nav.tipoMaglia">Tipo Maglia</div>
                 <ul>
-                  <li><button class="nav-mega-link" data-filter-type="new" id="navFilterNew">Novità</button></li>
-                  <li><button class="nav-mega-link" data-filter-type="vintage" id="navFilterVintage">Vintage</button>
+                  <li><button class="nav-mega-link" data-filter-type="new" id="navFilterNew" data-i18n="nav.novita">Novità</button></li>
+                  <li><button class="nav-mega-link" data-filter-type="vintage" id="navFilterVintage" data-i18n="nav.vintage">Vintage</button>
                   </li>
                 </ul>
               </div>
@@ -73,25 +79,25 @@
 
         <!-- SPORT -->
         <li class="nav-mega-item" id="megaSportItem">
-          <a class="nav-link nav-mega-trigger" href="#products">Sport</a>
+          <a class="nav-link nav-mega-trigger" href="#products" data-i18n="nav.sport">Sport</a>
           <div class="nav-mega-panel" id="megaSportPanel">
             <div class="nav-mega-grid">
               <div class="nav-mega-col">
-                <div class="nav-mega-col-title">Abbigliamento</div>
+                <div class="nav-mega-col-title" data-i18n="nav.abbigliamento">Abbigliamento</div>
                 <ul>
-                  <li><button class="nav-mega-link" data-filter="tute" id="navFilterTute">Tute</button></li>
-                  <li><button class="nav-mega-link" data-filter="felpe" id="navFilterFelpe">Felpe</button></li>
-                  <li><button class="nav-mega-link" data-filter="tshirt" id="navFilterTshirt">T-Shirt</button></li>
-                  <li><button class="nav-mega-link" data-filter="pantaloni" id="navFilterPantaloni">Pantaloni</button>
+                  <li><button class="nav-mega-link" data-filter="tute" id="navFilterTute" data-i18n="nav.tute">Tute</button></li>
+                  <li><button class="nav-mega-link" data-filter="felpe" id="navFilterFelpe" data-i18n="nav.felpe">Felpe</button></li>
+                  <li><button class="nav-mega-link" data-filter="tshirt" id="navFilterTshirt" data-i18n="nav.tshirt">T-Shirt</button></li>
+                  <li><button class="nav-mega-link" data-filter="pantaloni" id="navFilterPantaloni" data-i18n="nav.pantaloni">Pantaloni</button>
                   </li>
                 </ul>
               </div>
               <div class="nav-mega-col">
-                <div class="nav-mega-col-title">Scarpe</div>
+                <div class="nav-mega-col-title" data-i18n="nav.scarpe">Scarpe</div>
                 <ul>
-                  <li><button class="nav-mega-link" data-label="Scarpe da calcio">Da calcio</button></li>
-                  <li><button class="nav-mega-link" data-label="Running">Running</button></li>
-                  <li><button class="nav-mega-link" data-label="Lifestyle">Lifestyle</button></li>
+                  <li><button class="nav-mega-link" data-label="Scarpe da calcio" data-i18n="nav.daCalcio">Da calcio</button></li>
+                  <li><button class="nav-mega-link" data-label="Running" data-i18n="nav.running">Running</button></li>
+                  <li><button class="nav-mega-link" data-label="Lifestyle" data-i18n="nav.lifestyle">Lifestyle</button></li>
                 </ul>
               </div>
             </div>
@@ -100,15 +106,14 @@
 
         <!-- MONDIALI -->
         <li class="nav-mega-item" id="megaMondialiItem">
-          <a class="nav-link nav-mega-trigger" href="#products">Mondiali</a>
+          <a class="nav-link nav-mega-trigger" href="#products" data-i18n="nav.mondiali">Mondiali</a>
           <div class="nav-mega-panel" id="megaMondialiPanel">
             <div class="nav-mega-grid">
               <div class="nav-mega-col">
-                <div class="nav-mega-col-title">Competizioni</div>
+                <div class="nav-mega-col-title" data-i18n="nav.competizioni">Competizioni</div>
                 <ul>
-                  <li><button class="nav-mega-link" data-league="Mondiale2026" id="navLeagueMondiale2026">🌍 Mondiale
-                      2026</button></li>
-                  <li><button class="nav-mega-link" data-league="Nazionali" id="navLeagueNazionali">Nazionali</button>
+                  <li><button class="nav-mega-link" data-league="Mondiale2026" id="navLeagueMondiale2026" data-i18n="nav.mondiale2026">🌍 Mondiale 2026</button></li>
+                  <li><button class="nav-mega-link" data-league="Nazionali" id="navLeagueNazionali" data-i18n="nav.nazionali">Nazionali</button>
                   </li>
                 </ul>
               </div>
@@ -119,11 +124,11 @@
 
         <!-- Scarpe -->
         <li class="nav-mega-item" id="megaScarpeItem">
-          <a class="nav-link nav-mega-trigger" href="#products">Scarpe</a>
+          <a class="nav-link nav-mega-trigger" href="#products" data-i18n="nav.scarpe">Scarpe</a>
           <div class="nav-mega-panel" id="megaScarpePanel">
             <div class="nav-mega-grid">
               <div class="nav-mega-col">
-                <div class="nav-mega-col-title">Brand</div>
+                <div class="nav-mega-col-title" data-i18n="nav.brand">Brand</div>
                 <ul>
                   <li><button class="nav-mega-link" data-brand="Nike">Nike</button></li>
                   <li><button class="nav-mega-link" data-brand="Adidas">Adidas</button></li>
@@ -132,7 +137,7 @@
                 </ul>
               </div>
               <div class="nav-mega-col">
-                <div class="nav-mega-col-title">Tipo</div>
+                <div class="nav-mega-col-title" data-i18n="nav.tipo">Tipo</div>
                 <ul>
                   <li><button class="nav-mega-link" data-label="Scarpe da calcio">Da calcio</button></li>
                   <li><button class="nav-mega-link" data-label="Lifestyle">Lifestyle</button></li>
@@ -147,7 +152,7 @@
 
         <!-- Vestiario -->
         <li class="nav-mega-item" id="megaVestiarioItem">
-          <a class="nav-link nav-mega-trigger" href="#products">Vestiario</a>
+          <a class="nav-link nav-mega-trigger" href="#products" data-i18n="nav.vestiario">Vestiario</a>
           <div class="nav-mega-panel" id="megaVestiarioPanel">
             <div class="nav-mega-grid">
               <div class="nav-mega-col">
@@ -167,11 +172,11 @@
         <!-- Outlet -->
 
         <li class="nav-mega-item" id="megaOutletItem">
-          <a class="nav-link nav-mega-trigger nav-link-outlet" href="#products">Outlet</a>
+          <a class="nav-link nav-mega-trigger nav-link-outlet" href="#products" data-i18n="nav.outlet">Outlet</a>
           <div class="nav-mega-panel" id="megaOutletPanel">
             <div class="nav-mega-grid">
               <div class="nav-mega-col">
-                <div class="nav-mega-col-title">Offerte</div>
+                <div class="nav-mega-col-title" data-i18n="nav.offerte">Offerte</div>
                 <ul>
                   <li><a class="nav-mega-link" href="#products">Promozioni</a></li>
                   <li><a class="nav-mega-link" href="#products">Ultimi pezzi</a></li>
@@ -188,7 +193,7 @@
       <div class="nav-actions">
         <!-- Cerca -->
         <div class="nav-search-wrap" id="navSearchWrap">
-          <input type="text" class="nav-search-input" id="navSearchInput" placeholder="Cerca..." autocomplete="off" />
+          <input type="text" class="nav-search-input" id="navSearchInput" placeholder="Cerca..." autocomplete="off" data-i18n-ph="nav.cercaPh" />
           <button class="nav-search-btn" id="navSearchBtn" aria-label="Cerca">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
               stroke-linecap="round" stroke-linejoin="round">
@@ -196,6 +201,26 @@
               <line x1="21" y1="21" x2="16.65" y2="16.65" />
             </svg>
           </button>
+        </div>
+
+        <!-- Lingua -->
+        <div class="lang-wrap" id="langWrap">
+          <button class="lang-btn" id="langBtn" aria-label="Lingua" title="Lingua / Language">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10" />
+              <path d="M2 12h20" />
+              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+            </svg>
+            <span class="lang-current" id="langCurrent">IT</span>
+          </button>
+          <div class="lang-dropdown" id="langDropdown">
+            <button class="lang-option" data-lang="it">Italiano</button>
+            <button class="lang-option" data-lang="en">English</button>
+            <button class="lang-option" data-lang="es">Español</button>
+            <button class="lang-option" data-lang="fr">Français</button>
+            <button class="lang-option" data-lang="de">Deutsch</button>
+          </div>
         </div>
 
         <!-- Preferiti -->
@@ -234,7 +259,7 @@
         <circle cx="11" cy="11" r="8" />
         <line x1="21" y1="21" x2="16.65" y2="16.65" />
       </svg>
-      <input type="text" class="mob-search-input" id="mobSearchInput" placeholder="Cerca prodotti, squadre, brand..." autocomplete="off" />
+      <input type="text" class="mob-search-input" id="mobSearchInput" placeholder="Cerca prodotti, squadre, brand..." autocomplete="off" data-i18n-ph="nav.cercaPh" />
       <button class="mob-search-close" id="mobSearchClose" aria-label="Chiudi ricerca">✕</button>
     </div>
   </div>
@@ -246,11 +271,11 @@
       <img src="images/3d/editorial-hero.jpg" alt="Kit WorldOfKits" class="ed-panel-img" id="edHeroImg" />
       <div class="ed-panel-overlay"></div>
       <div class="ed-panel-content">
-        <p class="ed-panel-eyebrow">Nuova collezione</p>
+        <p class="ed-panel-eyebrow" data-i18n="hero.nuovaCollezione">Nuova collezione</p>
         <h2 class="ed-panel-title">Kit Home<br>2026/27</h2>
         <button class="ed-panel-btn" id="edBtn1"
           onclick="openCatPage('new', 'NOVITÀ', 'Novità', [])">
-          Acquista <span class="ed-btn-arrow">→</span>
+          <span data-i18n="common.acquista">Acquista</span> <span class="ed-btn-arrow">→</span>
         </button>
       </div>
     </div>
@@ -260,11 +285,11 @@
       <img src="images/models/Immagine 2026-05-03 112008.png" alt="Dettaglio kit" class="ed-panel-img" />
       <div class="ed-panel-overlay ed-panel-overlay--dark"></div>
       <div class="ed-panel-content ed-panel-content--center">
-        <p class="ed-panel-eyebrow">Qualità Premium</p>
-        <h2 class="ed-panel-title ed-panel-title--sm">Tessuto<br>Originale</h2>
+        <p class="ed-panel-eyebrow" data-i18n="hero.qualitaPremium">Qualità Premium</p>
+        <h2 class="ed-panel-title ed-panel-title--sm" data-i18n="hero.tessutoOriginale">Tessuto<br>Originale</h2>
         <button class="ed-panel-btn" id="edBtn2"
           onclick="openCatPage('all', 'TUTTI I PRODOTTI', 'Prodotti', [])">
-          Acquista <span class="ed-btn-arrow">→</span>
+          <span data-i18n="common.acquista">Acquista</span> <span class="ed-btn-arrow">→</span>
         </button>
       </div>
     </div>
@@ -275,11 +300,11 @@
       <div class="ed-panel-overlay"></div>
       <div class="ed-panel-content">
         <p class="ed-panel-eyebrow ed-eyebrow--light">WorldOfKits</p>
-        <h2 class="ed-panel-title ed-title--brand">STORE<br>UFFICIALE</h2>
-        <p class="ed-panel-sub ed-sub--light">Maglie da calcio premium<br>per ogni tifoso</p>
+        <h2 class="ed-panel-title ed-title--brand" data-i18n="hero.storeUfficiale">STORE<br>UFFICIALE</h2>
+        <p class="ed-panel-sub ed-sub--light" data-i18n="hero.tagline">Maglie da calcio premium<br>per ogni tifoso</p>
         <button class="ed-panel-btn ed-btn--outline" id="edBtn3"
           onclick="openCatPage('all', 'TUTTI I PRODOTTI', 'Prodotti', [])">
-          Scopri tutto <span class="ed-btn-arrow">→</span>
+          <span data-i18n="common.scopriTutto">Scopri tutto</span> <span class="ed-btn-arrow">→</span>
         </button>
       </div>
     </div>
@@ -289,11 +314,11 @@
   <section class="mustHaveSection" id="mustHaveSection">
     <div class="mustHave-header">
       <div class="mustHave-header-left">
-        <span class="mustHave-eyebrow">I Nostri</span>
+        <span class="mustHave-eyebrow" data-i18n="musthave.nostri">I Nostri</span>
         <h2 class="mustHave-title">MUST HAVE</h2>
       </div>
       <button class="mustHave-see-all" id="mustHaveSeeAll">
-        Vedi tutti i bestseller <span class="mustHave-arrow">→</span>
+        <span data-i18n="musthave.vediTutti">Vedi tutti i bestseller</span> <span class="mustHave-arrow">→</span>
       </button>
     </div>
     <!-- Viewport scroll orizzontale -->
@@ -310,18 +335,18 @@
    <!-- ═══════════════════ Sconto editorial ═══════════════════ -->
   <div class="sconto-editorial">
     <div class="sconto-content">
-      <h2 class="sconto-title">+10% SCONTO SUL PRIMO ORDINE CON IL CODICE: WOK10</h2>
-      <p class="sconto-sub">Acquista anche un solo prodotto e ricevi lo sconto del 10% direttamente nel carrello</p>
+      <h2 class="sconto-title" data-i18n="sconto.title">+10% SCONTO SUL PRIMO ORDINE CON IL CODICE: WOK10</h2>
+      <p class="sconto-sub" data-i18n="sconto.sub">Acquista anche un solo prodotto e ricevi lo sconto del 10% direttamente nel carrello</p>
     </div>
   </div>
   
   <!-- ═══════════════════ NON TROVI IL TUO PRODOTTO? ═══════════════════ -->
   <section class="custom-request-section">
     <div class="custom-request-inner">
-      <h2 class="custom-request-title">Non trovi il tuo prodotto?</h2>
-      <p class="custom-request-sub">Inserisci i dettagli qui: scrivici l'articolo che cerchi e faremo del nostro meglio per trovarlo</p>
+      <h2 class="custom-request-title" data-i18n="crq.title">Non trovi il tuo prodotto?</h2>
+      <p class="custom-request-sub" data-i18n="crq.sub">Inserisci i dettagli qui: scrivici l'articolo che cerchi e faremo del nostro meglio per trovarlo</p>
       <button class="custom-request-btn" onclick="openCustomRequest()">
-        Inserisci i dettagli <span class="custom-request-arrow">&rarr;</span>
+        <span data-i18n="crq.btn">Inserisci i dettagli</span> <span class="custom-request-arrow">&rarr;</span>
       </button>
     </div>
   </section>
@@ -330,10 +355,10 @@
   <section class="mondiali-section" id="mondialiSection">
     <div class="mondiali-header">
       <div class="mondiali-header-left">
-        <h2 class="mondiali-title">MAGLIE DEL MONDIALE</h2>
+        <h2 class="mondiali-title" data-i18n="mondiali.title">MAGLIE DEL MONDIALE</h2>
       </div>
       <button class="mondiali-see-all" id="mondialiSeeAll">
-        Acquista prodotti Mondiali <span class="mondiali-arrow">→</span>
+        <span data-i18n="mondiali.acquista">Acquista prodotti Mondiali</span> <span class="mondiali-arrow">→</span>
       </button>
     </div>
     <!-- Viewport scroll orizzontale -->
@@ -352,10 +377,10 @@
   <section class="vintage" id="maglieVintage">
     <div class="vintage-header">
       <div class="vintage-header-left">
-        <h2 class="vintage-title">MAGLIE VINTAGE</h2>
+        <h2 class="vintage-title" data-i18n="vintage.title">MAGLIE VINTAGE</h2>
       </div>
       <button class="vintage-see-all" id="vintageSeeAll">
-        Acquista prodotti Vintage <span class="vintage-arrow">→</span>
+        <span data-i18n="vintage.acquista">Acquista prodotti Vintage</span> <span class="vintage-arrow">→</span>
       </button>
     </div>
     <!-- Viewport scroll orizzontale -->
@@ -374,7 +399,7 @@
   <section class="brand-section" id="brandSection">
     <div class="brand-section-inner">
       <div class="brand-section-header">
-        <h2 class="brand-section-title">Acquista per brand</h2>
+        <h2 class="brand-section-title" data-i18n="brand.title">Acquista per brand</h2>
       </div>
       <div class="brand-grid">
         <!-- Nike -->
@@ -699,12 +724,12 @@
       <img src="images/3d/vintageheader.jpg" alt="WorldOfKits Nuova Stagione" class="ed-panel-img" />
       <div class="ed-panel-overlay"></div>
       <div class="ed-panel-content">
-        <p class="ed-panel-eyebrow">Scopri tutto</p>
-        <h2 class="ed-panel-title">Nuova<br>Stagione</h2>
-        <p class="ed-panel-sub">Le ultime collezioni per ogni campo</p>
+        <p class="ed-panel-eyebrow" data-i18n="common.scopriTutto">Scopri tutto</p>
+        <h2 class="ed-panel-title" data-i18n="nuova.title">Nuova<br>Stagione</h2>
+        <p class="ed-panel-sub" data-i18n="nuova.sub">Le ultime collezioni per ogni campo</p>
         <button class="ed-panel-btn" id="edBotBtn1"
-          onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">
-          Acquista <span class="ed-btn-arrow">→</span>
+          onclick="openCatPage('new', 'NOVITÀ', 'Novità', [])">
+          <span data-i18n="common.acquista">Acquista</span> <span class="ed-btn-arrow">→</span>
         </button>
       </div>
     </div>
@@ -715,10 +740,10 @@
   <section class="vintage" id="scarpeSection">
     <div class="vintage-header">
       <div class="vintage-header-left">
-        <h2 class="vintage-title">SCARPE</h2>
+        <h2 class="vintage-title" data-i18n="scarpe.title">SCARPE</h2>
       </div>
       <button class="vintage-see-all" id="scarpeSectionSeeAll">
-        Acquista prodotti Scarpe <span class="vintage-arrow">→</span>
+        <span data-i18n="scarpe.acquista">Acquista prodotti Scarpe</span> <span class="vintage-arrow">→</span>
       </button>
     </div>
     <!-- Viewport scroll orizzontale -->
@@ -735,10 +760,10 @@
   <section class="vintage" id="accessoriSection">
     <div class="vintage-header">
       <div class="vintage-header-left">
-        <h2 class="vintage-title">ACCESSORI</h2>
+        <h2 class="vintage-title" data-i18n="accessori.title">ACCESSORI</h2>
       </div>
       <button class="vintage-see-all" id="accessoriSectionSeeAll">
-        Acquista Accessori <span class="vintage-arrow">→</span>
+        <span data-i18n="accessori.acquista">Acquista Accessori</span> <span class="vintage-arrow">→</span>
       </button>
     </div>
     <div class="vintage-scroll-viewport" id="accessoriSecViewport">
@@ -753,10 +778,10 @@
   <section class="vintage" id="tuteSection">
     <div class="vintage-header">
       <div class="vintage-header-left">
-        <h2 class="vintage-title">TUTE</h2>
+        <h2 class="vintage-title" data-i18n="tute.title">TUTE</h2>
       </div>
       <button class="vintage-see-all" id="tuteSectionSeeAll">
-        Acquista Tute <span class="vintage-arrow">→</span>
+        <span data-i18n="tute.acquista">Acquista Tute</span> <span class="vintage-arrow">→</span>
       </button>
     </div>
     <div class="vintage-scroll-viewport" id="tuteSecViewport">
@@ -775,31 +800,31 @@
           <div class="nav-logo">
             <span class="logo-text">WorldOfKits</span>
           </div>
-          <p>Il tuo store di fiducia per maglie da calcio e articoli sportivi.</p>
+          <p data-i18n="footer.tagline">Il tuo store di fiducia per maglie da calcio e articoli sportivi.</p>
         </div>
         <div class="footer-links-group">
-          <h4>Navigazione</h4>
-          <a href="#home" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">Home</a>
-          <a href="#" onclick="openCatPage('all','TUTTI I PRODOTTI','Prodotti',[]);return false;">Prodotti</a>
-          <a href="#" onclick="openInfoPage('about');return false;">Chi Siamo</a>
-          <a href="#" onclick="openInfoPage('contact');return false;">Contatti</a>
+          <h4 data-i18n="footer.navigazione">Navigazione</h4>
+          <a href="#home" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;" data-i18n="footer.home">Home</a>
+          <a href="#" onclick="openCatPage('all','TUTTI I PRODOTTI','Prodotti',[]);return false;" data-i18n="footer.prodotti">Prodotti</a>
+          <a href="#" onclick="openInfoPage('about');return false;" data-i18n="footer.chiSiamo">Chi Siamo</a>
+          <a href="#" onclick="openInfoPage('contact');return false;" data-i18n="footer.contatti">Contatti</a>
         </div>
         <div class="footer-links-group">
-          <h4>Categorie</h4>
-          <a href="#" onclick="openCatPage('Nazionali','NAZIONALI','Nazionali',[]);return false;">Nazionali</a>
-          <a href="#" onclick="openCatPage('SerieA','SERIE A','Serie A',[]);return false;">Serie A</a>
-          <a href="#" onclick="openCatPage('Champions','CHAMPIONS LEAGUE','Champions League',[]);return false;">Champions League</a>
-          <a href="#" onclick="openCatPage('vintage','VINTAGE','Vintage',[]);return false;">Vintage</a>
+          <h4 data-i18n="footer.categorie">Categorie</h4>
+          <a href="#" onclick="openCatPage('Nazionali','NAZIONALI','Nazionali',[]);return false;" data-i18n="footer.nazionali">Nazionali</a>
+          <a href="#" onclick="openCatPage('SerieA','SERIE A','Serie A',[]);return false;" data-i18n="footer.serieA">Serie A</a>
+          <a href="#" onclick="openCatPage('Champions','CHAMPIONS LEAGUE','Champions League',[]);return false;" data-i18n="footer.champions">Champions League</a>
+          <a href="#" onclick="openCatPage('vintage','VINTAGE','Vintage',[]);return false;" data-i18n="nav.vintage">Vintage</a>
         </div>
         <div class="footer-links-group">
-          <h4>Informazioni</h4>
-          <a href="#" onclick="openInfoPage('reviews');return false;">Recensioni</a>
-          <a href="#" onclick="openInfoPage('custom');return false;">Ordine Personalizzato</a>
-          <a href="#" onclick="openInfoPage('contact');return false;">Contattaci</a>
+          <h4 data-i18n="footer.informazioni">Informazioni</h4>
+          <a href="#" onclick="openInfoPage('reviews');return false;" data-i18n="footer.recensioni">Recensioni</a>
+          <a href="#" onclick="openInfoPage('custom');return false;" data-i18n="footer.ordinePersonalizzato">Ordine Personalizzato</a>
+          <a href="#" onclick="openInfoPage('contact');return false;" data-i18n="footer.contattaci">Contattaci</a>
         </div>
       </div>
       <div class="footer-bottom">
-        <p>© 2026 WorldOfKits. Tutti i diritti riservati.</p>
+        <p data-i18n="footer.diritti">© 2026 WorldOfKits. Tutti i diritti riservati.</p>
       </div>
     </div>
   </footer>
@@ -809,12 +834,12 @@
     <div class="search-dropdown-inner">
       <!-- Colonna sinistra: categorie -->
       <div class="sd-categories" id="sdCategories">
-        <p class="sd-col-title">Categorie</p>
+        <p class="sd-col-title" data-i18n="search.categorie">Categorie</p>
         <ul class="sd-cat-list" id="sdCatList"></ul>
       </div>
       <!-- Colonna destra: prodotti -->
       <div class="sd-products" id="sdProducts">
-        <p class="sd-col-title">Prodotti</p>
+        <p class="sd-col-title" data-i18n="search.prodotti">Prodotti</p>
         <div class="sd-products-grid" id="sdProductsGrid"></div>
       </div>
     </div>
@@ -826,44 +851,44 @@
   <div class="cart-overlay" id="cartOverlay"></div>
   <aside class="cart-sidebar" id="cartSidebar">
     <div class="cart-header">
-      <h2>Il tuo Carrello</h2>
+      <h2 data-i18n="cart.title">Il tuo Carrello</h2>
       <button class="cart-close" id="cartClose" aria-label="Chiudi carrello">✕</button>
     </div>
     <div class="cart-items" id="cartItems">
       <div class="cart-empty" id="cartEmpty">
         <span class="cart-empty-icon"></span>
-        <p>Il carrello è vuoto</p>
-        <a href="#" class="btn btn-outline btn-sm" id="goShopBtn">Vai ai Prodotti</a>
+        <p data-i18n="cart.empty">Il carrello è vuoto</p>
+        <a href="#" class="btn btn-outline btn-sm" id="goShopBtn" data-i18n="cart.goShop">Vai ai Prodotti</a>
       </div>
     </div>
     <div class="cart-footer" id="cartFooter" style="display:none;">
       <div class="cart-subtotal">
-        <span>Subtotale</span>
+        <span data-i18n="common.subtotale">Subtotale</span>
         <span id="cartSubtotal">€0.00</span>
       </div>
       <div class="cart-shipping">
-        <span>Spedizione</span>
+        <span data-i18n="common.spedizione">Spedizione</span>
         <span id="cartShipping">Gratuita</span>
       </div>
       <!-- Riga sconto applicato -->
       <div class="cart-discount-line" id="cartDiscountLine" style="display:none;">
-        <span id="cartDiscountLabel">Sconto</span>
+        <span id="cartDiscountLabel" data-i18n="common.sconto">Sconto</span>
         <span id="cartDiscountValue" style="color:#2e7d32;font-weight:700;">-€0.00</span>
       </div>
       <div class="cart-total">
-        <span>Totale</span>
+        <span data-i18n="common.totale">Totale</span>
         <span id="cartTotal">€0.00</span>
       </div>
       <!-- Campo codice sconto -->
       <div class="cart-discount-wrap" id="cartDiscountWrap">
         <div class="cart-discount-input-row">
-          <input type="text" id="discountCodeInput" placeholder="Codice sconto..." autocomplete="off" />
-          <button id="applyDiscountBtn">Applica</button>
+          <input type="text" id="discountCodeInput" placeholder="Codice sconto..." autocomplete="off" data-i18n-ph="cart.codicePh" />
+          <button id="applyDiscountBtn" data-i18n="common.applica">Applica</button>
         </div>
         <div class="cart-discount-msg" id="cartDiscountMsg"></div>
       </div>
       <button class="btn btn-primary btn-full" id="checkoutBtn">
-        Procedi all'Ordine →
+        <span data-i18n="cart.procedi">Procedi all'Ordine</span> →
       </button>
     </div>
   </aside>
@@ -872,20 +897,19 @@
   <div class="cart-overlay" id="favOverlay"></div>
   <aside class="cart-sidebar" id="favSidebar">
     <div class="cart-header">
-      <h2>❤️ I Tuoi Preferiti</h2>
+      <h2>❤️ <span data-i18n="fav.title">I Tuoi Preferiti</span></h2>
       <button class="cart-close" id="favClose" aria-label="Chiudi">✕</button>
     </div>
     <div class="cart-items" id="favItems">
       <div class="cart-empty" id="favEmpty">
         <span class="cart-empty-icon">🤍</span>
-        <p>Nessun preferito ancora</p>
-        <a href="#" class="btn btn-outline btn-sm" id="goShopFromFavBtn">Sfoglia i Prodotti</a>
+        <p data-i18n="fav.empty">Nessun preferito ancora</p>
+        <a href="#" class="btn btn-outline btn-sm" id="goShopFromFavBtn" data-i18n="fav.sfoglia">Sfoglia i Prodotti</a>
       </div>
     </div>
     <div class="cart-footer" id="favFooter" style="display:none;">
-      <button class="favorites-clear-btn" id="favClearBtn" style="width:100%;margin-bottom:.75rem;">🗑️ Svuota tutti i
-        preferiti</button>
-      <button class="btn btn-primary btn-full" id="favAddAllBtn">🛒 Aggiungi tutti al carrello</button>
+      <button class="favorites-clear-btn" id="favClearBtn" style="width:100%;margin-bottom:.75rem;">🗑️ <span data-i18n="fav.svuotaTutti">Svuota tutti i preferiti</span></button>
+      <button class="btn btn-primary btn-full" id="favAddAllBtn">🛒 <span data-i18n="fav.aggiungiTutti">Aggiungi tutti al carrello</span></button>
     </div>
   </aside>
 
@@ -895,46 +919,46 @@
       <button class="modal-close" id="orderClose" aria-label="Chiudi">✕</button>
       <div class="modal-header">
         <span class="modal-icon">📦</span>
-        <h2>Completa il tuo Ordine</h2>
-        <p>Inserisci i tuoi dati per finalizzare l'acquisto</p>
+        <h2 data-i18n="order.title">Completa il tuo Ordine</h2>
+        <p data-i18n="order.sub">Inserisci i tuoi dati per finalizzare l'acquisto</p>
       </div>
       <form class="order-form" id="orderForm">
         <div class="form-row">
           <div class="form-group">
-            <label for="orderName">Nome *</label>
-            <input type="text" id="orderName" placeholder="Mario" required />
+            <label for="orderName" data-i18n="order.nome">Nome *</label>
+            <input type="text" id="orderName" placeholder="Mario" required data-i18n-ph="order.nomePh" />
           </div>
           <div class="form-group">
-            <label for="orderSurname">Cognome *</label>
-            <input type="text" id="orderSurname" placeholder="Rossi" required />
+            <label for="orderSurname" data-i18n="order.cognome">Cognome *</label>
+            <input type="text" id="orderSurname" placeholder="Rossi" required data-i18n-ph="order.cognomePh" />
           </div>
         </div>
         <div class="form-group">
-          <label for="orderEmail">Email *</label>
-          <input type="email" id="orderEmail" placeholder="mario.rossi@email.com" required />
+          <label for="orderEmail" data-i18n="order.email">Email *</label>
+          <input type="email" id="orderEmail" placeholder="mario.rossi@email.com" required data-i18n-ph="order.emailPh" />
         </div>
         <div class="form-group">
-          <label for="orderPhone">Telefono</label>
-          <input type="tel" id="orderPhone" placeholder="+39 333 000 0000" />
+          <label for="orderPhone" data-i18n="order.telefono">Telefono</label>
+          <input type="tel" id="orderPhone" placeholder="+39 333 000 0000" data-i18n-ph="order.telefonoPh" />
         </div>
         <div class="form-group">
-          <label for="orderAddress">Indirizzo di Spedizione *</label>
-          <input type="text" id="orderAddress" placeholder="Via Roma 1, 00100 Roma (RM)" required />
+          <label for="orderAddress" data-i18n="order.indirizzo">Indirizzo di Spedizione *</label>
+          <input type="text" id="orderAddress" placeholder="Via Roma 1, 00100 Roma (RM)" required data-i18n-ph="order.indirizzoPh" />
         </div>
         <div class="form-row">
           <div class="form-group">
-            <label for="orderCity">Città *</label>
-            <input type="text" id="orderCity" placeholder="Roma" required />
+            <label for="orderCity" data-i18n="order.citta">Città *</label>
+            <input type="text" id="orderCity" placeholder="Roma" required data-i18n-ph="order.cittaPh" />
           </div>
           <div class="form-group">
-            <label for="orderZip">CAP *</label>
-            <input type="text" id="orderZip" placeholder="00100" required />
+            <label for="orderZip" data-i18n="order.cap">CAP *</label>
+            <input type="text" id="orderZip" placeholder="00100" required data-i18n-ph="order.capPh" />
           </div>
         </div>
         <div class="form-group">
-          <label for="orderNotes">Note sull'ordine</label>
+          <label for="orderNotes" data-i18n="order.note">Note sull'ordine</label>
           <textarea id="orderNotes" rows="2"
-            placeholder="Personalizzazione maglia (nome/numero), note speciali..."></textarea>
+            placeholder="Personalizzazione maglia (nome/numero), note speciali..." data-i18n-ph="order.notePh"></textarea>
         </div>
 
         <!-- Order Summary inside modal -->
@@ -942,12 +966,12 @@
 
         <div class="form-group payment-notice">
           <span class="payment-icon">💳</span>
-          <span>Il pagamento avverrà al momento della consegna (contrassegno) o tramite bonifico bancario. Verrai
+          <span data-i18n="order.pagamento">Il pagamento avverrà al momento della consegna (contrassegno) o tramite bonifico bancario. Verrai
             contattato via email.</span>
         </div>
 
         <button type="submit" class="btn btn-primary btn-full" id="orderSubmitBtn">
-          <span id="orderBtnText">✅ Conferma Ordine</span>
+          <span id="orderBtnText">✅ <span data-i18n="order.conferma">Conferma Ordine</span></span>
         </button>
       </form>
     </div>
@@ -1032,22 +1056,22 @@
     <div class="qv-page-topbar">
       <button class="qv-page-back" id="customRequestBack" aria-label="Torna indietro" onclick="closeCustomRequest()">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
-        Indietro
+        <span data-i18n="common.indietro">Indietro</span>
       </button>
-      <span class="qv-page-title">Non trovi il tuo prodotto?</span>
+      <span class="qv-page-title" data-i18n="crq.title">Non trovi il tuo prodotto?</span>
     </div>
     <div class="qv-page-scroll">
       <div class="crq-inner">
         <div class="crq-form-card">
-          <p class="crq-intro">Scrivi il nome dell'articolo che cerchi: ti ricontatteremo con prezzo e disponibilit&agrave;.</p>
+          <p class="crq-intro" data-i18n="crqPage.intro">Scrivi il nome dell'articolo che cerchi: ti ricontatteremo con prezzo e disponibilit&agrave;.</p>
           <form id="customRequestForm" autocomplete="off">
             <div class="form-group">
-              <label for="crqName">Nome dell'articolo *</label>
+              <label for="crqName" data-i18n="crqPage.nomeArticolo">Nome dell'articolo *</label>
               <input type="text" id="crqName" class="crq-name-input" placeholder="Es: Maglia Barcellona Away 2026/27..." required />
             </div>
             <div class="crq-row">
               <div class="form-group">
-                <label for="crqSize">Taglia</label>
+                <label for="crqSize" data-i18n="crqPage.taglia">Taglia</label>
                 <select id="crqSize">
                   <option value="XS">XS</option>
                   <option value="S">S</option>
@@ -1058,7 +1082,7 @@
                 </select>
               </div>
               <div class="form-group">
-                <label for="crqQty">Quantit&agrave;</label>
+                <label for="crqQty" data-i18n="crqPage.quantita">Quantit&agrave;</label>
                 <select id="crqQty">
                   <option value="1" selected>1</option>
                   <option value="2">2</option>
@@ -1069,11 +1093,11 @@
               </div>
             </div>
             <div class="form-group">
-              <label for="crqNote">Dettagli aggiuntivi</label>
+              <label for="crqNote" data-i18n="crqPage.dettagli">Dettagli aggiuntivi</label>
               <textarea id="crqNote" rows="3" placeholder="Es: versione casa/trasferta, nome stampato, anno, squadra..."></textarea>
             </div>
-            <button type="submit" class="btn btn-primary btn-full crq-submit">Invia richiesta</button>
-            <p class="crq-disclaimer">Il prezzo verr&agrave; comunicato via email prima della conferma.</p>
+            <button type="submit" class="btn btn-primary btn-full crq-submit" data-i18n="crqPage.invia">Invia richiesta</button>
+            <p class="crq-disclaimer" data-i18n="crqPage.disclaimer">Il prezzo verr&agrave; comunicato via email prima della conferma.</p>
           </form>
         </div>
       </div>
@@ -1085,7 +1109,7 @@
     <div class="qv-page-topbar">
       <button class="qv-page-back" id="quickViewBack" aria-label="Torna indietro" onclick="closeQuickView()">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
-        Indietro
+        <span data-i18n="common.indietro">Indietro</span>
       </button>
       <span class="qv-page-title" id="qvPageTitle">Dettaglio Prodotto</span>
     </div>
@@ -1100,7 +1124,7 @@
   <div class="customize-modal-overlay" id="customizeOverlay">
     <div class="customize-modal" id="customizeModal">
       <div class="customize-modal-header">
-        <div class="customize-modal-title">✏️ Personalizza Maglia</div>
+        <div class="customize-modal-title">✏️ <span data-i18n="customize.title">Personalizza Maglia</span></div>
         <button class="customize-modal-close" id="customizeClose">✕</button>
       </div>
 
@@ -1108,25 +1132,25 @@
       <div class="customize-preview-box">
         <div class="customize-preview-shirt">👕</div>
         <div class="customize-preview-text">
-          <div class="customize-preview-name" id="prevName">IL TUO NOME</div>
+          <div class="customize-preview-name" id="prevName" data-i18n="customize.nomePh">IL TUO NOME</div>
           <div class="customize-preview-number" id="prevNumber">10</div>
         </div>
       </div>
 
       <!-- Campo nome -->
       <div class="customize-field-group">
-        <label class="customize-field-label" for="custName">Nome sulla maglia</label>
+        <label class="customize-field-label" for="custName" data-i18n="customize.nome">Nome sulla maglia</label>
         <input type="text" id="custName" class="customize-input" placeholder="Es: Rossi" maxlength="15"
           autocomplete="off" />
-        <div class="customize-hint">Max 15 caratteri. Verrà stampato sulla schiena.</div>
+        <div class="customize-hint" data-i18n="customize.maxCaratteri">Max 15 caratteri. Verrà stampato sulla schiena.</div>
       </div>
 
       <!-- Campo numero -->
       <div class="customize-field-group">
-        <label class="customize-field-label" for="custNumber">Numero sulla maglia</label>
+        <label class="customize-field-label" for="custNumber" data-i18n="customize.numero">Numero sulla maglia</label>
         <input type="number" id="custNumber" class="customize-input" placeholder="Es: 10" min="1" max="99"
           autocomplete="off" />
-        <div class="customize-hint">Numero da 1 a 99.</div>
+        <div class="customize-hint" data-i18n="customize.numeroRange">Numero da 1 a 99.</div>
       </div>
 
       <!-- Checkbox numero pantaloncino (Maglia+Pantaloncino / Kit Completo) -->
@@ -1153,7 +1177,7 @@
         <div class="customize-hint">Taglia in numero di scarpa europeo.</div>
       </div>
 
-      <button class="customize-confirm-btn" id="customizeConfirmBtn">✅ Conferma Personalizzazione</button>
+      <button class="customize-confirm-btn" id="customizeConfirmBtn">✅ <span data-i18n="customize.conferma">Conferma Personalizzazione</span></button>
     </div>
   </div>
 
@@ -1164,11 +1188,11 @@
       <div class="cat-page-breadcrumb">
         <button class="cat-page-back-btn" id="catPageBackBtn" aria-label="Torna indietro" onclick="closeCatPage()">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
-          Indietro
+          <span data-i18n="common.indietro">Indietro</span>
         </button>
         <span class="cat-page-sep">/</span>
         <button class="cat-page-bc-home" aria-label="Vai alla home"
-          onclick="closeCatPage();window.scrollTo({top:0,behavior:'smooth'});">Home</button>
+          onclick="closeCatPage();window.scrollTo({top:0,behavior:'smooth'});" data-i18n="footer.home">Home</button>
         <span class="cat-page-sep">/</span>
         <span class="cat-page-bc-label" id="catPageBcLabel">Categoria</span>
       </div>
@@ -1191,13 +1215,13 @@
         <span class="cat-page-results" id="catPageResults"></span>
         <div class="cat-sort-wrap" id="catSortWrap">
           <button class="cat-sort-btn" id="catSortBtn">
-            Filtra e ordina
+            <span data-i18n="cat.ordina">Filtra e ordina</span>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="11" y1="18" x2="13" y2="18"/></svg>
           </button>
           <div class="cat-sort-dropdown" id="catSortDropdown">
             <button class="cat-sort-item active" data-sort="default">Rilevanza</button>
-            <button class="cat-sort-item" data-sort="price-asc">Prezzo crescente</button>
-            <button class="cat-sort-item" data-sort="price-desc">Prezzo decrescente</button>
+            <button class="cat-sort-item" data-sort="price-asc" data-i18n="cat.prezzoCrescente">Prezzo crescente</button>
+            <button class="cat-sort-item" data-sort="price-desc" data-i18n="cat.prezzoDecrescente">Prezzo decrescente</button>
           </div>
         </div>
       </div>
@@ -1216,7 +1240,7 @@
       <span class="mob-nav-icon">
         <svg viewBox="0 0 24 24"><path d="M3 9.5L12 3l9 6.5V21a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5z"/><path d="M9 22V12h6v10"/></svg>
       </span>
-      <span class="mob-nav-label">Home</span>
+      <span class="mob-nav-label" data-i18n="mob.home">Home</span>
     </button>
 
     <!-- Cerca -->
@@ -1225,7 +1249,7 @@
       <span class="mob-nav-icon">
         <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
       </span>
-      <span class="mob-nav-label">Cerca</span>
+      <span class="mob-nav-label" data-i18n="mob.cerca">Cerca</span>
     </button>
 
     <!-- Prodotti -->
@@ -1234,7 +1258,7 @@
       <span class="mob-nav-icon">
         <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
       </span>
-      <span class="mob-nav-label">Prodotti</span>
+      <span class="mob-nav-label" data-i18n="mob.prodotti">Prodotti</span>
     </button>
 
     <!-- Preferiti -->
@@ -1244,7 +1268,7 @@
         <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
       </span>
       <span class="mob-nav-badge" id="mobFavBadge" style="display:none">0</span>
-      <span class="mob-nav-label">Preferiti</span>
+      <span class="mob-nav-label" data-i18n="mob.preferiti">Preferiti</span>
     </button>
 
     <!-- Carrello -->
@@ -1254,13 +1278,13 @@
         <svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
       </span>
       <span class="mob-nav-badge" id="mobCartBadge" style="display:none">0</span>
-      <span class="mob-nav-label">Carrello</span>
+      <span class="mob-nav-label" data-i18n="mob.carrello">Carrello</span>
     </button>
 
   </nav>
 
   <script src="products.js?v=20260811c"></script>
-  <script src="app.js?v=20260811c"></script>
+  <script src="app.js?v=20260812d"></script>
 
   <!-- ═══════════════════ MOBILE JS — Bottom nav sync + UX ═══════════════════ -->
   <script>

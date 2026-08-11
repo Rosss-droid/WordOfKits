@@ -15,6 +15,484 @@ const DEFAULT_EMAIL_CONFIG = {
 };
 let EMAIL_CONFIG = Object.assign({}, DEFAULT_EMAIL_CONFIG, JSON.parse(localStorage.getItem('gk_email_config') || '{}'));
 
+// â”€â”€ LINGUE / TRADUZIONI â”€â”€
+const I18N = {
+  it: {
+    'nav.menu': 'MENU', 'nav.calcio': 'Calcio', 'nav.sport': 'Sport', 'nav.mondiali': 'Mondiali',
+    'nav.scarpe': 'Scarpe', 'nav.vestiario': 'Vestiario', 'nav.outlet': 'Outlet',
+    'nav.campionati': 'Campionati', 'nav.tipoMaglia': 'Tipo Maglia', 'nav.abbigliamento': 'Abbigliamento',
+    'nav.competizioni': 'Competizioni', 'nav.brand': 'Brand', 'nav.tipo': 'Tipo', 'nav.offerte': 'Offerte',
+    'nav.novita': 'Novità', 'nav.vintage': 'Vintage', 'nav.tute': 'Tute', 'nav.felpe': 'Felpe',
+    'nav.tshirt': 'T-Shirt', 'nav.pantaloni': 'Pantaloni', 'nav.daCalcio': 'Da calcio', 'nav.running': 'Running',
+    'nav.lifestyle': 'Lifestyle', 'nav.promozioni': 'Promozioni', 'nav.ultimiPezzi': 'Ultimi pezzi',
+    'nav.scontiStagionali': 'Sconti stagionali', 'nav.mondiale2026': 'Mondiale 2026', 'nav.nazionali': 'Nazionali',
+    'nav.cercaPh': 'Cerca...',
+    'common.acquista': 'Acquista', 'common.scopriTutto': 'Scopri tutto', 'common.indietro': 'Indietro',
+    'common.applica': 'Applica', 'common.totale': 'Totale', 'common.spedizione': 'Spedizione',
+    'common.subtotale': 'Subtotale', 'common.sconto': 'Sconto', 'common.gratis': 'Gratuita',
+    'hero.nuovaCollezione': 'Nuova collezione', 'hero.qualitaPremium': 'Qualità Premium',
+    'hero.tessutoOriginale': 'Tessuto Originale', 'hero.storeUfficiale': 'STORE UFFICIALE',
+    'hero.tagline': 'Maglie da calcio premium per ogni tifoso',
+    'musthave.nostri': 'I Nostri', 'musthave.vediTutti': 'Vedi tutti i bestseller',
+    'sconto.title': '+10% SCONTO SUL PRIMO ORDINE CON IL CODICE: WOK10',
+    'sconto.sub': 'Acquista anche un solo prodotto e ricevi lo sconto del 10% direttamente nel carrello',
+    'crq.title': 'Non trovi il tuo prodotto?',
+    'crq.sub': 'Inserisci i dettagli qui: scrivici l\'articolo che cerchi e faremo del nostro meglio per trovarlo',
+    'crq.btn': 'Inserisci i dettagli',
+    'mondiali.title': 'MAGLIE DEL MONDIALE', 'mondiali.acquista': 'Acquista prodotti Mondiali',
+    'vintage.title': 'MAGLIE VINTAGE', 'vintage.acquista': 'Acquista prodotti Vintage',
+    'brand.title': 'Acquista per brand',
+    'nuova.title': 'Nuova Stagione', 'nuova.sub': 'Le ultime collezioni per ogni campo',
+    'scarpe.title': 'SCARPE', 'scarpe.acquista': 'Acquista prodotti Scarpe',
+    'accessori.title': 'ACCESSORI', 'accessori.acquista': 'Acquista Accessori',
+    'tute.title': 'TUTE', 'tute.acquista': 'Acquista Tute',
+    'footer.tagline': 'Il tuo store di fiducia per maglie da calcio e articoli sportivi.',
+    'footer.navigazione': 'Navigazione', 'footer.home': 'Home', 'footer.prodotti': 'Prodotti',
+    'footer.chiSiamo': 'Chi Siamo', 'footer.contatti': 'Contatti', 'footer.categorie': 'Categorie',
+    'footer.serieA': 'Serie A', 'footer.champions': 'Champions League', 'footer.informazioni': 'Informazioni',
+    'footer.recensioni': 'Recensioni', 'footer.ordinePersonalizzato': 'Ordine Personalizzato',
+    'footer.contattaci': 'Contattaci', 'footer.diritti': '© 2026 WorldOfKits. Tutti i diritti riservati.',
+    'search.categorie': 'Categorie', 'search.prodotti': 'Prodotti',
+    'cart.title': 'Il tuo Carrello', 'cart.empty': 'Il carrello è vuoto', 'cart.goShop': 'Vai ai Prodotti',
+    'cart.procedi': 'Procedi all\'Ordine', 'cart.articoli': 'articoli', 'cart.codicePh': 'Codice sconto...',
+    'fav.title': 'I Tuoi Preferiti', 'fav.empty': 'Nessun preferito ancora', 'fav.sfoglia': 'Sfoglia i Prodotti',
+    'fav.svuotaTutti': 'Svuota tutti i preferiti', 'fav.aggiungiTutti': 'Aggiungi tutti al carrello',
+    'order.title': 'Completa il tuo Ordine',
+    'order.sub': 'Inserisci i tuoi dati per finalizzare l\'acquisto',
+    'order.nome': 'Nome', 'order.cognome': 'Cognome', 'order.email': 'Email', 'order.telefono': 'Telefono',
+    'order.indirizzo': 'Indirizzo di Spedizione', 'order.citta': 'Città', 'order.cap': 'CAP',
+    'order.note': 'Note sull\'ordine', 'order.conferma': 'Conferma Ordine', 'order.invio': 'Invio in corso...',
+    'order.riepilogo': 'Riepilogo Ordine',
+    'order.pagamento': 'Il pagamento avverrà al momento della consegna (contrassegno) o tramite bonifico bancario. Verrai contattato via email.',
+    'confirm.title': 'Ordine Ricevuto!', 'confirm.grazie': 'Grazie',
+    'confirm.inviato': 'il tuo ordine è stato inviato con successo.',
+    'confirm.numeroOrdine': 'Numero ordine', 'confirm.totalePagato': 'Totale pagato',
+    'confirm.contatto': 'Verrai contattato via email o telefono per la conferma della spedizione. Il pagamento avviene alla consegna.',
+    'confirm.perfetto': 'Perfetto, grazie!',
+    'confirm.errore': 'Errore nell\'invio. Controlla la configurazione email e riprova.',
+    'qv.dettaglio': 'Dettaglio Prodotto', 'qv.taglia': 'Taglia', 'qv.tipoMaglia': 'Tipo Maglia',
+    'qv.standard': 'Standard', 'qv.tifoso': 'Tifoso', 'qv.player': 'Player', 'qv.composizione': 'Composizione',
+    'qv.soloMaglia': 'Solo Maglia', 'qv.inclusa': 'Inclusa nel prezzo', 'qv.magliaPanta': 'Maglia + Pantaloncino',
+    'qv.kitCompleto': 'Kit Completo', 'qv.kitCompletoSub': 'Maglia+Pant+Calzettoni',
+    'qv.personalizzazione': 'Personalizzazione applicata',
+    'qv.aggiungi': 'Aggiungi al Carrello', 'qv.aggiorna': 'Aggiorna', 'qv.aggiornaCarrello': 'Aggiorna Carrello',
+    'qv.personalizza': 'Personalizza (Nome & Numero)', 'qv.nonTrovato': 'Non trovi il tuo prodotto?',
+    'cat.prodotti': 'prodotti', 'cat.nessunProdotto': 'Nessun prodotto trovato per questa selezione.',
+    'cat.ordina': 'Ordina', 'cat.prezzoCrescente': 'Prezzo crescente', 'cat.prezzoDecrescente': 'Prezzo decrescente',
+    'mob.home': 'Home', 'mob.cerca': 'Cerca', 'mob.prodotti': 'Prodotti', 'mob.preferiti': 'Preferiti',
+    'mob.carrello': 'Carrello',
+    'crqPage.intro': 'Scrivi il nome dell\'articolo che cerchi: ti ricontatteremo con prezzo e disponibilità.',
+    'crqPage.nomeArticolo': 'Nome dell\'articolo', 'crqPage.taglia': 'Taglia', 'crqPage.quantita': 'Quantità',
+    'crqPage.dettagli': 'Dettagli aggiuntivi', 'crqPage.invia': 'Invia richiesta',
+    'crqPage.disclaimer': 'Il prezzo verrà comunicato via email prima della conferma.',
+    'customize.title': 'Personalizza Maglia', 'customize.nome': 'NOME SULLA MAGLIA',
+    'customize.numero': 'NUMERO SULLA MAGLIA', 'customize.conferma': 'Conferma Personalizzazione',
+    'toast.aggiunto': 'aggiunto!', 'toast.aggiornato': 'aggiornato!',
+    'toast.preferitiAggiunto': 'Aggiunto ai preferiti!', 'toast.preferitiRimosso': 'Rimosso dai preferiti.',
+    'toast.carrelloVuoto': 'Il carrello è vuoto!',
+    'toast.emailNonConfig': 'Sistema email non configurato.',
+    'toast.erroreInvio': 'Errore nell\'invio.',
+    'toast.prezzoComunicato': 'Il prezzo ti verrà comunicato via email.',
+    'qv.aggiungiSticky': 'Aggiungi', 'cart.taglia': 'Taglia', 'cart.gratis': 'Gratis',
+    'cart.omaggio': 'Omaggio', 'cart.rimuovi': 'Rimuovi', 'cart.vediProdotto': 'Vedi prodotto',
+    'customize.maxCaratteri': 'Max 15 caratteri. Verrà stampato sulla schiena.',
+    'customize.numeroRange': 'Numero da 1 a 99.', 'customize.nomePh': 'IL TUO NOME',
+    'order.nomePh': 'Mario', 'order.cognomePh': 'Rossi', 'order.emailPh': 'mario.rossi@email.com',
+    'order.telefonoPh': '+39 333 000 0000', 'order.indirizzoPh': 'Via Roma 1, 00100 Roma (RM)',
+    'order.cittaPh': 'Roma', 'order.capPh': '00100', 'order.notePh': 'Personalizzazione maglia (nome/numero), note speciali...'
+  },
+  en: {
+    'nav.menu': 'MENU', 'nav.calcio': 'Football', 'nav.sport': 'Sport', 'nav.mondiali': 'World Cup',
+    'nav.scarpe': 'Shoes', 'nav.vestiario': 'Apparel', 'nav.outlet': 'Outlet',
+    'nav.campionati': 'Leagues', 'nav.tipoMaglia': 'Shirt Type', 'nav.abbigliamento': 'Clothing',
+    'nav.competizioni': 'Competitions', 'nav.brand': 'Brands', 'nav.tipo': 'Type', 'nav.offerte': 'Offers',
+    'nav.novita': 'New Arrivals', 'nav.vintage': 'Vintage', 'nav.tute': 'Tracksuits', 'nav.felpe': 'Hoodies',
+    'nav.tshirt': 'T-Shirt', 'nav.pantaloni': 'Pants', 'nav.daCalcio': 'Football', 'nav.running': 'Running',
+    'nav.lifestyle': 'Lifestyle', 'nav.promozioni': 'Promotions', 'nav.ultimiPezzi': 'Last pieces',
+    'nav.scontiStagionali': 'Seasonal sales', 'nav.mondiale2026': 'World Cup 2026', 'nav.nazionali': 'National Teams',
+    'nav.cercaPh': 'Search...',
+    'common.acquista': 'Buy', 'common.scopriTutto': 'Discover all', 'common.indietro': 'Back',
+    'common.applica': 'Apply', 'common.totale': 'Total', 'common.spedizione': 'Shipping',
+    'common.subtotale': 'Subtotal', 'common.sconto': 'Discount', 'common.gratis': 'Free',
+    'hero.nuovaCollezione': 'New Collection', 'hero.qualitaPremium': 'Premium Quality',
+    'hero.tessutoOriginale': 'Original Fabric', 'hero.storeUfficiale': 'OFFICIAL STORE',
+    'hero.tagline': 'Premium football shirts for every fan',
+    'musthave.nostri': 'Our', 'musthave.vediTutti': 'See all bestsellers',
+    'sconto.title': '+10% OFF YOUR FIRST ORDER WITH CODE: WOK10',
+    'sconto.sub': 'Buy even a single product and get 10% off directly in the cart',
+    'crq.title': 'Can\'t find your product?',
+    'crq.sub': 'Enter the details here: tell us the item you\'re looking for and we\'ll do our best to find it',
+    'crq.btn': 'Enter the details',
+    'mondiali.title': 'WORLD CUP SHIRTS', 'mondiali.acquista': 'Shop World Cup products',
+    'vintage.title': 'VINTAGE SHIRTS', 'vintage.acquista': 'Shop Vintage products',
+    'brand.title': 'Shop by brand',
+    'nuova.title': 'New Season', 'nuova.sub': 'The latest collections for every pitch',
+    'scarpe.title': 'SHOES', 'scarpe.acquista': 'Shop Shoes',
+    'accessori.title': 'ACCESSORIES', 'accessori.acquista': 'Shop Accessories',
+    'tute.title': 'TRACKSUITS', 'tute.acquista': 'Shop Tracksuits',
+    'footer.tagline': 'Your trusted store for football shirts and sports items.',
+    'footer.navigazione': 'Navigation', 'footer.home': 'Home', 'footer.prodotti': 'Products',
+    'footer.chiSiamo': 'About Us', 'footer.contatti': 'Contact', 'footer.categorie': 'Categories',
+    'footer.serieA': 'Serie A', 'footer.champions': 'Champions League', 'footer.informazioni': 'Information',
+    'footer.recensioni': 'Reviews', 'footer.ordinePersonalizzato': 'Custom Order',
+    'footer.contattaci': 'Contact Us', 'footer.diritti': '© 2026 WorldOfKits. All rights reserved.',
+    'search.categorie': 'Categories', 'search.prodotti': 'Products',
+    'cart.title': 'Your Cart', 'cart.empty': 'Your cart is empty', 'cart.goShop': 'Go to Products',
+    'cart.procedi': 'Proceed to Checkout', 'cart.articoli': 'items', 'cart.codicePh': 'Discount code...',
+    'fav.title': 'Your Favorites', 'fav.empty': 'No favorites yet', 'fav.sfoglia': 'Browse Products',
+    'fav.svuotaTutti': 'Clear all favorites', 'fav.aggiungiTutti': 'Add all to cart',
+    'order.title': 'Complete Your Order',
+    'order.sub': 'Enter your details to finalize your purchase',
+    'order.nome': 'First Name', 'order.cognome': 'Last Name', 'order.email': 'Email', 'order.telefono': 'Phone',
+    'order.indirizzo': 'Shipping Address', 'order.citta': 'City', 'order.cap': 'ZIP',
+    'order.note': 'Order notes', 'order.conferma': 'Confirm Order', 'order.invio': 'Sending...',
+    'order.riepilogo': 'Order Summary',
+    'order.pagamento': 'Payment will be made on delivery (cash on delivery) or by bank transfer. You will be contacted by email.',
+    'confirm.title': 'Order Received!', 'confirm.grazie': 'Thank you',
+    'confirm.inviato': 'your order has been sent successfully.',
+    'confirm.numeroOrdine': 'Order number', 'confirm.totalePagato': 'Total paid',
+    'confirm.contatto': 'You will be contacted by email or phone to confirm shipping. Payment is made on delivery.',
+    'confirm.perfetto': 'Perfect, thanks!',
+    'confirm.errore': 'Error sending. Check the email configuration and try again.',
+    'qv.dettaglio': 'Product Details', 'qv.taglia': 'Size', 'qv.tipoMaglia': 'Shirt Type',
+    'qv.standard': 'Standard', 'qv.tifoso': 'Fan', 'qv.player': 'Player', 'qv.composizione': 'Composition',
+    'qv.soloMaglia': 'Shirt Only', 'qv.inclusa': 'Included in the price', 'qv.magliaPanta': 'Shirt + Shorts',
+    'qv.kitCompleto': 'Full Kit', 'qv.kitCompletoSub': 'Shirt+Shorts+Socks',
+    'qv.personalizzazione': 'Customization applied',
+    'qv.aggiungi': 'Add to Cart', 'qv.aggiorna': 'Update', 'qv.aggiornaCarrello': 'Update Cart',
+    'qv.personalizza': 'Customize (Name & Number)', 'qv.nonTrovato': 'Can\'t find your product?',
+    'cat.prodotti': 'products', 'cat.nessunProdotto': 'No products found for this selection.',
+    'cat.ordina': 'Sort', 'cat.prezzoCrescente': 'Price low to high', 'cat.prezzoDecrescente': 'Price high to low',
+    'mob.home': 'Home', 'mob.cerca': 'Search', 'mob.prodotti': 'Products', 'mob.preferiti': 'Favorites',
+    'mob.carrello': 'Cart',
+    'crqPage.intro': 'Write the name of the item you\'re looking for: we\'ll get back to you with price and availability.',
+    'crqPage.nomeArticolo': 'Item name', 'crqPage.taglia': 'Size', 'crqPage.quantita': 'Quantity',
+    'crqPage.dettagli': 'Additional details', 'crqPage.invia': 'Send request',
+    'crqPage.disclaimer': 'The price will be communicated by email before confirmation.',
+    'customize.title': 'Customize Shirt', 'customize.nome': 'NAME ON SHIRT',
+    'customize.numero': 'NUMBER ON SHIRT', 'customize.conferma': 'Confirm Customization',
+    'toast.aggiunto': 'added!', 'toast.aggiornato': 'updated!',
+    'toast.preferitiAggiunto': 'Added to favorites!', 'toast.preferitiRimosso': 'Removed from favorites.',
+    'toast.carrelloVuoto': 'Your cart is empty!',
+    'toast.emailNonConfig': 'Email system not configured.',
+    'toast.erroreInvio': 'Error sending.',
+    'toast.prezzoComunicato': 'The price will be communicated to you by email.',
+    'qv.aggiungiSticky': 'Add', 'cart.taglia': 'Size', 'cart.gratis': 'Free',
+    'cart.omaggio': 'Gift', 'cart.rimuovi': 'Remove', 'cart.vediProdotto': 'View product',
+    'customize.maxCaratteri': 'Max 15 characters. It will be printed on the back.',
+    'customize.numeroRange': 'Number from 1 to 99.', 'customize.nomePh': 'YOUR NAME',
+    'order.nomePh': 'John', 'order.cognomePh': 'Smith', 'order.emailPh': 'john.smith@email.com',
+    'order.telefonoPh': '+1 555 000 0000', 'order.indirizzoPh': '1 Main St, 00100 Rome',
+    'order.cittaPh': 'Rome', 'order.capPh': '00100', 'order.notePh': 'Shirt customization (name/number), special notes...'
+  },
+  es: {
+    'nav.menu': 'MENÚ', 'nav.calcio': 'Fútbol', 'nav.sport': 'Deporte', 'nav.mondiali': 'Mundial',
+    'nav.scarpe': 'Zapatillas', 'nav.vestiario': 'Ropa', 'nav.outlet': 'Outlet',
+    'nav.campionati': 'Ligas', 'nav.tipoMaglia': 'Tipo de Camiseta', 'nav.abbigliamento': 'Ropa',
+    'nav.competizioni': 'Competiciones', 'nav.brand': 'Marcas', 'nav.tipo': 'Tipo', 'nav.offerte': 'Ofertas',
+    'nav.novita': 'Novedades', 'nav.vintage': 'Vintage', 'nav.tute': 'Chándales', 'nav.felpe': 'Sudaderas',
+    'nav.tshirt': 'Camiseta', 'nav.pantaloni': 'Pantalones', 'nav.daCalcio': 'De fútbol', 'nav.running': 'Running',
+    'nav.lifestyle': 'Lifestyle', 'nav.promozioni': 'Promociones', 'nav.ultimiPezzi': 'Últimas unidades',
+    'nav.scontiStagionali': 'Rebajas de temporada', 'nav.mondiale2026': 'Mundial 2026', 'nav.nazionali': 'Selecciones',
+    'nav.cercaPh': 'Buscar...',
+    'common.acquista': 'Comprar', 'common.scopriTutto': 'Descubre todo', 'common.indietro': 'Atrás',
+    'common.applica': 'Aplicar', 'common.totale': 'Total', 'common.spedizione': 'Envío',
+    'common.subtotale': 'Subtotal', 'common.sconto': 'Descuento', 'common.gratis': 'Gratis',
+    'hero.nuovaCollezione': 'Nueva Colección', 'hero.qualitaPremium': 'Calidad Premium',
+    'hero.tessutoOriginale': 'Tejido Original', 'hero.storeUfficiale': 'TIENDA OFICIAL',
+    'hero.tagline': 'Camisetas de fútbol premium para cada aficionado',
+    'musthave.nostri': 'Nuestros', 'musthave.vediTutti': 'Ver todos los bestsellers',
+    'sconto.title': '+10% DE DESCUENTO EN TU PRIMER PEDIDO CON EL CÓDIGO: WOK10',
+    'sconto.sub': 'Compra incluso un solo producto y recibe el 10% de descuento directamente en el carrito',
+    'crq.title': '¿No encuentras tu producto?',
+    'crq.sub': 'Introduce los detalles aquí: escríbenos el artículo que buscas y haremos todo lo posible por encontrarlo',
+    'crq.btn': 'Introduce los detalles',
+    'mondiali.title': 'CAMISETAS DEL MUNDIAL', 'mondiali.acquista': 'Compra productos del Mundial',
+    'vintage.title': 'CAMISETAS VINTAGE', 'vintage.acquista': 'Compra productos vintage',
+    'brand.title': 'Compra por marca',
+    'nuova.title': 'Nueva Temporada', 'nuova.sub': 'Las últimas colecciones para cada campo',
+    'scarpe.title': 'ZAPATILLAS', 'scarpe.acquista': 'Compra zapatillas',
+    'accessori.title': 'ACCESORIOS', 'accessori.acquista': 'Compra accesorios',
+    'tute.title': 'CHÁNDALES', 'tute.acquista': 'Compra chándales',
+    'footer.tagline': 'Tu tienda de confianza para camisetas de fútbol y artículos deportivos.',
+    'footer.navigazione': 'Navegación', 'footer.home': 'Inicio', 'footer.prodotti': 'Productos',
+    'footer.chiSiamo': 'Quiénes Somos', 'footer.contatti': 'Contacto', 'footer.categorie': 'Categorías',
+    'footer.serieA': 'Serie A', 'footer.champions': 'Champions League', 'footer.informazioni': 'Información',
+    'footer.recensioni': 'Reseñas', 'footer.ordinePersonalizzato': 'Pedido Personalizado',
+    'footer.contattaci': 'Contáctanos', 'footer.diritti': '© 2026 WorldOfKits. Todos los derechos reservados.',
+    'search.categorie': 'Categorías', 'search.prodotti': 'Productos',
+    'cart.title': 'Tu Carrito', 'cart.empty': 'Tu carrito está vacío', 'cart.goShop': 'Ir a Productos',
+    'cart.procedi': 'Proceder al Pago', 'cart.articoli': 'artículos', 'cart.codicePh': 'Código de descuento...',
+    'fav.title': 'Tus Favoritos', 'fav.empty': 'Aún no hay favoritos', 'fav.sfoglia': 'Explorar Productos',
+    'fav.svuotaTutti': 'Vaciar todos los favoritos', 'fav.aggiungiTutti': 'Añadir todo al carrito',
+    'order.title': 'Completa tu Pedido',
+    'order.sub': 'Introduce tus datos para finalizar la compra',
+    'order.nome': 'Nombre', 'order.cognome': 'Apellido', 'order.email': 'Email', 'order.telefono': 'Teléfono',
+    'order.indirizzo': 'Dirección de Envío', 'order.citta': 'Ciudad', 'order.cap': 'CP',
+    'order.note': 'Notas del pedido', 'order.conferma': 'Confirmar Pedido', 'order.invio': 'Enviando...',
+    'order.riepilogo': 'Resumen del Pedido',
+    'order.pagamento': 'El pago se realizará en el momento de la entrega (contra reembolso) o mediante transferencia bancaria. Te contactaremos por email.',
+    'confirm.title': '¡Pedido Recibido!', 'confirm.grazie': 'Gracias',
+    'confirm.inviato': 'tu pedido ha sido enviado con éxito.',
+    'confirm.numeroOrdine': 'Número de pedido', 'confirm.totalePagato': 'Total pagado',
+    'confirm.contatto': 'Te contactaremos por email o teléfono para confirmar el envío. El pago se realiza en la entrega.',
+    'confirm.perfetto': '¡Perfecto, gracias!',
+    'confirm.errore': 'Error al enviar. Comprueba la configuración del email y vuelve a intentarlo.',
+    'qv.dettaglio': 'Detalle del Producto', 'qv.taglia': 'Talla', 'qv.tipoMaglia': 'Tipo de Camiseta',
+    'qv.standard': 'Estándar', 'qv.tifoso': 'Aficionado', 'qv.player': 'Jugador', 'qv.composizione': 'Composición',
+    'qv.soloMaglia': 'Solo Camiseta', 'qv.inclusa': 'Incluido en el precio', 'qv.magliaPanta': 'Camiseta + Pantalón',
+    'qv.kitCompleto': 'Kit Completo', 'qv.kitCompletoSub': 'Camiseta+Pant+Calcetines',
+    'qv.personalizzazione': 'Personalización aplicada',
+    'qv.aggiungi': 'Añadir al Carrito', 'qv.aggiorna': 'Actualizar', 'qv.aggiornaCarrello': 'Actualizar Carrito',
+    'qv.personalizza': 'Personalizar (Nombre y Número)', 'qv.nonTrovato': '¿No encuentras tu producto?',
+    'cat.prodotti': 'productos', 'cat.nessunProdotto': 'No se encontraron productos para esta selección.',
+    'cat.ordina': 'Ordenar', 'cat.prezzoCrescente': 'Precio ascendente', 'cat.prezzoDecrescente': 'Precio descendente',
+    'mob.home': 'Inicio', 'mob.cerca': 'Buscar', 'mob.prodotti': 'Productos', 'mob.preferiti': 'Favoritos',
+    'mob.carrello': 'Carrito',
+    'crqPage.intro': 'Escribe el nombre del artículo que buscas: te contactaremos con precio y disponibilidad.',
+    'crqPage.nomeArticolo': 'Nombre del artículo', 'crqPage.taglia': 'Talla', 'crqPage.quantita': 'Cantidad',
+    'crqPage.dettagli': 'Detalles adicionales', 'crqPage.invia': 'Enviar solicitud',
+    'crqPage.disclaimer': 'El precio se comunicará por email antes de la confirmación.',
+    'customize.title': 'Personalizar Camiseta', 'customize.nome': 'NOMBRE EN LA CAMISETA',
+    'customize.numero': 'NÚMERO EN LA CAMISETA', 'customize.conferma': 'Confirmar Personalización',
+    'toast.aggiunto': '¡añadido!', 'toast.aggiornato': '¡actualizado!',
+    'toast.preferitiAggiunto': '¡Añadido a favoritos!', 'toast.preferitiRimosso': 'Eliminado de favoritos.',
+    'toast.carrelloVuoto': '¡Tu carrito está vacío!',
+    'toast.emailNonConfig': 'Sistema de email no configurado.',
+    'toast.erroreInvio': 'Error al enviar.',
+    'toast.prezzoComunicato': 'El precio se te comunicará por email.',
+    'qv.aggiungiSticky': 'Añadir', 'cart.taglia': 'Talla', 'cart.gratis': 'Gratis',
+    'cart.omaggio': 'Regalo', 'cart.rimuovi': 'Eliminar', 'cart.vediProdotto': 'Ver producto',
+    'customize.maxCaratteri': 'Máx. 15 caracteres. Se imprimirá en la espalda.',
+    'customize.numeroRange': 'Número del 1 al 99.', 'customize.nomePh': 'TU NOMBRE',
+    'order.nomePh': 'Juan', 'order.cognomePh': 'García', 'order.emailPh': 'juan.garcia@email.com',
+    'order.telefonoPh': '+34 600 000 000', 'order.indirizzoPh': 'Calle Mayor 1, 00100 Roma',
+    'order.cittaPh': 'Roma', 'order.capPh': '00100', 'order.notePh': 'Personalización de camiseta (nombre/número), notas especiales...'
+  },
+  fr: {
+    'nav.menu': 'MENU', 'nav.calcio': 'Football', 'nav.sport': 'Sport', 'nav.mondiali': 'Mondial',
+    'nav.scarpe': 'Chaussures', 'nav.vestiario': 'Vêtements', 'nav.outlet': 'Outlet',
+    'nav.campionati': 'Championnats', 'nav.tipoMaglia': 'Type de Maillot', 'nav.abbigliamento': 'Vêtements',
+    'nav.competizioni': 'Compétitions', 'nav.brand': 'Marques', 'nav.tipo': 'Type', 'nav.offerte': 'Offres',
+    'nav.novita': 'Nouveautés', 'nav.vintage': 'Vintage', 'nav.tute': 'Survêtements', 'nav.felpe': 'Sweats',
+    'nav.tshirt': 'T-shirt', 'nav.pantaloni': 'Pantalons', 'nav.daCalcio': 'De football', 'nav.running': 'Running',
+    'nav.lifestyle': 'Lifestyle', 'nav.promozioni': 'Promotions', 'nav.ultimiPezzi': 'Dernières pièces',
+    'nav.scontiStagionali': 'Soldes saisonniers', 'nav.mondiale2026': 'Coupe du Monde 2026', 'nav.nazionali': 'Équipes nationales',
+    'nav.cercaPh': 'Rechercher...',
+    'common.acquista': 'Acheter', 'common.scopriTutto': 'Découvrir tout', 'common.indietro': 'Retour',
+    'common.applica': 'Appliquer', 'common.totale': 'Total', 'common.spedizione': 'Livraison',
+    'common.subtotale': 'Sous-total', 'common.sconto': 'Remise', 'common.gratis': 'Gratuite',
+    'hero.nuovaCollezione': 'Nouvelle Collection', 'hero.qualitaPremium': 'Qualité Premium',
+    'hero.tessutoOriginale': 'Tissu Original', 'hero.storeUfficiale': 'BOUTIQUE OFFICIELLE',
+    'hero.tagline': 'Maillots de football premium pour chaque fan',
+    'musthave.nostri': 'Nos', 'musthave.vediTutti': 'Voir tous les best-sellers',
+    'sconto.title': '+10% DE RÉDUCTION SUR VOTRE PREMIÈRE COMMANDE AVEC LE CODE : WOK10',
+    'sconto.sub': 'Achetez même un seul produit et bénéficiez de 10% de réduction directement dans le panier',
+    'crq.title': 'Vous ne trouvez pas votre produit ?',
+    'crq.sub': 'Saisissez les détails ici : écrivez-nous l\'article que vous cherchez et nous ferons de notre mieux pour le trouver',
+    'crq.btn': 'Saisissez les détails',
+    'mondiali.title': 'MAILLOTS DE LA COUPE DU MONDE', 'mondiali.acquista': 'Acheter des produits Mondial',
+    'vintage.title': 'MAILLOTS VINTAGE', 'vintage.acquista': 'Acheter des produits vintage',
+    'brand.title': 'Acheter par marque',
+    'nuova.title': 'Nouvelle Saison', 'nuova.sub': 'Les dernières collections pour chaque terrain',
+    'scarpe.title': 'CHAUSSURES', 'scarpe.acquista': 'Acheter des chaussures',
+    'accessori.title': 'ACCESSOIRES', 'accessori.acquista': 'Acheter des accessoires',
+    'tute.title': 'SURVÊTEMENTS', 'tute.acquista': 'Acheter des survêtements',
+    'footer.tagline': 'Votre boutique de confiance pour les maillots de football et les articles de sport.',
+    'footer.navigazione': 'Navigation', 'footer.home': 'Accueil', 'footer.prodotti': 'Produits',
+    'footer.chiSiamo': 'À propos', 'footer.contatti': 'Contact', 'footer.categorie': 'Catégories',
+    'footer.serieA': 'Serie A', 'footer.champions': 'Ligue des Champions', 'footer.informazioni': 'Informations',
+    'footer.recensioni': 'Avis', 'footer.ordinePersonalizzato': 'Commande Personnalisée',
+    'footer.contattaci': 'Contactez-nous', 'footer.diritti': '© 2026 WorldOfKits. Tous droits réservés.',
+    'search.categorie': 'Catégories', 'search.prodotti': 'Produits',
+    'cart.title': 'Votre Panier', 'cart.empty': 'Votre panier est vide', 'cart.goShop': 'Aller aux Produits',
+    'cart.procedi': 'Passer à la Commande', 'cart.articoli': 'articles', 'cart.codicePh': 'Code promo...',
+    'fav.title': 'Vos Favoris', 'fav.empty': 'Aucun favori', 'fav.sfoglia': 'Parcourir les Produits',
+    'fav.svuotaTutti': 'Vider tous les favoris', 'fav.aggiungiTutti': 'Tout ajouter au panier',
+    'order.title': 'Complétez votre Commande',
+    'order.sub': 'Saisissez vos données pour finaliser votre achat',
+    'order.nome': 'Prénom', 'order.cognome': 'Nom', 'order.email': 'E-mail', 'order.telefono': 'Téléphone',
+    'order.indirizzo': 'Adresse de Livraison', 'order.citta': 'Ville', 'order.cap': 'Code postal',
+    'order.note': 'Notes de commande', 'order.conferma': 'Confirmer la Commande', 'order.invio': 'Envoi en cours...',
+    'order.riepilogo': 'Récapitulatif',
+    'order.pagamento': 'Le paiement sera effectué à la livraison (contre remboursement) ou par virement bancaire. Vous serez contacté par email.',
+    'confirm.title': 'Commande Reçue !', 'confirm.grazie': 'Merci',
+    'confirm.inviato': 'votre commande a été envoyée avec succès.',
+    'confirm.numeroOrdine': 'Numéro de commande', 'confirm.totalePagato': 'Total payé',
+    'confirm.contatto': 'Vous serez contacté par email ou téléphone pour confirmer la livraison. Le paiement se fait à la livraison.',
+    'confirm.perfetto': 'Parfait, merci !',
+    'confirm.errore': 'Erreur d\'envoi. Vérifiez la configuration email et réessayez.',
+    'qv.dettaglio': 'Détails du Produit', 'qv.taglia': 'Taille', 'qv.tipoMaglia': 'Type de Maillot',
+    'qv.standard': 'Standard', 'qv.tifoso': 'Supporter', 'qv.player': 'Joueur', 'qv.composizione': 'Composition',
+    'qv.soloMaglia': 'Maillot Seul', 'qv.inclusa': 'Inclus dans le prix', 'qv.magliaPanta': 'Maillot + Short',
+    'qv.kitCompleto': 'Kit Complet', 'qv.kitCompletoSub': 'Maillot+Short+Chaussettes',
+    'qv.personalizzazione': 'Personnalisation appliquée',
+    'qv.aggiungi': 'Ajouter au Panier', 'qv.aggiorna': 'Mettre à jour', 'qv.aggiornaCarrello': 'Mettre à jour le Panier',
+    'qv.personalizza': 'Personnaliser (Nom et Numéro)', 'qv.nonTrovato': 'Vous ne trouvez pas votre produit ?',
+    'cat.prodotti': 'produits', 'cat.nessunProdotto': 'Aucun produit trouvé pour cette sélection.',
+    'cat.ordina': 'Trier', 'cat.prezzoCrescente': 'Prix croissant', 'cat.prezzoDecrescente': 'Prix décroissant',
+    'mob.home': 'Accueil', 'mob.cerca': 'Rechercher', 'mob.prodotti': 'Produits', 'mob.preferiti': 'Favoris',
+    'mob.carrello': 'Panier',
+    'crqPage.intro': 'Écrivez le nom de l\'article que vous cherchez : nous vous recontacterons avec le prix et la disponibilité.',
+    'crqPage.nomeArticolo': 'Nom de l\'article', 'crqPage.taglia': 'Taille', 'crqPage.quantita': 'Quantité',
+    'crqPage.dettagli': 'Détails supplémentaires', 'crqPage.invia': 'Envoyer la demande',
+    'crqPage.disclaimer': 'Le prix sera communiqué par email avant la confirmation.',
+    'customize.title': 'Personnaliser le Maillot', 'customize.nome': 'NOM SUR LE MAILLOT',
+    'customize.numero': 'NUMÉRO SUR LE MAILLOT', 'customize.conferma': 'Confirmer la Personnalisation',
+    'toast.aggiunto': 'ajouté !', 'toast.aggiornato': 'mis à jour !',
+    'toast.preferitiAggiunto': 'Ajouté aux favoris !', 'toast.preferitiRimosso': 'Retiré des favoris.',
+    'toast.carrelloVuoto': 'Votre panier est vide !',
+    'toast.emailNonConfig': 'Système d\'email non configuré.',
+    'toast.erroreInvio': 'Erreur d\'envoi.',
+    'toast.prezzoComunicato': 'Le prix vous sera communiqué par email.',
+    'qv.aggiungiSticky': 'Ajouter', 'cart.taglia': 'Taille', 'cart.gratis': 'Gratuit',
+    'cart.omaggio': 'Cadeau', 'cart.rimuovi': 'Retirer', 'cart.vediProdotto': 'Voir le produit',
+    'customize.maxCaratteri': 'Max 15 caractères. Il sera imprimé dans le dos.',
+    'customize.numeroRange': 'Numéro de 1 à 99.', 'customize.nomePh': 'VOTRE NOM',
+    'order.nomePh': 'Jean', 'order.cognomePh': 'Martin', 'order.emailPh': 'jean.martin@email.com',
+    'order.telefonoPh': '+33 600 000 000', 'order.indirizzoPh': '1 rue de Rome, 00100 Rome',
+    'order.cittaPh': 'Rome', 'order.capPh': '00100', 'order.notePh': 'Personnalisation du maillot (nom/numéro), notes spéciales...'
+  },
+  de: {
+    'nav.menu': 'MENÜ', 'nav.calcio': 'Fußball', 'nav.sport': 'Sport', 'nav.mondiali': 'WM',
+    'nav.scarpe': 'Schuhe', 'nav.vestiario': 'Bekleidung', 'nav.outlet': 'Outlet',
+    'nav.campionati': 'Ligen', 'nav.tipoMaglia': 'Trikotart', 'nav.abbigliamento': 'Bekleidung',
+    'nav.competizioni': 'Wettbewerbe', 'nav.brand': 'Marken', 'nav.tipo': 'Art', 'nav.offerte': 'Angebote',
+    'nav.novita': 'Neuheiten', 'nav.vintage': 'Vintage', 'nav.tute': 'Trainingsanzüge', 'nav.felpe': 'Sweatshirts',
+    'nav.tshirt': 'T-Shirt', 'nav.pantaloni': 'Hosen', 'nav.daCalcio': 'Fußball', 'nav.running': 'Laufen',
+    'nav.lifestyle': 'Lifestyle', 'nav.promozioni': 'Aktionen', 'nav.ultimiPezzi': 'Letzte Stücke',
+    'nav.scontiStagionali': 'Saisonrabatte', 'nav.mondiale2026': 'WM 2026', 'nav.nazionali': 'Nationalmannschaften',
+    'nav.cercaPh': 'Suchen...',
+    'common.acquista': 'Kaufen', 'common.scopriTutto': 'Alles entdecken', 'common.indietro': 'Zurück',
+    'common.applica': 'Anwenden', 'common.totale': 'Gesamt', 'common.spedizione': 'Versand',
+    'common.subtotale': 'Zwischensumme', 'common.sconto': 'Rabatt', 'common.gratis': 'Kostenlos',
+    'hero.nuovaCollezione': 'Neue Kollektion', 'hero.qualitaPremium': 'Premium-Qualität',
+    'hero.tessutoOriginale': 'Originalstoff', 'hero.storeUfficiale': 'OFFIZIELLER SHOP',
+    'hero.tagline': 'Premium-Fußballtrikots für jeden Fan',
+    'musthave.nostri': 'Unsere', 'musthave.vediTutti': 'Alle Bestseller ansehen',
+    'sconto.title': '+10% RABATT AUF IHRE ERSTE BESTELLUNG MIT DEM CODE: WOK10',
+    'sconto.sub': 'Kaufen Sie bereits ein einzelnes Produkt und erhalten Sie 10% Rabatt direkt im Warenkorb',
+    'crq.title': 'Produkt nicht gefunden?',
+    'crq.sub': 'Geben Sie hier die Details ein: Schreiben Sie uns den Artikel, den Sie suchen, und wir tun unser Bestes, um ihn zu finden',
+    'crq.btn': 'Details eingeben',
+    'mondiali.title': 'WM-TRIKOTS', 'mondiali.acquista': 'WM-Produkte kaufen',
+    'vintage.title': 'VINTAGE-TRIKOTS', 'vintage.acquista': 'Vintage-Produkte kaufen',
+    'brand.title': 'Nach Marke einkaufen',
+    'nuova.title': 'Neue Saison', 'nuova.sub': 'Die neuesten Kollektionen für jeden Platz',
+    'scarpe.title': 'SCHUHE', 'scarpe.acquista': 'Schuhe kaufen',
+    'accessori.title': 'ZUBEHÖR', 'accessori.acquista': 'Zubehör kaufen',
+    'tute.title': 'TRAININGSANZÜGE', 'tute.acquista': 'Trainingsanzüge kaufen',
+    'footer.tagline': 'Ihr vertrauenswürdiger Shop für Fußballtrikots und Sportartikel.',
+    'footer.navigazione': 'Navigation', 'footer.home': 'Startseite', 'footer.prodotti': 'Produkte',
+    'footer.chiSiamo': 'Über uns', 'footer.contatti': 'Kontakt', 'footer.categorie': 'Kategorien',
+    'footer.serieA': 'Serie A', 'footer.champions': 'Champions League', 'footer.informazioni': 'Informationen',
+    'footer.recensioni': 'Bewertungen', 'footer.ordinePersonalizzato': 'Individuelle Bestellung',
+    'footer.contattaci': 'Kontaktiere uns', 'footer.diritti': '© 2026 WorldOfKits. Alle Rechte vorbehalten.',
+    'search.categorie': 'Kategorien', 'search.prodotti': 'Produkte',
+    'cart.title': 'Ihr Warenkorb', 'cart.empty': 'Ihr Warenkorb ist leer', 'cart.goShop': 'Zu den Produkten',
+    'cart.procedi': 'Zur Kasse', 'cart.articoli': 'Artikel', 'cart.codicePh': 'Rabattcode...',
+    'fav.title': 'Ihre Favoriten', 'fav.empty': 'Noch keine Favoriten', 'fav.sfoglia': 'Produkte durchstöbern',
+    'fav.svuotaTutti': 'Alle Favoriten löschen', 'fav.aggiungiTutti': 'Alle in den Warenkorb',
+    'order.title': 'Schließen Sie Ihre Bestellung ab',
+    'order.sub': 'Geben Sie Ihre Daten ein, um den Kauf abzuschließen',
+    'order.nome': 'Vorname', 'order.cognome': 'Nachname', 'order.email': 'E-Mail', 'order.telefono': 'Telefon',
+    'order.indirizzo': 'Lieferadresse', 'order.citta': 'Stadt', 'order.cap': 'PLZ',
+    'order.note': 'Bestellnotizen', 'order.conferma': 'Bestellung bestätigen', 'order.invio': 'Wird gesendet...',
+    'order.riepilogo': 'Bestellübersicht',
+    'order.pagamento': 'Die Zahlung erfolgt bei Lieferung (Nachnahme) oder per Überweisung. Sie werden per E-Mail kontaktiert.',
+    'confirm.title': 'Bestellung erhalten!', 'confirm.grazie': 'Danke',
+    'confirm.inviato': 'Ihre Bestellung wurde erfolgreich gesendet.',
+    'confirm.numeroOrdine': 'Bestellnummer', 'confirm.totalePagato': 'Bezahlter Betrag',
+    'confirm.contatto': 'Sie werden per E-Mail oder Telefon zur Lieferbestätigung kontaktiert. Die Zahlung erfolgt bei Lieferung.',
+    'confirm.perfetto': 'Perfekt, danke!',
+    'confirm.errore': 'Fehler beim Senden. Überprüfen Sie die E-Mail-Konfiguration und versuchen Sie es erneut.',
+    'qv.dettaglio': 'Produktdetails', 'qv.taglia': 'Größe', 'qv.tipoMaglia': 'Trikotart',
+    'qv.standard': 'Standard', 'qv.tifoso': 'Fan', 'qv.player': 'Spieler', 'qv.composizione': 'Zusammenstellung',
+    'qv.soloMaglia': 'Nur Trikot', 'qv.inclusa': 'Im Preis inbegriffen', 'qv.magliaPanta': 'Trikot + Shorts',
+    'qv.kitCompleto': 'Komplettes Kit', 'qv.kitCompletoSub': 'Trikot+Shorts+Socken',
+    'qv.personalizzazione': 'Personalisierung angewendet',
+    'qv.aggiungi': 'In den Warenkorb', 'qv.aggiorna': 'Aktualisieren', 'qv.aggiornaCarrello': 'Warenkorb aktualisieren',
+    'qv.personalizza': 'Personalisieren (Name & Nummer)', 'qv.nonTrovato': 'Produkt nicht gefunden?',
+    'cat.prodotti': 'Produkte', 'cat.nessunProdotto': 'Keine Produkte für diese Auswahl gefunden.',
+    'cat.ordina': 'Sortieren', 'cat.prezzoCrescente': 'Preis aufsteigend', 'cat.prezzoDecrescente': 'Preis absteigend',
+    'mob.home': 'Start', 'mob.cerca': 'Suchen', 'mob.prodotti': 'Produkte', 'mob.preferiti': 'Favoriten',
+    'mob.carrello': 'Warenkorb',
+    'crqPage.intro': 'Schreiben Sie den Namen des gesuchten Artikels: Wir melden uns mit Preis und Verfügbarkeit.',
+    'crqPage.nomeArticolo': 'Artikelname', 'crqPage.taglia': 'Größe', 'crqPage.quantita': 'Menge',
+    'crqPage.dettagli': 'Weitere Details', 'crqPage.invia': 'Anfrage senden',
+    'crqPage.disclaimer': 'Der Preis wird vor der Bestätigung per E-Mail mitgeteilt.',
+    'customize.title': 'Trikot personalisieren', 'customize.nome': 'NAME AUF DEM TRIKOT',
+    'customize.numero': 'NUMMER AUF DEM TRIKOT', 'customize.conferma': 'Personalisierung bestätigen',
+    'toast.aggiunto': 'hinzugefügt!', 'toast.aggiornato': 'aktualisiert!',
+    'toast.preferitiAggiunto': 'Zu Favoriten hinzugefügt!', 'toast.preferitiRimosso': 'Von Favoriten entfernt.',
+    'toast.carrelloVuoto': 'Ihr Warenkorb ist leer!',
+    'toast.emailNonConfig': 'E-Mail-System nicht konfiguriert.',
+    'toast.erroreInvio': 'Fehler beim Senden.',
+    'toast.prezzoComunicato': 'Der Preis wird Ihnen per E-Mail mitgeteilt.',
+    'qv.aggiungiSticky': 'Hinzufügen', 'cart.taglia': 'Größe', 'cart.gratis': 'Kostenlos',
+    'cart.omaggio': 'Geschenk', 'cart.rimuovi': 'Entfernen', 'cart.vediProdotto': 'Produkt ansehen',
+    'customize.maxCaratteri': 'Max. 15 Zeichen. Wird auf den Rücken gedruckt.',
+    'customize.numeroRange': 'Nummer von 1 bis 99.', 'customize.nomePh': 'IHR NAME',
+    'order.nomePh': 'Max', 'order.cognomePh': 'Müller', 'order.emailPh': 'max.mueller@email.com',
+    'order.telefonoPh': '+49 170 000 0000', 'order.indirizzoPh': 'Hauptstraße 1, 00100 Rom',
+    'order.cittaPh': 'Rom', 'order.capPh': '00100', 'order.notePh': 'Trikot-Personalisierung (Name/Nummer), besondere Hinweise...'
+  }
+};
+
+let currentLang = localStorage.getItem('gk_lang') || 'it';
+if (!I18N[currentLang]) currentLang = 'it';
+
+function t(key) {
+  const lang = I18N[currentLang];
+  if (lang && lang[key] != null) return lang[key];
+  const it = I18N.it;
+  return (it && it[key] != null) ? it[key] : key;
+}
+
+function applyLang() {
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const val = t(el.dataset.i18n);
+    if (val && val !== el.dataset.i18n) el.textContent = val;
+  });
+  document.querySelectorAll('[data-i18n-ph]').forEach(el => {
+    const val = t(el.dataset.i18nPh);
+    if (val) el.placeholder = val;
+  });
+  const cur = document.getElementById('langCurrent');
+  if (cur) cur.textContent = currentLang.toUpperCase();
+  document.querySelectorAll('.lang-option').forEach(o => {
+    o.classList.toggle('active', o.dataset.lang === currentLang);
+  });
+  document.documentElement.lang = currentLang;
+}
+
+function setLang(lang) {
+  if (!I18N[lang]) lang = 'it';
+  currentLang = lang;
+  localStorage.setItem('gk_lang', lang);
+  applyLang();
+}
+
+function setupLang() {
+  const wrap = document.getElementById('langWrap');
+  const btn = document.getElementById('langBtn');
+  if (!wrap || !btn) return;
+  btn.addEventListener('click', e => {
+    e.stopPropagation();
+    wrap.classList.toggle('open');
+  });
+  document.querySelectorAll('.lang-option').forEach(o => {
+    o.addEventListener('click', () => {
+      setLang(o.dataset.lang);
+      wrap.classList.remove('open');
+    });
+  });
+  document.addEventListener('click', e => {
+    if (!e.target.closest('.lang-wrap')) wrap.classList.remove('open');
+  });
+  applyLang();
+}
+
 // â”€â”€ STATO â”€â”€
 let cart = JSON.parse(localStorage.getItem('gk_cart') || '[]').map(function (item) {
   if (!item._uid) item._uid = Date.now() + '-' + Math.random().toString(36).slice(2);
@@ -84,6 +562,8 @@ document.addEventListener('DOMContentLoaded', () => {
   updateCartUI();
   setupParticles();
   setupNav();
+  setupLang();
+  applyLang();
   setupNavMegaMenu();
   // Link residui verso la vecchia sezione #products (rimossa) → pagina prodotti
   document.addEventListener('click', (e) => {
@@ -177,7 +657,24 @@ function setupParticles() {
 function setupNav() {
   const hamburger = document.getElementById('hamburger');
   const navLinks = document.getElementById('navLinks');
-  hamburger?.addEventListener('click', () => navLinks?.classList.toggle('open'));
+
+  function closeAllPanels() {
+    document.querySelectorAll('.nav-mega-item').forEach(i => i.classList.remove('active'));
+  }
+
+  hamburger?.addEventListener('click', () => {
+    const closing = navLinks?.classList.contains('open');
+    navLinks?.classList.toggle('open');
+    if (closing) closeAllPanels();
+  });
+
+  // Tasto chiudi nel drawer: chiude menu e pannelli
+  document.getElementById('drawerClose')?.addEventListener('click', () => {
+    navLinks?.classList.remove('open');
+    closeAllPanels();
+    const hb = document.getElementById('hamburger');
+    if (hb) hb.setAttribute('aria-expanded', 'false');
+  });
 
   // Chiudi menu su click link (ma NON sui trigger del mega menu: quelli aprono il pannello)
   document.querySelectorAll('.nav-link').forEach(link => {
@@ -645,8 +1142,8 @@ function openQuickView(id, editItem) {
   quickViewProduct = p;
   currentCustomization = null;
   if (!editItem) qvEditUid = null; // apertura normale: nessuna riga in modifica
-  const addLabel = editItem ? 'Aggiorna Carrello' : 'Aggiungi al Carrello';
-  const stickyLabel = editItem ? 'Aggiorna' : 'Aggiungi';
+  const addLabel = editItem ? t('qv.aggiornaCarrello') : t('qv.aggiungi');
+  const stickyLabel = editItem ? t('qv.aggiorna') : t('qv.aggiungiSticky');
   const content = document.getElementById('quickViewContent');
   const catLabel = Array.isArray(p.categoryLabel) ? p.categoryLabel[0] : p.categoryLabel;
   const kitType = p.kitType || 'solo';
@@ -678,39 +1175,39 @@ function openQuickView(id, editItem) {
         </div>
 
         <!-- Taglia -->
-        <div class="qv-section-label">Taglia</div>
+        <div class="qv-section-label" data-i18n="qv.taglia">Taglia</div>
         <div class="qv-sizes">
           ${p.sizes.map((s, i) => `<button class="qv-size-btn${i === 0 ? ' active' : ''}" onclick="selectQvSize(this)">${s}</button>`).join('')}
         </div>
 
         <!-- Tipo Maglia -->
-        <div class="qv-section-label">Tipo Maglia</div>
+        <div class="qv-section-label" data-i18n="qv.tipoMaglia">Tipo Maglia</div>
         <div class="qv-fabric-row">
           <button class="qv-option-btn active" data-extra="0" onclick="selectQvFabric(this)">
-            <span class="qv-opt-text"><strong>Standard</strong><small>Tifoso</small></span>
+            <span class="qv-opt-text"><strong data-i18n="qv.standard">Standard</strong><small data-i18n="qv.tifoso">Tifoso</small></span>
           </button>
           <button class="qv-option-btn" data-extra="4" onclick="selectQvFabric(this)">
-            <span class="qv-opt-text"><strong>Player</strong><small>+&#x20AC;3,00</small></span>
+            <span class="qv-opt-text"><strong data-i18n="qv.player">Player</strong><small>+&#x20AC;3,00</small></span>
           </button>
         </div>
 
         <!-- Composizione -->
-        <div class="qv-section-label">Composizione</div>
+        <div class="qv-section-label" data-i18n="qv.composizione">Composizione</div>
         <div class="qv-kit-row">
           ${isSoloAllowed ? `<button class="qv-option-btn active" data-kit="solo" data-extra="0" onclick="selectQvKit(this)">
-            <span class="qv-opt-text"><strong>Solo Maglia</strong><small>Inclusa nel prezzo</small></span>
+            <span class="qv-opt-text"><strong data-i18n="qv.soloMaglia">Solo Maglia</strong><small data-i18n="qv.inclusa">Inclusa nel prezzo</small></span>
           </button>` : ''}
           <button class="qv-option-btn${!isSoloAllowed ? ' active' : ''}" data-kit="shorts" data-extra="6" onclick="selectQvKit(this)">
-            <span class="qv-opt-text"><strong>Maglia + Pantaloncino</strong><small>+&#x20AC;6,00</small></span>
+            <span class="qv-opt-text"><strong data-i18n="qv.magliaPanta">Maglia + Pantaloncino</strong><small>+&#x20AC;6,00</small></span>
           </button>
           <button class="qv-option-btn" data-kit="full" data-extra="10" onclick="selectQvKit(this)">
-            <span class="qv-opt-text"><strong>Kit Completo</strong><small>Maglia+Pant+Calzettoni +&#x20AC;10,00</small></span>
+            <span class="qv-opt-text"><strong data-i18n="qv.kitCompleto">Kit Completo</strong><small><span data-i18n="qv.kitCompletoSub">Maglia+Pant+Calzettoni</span> +&#x20AC;10,00</small></span>
           </button>
         </div>
 
         <!-- Badge personalizzazione applicata -->
         <div id="qvCustomizeBadge" style="display:none;margin-top:.5rem;">
-          <span class="customize-applied-badge">Personalizzazione applicata</span>
+          <span class="customize-applied-badge" data-i18n="qv.personalizzazione">Personalizzazione applicata</span>
         </div>
 
         <button class="btn btn-primary btn-full qv-add-btn" onclick="addToCartFromQV(${p.id}); closeQuickView();">
@@ -720,7 +1217,7 @@ function openQuickView(id, editItem) {
         <!-- Pulsante Personalizza (sempre visibile) -->
         <button class="qv-customize-btn" id="qvCustomizeBtn" onclick="openCustomizeModal(${p.id})" style="display:flex;">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-          Personalizza (Nome &amp; Numero)
+          <span data-i18n="qv.personalizza">Personalizza (Nome &amp; Numero)</span>
         </button>
       </div>
     </div>
@@ -777,6 +1274,7 @@ function openQuickView(id, editItem) {
 
   content.scrollTop = 0;
   openOverlay('quickViewOverlay');
+  applyLang();
   navPush();
 }
 
@@ -831,7 +1329,10 @@ function addToCartFromQV(productId) {
   const activeKit = document.querySelector('.qv-kit-row .qv-option-btn.active');
 
   const selectedSize = activeSize ? activeSize.textContent.trim() : (p.sizes[0] || 'M');
-  const fabricText = activeFabric ? activeFabric.querySelector('strong').textContent.trim() : 'Standard';
+  let fabricText = activeFabric ? activeFabric.querySelector('strong').textContent.trim() : 'Standard';
+  // Normalizza il nome del tessuto (in qualsiasi lingua) al valore canonico
+  if (fabricText === t('qv.standard') || fabricText === t('qv.tifoso')) fabricText = 'Standard';
+  else if (fabricText === t('qv.player')) fabricText = 'Player';
   const fabricLabel = fabricText;
   const fabricExtra = activeFabric ? parseFloat(activeFabric.dataset.extra || 0) : 0;
   const kitMode = activeKit ? activeKit.dataset.kit : 'solo';
@@ -956,8 +1457,8 @@ function addToCartFromQV(productId) {
 
   saveCart();
   updateCartUI();
-  const custSuffix = custNote ? ' + personalizzazione' : '';
-  const verb = isEdit ? 'aggiornato!' : 'aggiunto!';
+  const custSuffix = custNote ? ' + ' + t('qv.personalizzazione') : '';
+  const verb = isEdit ? t('toast.aggiornato') : t('toast.aggiunto');
   const msg = isFullKit
     ? 'Kit Completo (' + selectedSize + ' \u00B7 ' + fabricText + ')' + custSuffix + ' ' + verb
     : isWithShorts
@@ -1013,7 +1514,7 @@ function addToCart(productId) {
   }
   saveCart();
   updateCartUI();
-  showToast('✅', '"' + p.name + '" (' + selectedSize + ' · ' + fabricLabel + ') aggiunto!');
+  showToast('✅', '"' + p.name + '" (' + selectedSize + ' · ' + fabricLabel + ') ' + t('toast.aggiunto'));
   openCart();
 }
 
@@ -1091,7 +1592,7 @@ function renderCartItems() {
   if (footer) footer.style.display = 'block';
 
   const total = getCartTotal();
-  const shipping = total >= 50 ? 'Gratuita' : '€3.00';
+  const shipping = total >= 50 ? t('common.gratis') : '€3.00';
 
   let html = '';
   cart.forEach(function (item) {
@@ -1100,23 +1601,27 @@ function renderCartItems() {
     const uidRef = "'" + uid + "'";
 
     const priceLabel = isGift
-      ? '<span style="color:#2e7d32;font-weight:700;">🎁 Gratis</span>'
+      ? '<span style="color:#2e7d32;font-weight:700;">🎁 ' + t('cart.gratis') + '</span>'
       : '&euro;' + (item.price * item.qty).toFixed(2);
 
     const qtyControls = isGift
-      ? '<span style="font-size:.75rem;color:#2e7d32;font-weight:600;">Omaggio</span>'
+      ? '<span style="font-size:.75rem;color:#2e7d32;font-weight:600;">' + t('cart.omaggio') + '</span>'
       : '<button class="qty-btn" onclick="event.stopPropagation();changeQty(' + uidRef + ', -1)">&minus;</button>'
         + '<span class="qty-val">' + item.qty + '</span>'
         + '<button class="qty-btn" onclick="event.stopPropagation();changeQty(' + uidRef + ', +1)">+</button>';
 
     const removeBtn = isGift
       ? '' // gli articoli omaggio non si possono rimuovere manualmente
-      : '<button class="cart-item-remove" onclick="event.stopPropagation();removeFromCart(' + uidRef + ')" title="Rimuovi">&#x2715;</button>';
+      : '<button class="cart-item-remove" onclick="event.stopPropagation();removeFromCart(' + uidRef + ')" title="' + t('cart.rimuovi') + '">&#x2715;</button>';
 
-    html += '<div class="cart-item' + (isGift ? ' cart-item--gift' : '') + '" onclick="openCartItemProduct(' + uidRef + ')" title="Vedi prodotto">'
+    let fabricTxt = String(item.fabric || '').replace(/\uD83D\uDC55/g, '').trim();
+    if (fabricTxt === 'Standard') fabricTxt = t('qv.standard');
+    else if (fabricTxt === 'Player') fabricTxt = t('qv.player');
+
+    html += '<div class="cart-item' + (isGift ? ' cart-item--gift' : '') + '" onclick="openCartItemProduct(' + uidRef + ')" title="' + t('cart.vediProdotto') + '">'
       + '<div class="cart-item-info">'
       + '<div class="cart-item-name">' + item.name + '</div>'
-      + '<div class="cart-item-meta">Taglia: ' + item.size + (item.fabric ? ' &nbsp;&middot;&nbsp; ' + String(item.fabric).replace('\uD83D\uDC55', '').trim() : '') + (item.custNote ? '<br><span style="color:#2e7d32;font-size:.72rem;">' + item.custNote + '</span>' : '') + '</div>'
+      + '<div class="cart-item-meta">' + t('cart.taglia') + ': ' + item.size + (item.fabric ? ' &nbsp;&middot;&nbsp; ' + fabricTxt : '') + (item.custNote ? '<br><span style="color:#2e7d32;font-size:.72rem;">' + item.custNote + '</span>' : '') + '</div>'
       + '<div class="cart-item-row">'
       + '<div class="cart-item-price">' + priceLabel + '</div>'
       + '<div class="cart-item-qty">' + qtyControls + '</div>'
@@ -1141,14 +1646,14 @@ function renderCartItems() {
   if (discountLine) {
     if (appliedDiscount && discountAmount > 0) {
       discountLine.style.display = 'flex';
-      if (discountLabel) discountLabel.textContent = `Sconto (${appliedDiscount.code})`;
+      if (discountLabel) discountLabel.textContent = `${t('common.sconto')} (${appliedDiscount.code})`;
       if (discountValue) discountValue.textContent = `-€${discountAmount.toFixed(2)}`;
     } else {
       discountLine.style.display = 'none';
     }
   }
 
-  const rawTotal = shipping === 'Gratuita' ? total : total + 3.00;
+  const rawTotal = shipping === t('common.gratis') ? total : total + 3.00;
   const finalTotal = Math.max(0, rawTotal - discountAmount);
   if (totalEl) totalEl.textContent = `€${finalTotal.toFixed(2)}`;
 }
@@ -1450,7 +1955,7 @@ function setupOrderModal() {
 }
 
 function openOrderModal() {
-  if (cart.length === 0) { showToast('âš ï¸', 'Il carrello è vuoto!'); return; }
+  if (cart.length === 0) { showToast('âš ï¸', t('toast.carrelloVuoto')); return; }
   renderOrderSummary();
   openOverlay('orderOverlay');
   navPush();
@@ -1467,7 +1972,7 @@ function renderOrderSummary() {
   const shipping = total >= 50 ? 0 : 3.00;
   const finalTotal = total + shipping;
   box.innerHTML = `
-    <h4>📋 Riepilogo Ordine</h4>
+    <h4>📋 <span data-i18n="order.riepilogo">Riepilogo Ordine</span></h4>
     ${cart.map(item => `
       <div class="order-summary-row">
         <span>${item.name} × ${item.qty} (${item.size})</span>
@@ -1475,14 +1980,15 @@ function renderOrderSummary() {
       </div>
     `).join('')}
     <div class="order-summary-row">
-      <span>Spedizione</span>
-      <span>${shipping === 0 ? 'Gratuita ðŸŽ‰' : '€3.00'}</span>
+      <span data-i18n="common.spedizione">Spedizione</span>
+      <span>${shipping === 0 ? t('common.gratis') + ' 🎉' : '€3.00'}</span>
     </div>
     <div class="order-summary-total">
-      <span>TOTALE</span>
+      <span data-i18n="common.totale">TOTALE</span>
       <span>€${finalTotal.toFixed(2)}</span>
     </div>
   `;
+  applyLang();
 }
 
 async function submitOrder(e) {
@@ -1492,7 +1998,7 @@ async function submitOrder(e) {
 
   // Controlla configurazione EmailJS (usa la variabile globale)
   if (!EMAIL_CONFIG.publicKey || !EMAIL_CONFIG.serviceId || !EMAIL_CONFIG.templateId || !EMAIL_CONFIG.ownerEmail) {
-    showToast('⚠️', 'Sistema email non configurato. Clicca su "⚙️ Setup Email" per configurarlo.');
+    showToast('⚠️', t('toast.emailNonConfig'));
     return;
   }
 
@@ -1591,7 +2097,7 @@ async function submitOrder(e) {
 
   } catch (err) {
     console.error('Errore invio ordine:', err);
-    showToast('âŒ', 'Errore nell’invio. Controlla la configurazione email e riprova.');
+    showToast('âŒ', t('confirm.errore'));
   } finally {
     btn.disabled = false;
     btnText.textContent = '✅ Conferma Ordine';
@@ -1608,21 +2114,20 @@ function showOrderConfirmation({ orderNum, name, surname, finalTotal, shipping, 
     overlay.className = 'modal-overlay';
     overlay.innerHTML = `
       <div class="modal glass" style="max-width:500px;text-align:center;">
-        <div style="font-size:4rem;margin-bottom:1rem;">ðŸŽ‰</div>
-        <h2 style="font-size:1.6rem;font-weight:800;margin-bottom:.5rem;">Ordine Ricevuto!</h2>
-        <p style="color:var(--text-muted);margin-bottom:1.5rem;">Grazie <strong id="confName"></strong>, il tuo ordine è stato inviato con successo.</p>
+        <h2 style="font-size:1.6rem;font-weight:800;margin:1rem 0 .5rem;" data-i18n="confirm.title">Ordine Ricevuto!</h2>
+        <p style="color:var(--text-muted);margin-bottom:1.5rem;"><span data-i18n="confirm.grazie">Grazie</span> <strong id="confName"></strong>, <span data-i18n="confirm.inviato">il tuo ordine è stato inviato con successo.</span></p>
         <div class="glass" style="border-radius:12px;padding:1rem;margin-bottom:1.5rem;text-align:left;">
           <div style="display:flex;justify-content:space-between;margin-bottom:.5rem;">
-            <span style="color:var(--text-muted);font-size:.85rem;">Numero ordine</span>
+            <span style="color:var(--text-muted);font-size:.85rem;" data-i18n="confirm.numeroOrdine">Numero ordine</span>
             <strong id="confNum" style="color:var(--accent);"></strong>
           </div>
           <div style="display:flex;justify-content:space-between;">
-            <span style="color:var(--text-muted);font-size:.85rem;">Totale pagato</span>
+            <span style="color:var(--text-muted);font-size:.85rem;" data-i18n="confirm.totalePagato">Totale pagato</span>
             <strong id="confTotal"></strong>
           </div>
         </div>
-        <p style="font-size:.85rem;color:var(--text-muted);margin-bottom:2rem;">Verrai contattato via email o telefono per la conferma della spedizione. Il pagamento avviene alla consegna.</p>
-        <button class="btn btn-primary btn-full" id="confClose">✅ Perfetto, grazie!</button>
+        <p style="font-size:.85rem;color:var(--text-muted);margin-bottom:2rem;" data-i18n="confirm.contatto">Verrai contattato via email o telefono per la conferma della spedizione. Il pagamento avviene alla consegna.</p>
+        <button class="btn btn-primary btn-full" id="confClose" data-i18n="confirm.perfetto">Perfetto, grazie!</button>
       </div>
     `;
     document.body.appendChild(overlay);
@@ -1638,6 +2143,7 @@ function showOrderConfirmation({ orderNum, name, surname, finalTotal, shipping, 
   document.getElementById('confName').textContent = `${name} ${surname}`;
   document.getElementById('confNum').textContent = orderNum;
   document.getElementById('confTotal').textContent = `€${finalTotal.toFixed(2)}`;
+  applyLang();
 
   overlay.style.display = 'flex';
   requestAnimationFrame(() => overlay.classList.add('open'));
@@ -2110,7 +2616,7 @@ function setupCustomOrder() {
     pushCustomRequestItem(name, size, qty);
     openCart();
 
-    showToast('✅', `"${name}" aggiunto! Il prezzo ti verrà comunicato via email.`);
+    showToast('✅', `"${name}" ${t('toast.aggiunto')} ${t('toast.prezzoComunicato')}`);
     form.reset();
     document.getElementById('customProductSize').value = 'M';
     document.getElementById('customProductQty').value = '1';
@@ -2134,7 +2640,7 @@ function setupCustomRequest() {
     closeCustomRequest();
     openCart();
 
-    showToast('✅', `"${name}" aggiunto! Il prezzo ti verrà comunicato via email.`);
+    showToast('✅', `"${name}" ${t('toast.aggiunto')} ${t('toast.prezzoComunicato')}`);
     form.reset();
     const sz = document.getElementById('crqSize'); if (sz) sz.value = 'M';
     const qt = document.getElementById('crqQty'); if (qt) qt.value = '1';
@@ -2895,10 +3401,10 @@ function toggleFavorite(productId, btnEl) {
   const idx = favorites.indexOf(productId);
   if (idx === -1) {
     favorites.push(productId);
-    showToast('â¤ï¸', 'Aggiunto ai preferiti!');
+    showToast('â¤ï¸', t('toast.preferitiAggiunto'));
   } else {
     favorites.splice(idx, 1);
-    showToast('🤍', 'Rimosso dai preferiti.');
+    showToast('🤍', t('toast.preferitiRimosso'));
   }
   saveFavorites();
   updateFavBadge();
@@ -2922,10 +3428,10 @@ function toggleFavoriteFromQV(productId) {
   const idx = favorites.indexOf(productId);
   if (idx === -1) {
     favorites.push(productId);
-    showToast('â¤ï¸', 'Aggiunto ai preferiti!');
+    showToast('â¤ï¸', t('toast.preferitiAggiunto'));
   } else {
     favorites.splice(idx, 1);
-    showToast('🤍', 'Rimosso dai preferiti.');
+    showToast('🤍', t('toast.preferitiRimosso'));
   }
   saveFavorites();
   updateFavBadge();
@@ -3286,7 +3792,7 @@ function renderCatPage() {
   const resultsEl = document.getElementById('catPageResults');
   const label     = `(${filtered.length})`;
   if (countEl)   countEl.textContent   = label;
-  if (resultsEl) resultsEl.textContent = `${filtered.length} prodotti`;
+  if (resultsEl) resultsEl.textContent = `${filtered.length} ${t('cat.prodotti')}`;
 
   grid.innerHTML = '';
 
@@ -3294,7 +3800,7 @@ function renderCatPage() {
     grid.innerHTML = `
       <div class="cat-page-empty">
         <span class="cat-page-empty-icon">🔍</span>
-        <p>Nessun prodotto trovato per questa selezione.</p>
+        <p>${t('cat.nessunProdotto')}</p>
       </div>`;
     return;
   }
