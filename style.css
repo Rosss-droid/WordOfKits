@@ -9597,10 +9597,13 @@ body {
     scrollbar-width: none;
     -ms-overflow-style: none;
     -webkit-overflow-scrolling: touch;
-    /* contain: quando il carosello arriva a fine corsa il gesto NON si
-       "inceppa" nella catena di scroll — la pagina riprende subito */
+    /* overscroll-behavior-x: contain → a fine corsa il carosello non
+       "inceppa" il gesto orizzontale.
+       overscroll-behavior-y: auto (IMPORTANTE) → il trascinamento VERTICALE
+       che parte su una card del carosello deve passare alla pagina, altrimenti
+       lo scroll verticale risulta bloccato quando il dito tocca i caroselli */
     overscroll-behavior-x: contain;
-    overscroll-behavior-y: contain;
+    overscroll-behavior-y: auto;
     touch-action: pan-x pan-y;
   }
 

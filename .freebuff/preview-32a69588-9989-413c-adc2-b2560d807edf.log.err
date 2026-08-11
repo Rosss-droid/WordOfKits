@@ -414,3 +414,14 @@
 ::ffff:127.0.0.1 - - [12/Aug/2026 00:49:18] "GET /images/3d/Serie%20A/Como/2526/Como%20Home%202526.png HTTP/1.1" 200 -
 ::ffff:127.0.0.1 - - [12/Aug/2026 00:49:18] "GET /images/3d/Serie%20A/Como/2526/Como%20Away%202526.png HTTP/1.1" 200 -
 ::ffff:127.0.0.1 - - [12/Aug/2026 00:49:18] "GET /images/3d/Serie%20A/Como/2526/Como%20Third%202526.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:58:24] "GET /index.html?v=20260812f HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:58:24] "GET /style.css?v=20260812f HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:58:24] "GET /app.js?v=20260812d HTTP/1.1" 304 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:59:23] "GET /images/3d/Serie%20A/Como/2425/Como%20Home%202425.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:59:23] "GET /images/3d/Serie%20A/Como/2425/Como%20Away%202425.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:59:23] "GET /images/3d/Serie%20A/Cremonese/2526/Cremonese%20Home%202526.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:59:23] "GET /images/3d/Serie%20A/Como/2425/Como%20Third%202425.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:59:23] "GET /images/3d/Serie%20A/Cremonese/2425/Cremonese%20Home%202425.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:59:23] "GET /images/3d/Serie%20A/Fiorentina/2526/Fiorentina%20Home%202526.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:59:23] "GET /images/3d/Serie%20A/Fiorentina/2526/Fiorentina%20Away%202526.png HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [12/Aug/2026 00:59:23] "GET /images/3d/Serie%20A/Fiorentina/speciali/Fiorentina%20Home%209899.png HTTP/1.1" 200 -
