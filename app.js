@@ -61,6 +61,10 @@ const TEAMS = {
     'Real Madrid', 'Barcellona', 'Atletico Madrid', 'Siviglia', 'Villarreal',
     'Real Betis', 'Athletic Bilbao', 'Real Sociedad', 'Osasuna', 'Valencia'
   ],
+  Ligue1: [
+    'PSG', 'Marseille', 'Lyonnais', 'Monaco', 'Lilla', 'Nizza',
+    'Rennes', 'Lens'
+  ],
   Nazionali: [
     'Italia', 'Francia', 'Spagna', 'Germania', 'Brasile', 'Argentina',
     'Portogallo', 'Inghilterra', 'Belgio', 'Olanda', 'Marocco', 'Giappone'
@@ -353,20 +357,21 @@ function renderProducts(filter, team = null) {
     card.className = 'product-card';
     card.dataset.id = p.id;
     card.style.animationDelay = `${i * 0.06}s`;
+    card.onclick = () => openQuickView(p.id);
     const catLabel = Array.isArray(p.categoryLabel)
       ? p.categoryLabel[0]
       : p.categoryLabel;
     const fav = isFavorite(p.id);
     card.innerHTML = `
       <div class="card-img-wrap">
-        <img src="${p.image}" alt="${p.name}" loading="lazy" onclick="openQuickView(${p.id})"
-             onerror="this.onerror=null;this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 3 4%22%3E%3Crect fill=%22%23f0f0f0%22 width=%223%22 height=%224%22/%3E%3Ctext x=%221.5%22 y=%222.2%22 fill=%22%23ccc%22 text-anchor=%22middle%22 dominant-baseline=%22middle%22 font-size=%221%22%3E%E2%9A%BD%3C/text%3E%3C/svg%3E'" style="cursor:pointer;width:100%;height:100%;object-fit:cover;display:block;">
+        <img src="${p.image}" alt="${p.name}" loading="lazy"
+             onerror="this.onerror=null;this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 3 4%22%3E%3Crect fill=%22%23f0f0f0%22 width=%223%22 height=%224%22/%3E%3Ctext x=%221.5%22 y=%222.2%22 fill=%22%23ccc%22 text-anchor=%22middle%22 dominant-baseline=%22middle%22 font-size=%221%22%3E%E2%9A%BD%3C/text%3E%3C/svg%3E'" style="width:100%;height:100%;object-fit:cover;display:block;">
         ${p.badge ? `<span class="card-badge ${p.badge}">${p.badgeLabel}</span>` : ''}
         <button class="card-fav-btn${fav ? ' active' : ''}" data-pid="${p.id}" onclick="event.stopPropagation();toggleFavorite(${p.id},this)" title="${fav ? 'Rimuovi dai preferiti' : 'Aggiungi ai preferiti'}" aria-label="Preferiti">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="${fav ? '#e44545' : 'none'}" stroke="${fav ? '#e44545' : '#999'}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
         </button>
       </div>
-      <div class="card-info" onclick="openQuickView(${p.id})" style="cursor:pointer;">
+      <div class="card-info">
         <div class="card-category">${catLabel}</div>
         <div class="card-name">${p.name}</div>
         <div class="card-price-row">
@@ -1796,7 +1801,12 @@ function openOverlay(id) {
   if (!el) return;
   clearTimeout(el._closeTimer); // annulla eventuale chiusura pendente (race close→reopen)
   el.style.display = 'flex';
-  requestAnimationFrame(() => el.classList.add('open'));
+  // Aggiungi .open SUBITO: su mobile/webview iOS requestAnimationFrame può
+  // essere throttled e non scattare mai, lasciando l'overlay invisibile anche se
+  // il click ha aperto il prodotto (sintomo: "clicco ma non si apre nulla").
+  // La transizione di ingresso funziona comunque: l'elemento era già renderizzato
+  // (visibility:hidden + translateX), quindi il cambio classe anima da sola.
+  el.classList.add('open');
   document.body.style.overflow = 'hidden';
 }
 
@@ -2316,6 +2326,7 @@ const SEARCH_CATEGORIES = [
   { label: 'Champions League', icon: 'â­', filter: 'Champions' },
   { label: 'Premier League', icon: '🏴ó §ó ¢ó ¥ó ®ó §ó ¿', filter: 'Premier' },
   { label: 'La Liga', icon: '🇪🇸', filter: 'LaLiga' },
+  { label: 'Ligue 1', icon: '🇫🇷', filter: 'Ligue1' },
   { label: 'Bundesliga', icon: '🇩🇪', filter: 'Bundesliga' },
   { label: 'Nazionali', icon: '🌍', filter: 'Nazionali' },
   { label: 'Mondiale 2026', icon: '🏆', filter: 'Mondiale2026' },
@@ -3293,13 +3304,14 @@ function renderCatPage() {
     card.className = 'product-card';
     card.style.animationDelay = `${i * 0.04}s`;
     card.dataset.id = p.id;
+    card.onclick = () => openQuickView(p.id);
     const catLabel = Array.isArray(p.categoryLabel) ? p.categoryLabel[0] : p.categoryLabel;
     const fav = isFavorite(p.id);
     card.innerHTML = `
       <div class="card-img-wrap">
-        <img src="${p.image}" alt="${p.name}" loading="lazy" onclick="openQuickView(${p.id})"
+        <img src="${p.image}" alt="${p.name}" loading="lazy"
              onerror="this.onerror=null;this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 3 4%22%3E%3Crect fill=%22%23f0f0f0%22 width=%223%22 height=%224%22/%3E%3Ctext x=%221.5%22 y=%222.2%22 fill=%22%23ccc%22 text-anchor=%22middle%22 dominant-baseline=%22middle%22 font-size=%221%22%3E%E2%9A%BD%3C/text%3E%3C/svg%3E'"
-             style="cursor:pointer;width:100%;height:100%;object-fit:cover;display:block;">
+             style="width:100%;height:100%;object-fit:cover;display:block;">
         ${p.badge ? `<span class="card-badge ${p.badge}">${p.badgeLabel}</span>` : ''}
         <button class="card-fav-btn${fav ? ' active' : ''}" data-pid="${p.id}"
                 onclick="event.stopPropagation();toggleFavorite(${p.id},this)"
@@ -3310,7 +3322,7 @@ function renderCatPage() {
           </svg>
         </button>
       </div>
-      <div class="card-info" onclick="openQuickView(${p.id})" style="cursor:pointer;">
+      <div class="card-info">
         <div class="card-category">${catLabel}</div>
         <div class="card-name">${p.name}</div>
         <div class="card-price-row">

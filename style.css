@@ -8717,7 +8717,9 @@ img {
   z-index: 2;
 }
 
-/* Card in primo piano, touch-action ottimizzato */
+/* Card in primo piano: il tap resta reattivo ma NON blocchiamo il pan
+   (touch-action: manipulation qui disabiliterebbe lo scroll quando il dito
+   parte sulla card — i viewport carosello hanno già pan-x pan-y) */
 .product-card,
 .vintage-card,
 .mustHave-card,
@@ -8725,7 +8727,7 @@ img {
   position: relative;
   z-index: 3;
   pointer-events: auto !important;
-  touch-action: manipulation;
+  touch-action: pan-x pan-y;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0.05);
 }
 
@@ -8756,7 +8758,8 @@ img {
 .mustHave-card {
   cursor: pointer;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0); /* Rimuove il rettangolo grigio al tap */
-  touch-action: manipulation; /* Elimina il ritardo di 300ms sul tap mobile */
+  /* touch-action volutamente NON impostato qui: manipulation bloccherebbe
+     lo scroll del carosello quando il dito parte sulla card */
 }
 
 /* ═══════════════════════════════════════════════════════════
@@ -8882,7 +8885,7 @@ img {
 .qv-page-overlay {
   position: fixed;
   inset: 0;
-  z-index: 1600; /* sopra bottom nav (1500) e navbar (1000): pagina a schermo intero */
+  z-index: 1650; /* SOPRA catPageOverlay (1600): aprendo un prodotto da una pagina categoria, la scheda non deve finirci dietro */
   background: #fff;
   display: flex;
   flex-direction: column;
@@ -9313,4 +9316,23 @@ img {
   object-position: center !important;
   width: 100% !important;
   height: 100% !important;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   TAP PRODOTTO SU MOBILE/iOS — tap reattivo SENZA bloccare lo scroll
+   (touch-action: pan-x pan-y lascia fluido il trascinamento: le card
+   stanno dentro caroselli scrollabili orizzontalmente e nella pagina
+   scrollabile verticalmente — manipulation li bloccherebbe entrambi)
+═══════════════════════════════════════════════════════════ */
+.product-card,
+.vintage-card,
+.mustHave-card,
+.mondiali-card,
+.sd-card,
+.feat-product-card,
+.card-img-wrap,
+.card-info {
+  cursor: pointer;
+  touch-action: pan-x pan-y;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
