@@ -1,0 +1,15 @@
+::ffff:127.0.0.1 - - [13/Aug/2026 12:18:32] "GET /index.html HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [13/Aug/2026 12:18:35] "GET /index.html HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [13/Aug/2026 12:18:35] "GET /index.html HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [13/Aug/2026 12:18:39] "GET /style.css?v=20260813a HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [13/Aug/2026 12:18:39] "GET /products.js?v=20260811c HTTP/1.1" 304 -
+::ffff:127.0.0.1 - - [13/Aug/2026 12:18:39] "GET /app.js?v=20260812j HTTP/1.1" 304 -
+::ffff:127.0.0.1 - - [13/Aug/2026 12:18:39] "GET /images/3d/Serie%20A/Como/2627/Como%20Home%202627.png HTTP/1.1" 304 -
+::ffff:127.0.0.1 - - [13/Aug/2026 12:18:39] "GET /images/3d/Serie%20A/Atalanta/2627/Atalanta%20Home%202627.png HTTP/1.1" 304 -
+::ffff:127.0.0.1 - - [13/Aug/2026 12:19:17] "GET /style.css?v=20260813a HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [13/Aug/2026 12:19:17] "GET /style.css?v=20260813a HTTP/1.1" 200 -
+::ffff:127.0.0.1 - - [13/Aug/2026 12:22:56] "GET /2627/serieA/Inter%20Home.png HTTP/1.1" 304 -
+::ffff:127.0.0.1 - - [13/Aug/2026 12:22:56] "GET /images/3d/Serie%20A/Lazio/2627/Lazio%20Home%202627.png HTTP/1.1" 304 -
+::ffff:127.0.0.1 - - [13/Aug/2026 12:22:56] "GET /2627/serieA/Juventus%20Home.png HTTP/1.1" 304 -
+::ffff:127.0.0.1 - - [13/Aug/2026 12:23:08] code 404, message File not found
+::ffff:127.0.0.1 - - [13/Aug/2026 12:23:08] "GET /images/3d/Nazionali/AwayInghilterra2026.png HTTP/1.1" 404 -

@@ -491,6 +491,29 @@ img {
   display: flex;
 }
 
+/* ── AUTH / ACCOUNT BTN ── */
+.auth-btn {
+  position: relative;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #111111;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: .4rem .5rem;
+  border-radius: 50px;
+  transition: background .15s;
+}
+
+.auth-btn:hover {
+  background: rgba(0, 0, 0, .05);
+}
+
+.auth-btn.logged svg {
+  color: var(--accent2);
+}
+
 /* ── CART BTN ── */
 .cart-btn {
   position: relative;
@@ -4580,6 +4603,79 @@ img {
   font-size: .9rem;
 }
 
+/* ── AUTH MODAL ── */
+.auth-modal-icon {
+  width: 64px;
+  height: 64px;
+  margin: 0 auto .75rem;
+  border-radius: 50%;
+  background: #f5f5f5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #111;
+}
+
+.auth-modal-icon svg {
+  width: 34px;
+  height: 34px;
+}
+
+.auth-view {
+  display: flex;
+  flex-direction: column;
+  gap: .6rem;
+}
+
+.auth-guest-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-muted);
+  font-size: .85rem;
+  text-decoration: underline;
+  padding: .5rem;
+}
+
+.auth-guest-btn:hover {
+  color: #111;
+}
+
+.auth-guest-warn {
+  font-size: .78rem;
+  color: var(--text-muted);
+  text-align: center;
+  margin: .25rem 0 0;
+}
+
+.auth-error {
+  color: #d33;
+  font-size: .8rem;
+  text-align: center;
+  margin: 0;
+}
+
+.auth-back {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-muted);
+  font-size: .85rem;
+  margin-top: .75rem;
+  align-self: center;
+}
+
+.auth-back:hover {
+  color: #111;
+}
+
+.auth-hello {
+  font-size: 1.1rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
 .order-summary-box {
   padding: 1rem;
   border-radius: 10px;
@@ -6887,7 +6983,8 @@ img {
   /* Icone carrello e preferiti più toccabili */
   .cart-btn,
   .fav-btn,
-  .lang-btn {
+  .lang-btn,
+  .auth-btn {
     padding: .5rem .45rem;
     min-width: 40px;
     min-height: 40px;
@@ -8784,7 +8881,8 @@ body {
 
   /* Bottoni carrello e preferiti: minimali */
   .cart-btn,
-  .fav-btn {
+  .fav-btn,
+  .auth-btn {
     padding: .4rem .35rem;
     min-width: 36px;
     min-height: 36px;
@@ -8874,13 +8972,11 @@ body {
   .shoes-grid {
     display: flex !important;
     flex-wrap: nowrap !important;
-    overflow-x: auto !important;
-    /* proximity invece di mandatory: su iOS il snap obbligatorio rende il
-       trascinamento del dito faticoso (ruba il gesto in diagonale/verticale) */
-    scroll-snap-type: x proximity;
-    scroll-padding: 0 16px;
-    -webkit-overflow-scrolling: touch;
-    touch-action: pan-x pan-y;
+    /* IMPORTANTE: NIENTE overflow-x / scroll-snap / touch-action qui.
+       Il contenitore scrollabile deve restare UNO SOLO (il .xxx-scroll-viewport).
+       Due scroller orizzontali annidati (viewport + grid) confondono iOS Safari
+       e rendono il trascinamento orizzontale faticoso/inceppato. La grid è solo
+       una riga flex a larghezza max-content che il viewport fa scorrere. */
     gap: 12px !important;
     padding: 0 16px 15px 16px !important;
   }

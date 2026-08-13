@@ -99,7 +99,21 @@ const I18N = {
     'customize.numeroRange': 'Numero da 1 a 99.', 'customize.nomePh': 'IL TUO NOME',
     'order.nomePh': 'Mario', 'order.cognomePh': 'Rossi', 'order.emailPh': 'mario.rossi@email.com',
     'order.telefonoPh': '+39 333 000 0000', 'order.indirizzoPh': 'Via Roma 1, 00100 Roma (RM)',
-    'order.cittaPh': 'Roma', 'order.capPh': '00100', 'order.notePh': 'Personalizzazione maglia (nome/numero), note speciali...'
+    'order.cittaPh': 'Roma', 'order.capPh': '00100', 'order.notePh': 'Personalizzazione maglia (nome/numero), note speciali...',
+    'auth.title': 'Benvenuto su WorldOfKits',
+    'auth.sub': 'Accedi o registrati per salvare carrello e preferiti nel tuo profilo.',
+    'auth.register': 'Registrati', 'auth.login': 'Accedi',
+    'auth.guest': 'Continua senza registrarti',
+    'auth.guestWarn': 'Continuando senza registrarti, carrello e preferiti non verranno salvati nel tuo profilo.',
+    'auth.name': 'Nome', 'auth.email': 'Email',
+    'auth.namePh': 'Il tuo nome', 'auth.emailPh': 'tua@email.com',
+    'auth.submitRegister': 'Crea account', 'auth.submitLogin': 'Entra',
+    'auth.haveAccount': 'Hai già un account? Accedi',
+    'auth.noAccount': 'Non hai un account? Registrati',
+    'auth.hello': 'Ciao,', 'auth.logout': 'Esci',
+    'auth.welcome': 'Benvenuto', 'auth.welcomeBack': 'Bentornato',
+    'auth.errorNotFound': 'Account non trovato. Registrati prima.',
+    'auth.errorExists': 'Esiste già un account con questa email.'
   },
   en: {
     'nav.menu': 'MENU', 'nav.calcio': 'Football', 'nav.sport': 'Sport', 'nav.mondiali': 'World Cup',
@@ -183,7 +197,21 @@ const I18N = {
     'customize.numeroRange': 'Number from 1 to 99.', 'customize.nomePh': 'YOUR NAME',
     'order.nomePh': 'John', 'order.cognomePh': 'Smith', 'order.emailPh': 'john.smith@email.com',
     'order.telefonoPh': '+1 555 000 0000', 'order.indirizzoPh': '1 Main St, 00100 Rome',
-    'order.cittaPh': 'Rome', 'order.capPh': '00100', 'order.notePh': 'Shirt customization (name/number), special notes...'
+    'order.cittaPh': 'Rome', 'order.capPh': '00100', 'order.notePh': 'Shirt customization (name/number), special notes...',
+    'auth.title': 'Welcome to WorldOfKits',
+    'auth.sub': 'Log in or register to save your cart and favorites to your profile.',
+    'auth.register': 'Register', 'auth.login': 'Log in',
+    'auth.guest': 'Continue without registering',
+    'auth.guestWarn': 'By continuing without registering, your cart and favorites will not be saved to your profile.',
+    'auth.name': 'Name', 'auth.email': 'Email',
+    'auth.namePh': 'Your name', 'auth.emailPh': 'you@email.com',
+    'auth.submitRegister': 'Create account', 'auth.submitLogin': 'Sign in',
+    'auth.haveAccount': 'Already have an account? Log in',
+    'auth.noAccount': 'Don\'t have an account? Register',
+    'auth.hello': 'Hi,', 'auth.logout': 'Log out',
+    'auth.welcome': 'Welcome', 'auth.welcomeBack': 'Welcome back',
+    'auth.errorNotFound': 'Account not found. Please register first.',
+    'auth.errorExists': 'An account with this email already exists.'
   },
   es: {
     'nav.menu': 'MENÚ', 'nav.calcio': 'Fútbol', 'nav.sport': 'Deporte', 'nav.mondiali': 'Mundial',
@@ -267,7 +295,21 @@ const I18N = {
     'customize.numeroRange': 'Número del 1 al 99.', 'customize.nomePh': 'TU NOMBRE',
     'order.nomePh': 'Juan', 'order.cognomePh': 'García', 'order.emailPh': 'juan.garcia@email.com',
     'order.telefonoPh': '+34 600 000 000', 'order.indirizzoPh': 'Calle Mayor 1, 00100 Roma',
-    'order.cittaPh': 'Roma', 'order.capPh': '00100', 'order.notePh': 'Personalización de camiseta (nombre/número), notas especiales...'
+    'order.cittaPh': 'Roma', 'order.capPh': '00100', 'order.notePh': 'Personalización de camiseta (nombre/número), notas especiales...',
+    'auth.title': 'Bienvenido a WorldOfKits',
+    'auth.sub': 'Inicia sesión o regístrate para guardar tu carrito y favoritos en tu perfil.',
+    'auth.register': 'Regístrate', 'auth.login': 'Inicia sesión',
+    'auth.guest': 'Continuar sin registrarte',
+    'auth.guestWarn': 'Si continúas sin registrarte, tu carrito y favoritos no se guardarán en tu perfil.',
+    'auth.name': 'Nombre', 'auth.email': 'Correo electrónico',
+    'auth.namePh': 'Tu nombre', 'auth.emailPh': 'tu@correo.com',
+    'auth.submitRegister': 'Crear cuenta', 'auth.submitLogin': 'Entrar',
+    'auth.haveAccount': '¿Ya tienes una cuenta? Inicia sesión',
+    'auth.noAccount': '¿No tienes una cuenta? Regístrate',
+    'auth.hello': 'Hola,', 'auth.logout': 'Cerrar sesión',
+    'auth.welcome': 'Bienvenido', 'auth.welcomeBack': 'Bienvenido de nuevo',
+    'auth.errorNotFound': 'Cuenta no encontrada. Regístrate primero.',
+    'auth.errorExists': 'Ya existe una cuenta con este correo.'
   },
   fr: {
     'nav.menu': 'MENU', 'nav.calcio': 'Football', 'nav.sport': 'Sport', 'nav.mondiali': 'Mondial',
@@ -351,7 +393,21 @@ const I18N = {
     'customize.numeroRange': 'Numéro de 1 à 99.', 'customize.nomePh': 'VOTRE NOM',
     'order.nomePh': 'Jean', 'order.cognomePh': 'Martin', 'order.emailPh': 'jean.martin@email.com',
     'order.telefonoPh': '+33 600 000 000', 'order.indirizzoPh': '1 rue de Rome, 00100 Rome',
-    'order.cittaPh': 'Rome', 'order.capPh': '00100', 'order.notePh': 'Personnalisation du maillot (nom/numéro), notes spéciales...'
+    'order.cittaPh': 'Rome', 'order.capPh': '00100', 'order.notePh': 'Personnalisation du maillot (nom/numéro), notes spéciales...',
+    'auth.title': 'Bienvenue sur WorldOfKits',
+    'auth.sub': 'Connectez-vous ou inscrivez-vous pour enregistrer votre panier et vos favoris dans votre profil.',
+    'auth.register': 'S\'inscrire', 'auth.login': 'Se connecter',
+    'auth.guest': 'Continuer sans inscription',
+    'auth.guestWarn': 'En continuant sans vous inscrire, votre panier et vos favoris ne seront pas enregistrés dans votre profil.',
+    'auth.name': 'Nom', 'auth.email': 'E-mail',
+    'auth.namePh': 'Votre nom', 'auth.emailPh': 'vous@email.com',
+    'auth.submitRegister': 'Créer un compte', 'auth.submitLogin': 'Se connecter',
+    'auth.haveAccount': 'Vous avez déjà un compte ? Se connecter',
+    'auth.noAccount': 'Vous n\'avez pas de compte ? S\'inscrire',
+    'auth.hello': 'Bonjour,', 'auth.logout': 'Se déconnecter',
+    'auth.welcome': 'Bienvenue', 'auth.welcomeBack': 'Bon retour',
+    'auth.errorNotFound': 'Compte introuvable. Inscrivez-vous d\'abord.',
+    'auth.errorExists': 'Un compte avec cet e-mail existe déjà.'
   },
   de: {
     'nav.menu': 'MENÜ', 'nav.calcio': 'Fußball', 'nav.sport': 'Sport', 'nav.mondiali': 'WM',
@@ -435,7 +491,21 @@ const I18N = {
     'customize.numeroRange': 'Nummer von 1 bis 99.', 'customize.nomePh': 'IHR NAME',
     'order.nomePh': 'Max', 'order.cognomePh': 'Müller', 'order.emailPh': 'max.mueller@email.com',
     'order.telefonoPh': '+49 170 000 0000', 'order.indirizzoPh': 'Hauptstraße 1, 00100 Rom',
-    'order.cittaPh': 'Rom', 'order.capPh': '00100', 'order.notePh': 'Trikot-Personalisierung (Name/Nummer), besondere Hinweise...'
+    'order.cittaPh': 'Rom', 'order.capPh': '00100', 'order.notePh': 'Trikot-Personalisierung (Name/Nummer), besondere Hinweise...',
+    'auth.title': 'Willkommen bei WorldOfKits',
+    'auth.sub': 'Melde dich an oder registriere dich, um Warenkorb und Favoriten in deinem Profil zu speichern.',
+    'auth.register': 'Registrieren', 'auth.login': 'Anmelden',
+    'auth.guest': 'Ohne Registrierung fortfahren',
+    'auth.guestWarn': 'Wenn du ohne Registrierung fortfährst, werden Warenkorb und Favoriten nicht in deinem Profil gespeichert.',
+    'auth.name': 'Name', 'auth.email': 'E-Mail',
+    'auth.namePh': 'Dein Name', 'auth.emailPh': 'du@email.com',
+    'auth.submitRegister': 'Konto erstellen', 'auth.submitLogin': 'Anmelden',
+    'auth.haveAccount': 'Du hast bereits ein Konto? Anmelden',
+    'auth.noAccount': 'Du hast noch kein Konto? Registrieren',
+    'auth.hello': 'Hallo,', 'auth.logout': 'Abmelden',
+    'auth.welcome': 'Willkommen', 'auth.welcomeBack': 'Willkommen zurück',
+    'auth.errorNotFound': 'Konto nicht gefunden. Registriere dich zuerst.',
+    'auth.errorExists': 'Ein Konto mit dieser E-Mail existiert bereits.'
   }
 };
 
@@ -494,6 +564,131 @@ function setupLang() {
 }
 
 // â”€â”€ STATO â”€â”€
+// ══════════════════════════════════════════════
+// AUTH / ACCOUNT — Accedi / Registrati / Ospite
+// ══════════════════════════════════════════════
+function getAuthUsers() {
+  try { return JSON.parse(localStorage.getItem('gk_users') || '{}'); }
+  catch (e) { return {}; }
+}
+
+function setAuthUsers(users) {
+  localStorage.setItem('gk_users', JSON.stringify(users));
+}
+
+function getCurrentUser() {
+  try { return JSON.parse(localStorage.getItem('gk_user') || 'null'); }
+  catch (e) { return null; }
+}
+
+function setCurrentUser(user) {
+  if (user) localStorage.setItem('gk_user', JSON.stringify(user));
+  else localStorage.removeItem('gk_user');
+  const btn = document.getElementById('authBtn');
+  if (btn) btn.classList.toggle('logged', !!user);
+}
+
+function authShowView(id) {
+  ['authChoiceView', 'authRegisterView', 'authLoginView', 'authProfileView'].forEach(v => {
+    const el = document.getElementById(v);
+    if (el) el.style.display = (v === id) ? 'flex' : 'none';
+  });
+}
+
+function openAuthModal() {
+  const user = getCurrentUser();
+  const profileName = document.getElementById('authProfileName');
+  if (user) {
+    if (profileName) profileName.textContent = t('auth.hello') + ' ' + (user.name || user.email);
+    authShowView('authProfileView');
+  } else {
+    authShowView('authChoiceView');
+  }
+  openOverlay('authOverlay');
+  navPush();
+}
+
+function closeAuthModal() {
+  closeOverlay('authOverlay');
+}
+
+function setupAuth() {
+  const overlay = document.getElementById('authOverlay');
+  const btn = document.getElementById('authBtn');
+  if (!overlay || !btn) return;
+
+  btn.addEventListener('click', openAuthModal);
+  document.getElementById('authClose')?.addEventListener('click', closeAuthModal);
+  overlay.addEventListener('click', e => {
+    if (e.target.id === 'authOverlay') closeAuthModal();
+  });
+
+  document.getElementById('authGoRegister')?.addEventListener('click', () => {
+    const err = document.getElementById('authRegError');
+    if (err) err.style.display = 'none';
+    authShowView('authRegisterView');
+  });
+  document.getElementById('authGoLogin')?.addEventListener('click', () => {
+    const err = document.getElementById('authLoginError');
+    if (err) err.style.display = 'none';
+    authShowView('authLoginView');
+  });
+  document.getElementById('authRegBack')?.addEventListener('click', () => authShowView('authChoiceView'));
+  document.getElementById('authLoginBack')?.addEventListener('click', () => authShowView('authChoiceView'));
+
+  document.getElementById('authGoGuest')?.addEventListener('click', () => {
+    localStorage.setItem('gk_auth_dismissed', '1');
+    closeAuthModal();
+  });
+
+  document.getElementById('authLogout')?.addEventListener('click', () => {
+    setCurrentUser(null);
+    closeAuthModal();
+    showToast('👋', t('auth.logout'));
+  });
+
+  document.getElementById('authRegisterForm')?.addEventListener('submit', e => {
+    e.preventDefault();
+    const name = document.getElementById('authRegName').value.trim();
+    const email = document.getElementById('authRegEmail').value.trim().toLowerCase();
+    const err = document.getElementById('authRegError');
+    const users = getAuthUsers();
+    if (users[email]) {
+      if (err) { err.textContent = t('auth.errorExists'); err.style.display = 'block'; }
+      return;
+    }
+    users[email] = { name, email };
+    setAuthUsers(users);
+    setCurrentUser({ name, email });
+    localStorage.setItem('gk_auth_dismissed', '1');
+    closeAuthModal();
+    showToast('✅', t('auth.welcome') + ', ' + name);
+  });
+
+  document.getElementById('authLoginForm')?.addEventListener('submit', e => {
+    e.preventDefault();
+    const email = document.getElementById('authLoginEmail').value.trim().toLowerCase();
+    const err = document.getElementById('authLoginError');
+    const users = getAuthUsers();
+    if (!email || !users[email]) {
+      if (err) { err.textContent = t('auth.errorNotFound'); err.style.display = 'block'; }
+      return;
+    }
+    setCurrentUser(users[email]);
+    localStorage.setItem('gk_auth_dismissed', '1');
+    closeAuthModal();
+    showToast('👋', t('auth.welcomeBack') + ', ' + users[email].name);
+  });
+
+  // Stato iniziale del bottone account
+  btn.classList.toggle('logged', !!getCurrentUser());
+
+  // Popup di benvenuto al primo accesso (finché non sceglie utente o ospite)
+  if (!getCurrentUser() && !localStorage.getItem('gk_auth_dismissed')) {
+    openAuthModal();
+  }
+}
+
 let cart = JSON.parse(localStorage.getItem('gk_cart') || '[]').map(function (item) {
   if (!item._uid) item._uid = Date.now() + '-' + Math.random().toString(36).slice(2);
   return item;
@@ -605,6 +800,7 @@ document.addEventListener('DOMContentLoaded', () => {
   setupBrands();
   setupSquadra();
   setupDiscountCode();
+  setupAuth();
 });
 
 // ══════════════════════════════════════════════
@@ -2288,6 +2484,7 @@ function getTopmostOpenOverlay() {
   if (document.getElementById('favSidebar')?.classList.contains('open')) return 'fav';
   if (document.getElementById('cartSidebar')?.classList.contains('open')) return 'cart';
   if (document.getElementById('mobSearchPanel')?.classList.contains('open')) return 'search';
+  if (document.getElementById('authOverlay')?.classList.contains('open')) return 'auth';
   return null;
 }
 
@@ -2301,6 +2498,7 @@ function navPop() {
   else if (top === 'fav') closeFavSidebar();
   else if (top === 'order') closeOrderModal();
   else if (top === 'search') closeMobSearch();
+  else if (top === 'auth') closeAuthModal();
 }
 
 window.addEventListener('popstate', navPop);
@@ -3097,10 +3295,7 @@ function setupVintage() {
 // Foto prodotto reali presenti nella cartella images (fallback per le card Must Have)
 // Foto di riserva per i prodotti la cui immagine non esiste, abbinate alla squadra giusta
 const MUST_HAVE_IMAGE_OVERRIDES = {
-  103: 'images/3d/HomeArsenal0304.png',                 // Arsenal Away
-  105: 'images/3d/Premier League/Liverpool Third 2526.png', // Liverpool Away
-  109: 'images/3d/Premier League/Ronaldo2009.png',      // Man Utd Away (Ronaldo 2009)
-  118: 'images/3d/HomeBayern0708.png'                   // Bayern Away
+  // Riservato alle immagini locali sostitutive di prodotti che non hanno un asset valido.
 };
 
 // Un prodotto è valido per la sezione se ha una foto locale esistente (o un override)
