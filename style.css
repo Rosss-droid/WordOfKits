@@ -213,6 +213,10 @@ img {
   gap: 0;
   align-items: stretch;
   justify-content: center;
+  /* Estende i trigger a tutta l'altezza della navbar: il pannello del mega menu
+     parte esattamente sotto il trigger, senza gap. Un gap qui faceva scattare
+     mouseleave e la tendina spariva mentre il cursore ci passava sopra. */
+  align-self: stretch;
 }
 
 /* NAV ACTIONS — colonna destra */
@@ -308,6 +312,18 @@ img {
   opacity: 1;
   pointer-events: all;
   transform: translateY(0);
+}
+
+/* Su desktop la tendina resta aperta anche col solo hover: CSS :hover copre
+   sia il trigger sia il pannello, quindi non sparisce mentre il cursore passa
+   dal trigger alla tendina (il JS da solo non basta: il pannello assoluto non
+   fa parte della box del trigger). */
+@media (min-width: 769px) {
+  .nav-mega-item:hover .nav-mega-panel {
+    opacity: 1;
+    pointer-events: all;
+    transform: translateY(0);
+  }
 }
 
 /* Griglia interna colonne */
@@ -592,7 +608,7 @@ img {
 
 /* ── HAMBURGER ── */
 .hamburger {
-  display: none;
+  display: flex; /* visibile a tutte le larghezze: apre la tendina (drawer) */
   flex-direction: column;
   gap: 5px;
   background: none;
@@ -4649,8 +4665,9 @@ img {
   display: flex;
   flex-direction: column;
   gap: .25rem;
-  overflow-y: auto;
-  max-height: 90vh;
+  /* Niente overflow/max-height: la scheda prodotto è un unico blocco scrollabile
+     (immagine + dettagli insieme). Un overflow-y:auto qui creava uno scroll interno
+     separato: il testo si trascinava da solo mentre l'immagine restava ferma. */
 }
 
 .qv-category {
@@ -6353,7 +6370,9 @@ img {
   background: #fff;
   z-index: 1600; /* sopra navbar (1000) e bottom nav (1500), come la scheda prodotto */
   overflow-y: auto;
-  overflow-x: hidden;
+  /* IMPORTANTE: niente overflow-x qui. Su iOS Safari "overflow-x:hidden (o clip) + overflow-y:auto"
+     sullo stesso elemento lo rende NON scrollabile. Il contenuto non ha overflow orizzontale
+     (verificato), quindi basta overflow-y:auto. */
   transform: translateX(100%);
   transition: transform 0.38s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.38s;
   pointer-events: none; /* NON intercetta tap quando è chiuso (fuori schermo) */
@@ -6966,10 +6985,14 @@ img {
     backdrop-filter: blur(2px);
   }
 
-  /* Link nel drawer: più grandi, touch-friendly */
+  /* Link nel drawer: più grandi, touch-friendly.
+     Il li è a COLONNA: trigger sopra, pannello sotto a tutta larghezza
+     (con flex-direction row il pannello finiva di lato al trigger). */
   .nav-mega-item {
     width: 100%;
     border-bottom: 1px solid rgba(0,0,0,.06);
+    flex-direction: column;
+    align-items: stretch;
   }
 
   .nav-mega-trigger {
@@ -9198,7 +9221,9 @@ body {
   flex: 1;
   min-height: 0;
   overflow-y: auto;
-  overflow-x: hidden; /* niente scrollbar orizzontale che ruba i gesti verticali */
+  /* IMPORTANTE: niente overflow-x. Su iOS Safari "overflow-x:hidden (o clip) + overflow-y:auto"
+     sullo stesso elemento lo rende NON scrollabile. Il contenuto della scheda non ha overflow
+     orizzontale, quindi non serve nasconderlo: i gesti verticali restano liberi. */
   -webkit-overflow-scrolling: touch;
   touch-action: pan-y; /* scroll verticale fluido e immediato su mobile */
   background: #f4f5f7;
@@ -9216,8 +9241,9 @@ body {
 }
 
 .qv-img-wrap {
-  position: sticky;
-  top: 0;
+  /* Niente sticky: la scheda è un unico blocco che scorre tutto insieme
+     (immagine + dettagli). Con position:sticky l'immagine restava ferma
+     e si doveva "trascinare solo il testo". */
   align-self: start;
   aspect-ratio: 4/5;
   background: #f0f1f3;
@@ -9633,5 +9659,188 @@ body {
   .mondiali-scrollbar-thumb,
   .scarpe-scrollbar-thumb {
     display: none !important;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   MENU A TENdINA — DESKTOP (≥641px)
+   Niente link inline nella navbar: solo l'hamburger, allineato alle
+   altre icone, che apre la tendina VERSO IL BASSO a tutta larghezza
+   (come i pannelli di prima). Niente drawer laterale.
+   Su mobile (≤640px) resta il drawer laterale originale.
+═══════════════════════════════════════════════════════════ */
+
+/* Links: nascosti di default, diventano la tendina quando aperti */
+.nav-links {
+  display: none;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+@media (min-width: 641px) {
+
+  /* Navbar a flex: logo a sinistra, azioni + hamburger allineati a destra */
+  .navbar {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+  }
+
+  .nav-logo {
+    margin-right: auto;
+  }
+
+  /* Tendina: pannello a tutta larghezza che scende sotto la topbar */
+  .nav-links.open {
+    display: flex !important;
+    flex-direction: column;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    width: auto;
+    max-width: none;
+    background: #ffffff;
+    z-index: 2000;
+    padding: .75rem 1.5rem 2rem;
+    gap: .15rem;
+    overflow-y: auto;
+    max-height: calc(100vh - 130px);
+    box-shadow: 0 12px 32px rgba(0,0,0,.12);
+    border-top: 1px solid #e5e5e5;
+    animation: dropDownMenu .25s ease both;
+  }
+
+  @keyframes dropDownMenu {
+    from { opacity: 0; transform: translateY(-10px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Riga superiore della tendina: titolo MENU + tasto chiudi, sticky in cima */
+  .drawer-close-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 3;
+    background: #ffffff;
+    padding: .6rem 0 .75rem;
+    margin-bottom: .25rem;
+    border-bottom: 1px solid rgba(0,0,0,.08);
+  }
+
+  .drawer-title {
+    font-size: .8rem;
+    font-weight: 700;
+    letter-spacing: .14em;
+    color: #111;
+  }
+
+  .drawer-close {
+    width: 34px;
+    height: 34px;
+    border: none;
+    border-radius: 50%;
+    background: #111;
+    color: #fff;
+    font-size: .95rem;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .drawer-close:active {
+    transform: scale(.92);
+  }
+
+  /* Voci della tendina: tutta larghezza, a colonna (trigger sopra, pannello sotto) */
+  .nav-mega-item {
+    width: 100%;
+    border-bottom: 1px solid rgba(0,0,0,.06);
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .nav-mega-trigger {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #111;
+    padding: .85rem 0;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  /* Freccia › al posto della sottolineatura (sovrascrive la regola hover desktop) */
+  .nav-mega-trigger::after {
+    content: '›';
+    display: block !important;
+    position: static;
+    width: auto;
+    height: auto;
+    left: auto;
+    right: auto;
+    bottom: auto;
+    background: none;
+    transform: none;
+    font-size: 1.3rem;
+    opacity: .4;
+    border: none;
+  }
+
+  /* Outlet in rosso nella tendina */
+  .nav-link-outlet {
+    color: #e44545 !important;
+  }
+
+  /* Pannello nella tendina: a scomparsa verticale sotto il trigger */
+  .nav-mega-panel {
+    position: static;
+    opacity: 1;
+    pointer-events: all;
+    transform: none;
+    box-shadow: none;
+    border: none;
+    border-top: 1px solid rgba(0,0,0,.05);
+    display: none;
+    background: #fafafa;
+    border-radius: 10px;
+    margin-bottom: .5rem;
+    overflow: hidden;
+  }
+
+  .nav-mega-item.active .nav-mega-panel {
+    display: block !important;
+  }
+
+  .nav-mega-grid {
+    flex-direction: column;
+    gap: 0;
+    padding: .75rem 1rem 1rem;
+  }
+
+  .nav-mega-col {
+    min-width: unset;
+  }
+
+  .nav-mega-col-title {
+    font-size: .6rem;
+    color: #999;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    margin-top: .5rem;
+    margin-bottom: .3rem;
+  }
+
+  .nav-mega-link {
+    font-size: .76rem;
+    color: #333;
+    padding: .32rem 0;
   }
 }

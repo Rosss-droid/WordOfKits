@@ -14,7 +14,7 @@
   <link
     href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700;800;900&display=swap"
     rel="stylesheet" />
-  <link rel="stylesheet" href="style.css?v=20260812f" />
+  <link rel="stylesheet" href="style.css?v=20260812n" />
   <!-- EmailJS SDK -->
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 </head>
@@ -1284,7 +1284,7 @@
   </nav>
 
   <script src="products.js?v=20260811c"></script>
-  <script src="app.js?v=20260812d"></script>
+  <script src="app.js?v=20260812j"></script>
 
   <!-- ═══════════════════ MOBILE JS — Bottom nav sync + UX ═══════════════════ -->
   <script>
@@ -1356,16 +1356,15 @@
       });
     }
 
-    /* ── Drawer: chiude toccando l'overlay scuro ── */
+    /* ── Menu: chiude quando si clicca fuori dalla tendina/drawer ── */
     document.addEventListener('click', function(e) {
       var navLinks = document.getElementById('navLinks');
       if (!navLinks || !navLinks.classList.contains('open')) return;
-      /* Se il click è fuori dalla larghezza del drawer (82vw) chiudi */
-      if (e.clientX > window.innerWidth * 0.82) {
-        navLinks.classList.remove('open');
-        var hamburger = document.getElementById('hamburger');
-        if (hamburger) hamburger.setAttribute('aria-expanded', 'false');
-      }
+      /* Click sul bottone hamburger: non chiudere (è lui che apre/chiude) */
+      if (e.target && e.target.closest && (e.target.closest('#hamburger') || e.target.closest('#navLinks'))) return;
+      navLinks.classList.remove('open');
+      var hamburger = document.getElementById('hamburger');
+      if (hamburger) hamburger.setAttribute('aria-expanded', 'false');
     });
 
   })();

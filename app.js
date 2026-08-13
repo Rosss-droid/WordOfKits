@@ -700,11 +700,14 @@ function setupNav() {
   }
 
   function closeMega(item) {
-    // Aspetta 120ms prima di chiudere: se il cursore entra nel panel il timer viene annullato
+    // Un pannello aperto con un CLICK (tap/click sul trigger) resta aperto finché
+    // non si clicca altrove o si chiude: non deve sparire al passaggio del mouse.
+    if (item.dataset.clickOpened === '1') return;
+    // Aspetta 300ms prima di chiudere: se il cursore entra nel panel il timer viene annullato
     closeTimer = setTimeout(() => {
       item.classList.remove('active');
       closeTimer = null;
-    }, 120);
+    }, 300);
   }
 
   function closeAllMega() {
