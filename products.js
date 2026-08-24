@@ -191,7 +191,7 @@ const PRODUCTS = [
   { id: 116, name: "Maglia Borussia Dortmund Away 2025/26", category: "Bundesliga", categoryLabel: "Bundesliga", price: 83.00, oldPrice: null, badge: null, badgeLabel: null, image: "images/teams/dortmund_away.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "Maglia trasferta BVB 2025/26.", kitType: 'solo', inStock: true },
 
   // ══════════════ BAYERN MONACO ══════════════
-  { id: 117, name: "Maglia Bayern Monaco Home 2025/26", category: ["Champions", "Bundesliga"], categoryLabel: ["Champions League", "Bundesliga"], price: 92.00, oldPrice: null, badge: "new", badgeLabel: "NUOVO", image: "images/jersey_germany.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "Maglia casalinga Bayern Monaco 2025/26.", kitType: 'solo', inStock: true },
+  { id: 117, name: "Maglia Bayern Monaco Away 2007/08", category: "Vintage", categoryLabel: "Vintage", price: 28.00, oldPrice: null, badge: "vintage", badgeLabel: "VINTAGE", image: "images/3d/HomeBayern0708.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "La maglia da trasferta del Bayern Monaco 2007/08.", kitType: 'solo', inStock: true },
   { id: 118, name: "Maglia Bayern Monaco Home 2007/08", category: "Vintage", categoryLabel: "Vintage", price: 28.00, oldPrice: null, badge: "vintage", badgeLabel: "VINTAGE", image: "images/3d/HomeBayern0708.png", sizes: ["XS", "S", "M", "L", "XL", "XXL"], description: "Maglia casalinga del Bayern Monaco 2007/08.", kitType: 'solo', inStock: true },
 
   // ══════════════ BAYER LEVERKUSEN ══════════════
