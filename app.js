@@ -3317,7 +3317,9 @@ function openMobSearch() {
   closeCatPage();
   panel.classList.add('open');
   panel.setAttribute('aria-hidden', 'false');
+  document.documentElement.classList.add('mob-search-open');
   document.body.classList.add('mob-search-open');
+  document.body.style.overflow = 'hidden';
   setTimeout(() => input?.focus(), 60);
   navPush();
 }
@@ -3331,7 +3333,9 @@ function closeMobSearch() {
     panel.setAttribute('aria-hidden', 'true');
   }
   if (input) input.value = '';
+  document.documentElement.classList.remove('mob-search-open');
   document.body.classList.remove('mob-search-open');
+  if (!getTopmostOpenOverlay()) document.body.style.overflow = '';
   closeSearchDropdown();
 }
 

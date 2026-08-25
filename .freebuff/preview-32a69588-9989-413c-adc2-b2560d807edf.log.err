@@ -227,3 +227,46 @@
 127.0.0.1 - - [25/Aug/2026 17:11:55] "GET /images/teams/arsenal_home.png HTTP/1.1" 404 -
 127.0.0.1 - - [25/Aug/2026 17:11:55] code 404, message File not found
 127.0.0.1 - - [25/Aug/2026 17:11:55] "GET /images/teams/liverpool_home.png HTTP/1.1" 404 -
+127.0.0.1 - - [25/Aug/2026 17:11:56] code 404, message File not found
+127.0.0.1 - - [25/Aug/2026 17:11:56] "GET /images/teams/manutd_home.png HTTP/1.1" 404 -
+127.0.0.1 - - [25/Aug/2026 17:11:56] code 404, message File not found
+127.0.0.1 - - [25/Aug/2026 17:11:56] code 404, message File not found
+127.0.0.1 - - [25/Aug/2026 17:11:56] "GET /images/teams/dortmund_home.png HTTP/1.1" 404 -
+127.0.0.1 - - [25/Aug/2026 17:11:56] "GET /images/teams/alnassr_home.png HTTP/1.1" 404 -
+127.0.0.1 - - [25/Aug/2026 17:11:57] code 404, message File not found
+127.0.0.1 - - [25/Aug/2026 17:11:57] "GET /images/teams/alnassr_cr7.png HTTP/1.1" 404 -
+127.0.0.1 - - [25/Aug/2026 17:11:57] code 404, message File not found
+127.0.0.1 - - [25/Aug/2026 17:11:57] "GET /images/3d/Nazionali/AwayInghilterra2026.png HTTP/1.1" 404 -
+127.0.0.1 - - [25/Aug/2026 17:11:58] "GET /images/3d/Nazionali/HomePortogallo2026.png HTTP/1.1" 304 -
+127.0.0.1 - - [25/Aug/2026 17:12:00] "GET /images/3d/Nazionali/AwayPortogallo2026.png HTTP/1.1" 304 -
+127.0.0.1 - - [25/Aug/2026 17:12:00] "GET /images/3d/Nazionali/HomeBelgio2026.png HTTP/1.1" 304 -
+127.0.0.1 - - [25/Aug/2026 17:12:01] "GET /images/3d/Nazionali/HomeOlanda2026.png HTTP/1.1" 304 -
+127.0.0.1 - - [25/Aug/2026 17:12:01] "GET /images/3d/Nazionali/AwayBelgio2026.png HTTP/1.1" 304 -
+127.0.0.1 - - [25/Aug/2026 17:12:01] code 404, message File not found
+127.0.0.1 - - [25/Aug/2026 17:12:01] "GET /images/3d/Nazionali/AwayOlanda2026.png HTTP/1.1" 404 -
+127.0.0.1 - - [25/Aug/2026 17:12:01] "GET /images/3d/Nazionali/HomeMessico2026.png HTTP/1.1" 304 -
+127.0.0.1 - - [25/Aug/2026 17:12:01] "GET /images/3d/Nazionali/AwayMessico2026.png HTTP/1.1" 304 -
+127.0.0.1 - - [25/Aug/2026 17:12:01] "GET /images/3d/Nazionali/HomeColombia2026.png HTTP/1.1" 304 -
+127.0.0.1 - - [25/Aug/2026 17:12:01] "GET /images/3d/Nazionali/AwayColombia2026.png HTTP/1.1" 304 -
+127.0.0.1 - - [25/Aug/2026 17:12:01] "GET /images/3d/Nazionali/HomeGermania2026.png HTTP/1.1" 304 -
+127.0.0.1 - - [25/Aug/2026 17:12:01] "GET /images/3d/Nazionali/HomeCroazia2026.png HTTP/1.1" 200 -
+127.0.0.1 - - [25/Aug/2026 17:12:01] "GET /images/3d/Nazionali/AwayCroazia2026.png HTTP/1.1" 200 -
+127.0.0.1 - - [25/Aug/2026 17:12:01] "GET /images/3d/Nazionali/HomeItalia2026.png HTTP/1.1" 200 -
+127.0.0.1 - - [25/Aug/2026 17:12:02] "GET /images/3d/Nazionali/AwayItalia2026.png HTTP/1.1" 200 -
+127.0.0.1 - - [25/Aug/2026 17:12:02] "GET /images/3d/Nazionali/HomeUsa2026.png HTTP/1.1" 200 -
+127.0.0.1 - - [25/Aug/2026 17:12:02] code 404, message File not found
+127.0.0.1 - - [25/Aug/2026 17:12:02] "GET /images/3d/Nazionali/AwayUsa2026.png HTTP/1.1" 404 -
+127.0.0.1 - - [25/Aug/2026 17:12:02] "GET /images/3d/Nazionali/HomeCanada2026.png HTTP/1.1" 200 -
+127.0.0.1 - - [25/Aug/2026 17:12:03] code 404, message File not found
+127.0.0.1 - - [25/Aug/2026 17:12:03] "GET /images/3d/Nazionali/AwayCanada2026.png HTTP/1.1" 404 -
+127.0.0.1 - - [25/Aug/2026 17:12:03] "GET /images/3d/Nazionali/HomeGiappone2026.png HTTP/1.1" 200 -
+127.0.0.1 - - [25/Aug/2026 17:12:03] code 404, message File not found
+127.0.0.1 - - [25/Aug/2026 17:12:03] "GET /images/3d/Nazionali/AwayGiappone2026.png HTTP/1.1" 404 -
+127.0.0.1 - - [25/Aug/2026 17:12:03] "GET /images/3d/Nazionali/PreFrancia2026.png HTTP/1.1" 200 -
+127.0.0.1 - - [25/Aug/2026 17:12:03] "GET /images/3d/Nazionali/SpecialArgentina2026.png HTTP/1.1" 200 -
+127.0.0.1 - - [25/Aug/2026 17:12:03] "GET /images/3d/Cristo%20Del%20Rio%202526%20.png HTTP/1.1" 200 -
+127.0.0.1 - - [25/Aug/2026 17:12:03] "GET /images/3d/pantaloncino%20cristo%20del%20rio.png HTTP/1.1" 200 -
+127.0.0.1 - - [25/Aug/2026 17:12:03] "GET /images/3d/canotta%20brasile%20cristo.png HTTP/1.1" 200 -
+127.0.0.1 - - [25/Aug/2026 17:12:03] "GET /2627/serieA/Bologna%20Home.png HTTP/1.1" 200 -
+127.0.0.1 - - [25/Aug/2026 17:30:37] "GET /index.html?mobilefix=20260813f HTTP/1.1" 200 -
+127.0.0.1 - - [25/Aug/2026 17:30:37] "GET /style.css?v=20260813f HTTP/1.1" 200 -

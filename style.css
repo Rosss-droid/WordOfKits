@@ -6953,7 +6953,8 @@ img {
     border: none;
     background: transparent;
     outline: none;
-    font-size: .95rem;
+    /* iOS Safari zooma automaticamente gli input sotto 16px */
+    font-size: 16px;
     color: #111;
     font-family: inherit;
     min-width: 0;
@@ -7800,19 +7801,33 @@ img {
   /* ══════════════════════════
      SEARCH DROPDOWN
   ══════════════════════════ */
+  html.mob-search-open,
+  body.mob-search-open {
+    overflow: hidden;
+  }
+
   .search-dropdown {
     top: calc(var(--mob-topbar) + var(--mob-header));
-    max-height: 75dvh;
+    height: calc(100dvh - var(--mob-topbar) - var(--mob-header) - var(--mob-safe));
+    max-height: none;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-y;
+    padding-bottom: var(--mob-safe);
   }
 
   .search-dropdown.open {
-    max-height: 75dvh;
+    height: calc(100dvh - var(--mob-topbar) - var(--mob-header) - var(--mob-safe));
+    max-height: none;
+    overscroll-behavior: contain;
   }
 
   .search-dropdown-inner {
     grid-template-columns: 1fr;
     gap: .75rem;
     padding: 3.2rem 1rem 1rem;
+    min-height: 100%;
     max-height: none;
   }
 
@@ -7843,8 +7858,20 @@ img {
   }
 
   .sd-products-grid {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: .5rem;
+  }
+
+  /* Impedisce il pinch/auto-zoom quando si scrive nei moduli mobile. */
+  input,
+  textarea,
+  select,
+  .search-input,
+  .nav-search-input,
+  .customize-input,
+  .custom-product-input,
+  .custom-product-select {
+    font-size: 16px !important;
   }
 
   /* ══════════════════════════
