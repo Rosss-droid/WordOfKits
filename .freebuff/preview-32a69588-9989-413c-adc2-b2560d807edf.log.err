@@ -270,3 +270,10 @@
 127.0.0.1 - - [25/Aug/2026 17:12:03] "GET /2627/serieA/Bologna%20Home.png HTTP/1.1" 200 -
 127.0.0.1 - - [25/Aug/2026 17:30:37] "GET /index.html?mobilefix=20260813f HTTP/1.1" 200 -
 127.0.0.1 - - [25/Aug/2026 17:30:37] "GET /style.css?v=20260813f HTTP/1.1" 200 -
+127.0.0.1 - - [25/Aug/2026 18:00:12] "GET /index.html?keyboardfix=20260813g HTTP/1.1" 200 -
+127.0.0.1 - - [25/Aug/2026 18:00:12] "GET /style.css?v=20260813f HTTP/1.1" 200 -
+127.0.0.1 - - [25/Aug/2026 18:06:45] "GET /index.html?keyboardfix=20260813h HTTP/1.1" 200 -
+127.0.0.1 - - [25/Aug/2026 18:06:45] "GET /style.css?v=20260813g HTTP/1.1" 200 -
+127.0.0.1 - - [25/Aug/2026 18:23:48] "GET /index.html?keyboardfix=20260813i HTTP/1.1" 200 -
+127.0.0.1 - - [25/Aug/2026 18:23:48] "GET /style.css?v=20260813g HTTP/1.1" 304 -
+127.0.0.1 - - [25/Aug/2026 18:23:48] "GET /app.js?v=20260813m HTTP/1.1" 200 -
