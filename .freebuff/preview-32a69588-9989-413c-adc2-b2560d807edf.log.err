@@ -175,3 +175,55 @@
 127.0.0.1 - - [24/Aug/2026 13:26:38] code 404, message File not found
 127.0.0.1 - - [24/Aug/2026 13:26:38] "GET /images/3d/Nazionali/AwayInghilterra2026.png HTTP/1.1" 404 -
 127.0.0.1 - - [24/Aug/2026 14:21:26] "GET /images/3d/Serie%20A/Bologna/2324/Bologna%20Home%202324.png HTTP/1.1" 304 -
+127.0.0.1 - - [24/Aug/2026 15:23:41] code 404, message File not found
+127.0.0.1 - - [24/Aug/2026 15:23:41] code 404, message File not found
+127.0.0.1 - - [24/Aug/2026 15:23:41] "GET /images/teams/chelsea_away.png HTTP/1.1" 404 -
+127.0.0.1 - - [24/Aug/2026 15:23:41] "GET /images/teams/mancity_away.png HTTP/1.1" 404 -
+127.0.0.1 - - [24/Aug/2026 15:23:41] code 404, message File not found
+127.0.0.1 - - [24/Aug/2026 15:23:41] code 404, message File not found
+127.0.0.1 - - [24/Aug/2026 15:23:41] code 404, message File not found
+127.0.0.1 - - [24/Aug/2026 15:23:41] code 404, message File not found
+127.0.0.1 - - [24/Aug/2026 15:23:41] "GET /images/teams/tottenham_away.png HTTP/1.1" 404 -
+127.0.0.1 - - [24/Aug/2026 15:23:41] "GET /images/teams/manutd_home.png HTTP/1.1" 404 -
+127.0.0.1 - - [24/Aug/2026 15:23:41] "GET /images/teams/mancity_home.png HTTP/1.1" 404 -
+127.0.0.1 - - [24/Aug/2026 15:23:41] "GET /images/teams/liverpool_home.png HTTP/1.1" 404 -
+127.0.0.1 - - [24/Aug/2026 15:23:41] code 404, message File not found
+127.0.0.1 - - [24/Aug/2026 15:23:41] "GET /images/teams/newcastle_home.png HTTP/1.1" 404 -
+127.0.0.1 - - [24/Aug/2026 15:23:41] code 404, message File not found
+127.0.0.1 - - [24/Aug/2026 15:23:41] "GET /images/teams/arsenal_home.png HTTP/1.1" 404 -
+127.0.0.1 - - [24/Aug/2026 15:23:41] code 404, message File not found
+127.0.0.1 - - [24/Aug/2026 15:23:41] code 404, message File not found
+127.0.0.1 - - [24/Aug/2026 15:23:41] "GET /images/teams/chelsea_home.png HTTP/1.1" 404 -
+127.0.0.1 - - [24/Aug/2026 15:23:41] "GET /images/teams/tottenham_home.png HTTP/1.1" 404 -
+127.0.0.1 - - [24/Aug/2026 15:23:41] code 404, message File not found
+127.0.0.1 - - [24/Aug/2026 15:23:41] "GET /images/teams/newcastle_away.png HTTP/1.1" 404 -
+127.0.0.1 - - [24/Aug/2026 15:25:29] "GET /index.html HTTP/1.1" 200 -
+127.0.0.1 - - [24/Aug/2026 15:25:31] "GET /style.css?v=20260813e HTTP/1.1" 200 -
+127.0.0.1 - - [24/Aug/2026 15:25:31] "GET /app.js?v=20260813l HTTP/1.1" 200 -
+127.0.0.1 - - [24/Aug/2026 15:53:29] "GET /index.html HTTP/1.1" 304 -
+127.0.0.1 - - [24/Aug/2026 15:53:29] "GET /style.css?v=20260813e HTTP/1.1" 304 -
+127.0.0.1 - - [24/Aug/2026 15:53:29] "GET /app.js?v=20260813l HTTP/1.1" 304 -
+127.0.0.1 - - [25/Aug/2026 17:06:58] "GET /index.html HTTP/1.1" 200 -
+127.0.0.1 - - [25/Aug/2026 17:08:25] "GET /index.html HTTP/1.1" 200 -
+127.0.0.1 - - [25/Aug/2026 17:08:25] "GET /index.html HTTP/1.1" 304 -
+127.0.0.1 - - [25/Aug/2026 17:08:25] "GET /style.css?v=20260813e HTTP/1.1" 304 -
+127.0.0.1 - - [25/Aug/2026 17:08:25] "GET /products.js?v=20260813e HTTP/1.1" 200 -
+127.0.0.1 - - [25/Aug/2026 17:08:25] "GET /app.js?v=20260813l HTTP/1.1" 304 -
+127.0.0.1 - - [25/Aug/2026 17:08:26] "GET /images/3d/Nazionali/HomeFrancia2026.png HTTP/1.1" 304 -
+127.0.0.1 - - [25/Aug/2026 17:08:26] "GET /images/3d/Nazionali/AwayFrancia2026.png HTTP/1.1" 304 -
+127.0.0.1 - - [25/Aug/2026 17:08:26] "GET /images/3d/Nazionali/AwayArgentina2026.png HTTP/1.1" 304 -
+127.0.0.1 - - [25/Aug/2026 17:08:26] "GET /images/3d/Nazionali/HomeArgentina2026.png HTTP/1.1" 304 -
+127.0.0.1 - - [25/Aug/2026 17:08:26] "GET /images/3d/Nazionali/HomeSpagna2026.png HTTP/1.1" 304 -
+127.0.0.1 - - [25/Aug/2026 17:08:26] "GET /images/3d/Nazionali/AwayGermania2026.png HTTP/1.1" 304 -
+127.0.0.1 - - [25/Aug/2026 17:08:53] code 404, message File not found
+127.0.0.1 - - [25/Aug/2026 17:08:53] "GET /images/3d/Nazionali/AwayInghilterra2026.png HTTP/1.1" 404 -
+127.0.0.1 - - [25/Aug/2026 17:10:56] code 404, message File not found
+127.0.0.1 - - [25/Aug/2026 17:10:56] "GET /images/3d/Nazionali/AwayInghilterra2026.png HTTP/1.1" 404 -
+127.0.0.1 - - [25/Aug/2026 17:11:55] "GET /2627/serieA/Napoli%20Home.png HTTP/1.1" 200 -
+127.0.0.1 - - [25/Aug/2026 17:11:55] "GET /images/3d/Serie%20A/Roma/2627/Roma%20Home%202627.png HTTP/1.1" 200 -
+127.0.0.1 - - [25/Aug/2026 17:11:55] code 404, message File not found
+127.0.0.1 - - [25/Aug/2026 17:11:55] code 404, message File not found
+127.0.0.1 - - [25/Aug/2026 17:11:55] "GET /images/teams/mancity_home.png HTTP/1.1" 404 -
+127.0.0.1 - - [25/Aug/2026 17:11:55] "GET /images/teams/arsenal_home.png HTTP/1.1" 404 -
+127.0.0.1 - - [25/Aug/2026 17:11:55] code 404, message File not found
+127.0.0.1 - - [25/Aug/2026 17:11:55] "GET /images/teams/liverpool_home.png HTTP/1.1" 404 -

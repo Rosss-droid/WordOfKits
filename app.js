@@ -2659,6 +2659,23 @@ function navPop() {
 
 window.addEventListener('popstate', navPop);
 
+// Evita che il resize causato dalla tastiera virtuale ricalcoli o sposti il layout.
+// Il modal usa la viewport stabile (svh); aggiorniamo solo la variabile di altezza
+// quando cambia davvero la dimensione della finestra, non durante il keyboard resize.
+(function keepViewportStableForKeyboard() {
+  const root = document.documentElement;
+  let initialHeight = window.innerHeight;
+  root.style.setProperty('--app-viewport-height', initialHeight + 'px');
+  window.addEventListener('resize', () => {
+    const active = document.activeElement;
+    const keyboardLikelyOpen = active && /^(INPUT|TEXTAREA|SELECT)$/.test(active.tagName) && window.innerHeight < initialHeight - 120;
+    if (!keyboardLikelyOpen) {
+      initialHeight = Math.max(initialHeight, window.innerHeight);
+      root.style.setProperty('--app-viewport-height', initialHeight + 'px');
+    }
+  }, { passive: true });
+})();
+
 function openOverlay(id) {
   const el = document.getElementById(id);
   if (!el) return;
@@ -2980,28 +2997,50 @@ function setupCustomOrder() {
   });
 }
 
-// Scheda "Non trovi il tuo prodotto?": form stile prodotto che aggiunge la richiesta al carrello
+// Scheda "Non trovi il tuo prodotto?": invia direttamente la richiesta al venditore.
 function setupCustomRequest() {
   const form = document.getElementById('customRequestForm');
   if (!form) return;
 
-  form.addEventListener('submit', e => {
+  form.addEventListener('submit', async e => {
     e.preventDefault();
 
-    const name = document.getElementById('crqName')?.value.trim();
+    const productName = document.getElementById('crqName')?.value.trim();
+    const customerName = document.getElementById('crqCustomerName')?.value.trim();
+    const customerEmail = document.getElementById('crqCustomerEmail')?.value.trim();
     const size = document.getElementById('crqSize')?.value || 'M';
-    const qty = parseInt(document.getElementById('crqQty')?.value) || 1;
-    if (!name) return;
+    const qty = parseInt(document.getElementById('crqQty')?.value, 10) || 1;
+    const note = document.getElementById('crqNote')?.value.trim() || 'Nessun dettaglio aggiuntivo';
+    if (!productName || !customerName || !customerEmail) return;
 
-    pushCustomRequestItem(name, size, qty);
-    closeCustomRequest();
-    openCart();
+    const submit = form.querySelector('button[type="submit"]');
+    if (submit) { submit.disabled = true; submit.dataset.originalText = submit.textContent; submit.textContent = 'Invio in corso...'; }
 
-    showToast('✅', `"${name}" ${t('toast.aggiunto')} ${t('toast.prezzoComunicato')}`);
-    form.reset();
-    const sz = document.getElementById('crqSize'); if (sz) sz.value = 'M';
-    const qt = document.getElementById('crqQty'); if (qt) qt.value = '1';
-    const note = document.getElementById('crqNote'); if (note) note.value = '';
+    try {
+      if (!EMAIL_CONFIG.publicKey || !EMAIL_CONFIG.serviceId || !EMAIL_CONFIG.templateId || !EMAIL_CONFIG.ownerEmail) {
+        throw new Error('EmailJS non configurato');
+      }
+      await emailjs.send(EMAIL_CONFIG.serviceId, EMAIL_CONFIG.templateId, {
+        to_email: EMAIL_CONFIG.ownerEmail,
+        customer_name: customerName,
+        customer_email: customerEmail,
+        order_number: 'Richiesta prodotto',
+        order_details: `Prodotto richiesto: ${productName}\nTaglia: ${size}\nQuantità: ${qty}\nDettagli: ${note}`,
+        order_notes: note,
+        order_total: 'Prezzo da comunicare',
+        reply_to: customerEmail
+      });
+      closeCustomRequest();
+      showToast('', 'Richiesta inviata. Ti ricontatteremo via email.');
+      form.reset();
+      const sz = document.getElementById('crqSize'); if (sz) sz.value = 'M';
+      const qt = document.getElementById('crqQty'); if (qt) qt.value = '1';
+    } catch (err) {
+      console.error('Richiesta prodotto non inviata:', err);
+      showToast('', 'Errore nell\'invio della richiesta. Riprova.');
+    } finally {
+      if (submit) { submit.disabled = false; submit.textContent = submit.dataset.originalText || 'Invia richiesta'; }
+    }
   });
 }
 
