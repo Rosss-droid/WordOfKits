@@ -2659,71 +2659,19 @@ function navPop() {
 
 window.addEventListener('popstate', navPop);
 
-// Mantiene ferma la pagina mentre iOS apre la tastiera virtuale. Safari tende a
-// cambiare scrollY per portare il campo al centro; congeliamo la posizione del body
-// e la ripristiniamo alla chiusura, senza interferire con lo scroll interno dei modal.
+// Tiene una misura stabile per i modal senza intercettare scroll, focus o resize.
+// Il blocco forzato del body durante la tastiera causava ritorni indesiderati in home.
 (function keepViewportStableForKeyboard() {
   const root = document.documentElement;
   let initialHeight = window.innerHeight;
-  let lockedScrollY = 0;
-  let lockTimer = null;
-  let unlockTimer = null;
   root.style.setProperty('--app-viewport-height', initialHeight + 'px');
-
-  const isEditable = el => el && /^(INPUT|TEXTAREA|SELECT)$/.test(el.tagName);
-  const isKeyboardResize = () => window.innerHeight < initialHeight - 120 ||
-    (window.visualViewport && window.visualViewport.height < initialHeight - 120);
-
-  function lockPageScroll() {
-    if (document.documentElement.classList.contains('keyboard-scroll-locked')) return;
-    lockedScrollY = window.scrollY || window.pageYOffset || 0;
-    document.documentElement.style.setProperty('--keyboard-lock-y', lockedScrollY + 'px');
-    document.documentElement.classList.add('keyboard-scroll-locked');
-  }
-
-  function unlockPageScroll() {
-    document.documentElement.classList.remove('keyboard-scroll-locked');
-    window.scrollTo(0, lockedScrollY);
-  }
-
-  function scheduleLock() {
-    clearTimeout(lockTimer);
-    // Blocca subito, prima che iOS abbia il tempo di spostare la pagina.
-    if (isEditable(document.activeElement)) lockPageScroll();
-  }
-
-  function scheduleUnlock() {
-    clearTimeout(unlockTimer);
-    unlockTimer = setTimeout(() => {
-      if (!isEditable(document.activeElement) && !isKeyboardResize()) unlockPageScroll();
-    }, 120);
-  }
-
-  document.addEventListener('focusin', e => {
-    if (isEditable(e.target)) scheduleLock();
-  }, { passive: true });
-
-  document.addEventListener('focusout', () => scheduleUnlock(), { passive: true });
-
-  const keepPosition = () => {
-    if (document.documentElement.classList.contains('keyboard-scroll-locked')) {
-      window.scrollTo(0, lockedScrollY);
-    }
-  };
-  window.addEventListener('scroll', keepPosition, { passive: true });
   window.addEventListener('resize', () => {
     const active = document.activeElement;
-    const keyboardLikelyOpen = isEditable(active) && isKeyboardResize();
+    const keyboardLikelyOpen = active && /^(INPUT|TEXTAREA|SELECT)$/.test(active.tagName) && window.innerHeight < initialHeight - 120;
     if (!keyboardLikelyOpen) {
       initialHeight = Math.max(initialHeight, window.innerHeight);
       root.style.setProperty('--app-viewport-height', initialHeight + 'px');
-      if (!isEditable(active)) scheduleUnlock();
-    } else {
-      lockPageScroll();
     }
-  }, { passive: true });
-  window.visualViewport?.addEventListener('resize', () => {
-    if (isEditable(document.activeElement)) lockPageScroll();
   }, { passive: true });
 })();
 

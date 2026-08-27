@@ -6875,22 +6875,6 @@ img {
     touch-action: pan-y;
   }
 
-  /* Blocca lo scroll della pagina durante la tastiera senza bloccare lo scroll
-     interno del modal o del pannello risultati. */
-  html.keyboard-scroll-locked,
-  html.keyboard-scroll-locked body {
-    overflow: hidden !important;
-    overscroll-behavior: none;
-  }
-
-  html.keyboard-scroll-locked body {
-    position: fixed;
-    left: 0;
-    right: 0;
-    top: calc(var(--keyboard-lock-y, 0px) * -1);
-    width: 100%;
-  }
-
   /* ── Padding body per bottom nav ── */
   body {
     padding-bottom: var(--mob-safe);
