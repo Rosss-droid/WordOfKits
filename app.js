@@ -781,6 +781,11 @@ function productMatchesCategory(p, filter) {
   if (filter === 'vintage') {
     return p.badge === 'vintage';
   }
+  // Kit Home 2026/27: tutte le maglie col nome "Home ... 2026/27"
+  if (filter === 'Home2627') {
+    const n = p.name.toLowerCase();
+    return n.includes('home') && n.includes('2026/27');
+  }
   const cats = Array.isArray(p.category) ? p.category : [p.category];
   return cats.includes(filter);
 }
