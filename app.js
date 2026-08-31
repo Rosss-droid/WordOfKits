@@ -99,7 +99,21 @@ const I18N = {
     'customize.numeroRange': 'Numero da 1 a 99.', 'customize.nomePh': 'IL TUO NOME',
     'order.nomePh': 'Mario', 'order.cognomePh': 'Rossi', 'order.emailPh': 'mario.rossi@email.com',
     'order.telefonoPh': '+39 333 000 0000', 'order.indirizzoPh': 'Via Roma 1, 00100 Roma (RM)',
-    'order.cittaPh': 'Roma', 'order.capPh': '00100', 'order.notePh': 'Personalizzazione maglia (nome/numero), note speciali...'
+    'order.cittaPh': 'Roma', 'order.capPh': '00100', 'order.notePh': 'Personalizzazione maglia (nome/numero), note speciali...',
+    'auth.title': 'Benvenuto su WorldOfKits',
+    'auth.sub': 'Accedi o registrati per salvare carrello e preferiti nel tuo profilo.',
+    'auth.register': 'Registrati', 'auth.login': 'Accedi',
+    'auth.guest': 'Continua senza registrarti',
+    'auth.guestWarn': 'Continuando senza registrarti, carrello e preferiti non verranno salvati nel tuo profilo.',
+    'auth.name': 'Nome', 'auth.email': 'Email',
+    'auth.namePh': 'Il tuo nome', 'auth.emailPh': 'tua@email.com',
+    'auth.submitRegister': 'Crea account', 'auth.submitLogin': 'Entra',
+    'auth.haveAccount': 'Hai già un account? Accedi',
+    'auth.noAccount': 'Non hai un account? Registrati',
+    'auth.hello': 'Ciao,', 'auth.logout': 'Esci',
+    'auth.welcome': 'Benvenuto', 'auth.welcomeBack': 'Bentornato',
+    'auth.errorNotFound': 'Account non trovato. Registrati prima.',
+    'auth.errorExists': 'Esiste già un account con questa email.'
   },
   en: {
     'nav.menu': 'MENU', 'nav.calcio': 'Football', 'nav.sport': 'Sport', 'nav.mondiali': 'World Cup',
@@ -183,7 +197,21 @@ const I18N = {
     'customize.numeroRange': 'Number from 1 to 99.', 'customize.nomePh': 'YOUR NAME',
     'order.nomePh': 'John', 'order.cognomePh': 'Smith', 'order.emailPh': 'john.smith@email.com',
     'order.telefonoPh': '+1 555 000 0000', 'order.indirizzoPh': '1 Main St, 00100 Rome',
-    'order.cittaPh': 'Rome', 'order.capPh': '00100', 'order.notePh': 'Shirt customization (name/number), special notes...'
+    'order.cittaPh': 'Rome', 'order.capPh': '00100', 'order.notePh': 'Shirt customization (name/number), special notes...',
+    'auth.title': 'Welcome to WorldOfKits',
+    'auth.sub': 'Log in or register to save your cart and favorites to your profile.',
+    'auth.register': 'Register', 'auth.login': 'Log in',
+    'auth.guest': 'Continue without registering',
+    'auth.guestWarn': 'By continuing without registering, your cart and favorites will not be saved to your profile.',
+    'auth.name': 'Name', 'auth.email': 'Email',
+    'auth.namePh': 'Your name', 'auth.emailPh': 'you@email.com',
+    'auth.submitRegister': 'Create account', 'auth.submitLogin': 'Sign in',
+    'auth.haveAccount': 'Already have an account? Log in',
+    'auth.noAccount': 'Don\'t have an account? Register',
+    'auth.hello': 'Hi,', 'auth.logout': 'Log out',
+    'auth.welcome': 'Welcome', 'auth.welcomeBack': 'Welcome back',
+    'auth.errorNotFound': 'Account not found. Please register first.',
+    'auth.errorExists': 'An account with this email already exists.'
   },
   es: {
     'nav.menu': 'MENÚ', 'nav.calcio': 'Fútbol', 'nav.sport': 'Deporte', 'nav.mondiali': 'Mundial',
@@ -267,7 +295,21 @@ const I18N = {
     'customize.numeroRange': 'Número del 1 al 99.', 'customize.nomePh': 'TU NOMBRE',
     'order.nomePh': 'Juan', 'order.cognomePh': 'García', 'order.emailPh': 'juan.garcia@email.com',
     'order.telefonoPh': '+34 600 000 000', 'order.indirizzoPh': 'Calle Mayor 1, 00100 Roma',
-    'order.cittaPh': 'Roma', 'order.capPh': '00100', 'order.notePh': 'Personalización de camiseta (nombre/número), notas especiales...'
+    'order.cittaPh': 'Roma', 'order.capPh': '00100', 'order.notePh': 'Personalización de camiseta (nombre/número), notas especiales...',
+    'auth.title': 'Bienvenido a WorldOfKits',
+    'auth.sub': 'Inicia sesión o regístrate para guardar tu carrito y favoritos en tu perfil.',
+    'auth.register': 'Regístrate', 'auth.login': 'Inicia sesión',
+    'auth.guest': 'Continuar sin registrarte',
+    'auth.guestWarn': 'Si continúas sin registrarte, tu carrito y favoritos no se guardarán en tu perfil.',
+    'auth.name': 'Nombre', 'auth.email': 'Correo electrónico',
+    'auth.namePh': 'Tu nombre', 'auth.emailPh': 'tu@correo.com',
+    'auth.submitRegister': 'Crear cuenta', 'auth.submitLogin': 'Entrar',
+    'auth.haveAccount': '¿Ya tienes una cuenta? Inicia sesión',
+    'auth.noAccount': '¿No tienes una cuenta? Regístrate',
+    'auth.hello': 'Hola,', 'auth.logout': 'Cerrar sesión',
+    'auth.welcome': 'Bienvenido', 'auth.welcomeBack': 'Bienvenido de nuevo',
+    'auth.errorNotFound': 'Cuenta no encontrada. Regístrate primero.',
+    'auth.errorExists': 'Ya existe una cuenta con este correo.'
   },
   fr: {
     'nav.menu': 'MENU', 'nav.calcio': 'Football', 'nav.sport': 'Sport', 'nav.mondiali': 'Mondial',
@@ -351,7 +393,21 @@ const I18N = {
     'customize.numeroRange': 'Numéro de 1 à 99.', 'customize.nomePh': 'VOTRE NOM',
     'order.nomePh': 'Jean', 'order.cognomePh': 'Martin', 'order.emailPh': 'jean.martin@email.com',
     'order.telefonoPh': '+33 600 000 000', 'order.indirizzoPh': '1 rue de Rome, 00100 Rome',
-    'order.cittaPh': 'Rome', 'order.capPh': '00100', 'order.notePh': 'Personnalisation du maillot (nom/numéro), notes spéciales...'
+    'order.cittaPh': 'Rome', 'order.capPh': '00100', 'order.notePh': 'Personnalisation du maillot (nom/numéro), notes spéciales...',
+    'auth.title': 'Bienvenue sur WorldOfKits',
+    'auth.sub': 'Connectez-vous ou inscrivez-vous pour enregistrer votre panier et vos favoris dans votre profil.',
+    'auth.register': 'S\'inscrire', 'auth.login': 'Se connecter',
+    'auth.guest': 'Continuer sans inscription',
+    'auth.guestWarn': 'En continuant sans vous inscrire, votre panier et vos favoris ne seront pas enregistrés dans votre profil.',
+    'auth.name': 'Nom', 'auth.email': 'E-mail',
+    'auth.namePh': 'Votre nom', 'auth.emailPh': 'vous@email.com',
+    'auth.submitRegister': 'Créer un compte', 'auth.submitLogin': 'Se connecter',
+    'auth.haveAccount': 'Vous avez déjà un compte ? Se connecter',
+    'auth.noAccount': 'Vous n\'avez pas de compte ? S\'inscrire',
+    'auth.hello': 'Bonjour,', 'auth.logout': 'Se déconnecter',
+    'auth.welcome': 'Bienvenue', 'auth.welcomeBack': 'Bon retour',
+    'auth.errorNotFound': 'Compte introuvable. Inscrivez-vous d\'abord.',
+    'auth.errorExists': 'Un compte avec cet e-mail existe déjà.'
   },
   de: {
     'nav.menu': 'MENÜ', 'nav.calcio': 'Fußball', 'nav.sport': 'Sport', 'nav.mondiali': 'WM',
@@ -435,7 +491,21 @@ const I18N = {
     'customize.numeroRange': 'Nummer von 1 bis 99.', 'customize.nomePh': 'IHR NAME',
     'order.nomePh': 'Max', 'order.cognomePh': 'Müller', 'order.emailPh': 'max.mueller@email.com',
     'order.telefonoPh': '+49 170 000 0000', 'order.indirizzoPh': 'Hauptstraße 1, 00100 Rom',
-    'order.cittaPh': 'Rom', 'order.capPh': '00100', 'order.notePh': 'Trikot-Personalisierung (Name/Nummer), besondere Hinweise...'
+    'order.cittaPh': 'Rom', 'order.capPh': '00100', 'order.notePh': 'Trikot-Personalisierung (Name/Nummer), besondere Hinweise...',
+    'auth.title': 'Willkommen bei WorldOfKits',
+    'auth.sub': 'Melde dich an oder registriere dich, um Warenkorb und Favoriten in deinem Profil zu speichern.',
+    'auth.register': 'Registrieren', 'auth.login': 'Anmelden',
+    'auth.guest': 'Ohne Registrierung fortfahren',
+    'auth.guestWarn': 'Wenn du ohne Registrierung fortfährst, werden Warenkorb und Favoriten nicht in deinem Profil gespeichert.',
+    'auth.name': 'Name', 'auth.email': 'E-Mail',
+    'auth.namePh': 'Dein Name', 'auth.emailPh': 'du@email.com',
+    'auth.submitRegister': 'Konto erstellen', 'auth.submitLogin': 'Anmelden',
+    'auth.haveAccount': 'Du hast bereits ein Konto? Anmelden',
+    'auth.noAccount': 'Du hast noch kein Konto? Registrieren',
+    'auth.hello': 'Hallo,', 'auth.logout': 'Abmelden',
+    'auth.welcome': 'Willkommen', 'auth.welcomeBack': 'Willkommen zurück',
+    'auth.errorNotFound': 'Konto nicht gefunden. Registriere dich zuerst.',
+    'auth.errorExists': 'Ein Konto mit dieser E-Mail existiert bereits.'
   }
 };
 
@@ -494,10 +564,286 @@ function setupLang() {
 }
 
 // â”€â”€ STATO â”€â”€
-let cart = JSON.parse(localStorage.getItem('gk_cart') || '[]').map(function (item) {
-  if (!item._uid) item._uid = Date.now() + '-' + Math.random().toString(36).slice(2);
-  return item;
-});
+// ══════════════════════════════════════════════
+// AUTH / ACCOUNT — Accedi / Registrati / Ospite
+// ══════════════════════════════════════════════
+function getAuthUsers() {
+  try { return JSON.parse(localStorage.getItem('gk_users') || '{}'); }
+  catch (e) { return {}; }
+}
+
+function setAuthUsers(users) {
+  localStorage.setItem('gk_users', JSON.stringify(users));
+}
+
+function getCurrentUser() {
+  try { return JSON.parse(localStorage.getItem('gk_user') || 'null'); }
+  catch (e) { return null; }
+}
+
+function setCurrentUser(user) {
+  if (user) localStorage.setItem('gk_user', JSON.stringify(user));
+  else localStorage.removeItem('gk_user');
+  const btn = document.getElementById('authBtn');
+  if (btn) btn.classList.toggle('logged', !!user);
+}
+
+function authShowView(id) {
+  ['authChoiceView', 'authRegisterView', 'authLoginView', 'authProfileView'].forEach(v => {
+    const el = document.getElementById(v);
+    if (el) el.style.display = (v === id) ? 'flex' : 'none';
+  });
+}
+
+function openAuthModal() {
+  const user = getCurrentUser();
+  const profileName = document.getElementById('authProfileName');
+  if (user) {
+    if (profileName) profileName.textContent = t('auth.hello') + ' ' + (user.name || user.email);
+    authShowView('authProfileView');
+  } else {
+    authShowView('authChoiceView');
+  }
+  openOverlay('authOverlay');
+  navPush();
+}
+
+function closeAuthModal() {
+  closeOverlay('authOverlay');
+}
+
+function setupAuth() {
+  const overlay = document.getElementById('authOverlay');
+  const btn = document.getElementById('authBtn');
+  if (!overlay || !btn) return;
+
+  btn.addEventListener('click', openAuthModal);
+  document.getElementById('authClose')?.addEventListener('click', closeAuthModal);
+  overlay.addEventListener('click', e => {
+    if (e.target.id === 'authOverlay') closeAuthModal();
+  });
+
+  document.getElementById('authGoRegister')?.addEventListener('click', () => {
+    const err = document.getElementById('authRegError');
+    if (err) err.style.display = 'none';
+    authShowView('authRegisterView');
+  });
+  document.getElementById('authGoLogin')?.addEventListener('click', () => {
+    const err = document.getElementById('authLoginError');
+    if (err) err.style.display = 'none';
+    authShowView('authLoginView');
+  });
+  document.getElementById('authRegBack')?.addEventListener('click', () => authShowView('authChoiceView'));
+  document.getElementById('authLoginBack')?.addEventListener('click', () => authShowView('authChoiceView'));
+
+  document.getElementById('authGoGuest')?.addEventListener('click', () => {
+    continueAsGuest();
+    localStorage.setItem('gk_auth_dismissed', '1');
+    closeAuthModal();
+  });
+
+  document.getElementById('authLogout')?.addEventListener('click', () => {
+    continueAsGuest();
+    closeAuthModal();
+    showToast('', t('auth.logout'));
+  });
+
+  document.getElementById('authRegisterForm')?.addEventListener('submit', e => {
+    e.preventDefault();
+    const name = document.getElementById('authRegName').value.trim();
+    const email = document.getElementById('authRegEmail').value.trim().toLowerCase();
+    const err = document.getElementById('authRegError');
+    const users = getAuthUsers();
+    if (users[email]) {
+      if (err) { err.textContent = t('auth.errorExists'); err.style.display = 'block'; }
+      return;
+    }
+    users[email] = { name, email };
+    setAuthUsers(users);
+    activateAccount({ name, email }, true);
+    localStorage.setItem('gk_auth_dismissed', '1');
+    closeAuthModal();
+    showToast('', t('auth.welcome') + ', ' + name);
+  });
+
+  document.getElementById('authLoginForm')?.addEventListener('submit', e => {
+    e.preventDefault();
+    const email = document.getElementById('authLoginEmail').value.trim().toLowerCase();
+    const err = document.getElementById('authLoginError');
+    const users = getAuthUsers();
+    if (!email || !users[email]) {
+      if (err) { err.textContent = t('auth.errorNotFound'); err.style.display = 'block'; }
+      return;
+    }
+    activateAccount(users[email], true);
+    localStorage.setItem('gk_auth_dismissed', '1');
+    closeAuthModal();
+    showToast('', t('auth.welcomeBack') + ', ' + users[email].name);
+  });
+
+  // Stato iniziale del bottone account
+  btn.classList.toggle('logged', !!getCurrentUser());
+
+  // Popup di benvenuto al primo accesso (finché non sceglie utente o ospite)
+  if (!getCurrentUser() && !localStorage.getItem('gk_auth_dismissed')) {
+    openAuthModal();
+  }
+}
+
+// ── NOMI PRODOTTO / DATI SALVATI ──
+// I nomi salvati nel carrello sono copie dello stato precedente del catalogo. Per
+// evitare testo corrotto o obsoleto, per gli articoli catalogati usiamo sempre
+// il nome attuale di PRODUCTS, lasciando invariati solo gli articoli personalizzati.
+function readStoredArray(key, storage) {
+  const source = storage || localStorage;
+  try {
+    const value = JSON.parse(source.getItem(key) || '[]');
+    return Array.isArray(value) ? value : [];
+  } catch (e) {
+    return [];
+  }
+}
+
+function getAccountStorageInfo() {
+  const user = getCurrentUser();
+  if (user && user.email) {
+    const emailKey = encodeURIComponent(String(user.email).trim().toLowerCase());
+    return {
+      storage: localStorage,
+      cartKey: 'gk_cart_user_' + emailKey,
+      favoritesKey: 'gk_favorites_user_' + emailKey,
+      user
+    };
+  }
+  return {
+    storage: sessionStorage,
+    cartKey: 'gk_guest_cart',
+    favoritesKey: 'gk_guest_favorites',
+    user: null
+  };
+}
+
+function loadActiveArray(type) {
+  const info = getAccountStorageInfo();
+  const key = type === 'cart' ? info.cartKey : info.favoritesKey;
+  if (info.storage.getItem(key) !== null) return readStoredArray(key, info.storage);
+
+  // Migrazione una tantum dei dati creati dalla versione precedente.
+  const legacyKey = type === 'cart' ? 'gk_cart' : 'gk_favorites';
+  const legacy = readStoredArray(legacyKey, localStorage);
+  if (legacy.length) {
+    info.storage.setItem(key, JSON.stringify(legacy));
+    localStorage.removeItem(legacyKey);
+  }
+  return legacy;
+}
+
+function saveActiveArray(type, value) {
+  const info = getAccountStorageInfo();
+  const key = type === 'cart' ? info.cartKey : info.favoritesKey;
+  info.storage.setItem(key, JSON.stringify(value));
+}
+
+function cleanDisplayText(value) {
+  return String(value == null ? '' : value)
+    .replace(/[\u0000-\u001F\u007F-\u009F]/g, '')
+    .replace(/[\u{1F000}-\u{1FAFF}\u{2600}-\u{27BF}]/gu, '')
+    .replace(/\uFFFD/g, '')
+    .replace(/\s{2,}/g, ' ')
+    .trim();
+}
+
+function getCartProduct(item) {
+  if (!item || item.id == null) return null;
+  const rawId = String(item.id);
+  const baseId = rawId.replace(/^(shorts|socks)-/, '');
+  return PRODUCTS.find(p => String(p.id) === baseId) || null;
+}
+
+function getCartItemName(item) {
+  const rawId = item && item.id != null ? String(item.id) : '';
+  const product = getCartProduct(item);
+  if (product) {
+    const productName = cleanDisplayText(product.name);
+    if (rawId.indexOf('shorts-') === 0) {
+      return 'Pantaloncini – ' + productName.replace(/^Maglia\s*/i, '').trim();
+    }
+    if (rawId.indexOf('socks-') === 0) {
+      return 'Calzettoni – ' + productName.replace(/^Maglia\s*/i, '').trim();
+    }
+    return productName;
+  }
+  return cleanDisplayText(item && item.name);
+}
+
+function normalizeFavoriteIds(items) {
+  return items
+    .map(id => {
+      const numericId = typeof id === 'string' && id.trim() !== '' ? Number(id) : id;
+      return Number.isFinite(numericId) ? numericId : id;
+    })
+    .filter((id, index, list) => list.indexOf(id) === index && PRODUCTS.some(p => String(p.id) === String(id)));
+}
+
+function syncAccountDataUI() {
+  updateCartUI();
+  updateFavBadge();
+  if (document.getElementById('cartSidebar')?.classList.contains('open')) renderCartItems();
+  if (document.getElementById('favSidebar')?.classList.contains('open')) renderFavoritesSidebar();
+}
+
+function activateAccount(user, transferGuestData) {
+  const previousUser = getCurrentUser();
+  const guestCart = !previousUser ? cart.slice() : [];
+  const guestFavorites = !previousUser ? favorites.slice() : [];
+
+  saveActiveArray('cart', normalizeCartItems(cart));
+  saveActiveArray('favorites', favorites);
+  setCurrentUser(user);
+  localStorage.removeItem('gk_guest_mode');
+
+  cart = normalizeCartItems(loadActiveArray('cart'));
+  favorites = normalizeFavoriteIds(loadActiveArray('favorites'));
+
+  // Mantieni gli articoli aggiunti prima della registrazione/accesso, se il
+  // profilo non aveva ancora un carrello o una lista preferiti.
+  if (transferGuestData && !previousUser) {
+    if (cart.length === 0 && guestCart.length) cart = normalizeCartItems(guestCart);
+    if (favorites.length === 0 && guestFavorites.length) favorites = normalizeFavoriteIds(guestFavorites);
+    saveActiveArray('cart', cart);
+    saveActiveArray('favorites', favorites);
+  }
+  syncAccountDataUI();
+}
+
+function continueAsGuest() {
+  // Non lasciare visibili nel profilo successivo i dati dell'account precedente.
+  saveActiveArray('cart', normalizeCartItems(cart));
+  saveActiveArray('favorites', favorites);
+  setCurrentUser(null);
+  cart = [];
+  favorites = [];
+  saveActiveArray('cart', cart);
+  saveActiveArray('favorites', favorites);
+  localStorage.removeItem('gk_cart');
+  localStorage.removeItem('gk_favorites');
+  localStorage.setItem('gk_guest_mode', '1');
+  syncAccountDataUI();
+}
+
+function normalizeCartItems(items) {
+  return items.map(function (item) {
+    if (!item || typeof item !== 'object') return item;
+    if (typeof item.id === 'string' && /^\d+$/.test(item.id)) item.id = Number(item.id);
+    if (!item._uid) item._uid = Date.now() + '-' + Math.random().toString(36).slice(2);
+    item.name = getCartItemName(item);
+    return item;
+  }).filter(Boolean);
+}
+
+let cart = normalizeCartItems(loadActiveArray('cart'));
+// Salva subito i nomi canonici: corregge anche i carrelli già presenti nel browser.
+if (cart.length) saveActiveArray('cart', cart);
 let currentFilter = 'new';
 let currentTeam = null;
 let currentSearch = '';
@@ -506,7 +852,8 @@ let currentSort = 'default';
 let quickViewProduct = null;
 let qvEditUid = null; // uid della riga carrello in modifica (edit dalla scheda prodotto)
 let currentCustomization = null; // { name, number, shortsNumber, sockSize }
-let favorites = JSON.parse(localStorage.getItem('gk_favorites') || '[]'); // array di product id
+let favorites = normalizeFavoriteIds(loadActiveArray('favorites')); // array di product id
+if (favorites.length) saveActiveArray('favorites', favorites);
 
 // ── STATO SCONTO ──
 let appliedDiscount = null; // { code, type, description, amount }
@@ -605,6 +952,7 @@ document.addEventListener('DOMContentLoaded', () => {
   setupBrands();
   setupSquadra();
   setupDiscountCode();
+  setupAuth();
 });
 
 // ══════════════════════════════════════════════
@@ -700,11 +1048,14 @@ function setupNav() {
   }
 
   function closeMega(item) {
-    // Aspetta 120ms prima di chiudere: se il cursore entra nel panel il timer viene annullato
+    // Un pannello aperto con un CLICK (tap/click sul trigger) resta aperto finché
+    // non si clicca altrove o si chiude: non deve sparire al passaggio del mouse.
+    if (item.dataset.clickOpened === '1') return;
+    // Aspetta 300ms prima di chiudere: se il cursore entra nel panel il timer viene annullato
     closeTimer = setTimeout(() => {
       item.classList.remove('active');
       closeTimer = null;
-    }, 120);
+    }, 300);
   }
 
   function closeAllMega() {
@@ -1563,7 +1914,10 @@ function changeQty(uid, delta) {
 }
 
 function saveCart() {
-  localStorage.setItem('gk_cart', JSON.stringify(cart));
+  cart.forEach(item => {
+    if (item && typeof item === 'object') item.name = getCartItemName(item);
+  });
+  saveActiveArray('cart', cart);
 }
 
 function getCartTotal() {
@@ -1604,6 +1958,7 @@ function renderCartItems() {
     const isGift = !!item._gift;
     const uid = item._uid || item.id;
     const uidRef = "'" + uid + "'";
+    const itemName = getCartItemName(item);
 
     const priceLabel = isGift
       ? '<span style="color:#2e7d32;font-weight:700;">🎁 ' + t('cart.gratis') + '</span>'
@@ -1625,7 +1980,7 @@ function renderCartItems() {
 
     html += '<div class="cart-item' + (isGift ? ' cart-item--gift' : '') + '" onclick="openCartItemProduct(' + uidRef + ')" title="' + t('cart.vediProdotto') + '">'
       + '<div class="cart-item-info">'
-      + '<div class="cart-item-name">' + item.name + '</div>'
+      + '<div class="cart-item-name">' + itemName + '</div>'
       + '<div class="cart-item-meta">' + t('cart.taglia') + ': ' + item.size + (item.fabric ? ' &nbsp;&middot;&nbsp; ' + fabricTxt : '') + (item.custNote ? '<br><span style="color:#2e7d32;font-size:.72rem;">' + item.custNote + '</span>' : '') + '</div>'
       + '<div class="cart-item-row">'
       + '<div class="cart-item-price">' + priceLabel + '</div>'
@@ -1980,7 +2335,7 @@ function renderOrderSummary() {
     <h4>📋 <span data-i18n="order.riepilogo">Riepilogo Ordine</span></h4>
     ${cart.map(item => `
       <div class="order-summary-row">
-        <span>${item.name} × ${item.qty} (${item.size})</span>
+        <span>${getCartItemName(item)} × ${item.qty} (${item.size})</span>
         <span>€${(item.price * item.qty).toFixed(2)}</span>
       </div>
     `).join('')}
@@ -2028,7 +2383,7 @@ async function submitOrder(e) {
 
   const orderDetails = cart.map(item => {
     const priceStr = item.custom ? 'âš ï¸ Prezzo da definire' : `€${(item.price * item.qty).toFixed(2)}`;
-    return `• ${item.name} | Taglia: ${item.size} | Qtà: ${item.qty} | ${priceStr}`;
+    return `• ${getCartItemName(item)} | Taglia: ${item.size} | Qtà: ${item.qty} | ${priceStr}`;
   }).join('\n');
 
 
@@ -2290,6 +2645,7 @@ function getTopmostOpenOverlay() {
   if (document.getElementById('favSidebar')?.classList.contains('open')) return 'fav';
   if (document.getElementById('cartSidebar')?.classList.contains('open')) return 'cart';
   if (document.getElementById('mobSearchPanel')?.classList.contains('open')) return 'search';
+  if (document.getElementById('authOverlay')?.classList.contains('open')) return 'auth';
   return null;
 }
 
@@ -2303,9 +2659,26 @@ function navPop() {
   else if (top === 'fav') closeFavSidebar();
   else if (top === 'order') closeOrderModal();
   else if (top === 'search') closeMobSearch();
+  else if (top === 'auth') closeAuthModal();
 }
 
 window.addEventListener('popstate', navPop);
+
+// Tiene una misura stabile per i modal senza intercettare scroll, focus o resize.
+// Il blocco forzato del body durante la tastiera causava ritorni indesiderati in home.
+(function keepViewportStableForKeyboard() {
+  const root = document.documentElement;
+  let initialHeight = window.innerHeight;
+  root.style.setProperty('--app-viewport-height', initialHeight + 'px');
+  window.addEventListener('resize', () => {
+    const active = document.activeElement;
+    const keyboardLikelyOpen = active && /^(INPUT|TEXTAREA|SELECT)$/.test(active.tagName) && window.innerHeight < initialHeight - 120;
+    if (!keyboardLikelyOpen) {
+      initialHeight = Math.max(initialHeight, window.innerHeight);
+      root.style.setProperty('--app-viewport-height', initialHeight + 'px');
+    }
+  }, { passive: true });
+})();
 
 function openOverlay(id) {
   const el = document.getElementById(id);
@@ -2324,6 +2697,7 @@ function openOverlay(id) {
 function closeOverlay(id) {
   const el = document.getElementById(id);
   if (!el) return;
+  if (el.contains(document.activeElement) && document.activeElement.blur) document.activeElement.blur();
   el.classList.remove('open');
   clearTimeout(el._closeTimer);
   el._closeTimer = setTimeout(() => { el.style.display = 'none'; }, 300);
@@ -2628,28 +3002,50 @@ function setupCustomOrder() {
   });
 }
 
-// Scheda "Non trovi il tuo prodotto?": form stile prodotto che aggiunge la richiesta al carrello
+// Scheda "Non trovi il tuo prodotto?": invia direttamente la richiesta al venditore.
 function setupCustomRequest() {
   const form = document.getElementById('customRequestForm');
   if (!form) return;
 
-  form.addEventListener('submit', e => {
+  form.addEventListener('submit', async e => {
     e.preventDefault();
 
-    const name = document.getElementById('crqName')?.value.trim();
+    const productName = document.getElementById('crqName')?.value.trim();
+    const customerName = document.getElementById('crqCustomerName')?.value.trim();
+    const customerEmail = document.getElementById('crqCustomerEmail')?.value.trim();
     const size = document.getElementById('crqSize')?.value || 'M';
-    const qty = parseInt(document.getElementById('crqQty')?.value) || 1;
-    if (!name) return;
+    const qty = parseInt(document.getElementById('crqQty')?.value, 10) || 1;
+    const note = document.getElementById('crqNote')?.value.trim() || 'Nessun dettaglio aggiuntivo';
+    if (!productName || !customerName || !customerEmail) return;
 
-    pushCustomRequestItem(name, size, qty);
-    closeCustomRequest();
-    openCart();
+    const submit = form.querySelector('button[type="submit"]');
+    if (submit) { submit.disabled = true; submit.dataset.originalText = submit.textContent; submit.textContent = 'Invio in corso...'; }
 
-    showToast('✅', `"${name}" ${t('toast.aggiunto')} ${t('toast.prezzoComunicato')}`);
-    form.reset();
-    const sz = document.getElementById('crqSize'); if (sz) sz.value = 'M';
-    const qt = document.getElementById('crqQty'); if (qt) qt.value = '1';
-    const note = document.getElementById('crqNote'); if (note) note.value = '';
+    try {
+      if (!EMAIL_CONFIG.publicKey || !EMAIL_CONFIG.serviceId || !EMAIL_CONFIG.templateId || !EMAIL_CONFIG.ownerEmail) {
+        throw new Error('EmailJS non configurato');
+      }
+      await emailjs.send(EMAIL_CONFIG.serviceId, EMAIL_CONFIG.templateId, {
+        to_email: EMAIL_CONFIG.ownerEmail,
+        customer_name: customerName,
+        customer_email: customerEmail,
+        order_number: 'Richiesta prodotto',
+        order_details: `Prodotto richiesto: ${productName}\nTaglia: ${size}\nQuantità: ${qty}\nDettagli: ${note}`,
+        order_notes: note,
+        order_total: 'Prezzo da comunicare',
+        reply_to: customerEmail
+      });
+      closeCustomRequest();
+      showToast('', 'Richiesta inviata. Ti ricontatteremo via email.');
+      form.reset();
+      const sz = document.getElementById('crqSize'); if (sz) sz.value = 'M';
+      const qt = document.getElementById('crqQty'); if (qt) qt.value = '1';
+    } catch (err) {
+      console.error('Richiesta prodotto non inviata:', err);
+      showToast('', 'Errore nell\'invio della richiesta. Riprova.');
+    } finally {
+      if (submit) { submit.disabled = false; submit.textContent = submit.dataset.originalText || 'Invia richiesta'; }
+    }
   });
 }
 
@@ -2833,15 +3229,17 @@ function setupNavMegaMenu() {
 
 // Mappa categorie: nome display → filtro da passare a setActiveFilter
 const SEARCH_CATEGORIES = [
-  { label: 'Serie A', icon: '🇮🇹', filter: 'SerieA' },
-  { label: 'Champions League', icon: 'â­', filter: 'Champions' },
-  { label: 'Premier League', icon: '🏴ó §ó ¢ó ¥ó ®ó §ó ¿', filter: 'Premier' },
-  { label: 'La Liga', icon: '🇪🇸', filter: 'LaLiga' },
-  { label: 'Ligue 1', icon: '🇫🇷', filter: 'Ligue1' },
-  { label: 'Bundesliga', icon: '🇩🇪', filter: 'Bundesliga' },
-  { label: 'Nazionali', icon: '🌍', filter: 'Nazionali' },
-  { label: 'Mondiale 2026', icon: '🏆', filter: 'Mondiale2026' },
-  { label: 'Saudi Pro League', icon: '🇸🇦', filter: 'SaudiLeague' },
+  // Le icone erano emoji salvate con encoding errato e apparivano come testo corrotto.
+  // I nomi dei campionati restano puliti e leggibili in tutte le lingue.
+  { label: 'Serie A', icon: '', filter: 'SerieA' },
+  { label: 'Champions League', icon: '', filter: 'Champions' },
+  { label: 'Premier League', icon: '', filter: 'Premier' },
+  { label: 'La Liga', icon: '', filter: 'LaLiga' },
+  { label: 'Ligue 1', icon: '', filter: 'Ligue1' },
+  { label: 'Bundesliga', icon: '', filter: 'Bundesliga' },
+  { label: 'Nazionali', icon: '', filter: 'Nazionali' },
+  { label: 'Mondiale 2026', icon: '', filter: 'Mondiale2026' },
+  { label: 'Saudi Pro League', icon: '', filter: 'SaudiLeague' },
 ];
 
 function setupNavSearch() {
@@ -2849,6 +3247,7 @@ function setupNavSearch() {
   const navBtn = document.getElementById('navSearchBtn');
   const dropdown = document.getElementById('searchDropdown');
   const backdrop = document.getElementById('searchDropdownBackdrop');
+  const searchClose = document.getElementById('searchDropdownClose');
   if (!navInput || !dropdown) return;
 
   // â”€â”€ Aggiorna dropdown ad ogni input â”€â”€
@@ -2874,11 +3273,13 @@ function setupNavSearch() {
     if (e.key === 'Escape') closeSearchDropdown();
   });
 
-  // Chiudi cliccando sul backdrop (chiude anche la barra mobile)
-  backdrop?.addEventListener('click', () => {
+  // Chiudi cliccando sul backdrop o sul pulsante sempre visibile nel pannello.
+  const closeSearch = () => {
     closeMobSearch();
     navInput.value = '';
-  });
+  };
+  backdrop?.addEventListener('click', closeSearch);
+  searchClose?.addEventListener('click', closeSearch);
 
   // Chiudi con ESC globale
   document.addEventListener('keydown', e => {
@@ -2921,7 +3322,9 @@ function openMobSearch() {
   closeCatPage();
   panel.classList.add('open');
   panel.setAttribute('aria-hidden', 'false');
+  document.documentElement.classList.add('mob-search-open');
   document.body.classList.add('mob-search-open');
+  document.body.style.overflow = 'hidden';
   setTimeout(() => input?.focus(), 60);
   navPush();
 }
@@ -2934,8 +3337,13 @@ function closeMobSearch() {
     panel.classList.remove('open');
     panel.setAttribute('aria-hidden', 'true');
   }
-  if (input) input.value = '';
+  if (input) {
+    input.value = '';
+    input.blur();
+  }
+  document.documentElement.classList.remove('mob-search-open');
   document.body.classList.remove('mob-search-open');
+  if (!getTopmostOpenOverlay()) document.body.style.overflow = '';
   closeSearchDropdown();
 }
 
@@ -2985,7 +3393,7 @@ function renderSearchDropdown(query) {
   catList.innerHTML = catsToShow.map(cat => `
     <li class="sd-cat-item">
       <button class="sd-cat-btn" onclick="closeMobSearch(); openCatPage('${cat.filter}', '${cat.label.toUpperCase()}', '${cat.label}', []);">
-        <span class="sd-cat-icon">${cat.icon}</span>
+        ${cat.icon ? `<span class="sd-cat-icon">${cat.icon}</span>` : ''}
         <span class="sd-cat-label">${cat.label}</span>
       </button>
     </li>
@@ -3099,10 +3507,7 @@ function setupVintage() {
 // Foto prodotto reali presenti nella cartella images (fallback per le card Must Have)
 // Foto di riserva per i prodotti la cui immagine non esiste, abbinate alla squadra giusta
 const MUST_HAVE_IMAGE_OVERRIDES = {
-  103: 'images/3d/HomeArsenal0304.png',                 // Arsenal Away
-  105: 'images/3d/Premier League/Liverpool Third 2526.png', // Liverpool Away
-  109: 'images/3d/Premier League/Ronaldo2009.png',      // Man Utd Away (Ronaldo 2009)
-  118: 'images/3d/HomeBayern0708.png'                   // Bayern Away
+  // Riservato alle immagini locali sostitutive di prodotti che non hanno un asset valido.
 };
 
 // Un prodotto è valido per la sezione se ha una foto locale esistente (o un override)
@@ -3364,7 +3769,8 @@ function featProductCardHTML(p) {
 // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
 function saveFavorites() {
-  localStorage.setItem('gk_favorites', JSON.stringify(favorites));
+  favorites = normalizeFavoriteIds(favorites);
+  saveActiveArray('favorites', favorites);
 }
 
 function isFavorite(productId) {
@@ -3406,10 +3812,10 @@ function toggleFavorite(productId, btnEl) {
   const idx = favorites.indexOf(productId);
   if (idx === -1) {
     favorites.push(productId);
-    showToast('â¤ï¸', t('toast.preferitiAggiunto'));
+    showToast('', t('toast.preferitiAggiunto'));
   } else {
     favorites.splice(idx, 1);
-    showToast('🤍', t('toast.preferitiRimosso'));
+    showToast('', t('toast.preferitiRimosso'));
   }
   saveFavorites();
   updateFavBadge();
@@ -3433,10 +3839,10 @@ function toggleFavoriteFromQV(productId) {
   const idx = favorites.indexOf(productId);
   if (idx === -1) {
     favorites.push(productId);
-    showToast('â¤ï¸', t('toast.preferitiAggiunto'));
+    showToast('', t('toast.preferitiAggiunto'));
   } else {
     favorites.splice(idx, 1);
-    showToast('🤍', t('toast.preferitiRimosso'));
+    showToast('', t('toast.preferitiRimosso'));
   }
   saveFavorites();
   updateFavBadge();
@@ -3489,11 +3895,12 @@ function renderFavoritesSidebar() {
   favProducts.forEach(p => {
     const div = document.createElement('div');
     div.className = 'fav-item';
+    const productName = cleanDisplayText(p.name);
     div.innerHTML =
-      '<img class="fav-item-img" src="' + p.image + '" alt="' + p.name + '" onclick="closeFavSidebar();openQuickView(' + p.id + ')" ' +
+      '<img class="fav-item-img" src="' + p.image + '" alt="' + productName + '" onclick="closeFavSidebar();openQuickView(' + p.id + ')" ' +
       'onerror="this.style.display=\'none\'">' +
       '<div class="fav-item-info">' +
-      '<div class="fav-item-name" onclick="closeFavSidebar();openQuickView(' + p.id + ')">' + p.name + '</div>' +
+      '<div class="fav-item-name" onclick="closeFavSidebar();openQuickView(' + p.id + ')">' + productName + '</div>' +
       '<div class="fav-item-price">&#x20AC;' + p.price.toFixed(2) + '</div>' +
       '<div class="fav-item-actions">' +
       '<button class="fav-item-add" onclick="closeFavSidebar();openQuickView(' + p.id + ')">Vedi prodotto</button>' +
@@ -3549,7 +3956,7 @@ function setupFavorites() {
       if (svg) { svg.setAttribute('fill', 'none'); svg.setAttribute('stroke', '#999'); }
     });
     renderFavoritesSidebar();
-    showToast('🤍', 'Preferiti svuotati.');
+    showToast('', 'Preferiti svuotati.');
   });
 
   // Aggiungi tutti al carrello

@@ -4,7 +4,7 @@
 
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no, interactive-widget=overlays-content" />
   <link rel="icon" type="image/png" href="logo-wok-png-versione-nero.png" />
   <title>WorldofKits — Maglie da Calcio Premium</title>
   <meta name="description"
@@ -14,7 +14,7 @@
   <link
     href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700;800;900&display=swap"
     rel="stylesheet" />
-  <link rel="stylesheet" href="style.css?v=20260812e" />
+  <link rel="stylesheet" href="style.css?v=20260813h" />
   <!-- EmailJS SDK -->
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 </head>
@@ -222,6 +222,15 @@
             <button class="lang-option" data-lang="de">Deutsch</button>
           </div>
         </div>
+
+        <!-- Account / Accedi-Registrati -->
+        <button class="auth-btn" id="authBtn" aria-label="Account" title="Accedi / Registrati">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+            <circle cx="12" cy="7" r="4" />
+          </svg>
+        </button>
 
         <!-- Preferiti -->
         <button class="fav-btn" id="favBtn" aria-label="Preferiti">
@@ -831,6 +840,7 @@
 
   <!-- ═══════════════════ SEARCH DROPDOWN PANEL ═══════════════════ -->
   <div class="search-dropdown" id="searchDropdown" aria-hidden="true">
+    <button class="search-dropdown-close" id="searchDropdownClose" type="button" aria-label="Chiudi ricerca">✕ <span>Chiudi</span></button>
     <div class="search-dropdown-inner">
       <!-- Colonna sinistra: categorie -->
       <div class="sd-categories" id="sdCategories">
@@ -977,6 +987,69 @@
     </div>
   </div>
 
+  <!-- ═══════════════════ ACCOUNT / AUTH MODAL ═══════════════════ -->
+  <div class="modal-overlay" id="authOverlay">
+    <div class="modal glass" id="authModal" style="max-width:440px;">
+      <button class="modal-close" id="authClose" aria-label="Chiudi">✕</button>
+      <div class="modal-header">
+        <span class="modal-icon auth-modal-icon">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+            <circle cx="12" cy="7" r="4" />
+          </svg>
+        </span>
+        <h2 data-i18n="auth.title">Benvenuto su WorldOfKits</h2>
+        <p data-i18n="auth.sub">Accedi o registrati per salvare carrello e preferiti nel tuo profilo.</p>
+      </div>
+
+      <!-- Scelta iniziale -->
+      <div class="auth-view" id="authChoiceView">
+        <button class="btn btn-primary btn-full" id="authGoRegister" data-i18n="auth.register">Registrati</button>
+        <button class="btn btn-outline btn-full" id="authGoLogin" data-i18n="auth.login">Accedi</button>
+        <button class="auth-guest-btn" id="authGoGuest" data-i18n="auth.guest">Continua senza registrarti</button>
+        <p class="auth-guest-warn" data-i18n="auth.guestWarn">Continuando senza registrarti, carrello e preferiti non
+          verranno salvati nel tuo profilo.</p>
+      </div>
+
+      <!-- Registrazione -->
+      <div class="auth-view" id="authRegisterView" style="display:none;">
+        <form id="authRegisterForm" class="order-form">
+          <div class="form-group">
+            <label for="authRegName" data-i18n="auth.name">Nome</label>
+            <input type="text" id="authRegName" autocomplete="name" required data-i18n-ph="auth.namePh" />
+          </div>
+          <div class="form-group">
+            <label for="authRegEmail" data-i18n="auth.email">Email</label>
+            <input type="email" id="authRegEmail" autocomplete="email" required data-i18n-ph="auth.emailPh" />
+          </div>
+          <p class="auth-error" id="authRegError" style="display:none;"></p>
+          <button type="submit" class="btn btn-primary btn-full" data-i18n="auth.submitRegister">Crea account</button>
+        </form>
+        <button class="auth-back" id="authRegBack" type="button">← <span data-i18n="common.indietro">Indietro</span></button>
+      </div>
+
+      <!-- Login -->
+      <div class="auth-view" id="authLoginView" style="display:none;">
+        <form id="authLoginForm" class="order-form">
+          <div class="form-group">
+            <label for="authLoginEmail" data-i18n="auth.email">Email</label>
+            <input type="email" id="authLoginEmail" autocomplete="email" required data-i18n-ph="auth.emailPh" />
+          </div>
+          <p class="auth-error" id="authLoginError" style="display:none;"></p>
+          <button type="submit" class="btn btn-primary btn-full" data-i18n="auth.submitLogin">Entra</button>
+        </form>
+        <button class="auth-back" id="authLoginBack" type="button">← <span data-i18n="common.indietro">Indietro</span></button>
+      </div>
+
+      <!-- Profilo (utente registrato) -->
+      <div class="auth-view" id="authProfileView" style="display:none;">
+        <p class="auth-hello"><span id="authProfileName"></span></p>
+        <button class="btn btn-outline btn-full" id="authLogout" type="button" data-i18n="auth.logout">Esci</button>
+      </div>
+    </div>
+  </div>
+
   <!-- ═══════════════════ SETUP EMAIL MODAL ═══════════════════ -->
   <div class="modal-overlay" id="setupOverlay" style="display:none;">
     <div class="modal glass" id="setupModal" style="max-width:520px;">
@@ -1068,6 +1141,14 @@
             <div class="form-group">
               <label for="crqName" data-i18n="crqPage.nomeArticolo">Nome dell'articolo *</label>
               <input type="text" id="crqName" class="crq-name-input" placeholder="Es: Maglia Barcellona Away 2026/27..." required />
+            </div>
+            <div class="form-group">
+              <label for="crqCustomerName">Il tuo nome *</label>
+              <input type="text" id="crqCustomerName" autocomplete="name" required />
+            </div>
+            <div class="form-group">
+              <label for="crqCustomerEmail">La tua email *</label>
+              <input type="email" id="crqCustomerEmail" autocomplete="email" required />
             </div>
             <div class="crq-row">
               <div class="form-group">
@@ -1283,8 +1364,8 @@
 
   </nav>
 
-  <script src="products.js?v=20260811c"></script>
-  <script src="app.js?v=20260812d"></script>
+  <script src="products.js?v=20260813e"></script>
+  <script src="app.js?v=20260813n"></script>
 
   <!-- ═══════════════════ MOBILE JS — Bottom nav sync + UX ═══════════════════ -->
   <script>
@@ -1356,16 +1437,15 @@
       });
     }
 
-    /* ── Drawer: chiude toccando l'overlay scuro ── */
+    /* ── Menu: chiude quando si clicca fuori dalla tendina/drawer ── */
     document.addEventListener('click', function(e) {
       var navLinks = document.getElementById('navLinks');
       if (!navLinks || !navLinks.classList.contains('open')) return;
-      /* Se il click è fuori dalla larghezza del drawer (82vw) chiudi */
-      if (e.clientX > window.innerWidth * 0.82) {
-        navLinks.classList.remove('open');
-        var hamburger = document.getElementById('hamburger');
-        if (hamburger) hamburger.setAttribute('aria-expanded', 'false');
-      }
+      /* Click sul bottone hamburger: non chiudere (è lui che apre/chiude) */
+      if (e.target && e.target.closest && (e.target.closest('#hamburger') || e.target.closest('#navLinks'))) return;
+      navLinks.classList.remove('open');
+      var hamburger = document.getElementById('hamburger');
+      if (hamburger) hamburger.setAttribute('aria-expanded', 'false');
     });
 
   })();
