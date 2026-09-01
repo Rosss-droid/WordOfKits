@@ -2571,9 +2571,11 @@ img {
 }
 
 .brand-section-inner {
-  max-width: 1600px;
-  margin: 0 auto;
-  padding: 0 0;
+  max-width: 1700px;
+  margin: 0 0;
+  padding: 0rem 3rem;
+  alin-items: center;
+  justify-content: center;
 }
 
 .brand-section-header {
@@ -2844,14 +2846,17 @@ img {
 
 /* ── Sconto Editorial ── */
 .sconto-editorial {
-  width: 100%;
+  width: 100%;             /* Occupa tutto lo spazio disponibile su schermi piccoli */
+  max-width: 1690px;       /* Impedisce al sito di allargarsi all'infinito su schermi enormi (regola il valore in base al tuo design) */
+  margin-left: auto;       /* Centra il contenitore nella pagina */
+  margin-right: auto;      /* Centra il contenitore nella pagina */
+  padding: 20px 15px;      /* Sostituisce height fissa: crea uno spazio interno sopra/sotto e ai lati */
+  box-sizing: border-box;  /* Evita che il padding modifichi la larghezza totale */
   background-color: #00285e; /* Blu PSG */
-  height:180px;
+  min-height:80px;
   display: flex;
   align-items: center;
-  justify-content: flex-start;
-  padding: 0 5%;
-  box-sizing: border-box;
+  justify-content: center; /* Centra il testo orizzontalmente */
   margin-top: 20px;
 }
 
@@ -8189,6 +8194,7 @@ img {
   ══════════════════════════ */
   .brand-section {
     padding: 1.25rem 0;
+    
   }
 
   .brand-section-header {
