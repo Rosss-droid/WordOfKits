@@ -71,6 +71,7 @@ const I18N = {
     'confirm.perfetto': 'Perfetto, grazie!',
     'confirm.errore': 'Errore nell\'invio. Controlla la configurazione email e riprova.',
     'qv.dettaglio': 'Dettaglio Prodotto', 'qv.taglia': 'Taglia', 'qv.tipoMaglia': 'Tipo Maglia',
+    'qv.manica': 'Manica', 'qv.manicaCorta': 'Manica Corta', 'qv.manicaLunga': 'Manica Lunga',
     'qv.standard': 'Standard', 'qv.tifoso': 'Tifoso', 'qv.player': 'Player', 'qv.composizione': 'Composizione',
     'qv.soloMaglia': 'Solo Maglia', 'qv.inclusa': 'Inclusa nel prezzo', 'qv.magliaPanta': 'Maglia + Pantaloncino',
     'qv.kitCompleto': 'Kit Completo', 'qv.kitCompletoSub': 'Maglia+Pant+Calzettoni',
@@ -169,6 +170,7 @@ const I18N = {
     'confirm.perfetto': 'Perfect, thanks!',
     'confirm.errore': 'Error sending. Check the email configuration and try again.',
     'qv.dettaglio': 'Product Details', 'qv.taglia': 'Size', 'qv.tipoMaglia': 'Shirt Type',
+    'qv.manica': 'Sleeve', 'qv.manicaCorta': 'Short Sleeves', 'qv.manicaLunga': 'Long Sleeves',
     'qv.standard': 'Standard', 'qv.tifoso': 'Fan', 'qv.player': 'Player', 'qv.composizione': 'Composition',
     'qv.soloMaglia': 'Shirt Only', 'qv.inclusa': 'Included in the price', 'qv.magliaPanta': 'Shirt + Shorts',
     'qv.kitCompleto': 'Full Kit', 'qv.kitCompletoSub': 'Shirt+Shorts+Socks',
@@ -267,6 +269,7 @@ const I18N = {
     'confirm.perfetto': '¡Perfecto, gracias!',
     'confirm.errore': 'Error al enviar. Comprueba la configuración del email y vuelve a intentarlo.',
     'qv.dettaglio': 'Detalle del Producto', 'qv.taglia': 'Talla', 'qv.tipoMaglia': 'Tipo de Camiseta',
+    'qv.manica': 'Manga', 'qv.manicaCorta': 'Manga Corta', 'qv.manicaLunga': 'Manga Larga',
     'qv.standard': 'Estándar', 'qv.tifoso': 'Aficionado', 'qv.player': 'Jugador', 'qv.composizione': 'Composición',
     'qv.soloMaglia': 'Solo Camiseta', 'qv.inclusa': 'Incluido en el precio', 'qv.magliaPanta': 'Camiseta + Pantalón',
     'qv.kitCompleto': 'Kit Completo', 'qv.kitCompletoSub': 'Camiseta+Pant+Calcetines',
@@ -365,6 +368,7 @@ const I18N = {
     'confirm.perfetto': 'Parfait, merci !',
     'confirm.errore': 'Erreur d\'envoi. Vérifiez la configuration email et réessayez.',
     'qv.dettaglio': 'Détails du Produit', 'qv.taglia': 'Taille', 'qv.tipoMaglia': 'Type de Maillot',
+    'qv.manica': 'Manches', 'qv.manicaCorta': 'Manches courtes', 'qv.manicaLunga': 'Manches longues',
     'qv.standard': 'Standard', 'qv.tifoso': 'Supporter', 'qv.player': 'Joueur', 'qv.composizione': 'Composition',
     'qv.soloMaglia': 'Maillot Seul', 'qv.inclusa': 'Inclus dans le prix', 'qv.magliaPanta': 'Maillot + Short',
     'qv.kitCompleto': 'Kit Complet', 'qv.kitCompletoSub': 'Maillot+Short+Chaussettes',
@@ -463,6 +467,7 @@ const I18N = {
     'confirm.perfetto': 'Perfekt, danke!',
     'confirm.errore': 'Fehler beim Senden. Überprüfen Sie die E-Mail-Konfiguration und versuchen Sie es erneut.',
     'qv.dettaglio': 'Produktdetails', 'qv.taglia': 'Größe', 'qv.tipoMaglia': 'Trikotart',
+    'qv.manica': 'Ärmel', 'qv.manicaCorta': 'Kurze Ärmel', 'qv.manicaLunga': 'Lange Ärmel',
     'qv.standard': 'Standard', 'qv.tifoso': 'Fan', 'qv.player': 'Spieler', 'qv.composizione': 'Zusammenstellung',
     'qv.soloMaglia': 'Nur Trikot', 'qv.inclusa': 'Im Preis inbegriffen', 'qv.magliaPanta': 'Trikot + Shorts',
     'qv.kitCompleto': 'Komplettes Kit', 'qv.kitCompletoSub': 'Trikot+Shorts+Socken',
@@ -1505,6 +1510,13 @@ function openQuickView(id, editItem) {
   const kitType = p.kitType || 'solo';
   const isSoloAllowed = kitType !== 'unico';
   const isFav = isFavorite(p.id);
+  // Manica (solo per prodotti maglia): corta inclusa, lunga +4€. Se il prodotto è già "Manica Lunga" i ruoli si invertono.
+  const isSleeveProduct = /maglia/i.test(p.name);
+  const isLongSleeveProduct = !!p.manicaCortaId || /manica lunga/i.test(p.name);
+  const shortSleeveExtra = isLongSleeveProduct ? -4 : 0;
+  const longSleeveExtra = isLongSleeveProduct ? 0 : 4;
+  const sleeveShortLabel = isLongSleeveProduct ? '−€4,00' : t('qv.inclusa');
+  const sleeveLongLabel = isLongSleeveProduct ? t('qv.inclusa') : '+€4,00';
 
   // Titolo prodotto nella topbar della scheda
   const titleEl = document.getElementById('qvPageTitle');
@@ -1535,6 +1547,18 @@ function openQuickView(id, editItem) {
         <div class="qv-sizes">
           ${p.sizes.map((s, i) => `<button class="qv-size-btn${i === 0 ? ' active' : ''}" onclick="selectQvSize(this)">${s}</button>`).join('')}
         </div>
+
+        <!-- Manica -->
+        ${isSleeveProduct ? `
+        <div class="qv-section-label" data-i18n="qv.manica">Manica</div>
+        <div class="qv-fabric-row qv-sleeve-row">
+          <button class="qv-option-btn${isLongSleeveProduct ? '' : ' active'}" data-sleeve="short" data-extra="${shortSleeveExtra}" onclick="selectQvSleeve(this)">
+            <span class="qv-opt-text"><strong data-i18n="qv.manicaCorta">Manica Corta</strong><small>${sleeveShortLabel}</small></span>
+          </button>
+          <button class="qv-option-btn${isLongSleeveProduct ? ' active' : ''}" data-sleeve="long" data-extra="${longSleeveExtra}" onclick="selectQvSleeve(this)">
+            <span class="qv-opt-text"><strong data-i18n="qv.manicaLunga">Manica Lunga</strong><small>${sleeveLongLabel}</small></span>
+          </button>
+        </div>` : ''}
 
         <!-- Tipo Maglia -->
         <div class="qv-section-label" data-i18n="qv.tipoMaglia">Tipo Maglia</div>
@@ -1592,6 +1616,9 @@ function openQuickView(id, editItem) {
     `;
   }
 
+  // Allinea l'immagine alla manica selezionata di default
+  updateQvSleeveImage();
+
   // Modifica dal carrello: preseleziona taglia/tessuto/kit della riga esistente
   if (editItem) {
     const normFabric = String(editItem.fabric || '').replace(/\uD83D\uDC55/g, '').trim();
@@ -1605,12 +1632,12 @@ function openQuickView(id, editItem) {
     if (!sizeMatched && content.querySelector('.qv-size-btn')) content.querySelector('.qv-size-btn').classList.add('active');
 
     let fabricMatched = false;
-    content.querySelectorAll('.qv-fabric-row .qv-option-btn').forEach(b => {
+    content.querySelectorAll('.qv-fabric-row:not(.qv-sleeve-row) .qv-option-btn').forEach(b => {
       const m = (b.querySelector('strong') ? b.querySelector('strong').textContent.trim() : '') === normFabric;
       b.classList.toggle('active', m);
       if (m) fabricMatched = true;
     });
-    if (!fabricMatched && content.querySelector('.qv-fabric-row .qv-option-btn')) content.querySelector('.qv-fabric-row .qv-option-btn').classList.add('active');
+    if (!fabricMatched && content.querySelector('.qv-fabric-row:not(.qv-sleeve-row) .qv-option-btn')) content.querySelector('.qv-fabric-row:not(.qv-sleeve-row) .qv-option-btn').classList.add('active');
 
     let kitMatched = false;
     content.querySelectorAll('.qv-kit-row .qv-option-btn').forEach(b => {
@@ -1619,6 +1646,16 @@ function openQuickView(id, editItem) {
       if (m) kitMatched = true;
     });
     if (!kitMatched && content.querySelector('.qv-kit-row .qv-option-btn')) content.querySelector('.qv-kit-row .qv-option-btn').classList.add('active');
+
+    // Manica: preseleziona quella della riga nel carrello
+    let sleeveMatched = false;
+    content.querySelectorAll('.qv-sleeve-row .qv-option-btn').forEach(b => {
+      const m = (b.dataset.sleeve || 'short') === (editItem.sleeve || 'short');
+      b.classList.toggle('active', m);
+      if (m) sleeveMatched = true;
+    });
+    if (!sleeveMatched && content.querySelector('.qv-sleeve-row .qv-option-btn')) content.querySelector('.qv-sleeve-row .qv-option-btn').classList.add('active');
+    updateQvSleeveImage();
 
     // Badge personalizzazione se la riga nel carrello ne ha una
     if (editItem.custNote) {
@@ -1662,15 +1699,51 @@ function selectQvKit(btn) {
   }
 }
 
+function selectQvSleeve(btn) {
+  btn.closest('.qv-sleeve-row').querySelectorAll('.qv-option-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  updateQvPrice();
+  updateQvSleeveImage();
+}
+
+function findLongSleeveVariant(p) {
+  if (!p) return null;
+  // Collegamento esplicito nel catalogo (products.js): manicaLungaId punta al prodotto gemello
+  if (p.manicaLungaId) {
+    const direct = PRODUCTS.find(q => q && q.id === p.manicaLungaId);
+    if (direct) return direct;
+  }
+  if (!p.name) return null;
+  const norm = s => String(s || '').replace(/\s*Manica Lunga\s*/ig, ' ').replace(/\s+/g, ' ').trim();
+  return PRODUCTS.find(q => q && q.id !== p.id && /manica lunga/i.test(q.name) && norm(q.name) === norm(p.name)) || null;
+}
+
+function updateQvSleeveImage() {
+  if (!quickViewProduct || !/maglia/i.test(quickViewProduct.name)) return;
+  // Se il prodotto è già "Manica Lunga", l'immagine di catalogo è già quella giusta
+  if (/manica lunga/i.test(quickViewProduct.name)) return;
+  const sleeveBtn = document.querySelector('.qv-sleeve-row .qv-option-btn.active');
+  const img = document.querySelector('.qv-img-wrap .qv-img');
+  if (!sleeveBtn || !img) return;
+  if (sleeveBtn.dataset.sleeve === 'long') {
+    const variant = findLongSleeveVariant(quickViewProduct);
+    if (variant) img.src = getProductImage(variant);
+  } else {
+    img.src = getProductImage(quickViewProduct);
+  }
+}
+
 function updateQvPrice() {
   const priceEl = document.getElementById('qvPriceDisplay');
   if (!priceEl) return;
   const base = parseFloat(priceEl.dataset.base || 0);
-  const fabricBtn = document.querySelector('.qv-fabric-row .qv-option-btn.active');
+  const fabricBtn = document.querySelector('.qv-fabric-row:not(.qv-sleeve-row) .qv-option-btn.active');
   const kitBtn = document.querySelector('.qv-kit-row .qv-option-btn.active');
+  const sleeveBtn = document.querySelector('.qv-sleeve-row .qv-option-btn.active');
   const fabricExtra = fabricBtn ? parseFloat(fabricBtn.dataset.extra || 0) : 0;
   const kitExtra = kitBtn ? parseFloat(kitBtn.dataset.extra || 0) : 0;
-  const total = base + fabricExtra + kitExtra;
+  const sleeveExtra = sleeveBtn ? parseFloat(sleeveBtn.dataset.extra || 0) : 0;
+  const total = base + fabricExtra + kitExtra + sleeveExtra;
   priceEl.textContent = `€${total.toFixed(2)}`;
   const mobEl = document.getElementById('qvMobilePrice');
   if (mobEl) mobEl.textContent = `€${total.toFixed(2)}`;
@@ -1681,7 +1754,8 @@ function addToCartFromQV(productId) {
   if (!p) return;
 
   const activeSize = document.querySelector('.qv-sizes .qv-size-btn.active');
-  const activeFabric = document.querySelector('.qv-fabric-row .qv-option-btn.active');
+  const activeFabric = document.querySelector('.qv-fabric-row:not(.qv-sleeve-row) .qv-option-btn.active');
+  const activeSleeve = document.querySelector('.qv-sleeve-row .qv-option-btn.active');
   const activeKit = document.querySelector('.qv-kit-row .qv-option-btn.active');
 
   const selectedSize = activeSize ? activeSize.textContent.trim() : (p.sizes[0] || 'M');
@@ -1694,7 +1768,10 @@ function addToCartFromQV(productId) {
   const kitMode = activeKit ? activeKit.dataset.kit : 'solo';
   const isWithShorts = kitMode === 'shorts' || kitMode === 'full';
   const isFullKit = kitMode === 'full';
-  const finalPrice = p.price + fabricExtra;
+  const isSleeveProduct = /maglia/i.test(p.name);
+  const sleeveMode = activeSleeve ? activeSleeve.dataset.sleeve : (isSleeveProduct ? (/manica lunga/i.test(p.name) ? 'long' : 'short') : '');
+  const sleeveExtra = activeSleeve ? parseFloat(activeSleeve.dataset.extra || 0) : 0;
+  const finalPrice = p.price + fabricExtra + sleeveExtra;
 
   // Testo personalizzazione maglia
   let custNote = '';
@@ -1728,10 +1805,10 @@ function addToCartFromQV(productId) {
     const idx = cart.findIndex(x => (x._uid || x.id) === editUid);
     if (idx === -1) {
       // Riga non più presente: aggiungi come nuova
-      cart.push({ id: p.id, name: p.name, price: finalPrice, image: getProductImage(p), qty: 1, size: selectedSize, fabric: fabricLabel, custNote: custNote, kitMode: kitMode, _uid: Date.now() + '-' + Math.random().toString(36).slice(2) });
+      cart.push({ id: p.id, name: p.name, price: finalPrice, image: getProductImage(p), qty: 1, size: selectedSize, fabric: fabricLabel, custNote: custNote, kitMode: kitMode, sleeve: sleeveMode, _uid: Date.now() + '-' + Math.random().toString(36).slice(2) });
     } else {
       // Se esiste già un'altra riga identica alla nuova configurazione, unifica lì
-      const dupIdx = cart.findIndex((x, i) => i !== idx && x.id === p.id && x.size === selectedSize && x.fabric === fabricLabel && x.custNote === custNote);
+      const dupIdx = cart.findIndex((x, i) => i !== idx && x.id === p.id && x.size === selectedSize && x.fabric === fabricLabel && x.custNote === custNote && (x.sleeve || 'short') === (sleeveMode || 'short'));
       if (dupIdx !== -1) {
         cart[dupIdx].qty += cart[idx].qty;
         cart.splice(idx, 1);
@@ -1741,6 +1818,7 @@ function addToCartFromQV(productId) {
         cart[idx].custNote = custNote;
         cart[idx].price = finalPrice;
         cart[idx].kitMode = kitMode;
+        cart[idx].sleeve = sleeveMode;
       }
     }
 
@@ -1774,12 +1852,12 @@ function addToCartFromQV(productId) {
   } else {
     // ── AGGIUNTA NORMALE ──
     const existing = cart.find(item =>
-      item.id === productId && item.size === selectedSize && item.fabric === fabricLabel && item.custNote === custNote
+      item.id === productId && item.size === selectedSize && item.fabric === fabricLabel && item.custNote === custNote && (item.sleeve || 'short') === (sleeveMode || 'short')
     );
     if (existing) {
       existing.qty += 1;
     } else {
-      cart.push({ id: p.id, name: p.name, price: finalPrice, image: getProductImage(p), qty: 1, size: selectedSize, fabric: fabricLabel, custNote: custNote, kitMode: kitMode, _uid: Date.now() + '-' + Math.random().toString(36).slice(2) });
+      cart.push({ id: p.id, name: p.name, price: finalPrice, image: getProductImage(p), qty: 1, size: selectedSize, fabric: fabricLabel, custNote: custNote, kitMode: kitMode, sleeve: sleeveMode, _uid: Date.now() + '-' + Math.random().toString(36).slice(2) });
     }
 
     // Aggiungi pantaloncino (Maglia+Pantaloncino oppure Kit Completo)
@@ -1815,11 +1893,13 @@ function addToCartFromQV(productId) {
   updateCartUI();
   const custSuffix = custNote ? ' + ' + t('qv.personalizzazione') : '';
   const verb = isEdit ? t('toast.aggiornato') : t('toast.aggiunto');
+  const sleeveSuffix = sleeveMode ? ' \u00B7 ' + (sleeveMode === 'long' ? t('qv.manicaLunga') : t('qv.manicaCorta')) : '';
+  const metaStr = selectedSize + ' \u00B7 ' + fabricText + sleeveSuffix;
   const msg = isFullKit
-    ? 'Kit Completo (' + selectedSize + ' \u00B7 ' + fabricText + ')' + custSuffix + ' ' + verb
+    ? 'Kit Completo (' + metaStr + ')' + custSuffix + ' ' + verb
     : isWithShorts
-      ? 'Maglia + Pantaloncino (' + selectedSize + ' \u00B7 ' + fabricText + ')' + custSuffix + ' ' + verb
-      : '"' + p.name + '" (' + selectedSize + ' \u00B7 ' + fabricText + ')' + custSuffix + ' ' + verb;
+      ? 'Maglia + Pantaloncino (' + metaStr + ')' + custSuffix + ' ' + verb
+      : '"' + p.name + '" (' + metaStr + ')' + custSuffix + ' ' + verb;
   showToast('\u2705', msg);
   openCart();
   currentCustomization = null;
@@ -1981,7 +2061,7 @@ function renderCartItems() {
     html += '<div class="cart-item' + (isGift ? ' cart-item--gift' : '') + '" onclick="openCartItemProduct(' + uidRef + ')" title="' + t('cart.vediProdotto') + '">'
       + '<div class="cart-item-info">'
       + '<div class="cart-item-name">' + itemName + '</div>'
-      + '<div class="cart-item-meta">' + t('cart.taglia') + ': ' + item.size + (item.fabric ? ' &nbsp;&middot;&nbsp; ' + fabricTxt : '') + (item.custNote ? '<br><span style="color:#2e7d32;font-size:.72rem;">' + item.custNote + '</span>' : '') + '</div>'
+      + '<div class="cart-item-meta">' + t('cart.taglia') + ': ' + item.size + (item.fabric ? ' &nbsp;&middot;&nbsp; ' + fabricTxt : '') + (item.sleeve === 'long' ? ' &nbsp;&middot;&nbsp; ' + t('qv.manicaLunga') : '') + (item.custNote ? '<br><span style="color:#2e7d32;font-size:.72rem;">' + item.custNote + '</span>' : '') + '</div>'
       + '<div class="cart-item-row">'
       + '<div class="cart-item-price">' + priceLabel + '</div>'
       + '<div class="cart-item-qty">' + qtyControls + '</div>'
@@ -2335,7 +2415,7 @@ function renderOrderSummary() {
     <h4>📋 <span data-i18n="order.riepilogo">Riepilogo Ordine</span></h4>
     ${cart.map(item => `
       <div class="order-summary-row">
-        <span>${getCartItemName(item)} × ${item.qty} (${item.size})</span>
+        <span>${getCartItemName(item)} × ${item.qty} (${item.size}${item.sleeve === 'long' ? ' · ' + t('qv.manicaLunga') : ''})</span>
         <span>€${(item.price * item.qty).toFixed(2)}</span>
       </div>
     `).join('')}
@@ -2383,7 +2463,7 @@ async function submitOrder(e) {
 
   const orderDetails = cart.map(item => {
     const priceStr = item.custom ? 'âš ï¸ Prezzo da definire' : `€${(item.price * item.qty).toFixed(2)}`;
-    return `• ${getCartItemName(item)} | Taglia: ${item.size} | Qtà: ${item.qty} | ${priceStr}`;
+    return `• ${getCartItemName(item)} | Taglia: ${item.size}${item.sleeve === 'long' ? ' · ' + t('qv.manicaLunga') : ''} | Qtà: ${item.qty} | ${priceStr}`;
   }).join('\n');
 
 
